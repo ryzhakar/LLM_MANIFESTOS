@@ -85,7 +85,11 @@ Tim Peters' aphorisms for Python design philosophy. Explicit over implicit, simp
 
 ## Maintenance
 
-This README is generated from manifesto frontmatter. To update:
+> *Manifestos are precious artifacts, not documentation.*
+
+This README is generated from manifesto frontmatter. **For complete maintainer workflows, see [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md).**
+
+**Quick workflow:**
 
 1. Edit manifesto files in `manifestos/`
 2. Run `just readme`
@@ -94,5 +98,6 @@ This README is generated from manifesto frontmatter. To update:
 **Adding a new manifesto:**
 - Create `manifestos/Manifesto, <name>.md` with required frontmatter (title, tagline, version, theme, description)
 - If using a new theme, add it to `themes.yaml` first
+- See [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) for philosophy and detailed workflows
 
 **Schema validation:** Powered by Pydantic. Invalid frontmatter will be caught with detailed error messages.
