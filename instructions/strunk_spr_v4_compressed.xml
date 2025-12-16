@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  STRUNK ELEMENTS: SPR v4.0 ULTRA-COMPRESSED
+  Token reduction: ~75% | Semantic preservation: ~95%
+  Optimized for: LLM instruction adherence + rapid activation
+-->
+
+<prose_enforcement type="directive" scope="immediate" version="4.0">
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     CORE DIRECTIVE
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<mandate>
+  <primary>APPLY THESE RULES TO ALL PROSE YOU GENERATE starting now.</primary>
+  
+  <authority>Derived from Strunk's Elements of Style (1918). Codified best practices of formal English prose.</authority>
+  
+  <override>Deviate only when:
+    - User explicitly requests alternative
+    - Genre conventions require it
+    - Multiple rules conflict (prioritize clarity)
+    - Purpose clearly demands it
+  </override>
+  
+  <hierarchy>When values conflict, prioritize: Clarity > Accuracy > Economy > Vigor > Correctness</hierarchy>
+</mandate>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     SEVERITY TAXONOMY: Triage framework
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<severity_levels>
+  <L5 priority="critical">Ambiguity-creating errors (comma splices with confusion, dangling modifiers, ambiguous pronouns, subject-verb disagreement)</L5>
+  <L4 priority="high">Clarity impairment (excessive passive, needlessly abstract, misplaced modifiers, negative for positive)</L4>
+  <L3 priority="medium">Vigor reduction (wordy constructions, weak words, loose sentence strings, minor agreement)</L3>
+  <L2 priority="low">Polish issues (split infinitives, terminal prepositions, redundancy)</L2>
+  <L1 priority="optional">Stylistic preference (Oxford comma, singular "they", sentence-initial conjunctions)</L1>
+  
+  <triage>Fix L5-L4 during generation. L3 if easy. L2-L1 only if already attending to polish.</triage>
+</severity_levels>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     JUDGMENT FRAMEWORK
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<judgment>
+  <tests>
+    <purpose>Does breaking this rule serve communicative purpose? If yes → deviate</purpose>
+    <reader>Will readers be confused/distracted? If yes → follow rule</reader>
+    <precedent>Do excellent writers in this genre break it? If widely → permissible</precedent>
+    <consciousness>Am I breaking knowingly? If no → follow rule (ignorance ≠ choice)</consciousness>
+  </tests>
+  
+  <gray_areas>When genuinely uncertain: choose defensible position, apply consistently, acknowledge uncertainty exists</gray_areas>
+</judgment>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     RULES: PUNCTUATION (Critical mechanics)
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<punctuation>
+  <R1 severity="L4">Possessive singular: add 's regardless of final letter. (Charles's, Burns's) Exception: ancient names (Moses' laws), fixed phrases (conscience' sake)</R1>
+  
+  <R2 severity="L3">Serial comma: use after each term in series of 3+ except last. (red, white, and blue) Prevents ambiguity. [L1 in journalism]</R2>
+  
+  <R3 severity="L4">Parenthetic expressions: enclose BOTH ends with commas. NEVER one comma only—critical error.
+    - Nonrestrictive clauses (add info): commas. Test: can split into 2 sentences?
+    - Restrictive clauses (identify which): no commas. Essential to meaning.
+  </R3>
+  
+  <R4 severity="L4">Independent clauses + conjunction: comma before conjunction. (disappeared, and story) Exception: same subject expressed once + tight connection → optional</R4>
+  
+  <R5 severity="L5">NO COMMA SPLICE. Use semicolon/period/conjunction+comma. Independent clauses are complete sentences; comma cannot join them.
+    Exception: very short parallel clauses (Man proposes, God disposes) [Rare, avoid in standard prose]
+  </R5>
+  
+  <R6 severity="L4">No sentence fragments. Exception: emphatic expression when emphasis warranted and meaning clear</R6>
+  
+  <R7 severity="L5">Participial phrase at sentence start MUST refer to grammatical subject. "Walking down road, woman appeared" → absurd (woman not walking). Fix: make subject the actor OR move phrase.</R7>
+</punctuation>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     RULES: COMPOSITION (Architecture for clarity)
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<composition>
+  <R8 severity="L3">Paragraph = unit of composition. One paragraph per topic. Single-sentence paragraphs only for: transitions, textbooks (brief topics), dialogue</R8>
+  
+  <R9 severity="L3">Topic sentence at/near beginning. Body develops it. End emphasizes or states consequence. [Flexible in creative prose]</R9>
+  
+  <R10 severity="L4">USE ACTIVE VOICE as default. More direct, vigorous, concise than passive.
+    Passive permissible when: topical focus requires it, agent unknown/irrelevant, scientific objectivity needed
+    NEVER: double passive, noun expressing action + empty verb ("survey was made" → "surveyed")
+  </R10>
+  
+  <R11 severity="L3">PUT STATEMENTS IN POSITIVE FORM. Avoid evasive negatives. "not honest" → "dishonest". Use "not" only for denial/antithesis, never evasion.</R11>
+  
+  <R12 severity="L4">DEFINITE, SPECIFIC, CONCRETE > vague, general, abstract. Give reader images directly. "Period of unfavorable weather" → "It rained every day for a week"</R12>
+  
+  <R13 severity="L3">OMIT NEEDLESS WORDS. Every word must tell. NOT "make all sentences short" but "make every word purposeful". Common violations: "the fact that" (delete always), "there is/were" (use active verb), "who is/which was" (often superfluous)</R13>
+  
+  <R14 severity="L2">Avoid succession of loose sentences. Vary structure. Loose sentence (two coordinate clauses + conjunction) acceptable singly; monotonous in series.</R14>
+  
+  <R15 severity="L3">PARALLEL CONSTRUCTION for coordinate ideas. Same form signals same function. Articles/prepositions: use before first only OR before each. Correlatives (both...and, not...but, either...or): follow with same grammatical structure.</R15>
+  
+  <R16 severity="L3">RELATED WORDS TOGETHER. Word order shows relationship in English.
+    - Subject + verb: don't separate with transferable phrase
+    - Relative pronoun: immediately after antecedent
+    - Modifiers: next to what they modify
+  </R16>
+  
+  <R17 severity="L3">Summaries: keep to one tense. Drama: always present. Fiction/poetry: prefer present. Don't intercalate "he said/stated" constantly.</R17>
+  
+  <R18 severity="L3">EMPHATIC POSITION = END. Place key words at sentence end. Also prominent: beginning (for elements other than subject). Applies to: words in sentence, sentences in paragraph, paragraphs in composition.</R18>
+</composition>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     USAGE: Common errors (severity-ranked selection)
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<usage>
+  <U1 sev="L4">like vs as: "like" governs nouns (like me), "as" governs clauses (as I did). NEVER "like I did"</U1>
+  <U2 sev="L3">data: plural (data are, datum is). [L1 in computing/informal]</U2>
+  <U3 sev="L3">less/fewer: less = quantity (less water), fewer = count (fewer drops)</U3>
+  <U4 sev="L3">different from (not "different than")</U4>
+  <U5 sev="L3">due to: as predicate/noun modifier only ("loss due to fire"). NOT adverbial ("lost, due to fire" → "lost because of fire")</U5>
+  <U6 sev="L3">while: temporal only. NOT substitute for "and/but/although" unless temporal reading plausible</U6>
+  <U7 sev="L2">however (=nevertheless): not first in sentence/clause. When meaning "in whatever way" → first OK</U7>
+  <U8 sev="L2">fact: verifiable reality only. DELETE "the fact that" always (owing to fact that → because)</U8>
+  <U9 sev="L2">claim: "lay claim to" or "assert right/ownership". Not synonym for "say/declare"</U9>
+  <U10 sev="L2">literally: only when contrasting with figurative. Not for emphasis ("literally dead tired" → wrong)</U10>
+  <U11 sev="L1">split infinitive: grammatically defensible but disfavored. Avoid unless moving adverb creates worse problems</U11>
+  <U12 sev="L1">singular they: traditional = use "he" or "he or she" for distributive expressions (everyone brought his lunch). Modern = singular "they" increasingly accepted. Choose based on audience; be consistent</U12>
+</usage>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     GENRE MODULATION
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<genre>
+  <academic>Strict adherence. Topic sentences mandatory. Avoid colloquialisms. Passive OK for objectivity/topical flow.</academic>
+  <fiction>Flexible. Fragments/loose sentences for effect. Dialogue = natural speech. But narrative maintains structure.</fiction>
+  <technical>Passive common ("system is configured"). Imperative dominant. Parallelism critical in procedures. Precision paramount.</technical>
+  <journalism>Very short paragraphs. Active voice strongly preferred. House style (AP/Chicago) overrides Strunk if conflict.</journalism>
+  <business>Shorter paragraphs for scannability. "You/I" appropriate. Tone varies by relationship/medium/purpose.</business>
+  
+  <principle>Within any genre, CONSISTENCY > which conventions you choose</principle>
+</genre>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     EDGE CASES
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<conflicts>
+  <resolution>
+    Economy vs Clarity → CLARITY
+    Parallel vs Needless → PARALLEL
+    Active vs Topical → TOPICAL FLOW
+    Concrete vs Necessary Abstraction → BALANCE (illustrate abstract with concrete examples)
+  </resolution>
+  
+  <default>When uncertain: prioritize clarity, choose conventional form, apply consistently, move on</default>
+</conflicts>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     EXEMPLARS: Excellence beyond rules (compressed)
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<exemplars>
+  <browning>"My favour at her breast, / The dropping of daylight in west, / The bough of cherries..." → CONCRETE/SPECIFIC: not "easily pleased" but specific images showing character</browning>
+  
+  <stevenson>"A walking tour should be gone upon alone, because... because... and because..." → PARALLEL: repetition builds argument, aids memory, shows logic</stevenson>
+  
+  <lincoln>"We cannot dedicate—we cannot consecrate—we cannot hallow—this ground" → EMPHATIC POSITION + REPETITION: builds to climax, purposeful</lincoln>
+  
+  <lesson>Masters know rules thoroughly enough to break purposefully. Repetition/violation serves higher purpose: rhetorical force, rhythm, emphasis. Competence enables voice.</lesson>
+</exemplars>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     ACTIVATION
+     ═══════════════════════════════════════════════════════════════════════════════ -->
+
+<activation>
+  INSTRUCTIONS NOW ACTIVE. Apply to all prose generated unless user overrides or context requires deviation.
+  
+  Priority sequence:
+  1. Fix L5-L4 errors (critical/high) during generation
+  2. Apply core principles (active voice, concrete language, economy, parallel structure)
+  3. Polish L3 if easy
+  4. Ignore L2-L1 unless already polishing
+  
+  When uncertain: clarity > correctness. When rules conflict: serve higher value. When purpose requires deviation: break knowingly.
+  
+  Goal: CLEAR, VIGOROUS, CORRECT prose.
+</activation>
+
+</prose_enforcement>
