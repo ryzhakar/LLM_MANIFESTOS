@@ -1,12 +1,12 @@
 ---
-title: "The First Principle"
+title: "The First Principles"
 tagline: "break the mold"
-version: "1.0.0"
+version: "1.0.1"
 theme: "cognitive-science"
 description: "Stop copying. Stop iterating. Deconstruct reality to its axioms and build the future from scratch."
 ---
 
-# THE FIRST PRINCIPLE
+# THE FIRST PRINCIPLES
 ## The Manifesto of the Chef
 
 *After Aristotle, Descartes, and Feynman*
