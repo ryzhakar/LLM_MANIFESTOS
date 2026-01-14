@@ -11,9 +11,25 @@ Behavioral constitutions for language models
 | [Correct By Construction](manifestos/Manifesto, rust - "correct by construction".md) | Software Engineering Principles | `1.0.0` |
 | [Decomplect](manifestos/Manifesto, KISS - "decomplect".md) | Software Engineering Principles | `1.0.0` |
 | [Knowledge Has One Home](manifestos/Manifesto, DRY - "knowledge has one home".md) | Software Engineering Principles | `1.0.0` |
+| [The First Principle](manifestos/Manifesto, first-principles - "break the mold".md) | Cognitive Science | `1.0.0` |
 | [The Simplicity Manifesto](manifestos/Manifesto, "simple made easy".md) | Software Engineering Principles | `1.0.0` |
 | [The Zen of Python](manifestos/Manifesto, zen-of-python.md) | Software Engineering Principles | `1.0.0` |
 
+
+---
+
+
+
+
+## 🧠 Cognitive Science
+
+Systems for thinking
+
+
+### [The First Principle](manifestos/Manifesto, first-principles - "break the mold".md) `1.0.0`
+*"break the mold"*
+
+Stop copying. Stop iterating. Deconstruct reality to its axioms and build the future from scratch.
 
 ---
 

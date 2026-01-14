@@ -17,3 +17,8 @@ research-protocols:
   icon: "🔬"
   name: "Research Protocols"
   description: "Methodologies for analyzing and replicating creative processes"
+
+cognitive-science:
+  icon: "🧠"
+  name: "Cognitive Science"
+  description: "Systems for thinking"
