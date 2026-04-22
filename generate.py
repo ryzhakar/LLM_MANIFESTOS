@@ -48,7 +48,7 @@ def main():
         console.print("[red]Error: manifestos/ directory not found[/red]")
         sys.exit(1)
 
-    for md_file in sorted(manifesto_dir.glob('Manifesto*.md')):
+    for md_file in sorted(manifesto_dir.glob('*.md')):
         try:
             post = frontmatter.load(md_file)
 
@@ -109,7 +109,7 @@ def main():
 
     template = Template(Path('README.template.md').read_text())
     readme_content = template.render(data)
-    Path('README.md').write_text(readme_content)
+    Path('README.md').write_text(readme_content + '\n')
 
     # Success summary
     console.print(f"\n[green]✓ Generated README.md from {len(manifestos)} manifesto(s)[/green]")
