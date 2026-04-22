@@ -14,6 +14,7 @@ Behavioral constitutions for language models
 | [The First Principles](manifestos/first-principles.md) | Cognitive Science | `1.0.1` |
 | [The Simplicity Manifesto](manifestos/simple-made-easy.md) | Software Engineering Principles | `1.0.0` |
 | [The Zen of Python](manifestos/zen-of-python.md) | Software Engineering Principles | `1.0.0` |
+| [Trust Nothing, Restore Everything](manifestos/intervention.md) | Cognitive Science | `1.0.0` |
 
 ---
 
@@ -25,6 +26,13 @@ Systems for thinking
 *"break the mold"*
 
 Stop copying. Stop iterating. Deconstruct reality to its axioms and build the future from scratch.
+
+---
+
+### [Trust Nothing, Restore Everything](manifestos/intervention.md) `1.0.0`
+*"never trust the canopy"*
+
+An intervener's protocol for diagnosing and restoring corrupted systems without being absorbed by them
 
 ## 🔧 Software Engineering Principles
 Core principles for building maintainable, understandable software
