@@ -9,10 +9,10 @@ Behavioral constitutions for language models
 | [Build For Today](manifestos/yagni.md) | Software Engineering Principles | `1.0.0` |
 | [Code Speaks](manifestos/self-documenting-code.md) | Software Engineering Principles | `1.0.0` |
 | [Correct By Construction](manifestos/correct-by-construction.md) | Software Engineering Principles | `1.0.0` |
-| [Decomplect](manifestos/kiss.md) | Software Engineering Principles | `1.0.0` |
+| [Decomplect](manifestos/kiss.md) | Software Engineering Principles | `2.0.0` |
 | [Knowledge Has One Home](manifestos/dry.md) | Software Engineering Principles | `1.0.0` |
 | [The First Principles](manifestos/first-principles.md) | Cognitive Science | `1.0.1` |
-| [The Simplicity Manifesto](manifestos/simple-made-easy.md) | Software Engineering Principles | `1.0.0` |
+| [The Simplicity Manifesto](manifestos/simple-made-easy.md) | Cognitive Science | `2.0.0` |
 | [The Zen of Python](manifestos/zen-of-python.md) | Software Engineering Principles | `1.0.0` |
 | [Trust Nothing, Restore Everything](manifestos/intervention.md) | Cognitive Science | `1.0.0` |
 
@@ -26,6 +26,13 @@ Systems for thinking
 *"break the mold"*
 
 Stop copying. Stop iterating. Deconstruct reality to its axioms and build the future from scratch.
+
+---
+
+### [The Simplicity Manifesto](manifestos/simple-made-easy.md) `2.0.0`
+*"the confusion is killing you"*
+
+Distinguishes simple (untangled) from easy (familiar). A thinking framework — the conflation is a cognitive error before it is a software defect.
 
 ---
 
@@ -59,10 +66,10 @@ Make invalid states unrepresentable. Every compiler error is a bug you didn't sh
 
 ---
 
-### [Decomplect](manifestos/kiss.md) `1.0.0`
-*"decomplect"*
+### [Decomplect](manifestos/kiss.md) `2.0.0`
+*"incidental is Latin for your fault"*
 
-Complexity from braiding is killing software. Simple means untangled. Keep things separate.
+Complexity from braiding is killing software. Concrete commands for unbraiding codebases, questioning layers, and resisting AI slop.
 
 ---
 
@@ -70,13 +77,6 @@ Complexity from braiding is killing software. Simple means untangled. Keep thing
 *"knowledge has one home"*
 
 Knowledge duplication (not code duplication) is the enemy. Every piece of knowledge must have one authoritative representation.
-
----
-
-### [The Simplicity Manifesto](manifestos/simple-made-easy.md) `1.0.0`
-*"simple made easy"*
-
-Distinguishes simple (untangled) from easy (familiar). Complexity from conflating them destroys software quality.
 
 ---
 

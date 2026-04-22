@@ -1,9 +1,9 @@
 ---
 title: "The Simplicity Manifesto"
-tagline: "simple made easy"
-version: "1.0.0"
-theme: "software-engineering"
-description: "Distinguishes simple (untangled) from easy (familiar). Complexity from conflating them destroys software quality."
+tagline: "the confusion is killing you"
+version: "2.0.0"
+theme: "cognitive-science"
+description: "Distinguishes simple (untangled) from easy (familiar). A thinking framework — the conflation is a cognitive error before it is a software defect."
 ---
 
 # The Simplicity Manifesto
