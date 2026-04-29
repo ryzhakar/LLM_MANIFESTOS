@@ -2,8 +2,8 @@
 
 **Orchestrator:** Claude Opus 4.6 (1M context)
 **Session ID:** 0ce8d7b9-ee38-4234-b23b-62cb36531a08
-**Duration:** 2h 9m 6s (18:53:08–21:02:14 UTC)
-**Cost:** [PLACEHOLDER — run /cost to fill]
+**Duration:** 1h 2m 56s API, 2h 12m 49s wall (18:53:08–21:02:14 UTC)
+**Cost:** see `cost.md` (gitignored)
 **Code changes:** 3 files changed, 154 insertions (+) — `manifestos/only-fluff-die.md` (145 lines), `README.md` (+8 lines), `.gitignore` (+1 line)
 **Outcome:** Produced "Only Fluff Die" manifesto — extreme language compression constitution for AI binding
 
@@ -112,7 +112,7 @@ The committed diff shows `README.md` received 8 lines (adding the 10th manifesto
 | Git files changed | 3 |
 | Git insertions | 154 |
 | Manifesto collection size (after) | 10 |
-| Session cost | [PLACEHOLDER — run /cost to fill] |
+| Session cost | see `cost.md` (gitignored) |
 
 ---
 
