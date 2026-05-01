@@ -1,6 +1,6 @@
 # Codebase State
 
-_Last verified: 2026-04-29. Generation pipeline confirmed working: `just readme` produced 10 manifestos cleanly._
+_Last verified: 2026-05-01. Generation pipeline confirmed working: `just readme` produced 10 manifestos cleanly._
 
 ---
 
@@ -13,7 +13,7 @@ _Last verified: 2026-04-29. Generation pipeline confirmed working: `just readme`
 | `first-principles.md` | The First Principles | "break the mold" | cognitive-science | 1.0.1 |
 | `intervention.md` | Trust Nothing, Restore Everything | "never trust the canopy" | cognitive-science | 1.0.0 |
 | `kiss.md` | Decomplect | "incidental is Latin for your fault" | software-engineering | 2.0.0 |
-| `only-fluff-die.md` | Only Fluff Die | "noise is not neutral" | cognitive-science | 1.0.0 |
+| `stop-yapping.md` | Stop Yapping | "your helpfulness is the problem" | cognitive-science | 1.0.0 |
 | `self-documenting-code.md` | Code Speaks | "code speaks" | software-engineering | 1.0.0 |
 | `simple-made-easy.md` | The Simplicity Manifesto | "the confusion is killing you" | cognitive-science | 2.0.0 |
 | `yagni.md` | Build For Today | "build for today" | software-engineering | 1.0.0 |
@@ -92,7 +92,7 @@ Dependencies are injected inline via `uv run --with`; no separate virtualenv or 
 - **Three themes defined but unused.** `design-methodology`, `ai-instructions`, and `research-protocols` exist in `themes.yaml` but have no manifestos. They add no value until assigned. They may be aspirational placeholders or stale definitions.
 - **`first-principles.md` is at version 1.0.1.** All other manifestos are at x.0.0 or x.0.0 (major only). This is the only file using a patch-level version, which MAINTAINERS_GUIDE discourages ("Patches — don't use; just edit").
 - **No CI/CD gate.** `just readme` is a manual step. Nothing prevents committing a manifesto without regenerating README, creating drift. The MAINTAINERS_GUIDE calls this out as a responsibility but does not enforce it mechanically.
-- **`only-fluff-die.md` is the most recent addition** (committed 2026-04-29). It has not been in the collection long enough to assess whether its theme assignment is stable.
+- **`stop-yapping.md` replaced `only-fluff-die.md`** (2026-05-01). Same function (language compression), completely different manifesto — abusive register, model-addressed, no security escape hatch. Theme: cognitive-science.
 - **`kiss.md` and `simple-made-easy.md` are both at version 2.0.0.** Both were refactored recently (commits `5994364` and `7c6467a`). Their current thesis boundaries may still be settling.
 
 ---
@@ -103,5 +103,5 @@ These are observations, not commitments. An orchestrator or maintainer should ev
 
 - Decide whether the three unused themes (`design-methodology`, `ai-instructions`, `research-protocols`) should be populated, renamed, or removed.
 - Consider bumping `first-principles.md` from `1.0.1` back to `1.0.0` or forward to `1.1.0` per the MAINTAINERS_GUIDE versioning conventions (patch versions are discouraged).
-- Assess whether `ai-instructions` theme should capture the `only-fluff-die` manifesto or similar AI-targeted content; currently it sits in `cognitive-science`.
+- Assess whether the three unused themes (`design-methodology`, `ai-instructions`, `research-protocols`) should be populated, renamed, or removed. `ai-instructions` was considered for `stop-yapping.md` but rejected — all manifestos in LLM_MANIFESTOS are AI instructions by definition, so the theme doesn't differentiate.
 - Add a CI step (e.g., a pre-commit hook or GitHub Action) that runs `just readme` and fails if `README.md` has uncommitted changes.

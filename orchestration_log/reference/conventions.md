@@ -33,6 +33,15 @@ Established in the 2026-04-29 session (only-fluff-die.md). Verified by execution
 
 **Writing methodology references:** `instructions/strunk_spr_v3_complete.xml` and `instructions/sparse-priming-representations.md` are loaded as writing technique guidance (not content) for the writer agent.
 
+**Lessons from 2026-05-01 session (7 failed drafts before success):**
+
+- **Constrain fury aggressively, structure minimally.** All dispatched agents front-loaded 10+ structural constraints with emotional instruction last. The constraints won every time. Invert: lead with the emotional mandate, give minimal structural requirements.
+- **Prompt register determines output register.** The writer mirrors the orchestrator's tone. A measured prompt produces measured output regardless of "write with fury" instructions.
+- **2-4 source files, not 15.** Information overload → skimming → measured output. Depth over breadth.
+- **The orchestrator edits, not rewrites.** The agent produces the base content (structure, tables, rules). The orchestrator edits the register and form. This is cheaper and more effective than re-dispatching. The $15 orchestrator cost in the 2026-05-01 session was mostly learning what to ask for — the actual value was in two direct edit passes on agent output.
+- **Write tool requires reading existing files → contamination.** Write to a FRESH path when the writer must not inherit from previous drafts. Delete the old file first if reusing the path.
+- **Do not pre-decide branding.** Let the writer choose title, tagline, theme, description unless the user specifies.
+
 ---
 
 ## Dispatch Rules

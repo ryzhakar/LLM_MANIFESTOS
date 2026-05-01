@@ -18,11 +18,10 @@ Three themes are defined but have zero manifestos: `design-methodology`, `ai-ins
 `first-principles.md` is at version `1.0.1`. MAINTAINERS_GUIDE explicitly states "Patches — don't use; just edit." This is the only manifesto using a patch segment.  
 **Action needed:** Either amend the version to `1.0.0` (if the patch was a minor edit) or advance to `1.1.0` with justification. Low urgency.
 
-### OQ-003 — Theme fit for `only-fluff-die.md`
-**Status:** Open  
+### OQ-003 — Theme fit for compression manifesto
+**Status:** Resolved (2026-05-01)  
 **Source:** Manifesto inventory; `themes.yaml`  
-`only-fluff-die.md` is about compressing machine-generated language — it sits in `cognitive-science`. The unused `ai-instructions` theme might be a better fit. Alternatively, `only-fluff-die` may be the seed manifesto that justifies populating `ai-instructions`.  
-**Action needed:** Deliberate when a second AI-instructions-class manifesto is being considered.
+`only-fluff-die.md` replaced by `stop-yapping.md`. Theme stays `cognitive-science`. The `ai-instructions` theme was explicitly rejected: all manifestos in LLM_MANIFESTOS are AI instructions by definition, so the theme fails to differentiate within the collection. The compression manifesto addresses communication discipline — a cognitive framework — not tool configuration.
 
 ---
 
