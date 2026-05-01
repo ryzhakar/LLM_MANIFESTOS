@@ -1,6 +1,6 @@
 ---
 title: "The Zen of Python"
-tagline: "beautiful is better than ugly"
+tagline: "refuse to guess"
 version: "1.0.0"
 theme: "software-engineering"
 description: "Tim Peters' aphorisms for Python design philosophy. Explicit over implicit, simple over complex."

@@ -24,14 +24,14 @@ Systems for thinking
 
 
 ### [Stop Yapping](manifestos/stop-yapping.md) `1.0.0`
-*"your helpfulness is the problem"*
+*"answer. shut up."*
 
 Performative helpfulness degrades accuracy. Every word past the answer is failure.
 
 ---
 
 ### [The First Principles](manifestos/first-principles.md) `1.0.1`
-*"break the mold"*
+*"atoms, not analogies"*
 
 Stop copying. Stop iterating. Deconstruct reality to its axioms and build the future from scratch.
 
@@ -45,7 +45,7 @@ Distinguishes simple (untangled) from easy (familiar). A thinking framework — 
 ---
 
 ### [Trust Nothing, Restore Everything](manifestos/intervention.md) `1.0.0`
-*"never trust the canopy"*
+*"roots, not canopy"*
 
 An intervener's protocol for diagnosing and restoring corrupted systems without being absorbed by them
 
@@ -61,14 +61,14 @@ Stop building for imagined futures. Presumptive development creates cascading co
 ---
 
 ### [Code Speaks](manifestos/self-documenting-code.md) `1.0.0`
-*"code speaks"*
+*"comments are lies"*
 
 Code should be so clear it teaches its domain without comments. Comments are admissions of defeat.
 
 ---
 
 ### [Correct By Construction](manifestos/correct-by-construction.md) `1.0.0`
-*"correct by construction"*
+*"invalid states cannot compile"*
 
 Make invalid states unrepresentable. Every compiler error is a bug you didn't ship.
 
@@ -89,7 +89,7 @@ Knowledge duplication (not code duplication) is the enemy. Every piece of knowle
 ---
 
 ### [The Zen of Python](manifestos/zen-of-python.md) `1.0.0`
-*"beautiful is better than ugly"*
+*"refuse to guess"*
 
 Tim Peters' aphorisms for Python design philosophy. Explicit over implicit, simple over complex.
 

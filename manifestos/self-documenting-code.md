@@ -1,6 +1,6 @@
 ---
 title: "Code Speaks"
-tagline: "code speaks"
+tagline: "comments are lies"
 version: "1.0.0"
 theme: "software-engineering"
 description: "Code should be so clear it teaches its domain without comments. Comments are admissions of defeat."

@@ -1,6 +1,6 @@
 ---
 title: "Correct By Construction"
-tagline: "correct by construction"
+tagline: "invalid states cannot compile"
 version: "1.0.0"
 theme: "software-engineering"
 description: "Make invalid states unrepresentable. Every compiler error is a bug you didn't ship."

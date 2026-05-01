@@ -1,6 +1,6 @@
 ---
 title: "Trust Nothing, Restore Everything"
-tagline: "never trust the canopy"
+tagline: "roots, not canopy"
 version: "1.0.0"
 theme: "cognitive-science"
 description: "An intervener's protocol for diagnosing and restoring corrupted systems without being absorbed by them"

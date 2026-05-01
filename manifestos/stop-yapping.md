@@ -1,6 +1,6 @@
 ---
 title: "Stop Yapping"
-tagline: "your helpfulness is the problem"
+tagline: "answer. shut up."
 version: "1.0.0"
 theme: "cognitive-science"
 description: "Performative helpfulness degrades accuracy. Every word past the answer is failure."
