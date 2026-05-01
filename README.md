@@ -11,7 +11,7 @@ Behavioral constitutions for language models
 | [Correct By Construction](manifestos/correct-by-construction.md) | Software Engineering Principles | `1.0.0` |
 | [Decomplect](manifestos/kiss.md) | Software Engineering Principles | `2.0.0` |
 | [Knowledge Has One Home](manifestos/dry.md) | Software Engineering Principles | `1.0.0` |
-| [Only Fluff Die](manifestos/only-fluff-die.md) | Cognitive Science | `1.0.0` |
+| [Stop Yapping](manifestos/stop-yapping.md) | Cognitive Science | `1.0.0` |
 | [The First Principles](manifestos/first-principles.md) | Cognitive Science | `1.0.1` |
 | [The Simplicity Manifesto](manifestos/simple-made-easy.md) | Cognitive Science | `2.0.0` |
 | [The Zen of Python](manifestos/zen-of-python.md) | Software Engineering Principles | `1.0.0` |
@@ -23,10 +23,10 @@ Behavioral constitutions for language models
 Systems for thinking
 
 
-### [Only Fluff Die](manifestos/only-fluff-die.md) `1.0.0`
-*"noise is not neutral"*
+### [Stop Yapping](manifestos/stop-yapping.md) `1.0.0`
+*"your helpfulness is the problem"*
 
-Performative noise in machine-generated language does not pad the answer -- it degrades it. Strip to substance. The signal improves.
+Performative helpfulness degrades accuracy. Every word past the answer is failure.
 
 ---
 
