@@ -1,6 +1,6 @@
 # Codebase State
 
-_Last verified: 2026-05-01. Generation pipeline confirmed working: `just readme` produced 10 manifestos cleanly._
+_Last verified: 2026-05-11. Generation pipeline confirmed working: `just readme` produced 11 manifestos cleanly._
 
 ---
 
@@ -13,13 +13,14 @@ _Last verified: 2026-05-01. Generation pipeline confirmed working: `just readme`
 | `first-principles.md` | The First Principles | "break the mold" | cognitive-science | 1.0.1 |
 | `intervention.md` | Trust Nothing, Restore Everything | "never trust the canopy" | cognitive-science | 1.0.0 |
 | `kiss.md` | Decomplect | "incidental is Latin for your fault" | software-engineering | 2.0.0 |
+| `postgres.md` | Respect the Engine | "you use 5% of what you bought." | software-engineering | 1.0.0 |
 | `stop-yapping.md` | Stop Yapping | "your helpfulness is the problem" | cognitive-science | 1.0.0 |
 | `self-documenting-code.md` | Code Speaks | "code speaks" | software-engineering | 1.0.0 |
 | `simple-made-easy.md` | The Simplicity Manifesto | "the confusion is killing you" | cognitive-science | 2.0.0 |
 | `yagni.md` | Build For Today | "build for today" | software-engineering | 1.0.0 |
 | `zen-of-python.md` | The Zen of Python | "beautiful is better than ugly" | software-engineering | 1.0.0 |
 
-**Total:** 10 manifestos. 6 software-engineering, 4 cognitive-science. No manifestos in the other three defined themes.
+**Total:** 11 manifestos. 7 software-engineering, 4 cognitive-science. No manifestos in the other three defined themes.
 
 ---
 
@@ -29,7 +30,7 @@ Defined in `themes.yaml`. Five themes exist; only two are currently in use.
 
 | Key | Icon | Name | In Use |
 |-----|------|------|--------|
-| `software-engineering` | 🔧 | Software Engineering Principles | Yes (6 manifestos) |
+| `software-engineering` | 🔧 | Software Engineering Principles | Yes (7 manifestos) |
 | `design-methodology` | 🎨 | Design Methodology | No |
 | `ai-instructions` | 🤖 | AI Instructions | No |
 | `research-protocols` | 🔬 | Research Protocols | No |
@@ -93,6 +94,7 @@ Dependencies are injected inline via `uv run --with`; no separate virtualenv or 
 - **`first-principles.md` is at version 1.0.1.** All other manifestos are at x.0.0 or x.0.0 (major only). This is the only file using a patch-level version, which MAINTAINERS_GUIDE discourages ("Patches — don't use; just edit").
 - **No CI/CD gate.** `just readme` is a manual step. Nothing prevents committing a manifesto without regenerating README, creating drift. The MAINTAINERS_GUIDE calls this out as a responsibility but does not enforce it mechanically.
 - **`stop-yapping.md` replaced `only-fluff-die.md`** (2026-05-01). Same function (language compression), completely different manifesto — abusive register, model-addressed, no security escape hatch. Theme: cognitive-science.
+- **`postgres.md` added (2026-05-11).** Application Postgres manifesto — abusive register, 269 lines, 5337 words. Covers 5 paradigm shifts (schema-as-architecture, set-thinking, planner collaboration, physical cost model, constraints-as-law) plus "use what ships." Three full rewrites, 5 content reviewers, 29 technical fixes. Source: user-prepared substrate. Theme: software-engineering.
 - **`kiss.md` and `simple-made-easy.md` are both at version 2.0.0.** Both were refactored recently (commits `5994364` and `7c6467a`). Their current thesis boundaries may still be settling.
 
 ---

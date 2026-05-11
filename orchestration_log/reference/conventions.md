@@ -42,6 +42,15 @@ Established in the 2026-04-29 session (only-fluff-die.md). Verified by execution
 - **Write tool requires reading existing files → contamination.** Write to a FRESH path when the writer must not inherit from previous drafts. Delete the old file first if reusing the path.
 - **Do not pre-decide branding.** Let the writer choose title, tagline, theme, description unless the user specifies.
 
+**Lessons from 2026-05-11 session (3 rewrites, register breakthrough):**
+
+- **Full rewrites beat editorial passes for register changes.** Editing measured prose produces measured edits. Write to a fresh path when the register must break. The existing file's voice bleeds through edits.
+- **Unbiased reviewers override orchestrator judgment.** Dispatch 5 specialized reviewers (accuracy, completeness, boundaries, scope, precision) against the substrate. Their findings are authoritative — the orchestrator is biased toward its own output.
+- **Prescription and diagnosis must share the same voice.** Teaching and attacking are not separate passes. Every explanation is something the reader should already know, delivered as an accusation. The feedback "diagnosis thorough, prescription thin" signals structural failure, not register failure.
+- **Anti-Claude patterns are a checklist, not a mindset.** Document them (`anti-claude-patterns.md`), check against them mechanically. The orchestrator cannot self-detect its own patterns by introspection — it needs an external list.
+- **Register ceiling is real.** The orchestrator will hit a register ceiling where editorial passes stop improving. User escalation ("HARDER") is the mechanism that breaks through. Plan for 2-3 rounds of user-driven escalation, not one-shot delivery.
+- **External feedback on structure comes AFTER register work.** Register problems mask structural problems. Fix register first, then evaluate whether the structure serves the audience.
+
 ---
 
 ## Dispatch Rules
