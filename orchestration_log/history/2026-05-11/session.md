@@ -2,9 +2,9 @@
 
 **Orchestrator:** Claude Opus 4.6 (1M context)
 **Session ID:** 32b7d397-c8eb-4e0b-81c3-3bb67c429ee2
-**Duration:** ~4h wall (16:17–20:24 UTC)
+**Duration:** 1h 47m API, 4h 8m wall
 **Cost:** see local `cost.md` (gitignored; per-session)
-**Code changes:** 277 lines added (manifestos/postgres.md 269, README.md 8)
+**Code changes:** 3201 lines added, 468 lines removed
 **Outcome:** Produced "Respect the Engine" postgres manifesto — abusive register, 269 lines, 5337 words. 11th manifesto in collection. Three full rewrites (v1→v2→v3), 5 content reviewers, 2 tone reviewers, 29 technical fixes.
 
 ---
@@ -72,7 +72,8 @@
 
 | Metric | Value |
 |--------|-------|
-| Session time range | 16:17–20:24 UTC |
+| API duration | 1h 47m 8s |
+| Wall duration | 4h 8m 18s |
 | Git commits (this session) | 7 (8f3ee26..02a5668) |
 | Lines added | 277 |
 | Files changed | 2 (manifestos/postgres.md, README.md) |
