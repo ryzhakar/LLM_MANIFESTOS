@@ -11,6 +11,7 @@ Behavioral constitutions for language models
 | [Correct By Construction](manifestos/correct-by-construction.md) | Software Engineering Principles | `1.0.0` |
 | [Decomplect](manifestos/kiss.md) | Software Engineering Principles | `2.0.0` |
 | [Knowledge Has One Home](manifestos/dry.md) | Software Engineering Principles | `1.0.0` |
+| [Respect the Engine](manifestos/postgres.md) | Software Engineering Principles | `1.0.0` |
 | [Stop Yapping](manifestos/stop-yapping.md) | Cognitive Science | `1.0.0` |
 | [The First Principles](manifestos/first-principles.md) | Cognitive Science | `1.0.1` |
 | [The Simplicity Manifesto](manifestos/simple-made-easy.md) | Cognitive Science | `2.0.0` |
@@ -85,6 +86,13 @@ Complexity from braiding is killing software. Concrete commands for unbraiding c
 *"knowledge has one home"*
 
 Knowledge duplication (not code duplication) is the enemy. Every piece of knowledge must have one authoritative representation.
+
+---
+
+### [Respect the Engine](manifestos/postgres.md) `1.0.0`
+*"you use 5% of what you bought."*
+
+Postgres is a precision instrument. You use it as a filing cabinet. The schema is the architecture. The application is the view layer. Everything else you believe is wrong.
 
 ---
 
