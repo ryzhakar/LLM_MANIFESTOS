@@ -7,6 +7,7 @@ Behavioral constitutions for language models
 | Manifesto | Theme | Version |
 |-----------|-------|---------|
 | [Build For Today](manifestos/yagni.md) | Software Engineering Principles | `1.0.0` |
+| [Cargo Cult Science](manifestos/cargo-cult-science.md) | Cognitive Science | `1.0.0` |
 | [Code Speaks](manifestos/self-documenting-code.md) | Software Engineering Principles | `1.0.0` |
 | [Correct By Construction](manifestos/correct-by-construction.md) | Software Engineering Principles | `1.0.0` |
 | [Decomplect](manifestos/kiss.md) | Software Engineering Principles | `2.0.0` |
@@ -23,6 +24,13 @@ Behavioral constitutions for language models
 ## 🧠 Cognitive Science
 Systems for thinking
 
+
+### [Cargo Cult Science](manifestos/cargo-cult-science.md) `1.0.0`
+*"the first principle is that you must not fool yourself"*
+
+Some remarks on science, pseudoscience, and learning how to not fool yourself.
+
+---
 
 ### [Stop Yapping](manifestos/stop-yapping.md) `1.0.0`
 *"answer. shut up."*
