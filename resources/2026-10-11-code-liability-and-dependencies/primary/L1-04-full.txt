@@ -1,0 +1,48 @@
+ID: L1-04
+TITLE: Code is our enemy (page title "Code is our enemy (Skrentablog)"; page h2 "Code is our enemy")
+AUTHOR: Rich Skrenta (name from L1-05: "Rich Skrenta writes that code is our enemy."; the archived page prints no personal byline: banner "Skrentablog", host www.skrenta.com, RDF dc:creator empty)
+YEAR: 2007 (post footer "Posted on May 30, 2007 3:11 PM"; RDF dc:date 2007-05-30T15:11:17-08:00; Wayback capture 2 June 2007 15:26:48 GMT)
+URL FETCHED: https://web.archive.org/web/20070602152648/http://www.skrenta.com/2007/05/code_is_our_enemy.html
+EXTRACTION METHOD: curl -sSL --max-time 60 (HTTP 200, 28705 bytes, 11 Oct 2026 11:21:30 UTC); Python re/html on div.entry-body; paragraph breaks on <p>; list items prefixed "- "; links kept as anchor text; <i> markup, line wraps and double spaces collapsed; page title, nav, post footer, trackback, 5 reader comments, comment form, sidebar and archive footer dropped
+
+Code is bad. It rots. It requires periodic maintenance. It has bugs that need to be found. New features mean old code has to be adapted.
+
+The more code you have, the more places there are for bugs to hide. The longer checkouts or compiles take. The longer it takes a new employee to make sense of your system. If you have to refactor there's more stuff to move around.
+
+Furthermore, more code often means less flexibility and functionality. This is counter-intuitive, but a lot of times a simple, elegant solution is faster and more general than the plodding mess of code produced by a programmer of lesser talent.
+
+Code is produced by engineers. To make more code requires more engineers. Engineers have n^2 communication costs, and all that code they add to the system, while expanding its capability, also increases a whole basket of costs.
+
+You should do whatever possible to increase the productivity of individual programmers in terms of the expressive power of the code they write. Less code to do the same thing (and possibly better). Less programmers to hire. Less organizational communication costs.
+
+The minimum description length principle (MDL) is often used in genetic programming to identify the most promising candidate programs from a population. The shorter solutions are often better; not just shorter, but actually faster and/or more general.
+
+A few hours reading WTF should convince anyone that there are often vast differences in the amount of code different programmers will put into the same task. But it's not just wtf? code. Components like a page crawler can have very different solutions. Maybe you can re-implement a 10k line solution into a 1k line solution, by taking a different approach. And it turns out that the shorter crawler is actually more general and works in a lot more cases. I've seen this over and over again in code and I'm convinced that it's harder to write something short and robust than something big and brittle.
+
+I've been looking for ways to get code out of the code. Is there something the code is doing that can be turned into an external dataset, and driven by a web UI, or some rule-list that I can contract out to someone on elance? Maybe a little rule-based language has to be written. I've seen this yield an unexpected productivity increase. It turns out that using the web tool to edit the rules in the little domain-specific language ends up being more productive than messing around in the raw code anyway. The time spent formalizing the subdomain language is more than paid back.
+
+Code has three lifetime performance curves:
+
+- Code that is consistent over time. The MD5 function is just great and it always does what we want. We act like all code is like this but most of the interesting parts of the system really aren't.
+
+- Code that will get worse over time, or will inevitably cause a problem in the future.
+
+Humans will have to jump in at some point to deal. You know this when you write the code, if you stop to think. Appending lines to a logfile without bothering to implement rotation is like this. Having a database that you know will grow over time on a single disk that counts on someone to type 'df' every so often and eventually deal is like that too.
+
+RAID is kind of like this. It reduces disk reliability problems by some constant. But when a disk fails, RAID has to email someone and say it's going to lose data unless someone steps in and deals. In a growing service, RAID is going to generate m management events for n disks. As n grows, m grows. 10X the disk cluster, 10X the management events. Wonderful. Better to architect something that decays organically over time, without requiring pager-level immediate support or else it will catastrophically fail. e.g the datacenter in one of these shipping container prototypes.
+
+- Code that gets better over time.
+
+This is the frontier.
+
+Google's spelling corrector is like this. It works okay on a small crawl, but better on a big crawl.
+
+People in the system can be organized this way, working on a component (like a dataset or ruleset) that they steadily improve over time. They're external to the core programming team but they make the code better by improving it with data.
+
+I've been wondering if it's possible to generally insert learning components at certain points into the code to adaptively respond to failure cases, scenarios, etc. Why am I manually tuning this perf variable or setting this backoff strategy? Why are we manually doing A/B testing and putting the results back into CVS to run another test, when the whole loop could be wired up to the live site to run by itself and just adapt and/or improve over time? I need to bake this some more but I think it's promising.
+
+Related:
+
+- Kevin Burton
+
+- be inflexibile

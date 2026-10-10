@@ -1,0 +1,304 @@
+
+
+Computer Science > Software Engineering
+
+arXiv:2406.10279
+ (cs)
+
+  [Submitted on 12 Jun 2024 (
+v1
+), last revised 2 Mar 2025 (this version, v3)]
+
+Title:
+We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs
+
+Authors:
+Joseph Spracklen
+,
+Raveen Wijewickrama
+,
+A H M Nazmus Sakib
+,
+Anindya Maiti
+,
+Bimal Viswanath
+,
+Murtuza Jadliwala
+
+View a PDF of the paper titled We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs, by Joseph Spracklen and 5 other authors
+
+View PDF
+
+HTML (experimental)
+
+Abstract:
+The reliance of popular programming languages such as Python and JavaScript on centralized package repositories and open-source software, combined with the emergence of code-generating Large Language Models (LLMs), has created a new type of threat to the software supply chain: package hallucinations. These hallucinations, which arise from fact-conflicting errors when generating code using LLMs, represent a novel form of package confusion attack that poses a critical threat to the integrity of the software supply chain. This paper conducts a rigorous and comprehensive evaluation of package hallucinations across different programming languages, settings, and parameters, exploring how a diverse set of models and configurations affect the likelihood of generating erroneous package recommendations and identifying the root causes of this phenomenon. Using 16 popular LLMs for code generation and two unique prompt datasets, we generate 576,000 code samples in two programming languages that we analyze for package hallucinations. Our findings reveal that that the average percentage of hallucinated packages is at least 5.2% for commercial models and 21.7% for open-source models, including a staggering 205,474 unique examples of hallucinated package names, further underscoring the severity and pervasiveness of this threat. To overcome this problem, we implement several hallucination mitigation strategies and show that they are able to significantly reduce the number of package hallucinations while maintaining code quality. Our experiments and findings highlight package hallucinations as a persistent and systemic phenomenon while using state-of-the-art LLMs for code generation, and a significant challenge which deserves the research community's urgent attention.
+
+Comments:
+
+To appear in the 2025 USENIX Security Symposium. 22 pages, 14 figures, 8 tables. Edited from original version for submission to a different conference. No change to original results or findings
+
+Subjects:
+
+Software Engineering (cs.SE)
+; Artificial Intelligence (cs.AI); Cryptography and Security (cs.CR); Machine Learning (cs.LG)
+
+Cite as:
+
+arXiv:2406.10279
+ [cs.SE]
+
+(or
+
+arXiv:2406.10279v3
+ [cs.SE]
+ for this version)
+
+https://doi.org/10.48550/arXiv.2406.10279
+
+Focus to learn more
+
+                  arXiv-issued DOI via DataCite
+
+Submission history
+ From: Joseph Spracklen [
+view email
+]
+
+[v1]
+
+        Wed, 12 Jun 2024 03:29:06 UTC (369 KB)
+
+[v2]
+
+        Tue, 24 Sep 2024 21:46:56 UTC (318 KB)
+
+[v3]
+
+        Sun, 2 Mar 2025 21:03:52 UTC (424 KB)
+
+Full-text links:
+
+Access Paper:
+
+View a PDF of the paper titled We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs, by Joseph Spracklen and 5 other authors
+View PDF
+HTML (experimental)
+TeX Source
+
+view license
+
+Current browse context:
+
+cs.SE
+
+< prev
+
+  |  
+
+next >
+
+new
+
+ |
+
+recent
+
+ |
+2024-06
+
+    Change to browse by:
+
+cs
+
+cs.AI
+
+cs.CR
+
+cs.LG
+
+References & Citations
+
+NASA ADS
+Google Scholar
+
+Semantic Scholar
+
+export BibTeX citation
+
+Loading...
+
+BibTeX formatted citation
+
+×
+
+loading...
+
+Data provided by:
+
+Bookmark
+
+Bibliographic Tools
+
+Bibliographic and Citation Tools
+
+Bibliographic Explorer Toggle
+
+Bibliographic Explorer
+
+(
+What is the Explorer?
+)
+
+Connected Papers Toggle
+
+Connected Papers
+
+(
+What is Connected Papers?
+)
+
+Litmaps Toggle
+
+Litmaps
+
+(
+What is Litmaps?
+)
+
+scite.ai Toggle
+
+scite Smart Citations
+
+(
+What are Smart Citations?
+)
+
+Code, Data, Media
+
+Code, Data and Media Associated with this Article
+
+alphaXiv Toggle
+
+alphaXiv
+
+(
+What is alphaXiv?
+)
+
+Links to Code Toggle
+
+CatalyzeX Code Finder for Papers
+
+(
+What is CatalyzeX?
+)
+
+DagsHub Toggle
+
+DagsHub
+
+(
+What is DagsHub?
+)
+
+GotitPub Toggle
+
+Gotit.pub
+
+(
+What is GotitPub?
+)
+
+Huggingface Toggle
+
+Hugging Face
+
+(
+What is Huggingface?
+)
+
+ScienceCast Toggle
+
+ScienceCast
+
+(
+What is ScienceCast?
+)
+
+Demos
+
+Demos
+
+Replicate Toggle
+
+Replicate
+
+(
+What is Replicate?
+)
+
+Spaces Toggle
+
+Hugging Face Spaces
+
+(
+What is Spaces?
+)
+
+Spaces Toggle
+
+TXYZ.AI
+
+(
+What is TXYZ.AI?
+)
+
+Related Papers
+
+Recommenders and Search Tools
+
+Link to Influence Flower
+
+Influence Flower
+
+(
+What are Influence Flowers?
+)
+
+Core recommender toggle
+
+CORE Recommender
+
+(
+What is CORE?
+)
+
+Author
+
+Venue
+
+Institution
+
+Topic
+
+        About arXivLabs
+
+arXivLabs: experimental projects with community collaborators
+
+arXivLabs is a framework that allows collaborators to develop and share new arXiv features directly on our website.
+
+Both individuals and organizations that work with arXivLabs have embraced and accepted our values of openness, community, excellence, and user data privacy. arXiv is committed to these values and only works with partners that adhere to them.
+
+Have an idea for a project that will add value for arXiv's community?
+Learn more about arXivLabs
+.
+
+Which authors of this paper are endorsers?
+ |
+
+Disable MathJax
+ (
+What is MathJax?
+)
+

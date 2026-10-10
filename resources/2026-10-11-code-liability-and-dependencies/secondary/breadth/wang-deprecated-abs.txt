@@ -1,0 +1,299 @@
+
+
+Computer Science > Software Engineering
+
+arXiv:2406.09834
+ (cs)
+
+  [Submitted on 14 Jun 2024 (
+v1
+), last revised 13 Feb 2025 (this version, v3)]
+
+Title:
+LLMs Meet Library Evolution: Evaluating Deprecated API Usage in LLM-based Code Completion
+
+Authors:
+Chong Wang
+,
+Kaifeng Huang
+,
+Jian Zhang
+,
+Yebo Feng
+,
+Lyuye Zhang
+,
+Yang Liu
+,
+Xin Peng
+
+View a PDF of the paper titled LLMs Meet Library Evolution: Evaluating Deprecated API Usage in LLM-based Code Completion, by Chong Wang and 6 other authors
+
+View PDF
+
+HTML (experimental)
+
+Abstract:
+Large language models (LLMs), pre-trained or fine-tuned on large code corpora, have shown effectiveness in generating code completions. However, in LLM-based code completion, LLMs may struggle to use correct and up-to-date Application Programming Interfaces (APIs) due to the rapid and continuous evolution of libraries. While existing studies have highlighted issues with predicting incorrect APIs, the specific problem of deprecated API usage in LLM-based code completion has not been thoroughly investigated. To address this gap, we conducted the first evaluation study on deprecated API usage in LLM-based code completion. This study involved seven advanced LLMs, 145 API mappings from eight popular Python libraries, and 28,125 completion prompts. The study results reveal the status quo (i.e., API usage plausibility and deprecated usage rate) of deprecated API and replacing API usage in LLM-based code completion from the perspectives of model, prompt, and library, and indicate the root causes behind. Based on these findings, we propose two lightweight fixing approaches, REPLACEAPI and INSERTPROMPT, which can serve as baseline approaches for future research on mitigating deprecated API usage in LLM-based completion. Additionally, we provide implications for future research on integrating library evolution with LLM-driven software development.
+
+Comments:
+
+Accepted by ICSE'25
+
+Subjects:
+
+Software Engineering (cs.SE)
+
+Cite as:
+
+arXiv:2406.09834
+ [cs.SE]
+
+(or
+
+arXiv:2406.09834v3
+ [cs.SE]
+ for this version)
+
+https://doi.org/10.48550/arXiv.2406.09834
+
+Focus to learn more
+
+                  arXiv-issued DOI via DataCite
+
+Submission history
+ From: Chong Wang [
+view email
+]
+
+[v1]
+
+        Fri, 14 Jun 2024 08:44:10 UTC (9,172 KB)
+
+[v2]
+
+        Wed, 3 Jul 2024 06:37:04 UTC (9,172 KB)
+
+[v3]
+
+        Thu, 13 Feb 2025 11:18:01 UTC (3,722 KB)
+
+Full-text links:
+
+Access Paper:
+
+View a PDF of the paper titled LLMs Meet Library Evolution: Evaluating Deprecated API Usage in LLM-based Code Completion, by Chong Wang and 6 other authors
+View PDF
+HTML (experimental)
+TeX Source
+
+view license
+
+Current browse context:
+
+cs.SE
+
+< prev
+
+  |  
+
+next >
+
+new
+
+ |
+
+recent
+
+ |
+2024-06
+
+    Change to browse by:
+
+cs
+
+References & Citations
+
+NASA ADS
+Google Scholar
+
+Semantic Scholar
+
+export BibTeX citation
+
+Loading...
+
+BibTeX formatted citation
+
+×
+
+loading...
+
+Data provided by:
+
+Bookmark
+
+Bibliographic Tools
+
+Bibliographic and Citation Tools
+
+Bibliographic Explorer Toggle
+
+Bibliographic Explorer
+
+(
+What is the Explorer?
+)
+
+Connected Papers Toggle
+
+Connected Papers
+
+(
+What is Connected Papers?
+)
+
+Litmaps Toggle
+
+Litmaps
+
+(
+What is Litmaps?
+)
+
+scite.ai Toggle
+
+scite Smart Citations
+
+(
+What are Smart Citations?
+)
+
+Code, Data, Media
+
+Code, Data and Media Associated with this Article
+
+alphaXiv Toggle
+
+alphaXiv
+
+(
+What is alphaXiv?
+)
+
+Links to Code Toggle
+
+CatalyzeX Code Finder for Papers
+
+(
+What is CatalyzeX?
+)
+
+DagsHub Toggle
+
+DagsHub
+
+(
+What is DagsHub?
+)
+
+GotitPub Toggle
+
+Gotit.pub
+
+(
+What is GotitPub?
+)
+
+Huggingface Toggle
+
+Hugging Face
+
+(
+What is Huggingface?
+)
+
+ScienceCast Toggle
+
+ScienceCast
+
+(
+What is ScienceCast?
+)
+
+Demos
+
+Demos
+
+Replicate Toggle
+
+Replicate
+
+(
+What is Replicate?
+)
+
+Spaces Toggle
+
+Hugging Face Spaces
+
+(
+What is Spaces?
+)
+
+Spaces Toggle
+
+TXYZ.AI
+
+(
+What is TXYZ.AI?
+)
+
+Related Papers
+
+Recommenders and Search Tools
+
+Link to Influence Flower
+
+Influence Flower
+
+(
+What are Influence Flowers?
+)
+
+Core recommender toggle
+
+CORE Recommender
+
+(
+What is CORE?
+)
+
+Author
+
+Venue
+
+Institution
+
+Topic
+
+        About arXivLabs
+
+arXivLabs: experimental projects with community collaborators
+
+arXivLabs is a framework that allows collaborators to develop and share new arXiv features directly on our website.
+
+Both individuals and organizations that work with arXivLabs have embraced and accepted our values of openness, community, excellence, and user data privacy. arXiv is committed to these values and only works with partners that adhere to them.
+
+Have an idea for a project that will add value for arXiv's community?
+Learn more about arXivLabs
+.
+
+Which authors of this paper are endorsers?
+ |
+
+Disable MathJax
+ (
+What is MathJax?
+)
+

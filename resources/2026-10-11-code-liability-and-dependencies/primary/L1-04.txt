@@ -1,0 +1,10 @@
+ID: L1-04
+TITLE: Code is our enemy (Skrentablog; title from link text in L1-05 and search-index title)
+AUTHOR: Rich Skrenta (attribution: "Rich Skrenta writes that code is our enemy" in L1-05)
+YEAR: 2007 (URL path /2007/05/; L1-05 dated 30 May 2007 cites a 2 June 2007 archive snapshot)
+URL FETCHED: https://blog.codinghorror.com/the-best-code-is-no-code-at-all/ (Atwood's block quotation of Skrenta; original http://www.skrenta.com/2007/05/code_is_our_enemy.html redirects to linkedin.com, HTTP 999)
+EXTRACTION METHOD: PARTIAL - copied the two-paragraph blockquote Atwood presents as Skrenta's words from L1-05 (blockquote element, quote marks removed); original post not retrievable; completeness against the original unverified
+
+Code is bad. It rots. It requires periodic maintenance. It has bugs that need to be found. New features mean old code has to be adapted. The more code you have, the more places there are for bugs to hide. The longer checkouts or compiles take. The longer it takes a new employee to make sense of your system. If you have to refactor there’s more stuff to move around.
+
+Code is produced by engineers. To make more code requires more engineers. Engineers have n^2 communication costs, and all that code they add to the system, while expanding its capability, also increases a whole basket of costs. You should do whatever possible to increase the productivity of individual programmers in terms of the expressive power of the code they write. Less code to do the same thing (and possibly better). Less programmers to hire. Less organizational communication costs.

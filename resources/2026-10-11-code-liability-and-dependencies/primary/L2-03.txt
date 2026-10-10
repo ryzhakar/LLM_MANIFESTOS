@@ -1,0 +1,134 @@
+ID: L2-03
+Title: CPAN "private showing" (CPAN.ANNOUNCE; Hietaniemi's pre-launch announcement to perl-packrats; NOT the 26 Oct 1995 comp.lang.perl.announce launch post)
+Author: Jarkko Hietaniemi
+Year: 1995 (dated 1 August 1995 by Bowers 2015; file Last-Modified 26 Jul 1995)
+URL fetched: https://www.cpan.org/misc/CPAN.ANNOUNCE
+Extraction method: curl -sSL; saved verbatim, message headers included, trailing whitespace stripped
+
+Organization: Helsinki University of Technology, Finland
+To: perl-packrats@feenix.metronet.com
+Cc: rahard@ee.umanitoba.ca
+Subject: CPAN "private showing"
+Reply-to: Jarkko.Hietaniemi@hut.fi
+FCC: /u/lai/lk/jhi/.Mail/Out/OUT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+--text follows this line--
+
+I finally decided let this thing loose
+
+	ftp.funet.fi:/pub/languages/perl/CPAN/
+
+This "release" is mainly meant for the current keepers of the
+various Perl archives.  Please take a look around, many looks,
+tell me (and the perl-packrats) what do you think.  What do you
+see that you do not like, what do you not see that you would like?
+The hierarchy is to be blamed on me (with some cosmetic guidance from
+the earlier packrats discussions :-).  Some kind souls (src.doc.ic.ac.uk
+and ftp.metronet.com come to mind) could setup a mirroring from funet.
+
+But there is a catch:
+I will be leaving for a _long_ holiday starting the 7th of October,
+will be non-Inet-connectible until the 10th of September.
+Therefore, there is not much time for me to do any massive
+enhancements for this skeletal CPAN.  BUT: please, Fellow Perl Archivists,
+you have 7.5 weeks time to practise Comparative Perl Archaeology
+and see what CPAN is lacking that _you_ have.  And because the goal
+of the CPAN is to be the Mother of All Perl Archives...
+Perl scripts, documentation, ports to non-UNIXy machines, tips,
+tricks, and trips, Perl folklore/poetry, anything.
+
+I guess I will not be putting up an incoming/ directory to funet.
+Why? Because I guess there will be a lot of missing things and I do not
+like the idea of returning from the holiday AND after several days
+of battling with my obscenely overflowing mailbox I would have to
+wade through umpteen dozen little perl snippets in the incoming/.
+I would prefer the following agenda: all you who have something
+that CPAN is missing, please create tidy .tar.gz:s in somewhere
+for me to ftp (and then, alas, drop me an email note about that...).
+That tar very preferably already subdivided according to the CPAN hierarchy.
+
+Suggestions about the hierarchy and more sites to be mirrored also
+welcome.  Cc such suggestions to the packrats, they might need more
+public hashing.
+
+A general plea: some site could volunteer to be the perl5 extension site.
+
+If you are a perl archivist but not yet on the packrats list, now
+is the time to subscribe.  perl-packrats-request@metronet.com
+if I am not mistaken.
+
+Suggestions for the Archivists:
+	- no shars, make them to be tars
+	- no zips/lzhs/lhas for UNIX stuff, make them to be tars
+	  (such native packing formats are quite ok for non-UNIX stuff)
+	- no .Z, use .gz
+
+Suggestions for tchrist:
+	- the doc/ tree is all yours, do something about it :-)
+	  (as it now stands it is a veritable mess)
+
+The files ls-lR.gz, find-ls.gz, and MIRRORING.FROM are automagically
+generated nightly.
+
+This the MIRRORING.FROM as it now stands:
+
+---
+# Perl scripts from metronet
+# daily: last update Wed Jul 26 21:26:08 EET DST 1995
+
+ftp.metronet.com:/pub/perl/scripts/
+
+# CPAN ANLpasswd
+# weekly: last update Sat Jun 17 14:56:07 EET DST 1995
+
+ftp.mcs.anl.gov:/pub/systems/anlpasswd.*|README.INSTALL.ANLPASSWD
+
+# CPAN Perl Byacc
+# weekly: last update Tue Jun 20 10:51:29 EET DST 1995
+
+ftp.sterling.com:/local/perl-byacc.*.tar.Z
+
+# CPAN Berkeley DB
+# weekly: last update Sun Jul  2 07:11:52 EET DST 1995
+
+ftp.cs.berkeley.edu:/ucb/4bsd/db.*.tar.gz
+
+# CPAN FAQ
+# weekly: last update Wed Jul 26 07:06:45 EET DST 1995
+
+ftp.cis.ufl.edu:/pub/perl/doc/FAQ.gz
+
+# CPAN GNU DBM
+# weekly: last update Sun Jul  2 07:11:52 EET DST 1995
+
+prep.ai.mit.edu:/pub/gnu/gdbm.*.tar.gz
+
+# CPAN metaFAQ
+# weekly: last update Wed Jul 26 07:06:45 EET DST 1995
+
+ftp.khoros.unm.edu:/pub/perl/metaFAQ.ps|metaFAQ.txt|metaFAQ-html.tar.gz
+
+# CPAN MSDOS Perl
+# weekly: last update Wed Jul 26 07:06:00 EET DST 1995
+
+ftp.ee.umanitoba.ca:/pub/msdos/perl/
+
+# CPAN O'Reilly
+# weekly: last update Sun Jul  2 07:12:58 EET DST 1995
+
+ftp.ora.com:/pub/examples/nutshell/learning_perl|programming_perl|ujip/perl
+
+# CPAN DBPerl
+# daily: last update Wed Jul 26 02:02:28 EET DST 1995
+
+ftp.demon.co.uk:/pub/perl/db/
+
+# CPAN MacPerl
+# weekly: last update Sun Jul 23 02:01:38 EET DST 1995
+
+nic.switch.ch:/software/mac/perl/
+---
+
+++jhi;

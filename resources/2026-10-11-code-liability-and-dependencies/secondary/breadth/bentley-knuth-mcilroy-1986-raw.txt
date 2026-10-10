@@ -1,0 +1,1686 @@
+by jot1 Be~~tley
+with Special Guest Oysters
+Don Knuth and Doug McIlroy
+
+programming
+pearls
+
+A LITERATE PROGRAM
+Last month‘s column introduced Don Knuth’s style of
+“Literate Programming” and his WEB system for building
+programs that are works of literature. This column presents a literate program by Knuth (its origins are sketched
+in last month‘s column) and, as befits literature, a review.
+So without further ado, here is Knuth’s program,
+retypeset in Communications style.
+-Jon Bentley
+Common Words
+Section
+Introduction..
+....,.......,,.....,.,.....,,.. 1
+Strategic considerations . . . . . . . . . . . . . . . . . . . . . . , a
+Basic input routines . . . . , , . . . . . . . . . . . . . . . . . . . . 9
+Dictionary lookup . , . . . . . . . . . . . . . . . . . , . . . . . . , .17
+The frequency counts . . . . . . . . . . . . . . . . . . . . . . . .32
+Sortingatrie
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . ...36
+Theendgame................................41
+Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ...42
+1. Introduction.
+The purpose of this program is to
+solve the following problem posed by Jon Bentley:
+Given a text file and an integer k, print the k most
+common words in the file (and the number of
+their occurrences) in decreasing frequency.
+Jon intentionally left the problem somewhat
+vague, but he stated that “a user should be able to
+find the 100 most frequent words in a twenty-page
+technical paper (roughly a 50K byte file) without
+undue emotional trauma.”
+Let us agree that a word is a sequence of one or
+more contiguous letters; “Bentley”
+is a word, but
+“ain 1t II isn’t. The sequence of letters should be
+maximal, in the sense that it cannot be lengthened
+without including a nonletter. Uppercase letters
+are considered equivalent to their lowercase
+counterparts, so that the words “Bentley”
+and “BENTLEY” and “bentley”
+are essentially
+identical.
+The given problem still isn’t well defined, for the
+file might contain more than k words, all of the same
+01966 ACM OOOl-0782/86/0600-0471
+
+June 1986
+
+750
+
+Volume 29 Number 6
+
+frequency; or there might not even be as many as k
+words. Let’s be more precise: The most common
+words are to be printed in order of decreasing frequency, with words of equal frequency listed in alphabetic order. Printing should stop after k words
+have been output, if more than k words are present.
+2. The input file is assumed to contain the given
+text. If it begins with a positive decimal number
+(preceded by optional blanks), that number will be
+the value of k; otherwise we shall assume that
+k = 100. Answers will be sent to the output file.
+define default-k = 100 (use this value if k isn’t
+otherwise specified)
+3. Besides solving the given problem, this program is
+supposed to be an example of the WEB system, for
+people who know some Pascal but who have never
+seen WEB before. Here is an outline of the program
+to be constructed:
+program common-words (input, output);
+type (Type declarations 17)
+var (Global variables 4)
+(Procedures for initialization 5)
+(Procedures for input and output a)
+(Procedures for data manipulation 20)
+begin (The main program 8);
+end.
+4. The main idea of the WEB approach is to let the
+program grow in natural stages, with its parts presented in roughly the order that they might have
+been written by a programmer who isn’t especially
+clairvoyant.
+For example, each global variable will be introduced when we first know that it is necessary or
+desirable; the WEB system will take care of collecting
+these declarations into the proper place. We already
+know about one global variable, namely the number
+that Bentley called k. Let us give it the more descriptive name max-words-to-print.
+
+Communications
+of the ACM
+
+471
+
+Programming Pear/s
+
+(Global variables 4) =
+max.-words-to-print: integer;
+(at most this many words will be printed)
+See also sections 11, 13, 18, 22, 32, and 36.
+This code is used in section 3.
+
+5. As we introduce new global variables, we’ll often
+want to give them certain starting values, This will
+be done by the initialize procedure, whose body will
+consist of various pieces of code to be specified
+when we think of particular kinds of initialization,
+(Procedures for initialization
+5) =
+procedure initialize;
+var i: integer; {all-purpose index for initializations)
+begin (Set initial values 12)
+end;
+This code is used in section 3.
+
+6. The WEB system, which may be thought of as a
+preprocessor for Pascal, includes a macro definition
+facibty so that portable programs are easier to write.
+For example, we have already defined ‘default-k’ to
+be 100. Here are two more examples of WEB macros;
+they allow us to write, e.g., ‘incr(counf[ p])’ as a convenient abbreviation for the statement ‘counf[ p] +
+counf[p] + 1’.
+define incr(#) = # c- # + 1 (increment a variable}
+define deer(#) = 4#t # - 1 {decrement a variable)
+7. Some of the procedures we shall be writing come
+to abrupt conclusions; hence it will be convenient to
+introduce a ‘return’ macro for the operation of
+jumping to the end of the procedure. A symbolic
+label ‘exit’ will be declared in all such procedures,
+and ‘exit:’ will be placed just before the final end.
+(No other labels or goto statements are used in the
+present program, but the author would find it painful to eliminate these particular ones.)
+define exit = 30 (the end of a procedure}
+define return = goto exit {quick termination]
+format return = nil {typeset ‘return’ in boldface)
+8. Strategic considerations.
+What algorithms and
+data structures should be used for Bentley’s problem? Clearly we need to be able to recognize different occurrences of the same word, so some sort of
+internal dictionary is necessary. There’s no obvious
+way to decide that a particular word of the input
+cannot possibly be in the final set, until we’ve gotten
+very near the end of the file; so we might as well
+remember every word that appears.
+
+472
+
+Communications of he ACM
+
+There should be a frequency count associated
+with each word, and we will eventually want to run
+through the words in order of decreasing frequency.
+But there’s no need to keep these counts in order as
+we read through the input, since the order matters
+only at the end.
+Therefore it makes sense to structure our program
+as follows:
+(The main program a) =
+initialize;
+IO);
+(Establish the value of max-words-to-print
+(Input the text, maintaining a dictionary with
+frequency counts 34);
+(Sort the dictionary by frequency 39);
+(Output the results 41)
+This code is used in section 3.
+
+9. Basic input routines.
+Let’s switch to a bottomup approach now, by writing some of the procedures
+that we know will be necessary sooner or later.
+Then we’ll have some confidence that our program
+is taking shape, even though we haven’t decided yet
+how to handle the searching or the sorting. It will be
+nice to get the messy details of Pascal input out of
+the way and off our minds.
+Here’s a function that reads an optional positive
+integer, returning zero if none is present at the beginning of the current line.
+(Procedures for input and output 9) =
+function read-inf: integer;
+var n: integer; {th e accumulated value)
+begin n c 0;
+if leaf then
+begin while (leoln) A (input t = Iu’) do
+gef(inpuf];
+while (input 1 2 ‘0’) A (input 1 5 ‘9’) do
+begin n t lO*n + ord(inpuf7) - ord(‘0’);
+gef(inpuf);
+end;
+end;
+read-inf c n;
+end;
+See also sections 15, 35, and 40.
+This code is used in section 3.
+
+10. We invoke readht
+
+only once.
+
+(Establish the value of max-words-to-print
+max-words-to-print c read-inf;
+if max-words-to-prinf = 0 then
+max-words-to-print t default-k
+
+IO)
+
+=
+
+This code is used in section 8.
+
+11. To find words in the input file, we want a quick
+way to distinguish letters from nonletters. Pascal has
+
+June 1986
+
+Volume 29
+
+Number 6
+
+Programming Pearls
+
+conspired to make this problem somewhat tricky,
+because it leaves many details of the character set
+undefined. We shall define two arrays, lowercase and
+uppercase, that specify the letters of the alphabet. A
+third array, lettercode, maps arbitrary characters into
+the integers 0 . . 26.
+If c is a value of type char that represents the kth
+letter of the alphabet, then lettercode[ord(c)] = k; but
+if c is a nonletter, lettercode[ord(c)] = 0. We assume
+that 0 5 ord(c) 5 255 whenever c is of type char.
+(Global variables 4) +=
+lowercase, uppercase: array [l . . 261 of char;
+(the letters)
+lettercode; array [0 . . 2551 of 0 . . 26;
+{the input conversion table)
+12. A somewhat tedious set of assignments is necessary for the definition of lowercase and uppercase, because letters need not be consecutive in Pascal’s
+character set.
+(Set initial values 12) =
+lowercase[l] t ‘a’; uppercase[l] t ‘A’;
+lowercase[2] + ‘b’; uppercase[2] c ‘B’;
+lowercase[3] .L ‘c’; uppercase[3] c ‘C’;
+lowercase[4] t ‘d’; uppeucase[4] t ‘D’;
+loweYcase[5] + ‘e’; uppercase[5] t ‘E’;
+lowercase[6] + ‘f’; uppercase[6] t ‘I?‘;
+lowercase[7] t ‘g’; uppercase[7] t ‘G’;
+lowercase[8] + ‘h’; uppercase[8] t ‘H’;
+lowercase[9] + ‘i’; uppercase[9] c ‘I’;
+lowercase[lO] + ’ j’; uppercase[lO] c ‘J’;
+~owercase[ll] t ‘k’; uppercase[ll] t ‘K’;
+lowercase[l2] c ‘1’; uppercase1121c ‘L’;
+lowercase[l3] t ‘m’; uppercase[l3] c ‘M’;
+lowercase[l4] t ‘n’; uppercase[l4] t ‘N’;
+lowercase[l5] + ‘0’; uppercase[l5] c ‘0’;
+lowercase[l6] c ‘p’; uppercase[l6] c ‘P’;
+lowercase[l7] t ‘q’; uppercase[l7] t ‘Q’;
+loweucase[l8] c ‘r’; uppercase[l8] c ‘R’;
+lowercase[l9] c ‘s’; uppercase[l9] c ‘S’;
+loweYcase[20] + ‘t’; uppercase[20] c ‘T’;
+Zowercase[21] c ‘u’; uppercase[Zl] c ‘U’;
+lowercase[22] c ‘v’; uppercase[22] t ‘V’;
+lowercase[23] + ‘WI; uppercase[23] t ‘W’;
+lowercase[24] + ‘x’; uppercase[24] c ‘X’;
+lowercase[25] + ‘y’; uppercase[25] c ‘Y’;
+lowercase[26] c ‘2’; uppercase[26] c ‘z’;
+for i t 0 to 255 do lettercode [i] c 0;
+for i t 1 to 26 do
+begin lettercode[ord(lowercase[i])] c i;
+lettercode[ord(uppercase[i])] c i;
+end;
+See also sections 14, 19, 23, and 33.
+This code is used in section 5.
+
+June 1986
+
+Volume 29 Number 6
+
+13. Each new word found in the input will be
+placed into a buffer array. We shall assume that no
+words are more than 60 letters long; if a longer word
+appears, it will be truncated to 60 characters, and a
+warning message will be printed at the end of the
+run.
+define max-word-length = 60
+{words shouldn’t be longer than this]
+(Global variables 4) +=
+buffer: array [l . . max-word-length] of 1 . . 26;
+(the current word]
+word-length: 0 . . max-word-length;
+(the number of active letters currently in buffer]
+word-truncated: boolean;
+(was some word longer than max-word-length?]
+14. (Set initial values 12) +=
+word-truncated t false;
+15. We’re ready now for the main input routine,
+which puts the next word into the buffer. If no more
+words remain, word-length is set to zero; otherwise
+word-length is set to the length of the new word.
+(Procedures for input and output 9) +=
+procedure get-word;
+label exit; {enable a quick return)
+begin word-length + 0;
+if leaf then
+begin while lettercode[ord(input t)] = 0 do
+if leoln then get(input)
+else begin read-ln;
+if eof then return;
+end;
+(Read a word into buffer 16);
+end;
+exit: end;
+16. At this point lettercode[ord(input t)] > 0, hence
+input T contains the first letter of a word.
+(Read a word into buffer 16) =
+repeat if word-length = max-word-length then
+word-truncated + true
+else begin incr(word-length);
+buffer[word-length] c lettercode[ord(input t)];
+end;
+get(input);
+until lettercode[ord(input f)] = 0
+This code is used in section 15.
+
+17. Dictionary lookup.
+Given a word in the buffer,
+we will want to look for it in a dynamic dictionary
+of all words that have appeared so far. We expect
+
+Communications
+
+of the ACM
+
+473
+
+Programming Pearls
+
+many words to occur often, so we want a search
+technique that will find existing words quickly. Furthermore, the dictionary should accommodate words
+of variable length, and [ideally) it should also facilitate the task of alphabetic ordering.
+These constraints, suggest a variant of the data
+structure introduced by Frank M. Liang in his Ph.D.
+thesis [“Word Hy-p.hen-a-tion by Corn-pu-ter,”
+Stanford University, 19831. Liang’s structure, which
+we may call a hash Pie, requires comparatively few
+operations to find a word that is already present,
+although it may take somewhat longer to insert a
+new entry. Some space is sacrificed-we
+will need
+two pointers, a count, and another s-bit field for
+each character in the dictionary, plus extra space to
+keep the hash table from becoming congested-but
+relatively large memories are commonplace nowadays, so the method seems ideal for the present
+application.
+A trie represents a set of words and all prefixes of
+those words [cf. I<nuth, Sorting and Searching, Section
+6.31. For convenience, we shall say that all nonempty prefixes of the words in our dictionary are
+also words, even though they may not occur as
+“words” in the inpu.t file. Each word (in this generalized sense) is represented by a pointer, which is an
+index into four large arrays called link, sibling, count,
+and ch.
+define frie-size = 32767
+
+(the largest pointer value)
+
+(Type declarations 17) =
+pointer = 0 . . trie.size;
+This code is used in section 3.
+
+18. One-letter words are represented by the pointers
+1 through 26. The representation of longer words is
+defined recursively: If p represents word w and if
+1 5 c % 26, then the word w followed by the cth
+letter of the alphabet is represented by Iink[ p] + c.
+For example, suppose that link[2] = 1000,
+link[1005] = 2000, a.nd link[2015] = 3000. Then the
+word vlb*l is represented by the pointer value 2;
+“be” is represented by Zink[2] + 5 = 1005; “hen”
+is
+represented by 2015; and “bent”
+by 3021. If no
+longer word beginning with “bent ‘I appears in the
+dictionary, Iink[3021] will be zero.
+The hash trie also contains redundant information
+to facilitate traversal and updating. If link[ p] is nonzero, then link[Zink[ p]] = p. Furthermore if 4 =
+link[ p] + c is a “child” of p, we have ch[q] = c; this
+makes it possible to’ go from child to parent, since
+link[q - ch[q]] = link[link[p]] = p.
+Children of the same parent are linked by sibling
+pointers: The largest child of p is sibling]link[ p]], and
+the next largest is sibling[sibling[link[ p]]]; the small-
+
+474
+
+Communications of the ACM
+
+est child’s sibling pointer is link[ p]. Continuing our
+earlier example, if all words in the dictionary beginning with “be*’ sl.art with either “hen” or “betl*,
+then sibfing[2000] = 2021, sibling[2021] = 2015, and
+sibling[2015] = 2000.
+Notice that children of different parents might appear next to each other. For example, we might
+have ch[2020] = 6, for the child of some word such
+that link[p] = 2014.
+If link[ p] # 0, the table entry in position link[ p] is
+called the “header” of p’s children. The special code
+value header appears in the ch field of each header
+entry.
+If p represents a word, count [p] is the number of
+times that the word has occurred in the input so far.
+The count field in a header entry is undefined.
+Unused positions p have ch[p] = empty-slot: In this
+case link[ p], sibling[ p], and count [ p] are undefined.
+define empfy-slot = 0
+define header = 27
+define move-to-prefix(#) = # c link[# - ch[#]]
+define move-to-last-suffix(#)
+=
+while link[#] # 0 do # t sibling[link[#]]
+(Global variables 4) +=
+link, sibling: array [pointer] of pointer;
+ch: array [pointer] of empty-slot . . header;
+19. (Set initial values 12) +=
+for i c 27 to trie-size do ch[i] t empty-slot;
+foritl
+to26do
+begin ch[i] c i; link[i] c 0; count[i] t 0;
+sibling[i] c i - 1;
+end;
+ch[O] c header; link[O] c 0; sibling[O] t 26;
+20. Here’s the basic subroutine that finds a given
+word in the dictionary. The word will be inserted
+(with a count of zero) if it isn’t already present.
+More precisely, the find-buffer function looks for
+the contents of buffer, and returns a pointer to the
+appropriate dictionary location. If the dictionary is
+so full that a new word cannot be inserted, the
+pointer 0 is returned.
+define abort-find =
+begin find-buffer c 0; return; end
+(Procedures for data manipulation zo) =
+function find-buffer: pointer;
+label exit; (enable a quick return)
+vari:l..
+max-word-length; (index into buffer)
+p: pointer; (the current word position)
+q: pointer; (the next word position)
+c: 1 . . 26; {current letter code)
+(Other local variables of find-buffer 26)
+
+June 1986
+
+Volume 29 Number 6
+
+Programming
+
+begin i t 1; p t buffer[l];
+while i < word-length do
+begin incr(i); c + buffer[i];
+(Advance p to its child number c 21);
+end;
+find-buffer c p;
+exit: end ;
+See also section 37.
+
+Pearls
+
+define tolerance = 1000
+(Get set for computing header locations 24) =
+if x < trie-size - 52 - alpha then x t x + alpha
+else x t x + alpha - trie-size + 52;
+h + x + 27; {now 26 < h 6 trie-size - 26)
+if h 5 trie-size - 26 - tolerance then
+lust-h t h + tolerance
+else lust-h c h + tolerance - trie-size + 52;
+
+This code is used in section 3.
+This code is used in sections 27 and 31.
+
+21. (Advance p to its child number c 21) =
+if link[ p] = 0 then (Insert the firstborn child of p
+and move to it, or abort-find 27)
+else begin 9 c link[ p] + c;
+if ch[9] # c then
+begin if ch[q] # empty-slot then
+(Move p’s family to a place where child c
+will fit, or abort-find 29);
+(Insert child c into p’s family 28);
+end;
+P+9;
+
+end
+This code is used in section 20.
+
+22. Each “family” in the trie has a header location
+h = link[ p] such that child c is in location h + c. We
+want these values to be spread out in the trie, so
+that families don’t often interfere with each other.
+Furthermore we will need to have
+26 < h 5 trie-size - 26
+if the search algorithm is going to work properly.
+One of the main tasks of the insertion algorithm is
+to find a place for a new header. The theory of hashing tells us that it is advantageous to put the nth
+header near the location x,, = conmod t, where t =
+trie-size - 52 and where (Yis an integer relatively
+prime to t such that a/t is approximately equal to
+(& - 1)/2 = .61803. [These locations X, are about as
+“spread out” as you can get; see Sorting and Searching,
+pp. 510-511.1
+define alpha = 20219
+
+(- .61803trie_size)
+
+(Global variables 4) +=
+x: pointer; (an mod (trie-size - 52))
+23. (Set initial
+
+xt
+
+values 12) +=
+
+0;
+
+25. (Compute the next trial header location h,
+
+or abort-find 25) =
+if h = last-h then abort-find;
+if h = trie-size - 26 then h + 27
+else incr(h)
+This code is used in sections 27 and 31.
+
+26. (Other local variables of find-buffer 26) =
+h: pointer; (trial header location)
+last-h: integer; lthe final one to try)
+See also section 30.
+This code is used in section 20.
+
+27. (Insert the firstborn child of p and move to it,
+
+or abort-find 27) =
+begin (Get set for computing header locations 24);
+repeat (Compute the next trial header location h,
+or abort-find 25);
+until (ch[h] = empty-slot) A
+(ch[h + c] = empty-slot);
+link[ p] c h; link[h] t p; p t h + c;
+ch[h] c header; ch[ p] t c;
+sibling[h] c p; sibling[ p] c h; count[ p] t 0;
+link[ p] t 0;
+end
+This code is used in section 21.
+
+28. The decreasing order of sibling pointers is preserved here. We assume that 9 = link[p] + c.
+
+(Insert child c into p’s family 28) =
+begin h t link[ p];
+while sibling[h] > 9 do h t sibling[h];
+sibling[q] t sibling[h]; sibling[h] + 9;
+ch[q] c c; count[q] c 0; link[q] c 0;
+end
+This code is used in section 21.
+
+24. We will give up trying to find a vacancy if 1000
+
+trials have been made without success. This will
+happen only if the table is quite full, at which time
+the most common words will probably already appear in the dictionary.
+
+he
+
+1986
+
+Volume 29
+
+Number 6
+
+29. There’s one complicated case, which we have
+left for last. Fortunately this step doesn’t need to be
+done very often in practice, and the families that
+need to be moved are generally small.
+
+Communicationsof the ACM
+
+475
+
+Programming Pearls
+
+(Move p’s family to a place w:here child c will fit,
+or abort-find 29) =
+begin (Find a suitable place h to move,
+or abort-find 31);
+q c h + c; r c link[ p]; delta c h - r;
+repeat sibling[r + delta] t sibling[r] + delta;
+ch[r + delta] c ch[r]; ch[r] t empty-slot;
+count[r + delta] c count[r];
+link[r + delta] t- link[r];
+if link[r] # 0 then link[link[r]] t r + delta;
+r c sibling[rI];
+until ch [ r] = empty-slot ;
+end
+This code is used in section 21.
+
+30. (Other local va.riables of find-buffer 26) +=
+r: pointer; (family member to be moved]
+delta: integer; {amount of motion]
+slot-found: boolean; (h ave we found a new homestead?}
+31. (Find a suitable place h to move,
+or abort-find 31) =
+slot-found c false;
+(Get set for computing header locations 24);
+repeat (Compute the next trial header location h,
+or abort-find 25);
+if ch[h + c] = empty-slot then
+begin r t link[ p]; delta t h - r;
+while (ch[r + delta] = empty-slot) A
+(sibling[r] # link[p]) do r t sibling[r];
+if ch[r + delta] = empty-slot then
+slot-found 4~ true;
+end;
+until slot-found
+This code is used in section 29.
+
+32. The frequency counts. 1.tis, of course, a simple matter to combine dictionary lookup with the
+get-word routine, so that all the word frequencies
+are counted. We may have to drop a few words in
+extreme cases (when the dictionary is full or the
+maximum count has been reached).
+define max-count = 32767
+{counts won’t go higher than this!
+(Global variables 4) +=
+count: array [pointer] of 0 , . max-count;
+word-missed: boolean; (did the dictionary get too
+full?]
+p: pointer; (location of the current word)
+33. (Set initial values 12) +=
+word-missed + false;
+
+476
+
+Commutlications of the ,4CM
+
+34. (Input the text, maintaining a dictionary with
+frequency counts 34) =
+get-word;
+while word-length # 0 do
+begin p c find-buffer;
+if p = 0 then word-missed + true
+else if count[ p] < max-count then incr(count[ p]);
+get-word;
+end
+This code is used in section 8.
+
+35. While we have the dictionary structure in mind,
+let’s write a routine that prints the word corresponding to a given pointer, together with the corresponding frequency count.
+For obvious reasons, we put the word into the
+buffer backwards during this process.
+(Procedures for input and output 9) +=
+procedure print-word( p: pointer);
+var q: pointer; (runs through ancestors of p]
+i: 1 , . max-word-length;
+(index into buffer)
+begin word-length t 0; q t p; write(‘,‘);
+repeat incr(word-length);
+buffer[ word-length] + ch [q];
+move-to-prefix(q);
+until q = 0;
+for i c word-length downto 1 do
+write(lowercase[buffer[i]]);
+if count[ p] < max-count then
+wrife-ln(‘u’, counf[p] : 1)
+else write-ln(‘u’, max-count : 1, ‘oor,more’);
+end;
+36. Sorting a trie. Almost all of the frequency
+counts will be small, in typical situations, so we
+needn’t use a general-purpose sorting method. It suffices to keep a few linked lists for the words with
+small frequencies, with one other list to hold everything else.
+define large-count = ZOO {all counts less than this
+will appear in separate lists)
+(Global variables 4) +=
+sorted: array [l . . large-count] of pointer; (list
+heads]
+total-words: integer: (th e number of words sorted]
+37. If we walk through the trie in reverse alphabetical order, it is a simple matter to change the sibling
+hnks so that the words of frequency f are pointed to
+by sorted[ f], sibling[sorted[ f]], . . . in alphabetical
+order. When f = large-count, the words must also be
+linked in decreasing order of their count fields.
+
+\une 1986
+
+Volume 29
+
+Number 6
+
+Programming Pearls
+
+The restructuring operations are slightly subtle
+here, because we are modifying the sibling pointers
+while traversing the trie.
+(Procedures for data manipulation ZO) +=
+procedure trie-sort;
+varkzl..
+large-count; {index to sorted}
+p : pointer; {current position in the trie}
+f:O.. max-count; (current frequency count 1
+q, r: pointer; (list manipulation variables)
+begin total...words t 0;
+for k c 1 to large-count do sorted[k] c 0;
+p c sibling[O]; move-to-last-suffix(p);
+repeat ft count[ p]; q t sibling[ p];
+if f # 0 then (Link p into the list sorted[ f ] 38);
+if ch[q] # header then
+begin p c 9; move-to-last-suffix(p);
+end
+{move to prefix]
+else p t link[q];
+until p = 0;
+end :
+38. Here we use the fact that count[O] = 0.
+(Link p into the list sorted[ f] 38) =
+begin incr(total-words);
+if f < large-count then (easy case}
+begin sibling[ p] t sorted[ f]; sorted[ f] t p;
+end
+else begin r c sorted[large-count];
+if count[ p] 2 count[r] then
+begin sibling[ p] c r; sorted[large-count] c p;
+end
+else begin while count[pJ < count[sibling[r]] do
+r c sibling[r];
+sibling[ p] c sibling[r]; sibling[r] c p;
+end ;
+end;
+end
+This code is used in section 37
+
+(Procedures for input and output 9) +=
+procedure print-common(k : integer);
+label exit; {enable a quick return)
+large-count + 1; (current frequency)
+varfil..
+p: pointer; {current or next word]
+begin f c large-count + 1; p + 0;
+repeat while p = 0 do
+begin if f = 1 then return;
+decr( f ); p t sorted[ f 1;
+end;
+print-word(p); deer(k); p c sibling[ p];
+until k = 0;
+exit: end ;
+41. The endgame. We have recorded total-words
+different words. Furthermore the variables
+word-missed and word-truncated tell whether or
+not any storage limitations were exceeded. So the
+remaining task is simple:
+(Output the results 41) =
+if total-words = 0 then write-ln('Thereuare',
+'Uno,wordsUin,theUinput!')
+else begin if total-words < max-words-to-print
+{we will print all words]
+write-ln('Words,of,the,input,file,',
+',,ordered,by,frequency:')
+else if max-words-to-print = 1 then
+wrife(‘TheumostUcommonUword’,
+
+'UandUitsufrequency:')
+else write-ln('The,',
+max-words-to-print : 1,
+'umostucommonuwords,',
+',and,their,frequencies:');
+print-common(max-words-to-print);
+if word.-truncated then
+write-ln('(At,least,one,word,had,toUbe',
+'Ushortened,to,',
+max-word-length: 1,
+‘Jetters
+
+. ) ‘);
+
+if word-missed then
+write-ln(’ (Someuinputudata,wasUskipped,',
+‘,due,to,,memory,limitations.
+
+38. (Sort the dictionary
+trie-sort
+
+by frequency 39) E
+
+This code is used in section 8.
+
+40. After trie-sort has done its thing, the linked lists
+sorted[large-count], . . . , sorted[l] collectively contain
+all the words of the input file, in decreasing order
+of frequency. Words of equal frequency appear in
+alphabetic order. These lists are linked by means
+of the sibling array.
+Therefore the following procedure will print the
+first k words, as required in Bentley’s problem.
+
+]une 1986
+
+Volume 29
+
+Number 6
+
+then
+
+)‘);
+
+end
+This code is used in section 8.
+
+42. Index. Here is a list of all uses of all identifiers,
+underlined at the point of definition.
+char: 11.
+abort-find: 2J, 25.
+common-words: 3.
+alpha: 22, 24.
+count: 6, 17, 18,19, 20,
+Bentley, Jon Louis: 1.
+27, 28, 29,3J, 34, 35,
+boolean: 13, 30, 32.
+37, 38.
+buffer: lJ, 16, 20, 35.
+deer: 5, 40.
+c: 20.
+default-k: 2, 6, 10.
+ch% 18, 19, 21, 27, 28,
+delta: 29, 3, 31.
+29, 31, 35, 37.
+
+Communications of the ACM
+
+477
+
+Programming Pearls
+
+empty-slot: 18, 19, 21, 27,
+29, 31.
+eof: 9, 15.
+eoln: 9, 15.
+exit: 2, 15, 20, 40.
+f: 37, 40.
+false:14, 31, 33.
+find-buffer: ZJ, 34.
+get: 9, 15, 16.
+get-word: 15, 32, 34.
+goto: 1.
+h: 26.
+header: 18, 19, 27, 37.
+i: 5,2, 35.
+incr: tj, lx 20, 25, 34, 35,
+38.
+initialize: !j, 8.
+input: 2, 3, 9, 11, 15, 16.
+integer: 4, 5, 9, 26, 30, 36,
+40.
+k: 37, 40.
+Knuth3onald
+Ervin: 17.
+large-count: 36, 37, 38,
+40.
+last-h: 24, 25, 26.
+lettercode: lJ, 12, 15, 16.
+Liang, Franklin Mark:
+17.
+link: 17,IJ 19, 21, 122,
+27, 28, 29, 31, 37.
+lowercase: 2, 12, 35.
+max-count: 3, 34, 35, 37.
+max-word-length: 13, 16,
+20, 35, 41.
+max-words-to-print:
+4,
+10, 41.
+move-to-last-suffix: 3,
+37.
+
+move-to-prefix: 18, 35.
+n: -9.
+nil: 7.
+ord: 9, 11, 12, 15, 16.
+oufpuf: 2, 3.
+p: 20, 32, 35, 37, 40.
+pointer: 17, 18, 20, 22, 26,
+30, 32, 35, 36, 37, 40.
+print-common: 40, 41.
+print-word: 35, 40.
+q: 20, 35, 37.
+r: 3J, -37.
+read-int: 9, 10.
+read-ln: 15.
+return: 7.
+sibling: 17, 18, 19, 27, 28,
+29, 31, 37, 38, 40.
+slot-found: 3J, 31.
+sorted: 3, 37, 38, 40.
+tolerance: 24.
+total-word;%,
+37, 38,
+41.
+trie-size: lJ, 19, 22, 24,
+25.
+Pie-sort: 3J, 39, 40.
+true: 16, 31, 34.
+uppercase: 11, 12.
+word-length: lJ, 15, 16,
+20, 34, 35.
+word-missed: 32, 33, 34,
+41.
+word-truncated: lJ, 14,
+16, 41.
+write: 35, 41.
+write-ln: 35, 41.
+x: -22.
+
+(Advance p to its child number c 21)
+Used in section 20.
+
+(Compute the next trial header location h, or
+abort-find 25) Used in sections 27 and 31.
+(Establish the value of max-words-to-print
+IO)
+Used in section 8.
+
+(Find a suitable place h to move, or abort-find 31)
+Used in section 29.
+
+(Get set for computing header locations 24)
+Used in sections 27 and 31.
+
+(Global variables 4,11,13, 18, 22, 32, 36)
+Used in section 3.
+
+(Input the text, maintaining a dictionary with frequency counts 34) Used in section 8.
+(Insert child c into p’s family 28) Used in section 21.
+
+478
+
+Commurlications of the ACM
+
+(Insert the firstborn child of p and move to it, or
+abort-find 27) Used in section 21.
+(Link p into the list sorted[ f ] 38) Used in section 37.
+(Move p’s family to a place where child c will fit, or
+abort-find 29) Used in section 21.
+(Other local variables of find-buffer 26, 30)
+Used in section 20.
+
+(Output the results 41) Used in section 8.
+(Procedures for data manipulation 20,37)
+Used in section 3.
+
+(Procedures for initialization
+5) Used in section 3.
+(Procedures for input and output 9,15,35,40)
+Used in section 3.
+
+(Read a word into buffer 16) Used in section 15.
+(Set initial values 12,14.19, 23, 33) Used in section 5.
+(Sort the dictionary by frequency 39)
+Used in section 8.
+
+(The main program 8)
+(Type declarations 17)
+
+Used in section 3.
+Used in section 3.
+
+A Review
+My dictiona y defines criticism as “the art of evaluating
+or analyzing with knowledge and propriety, especially
+works of art or literature. “ Knuth’s program deserves
+criticism on two counts. He was the one, after all, who
+put forth the analogy of programming as literature, so
+what is more deserved than a little criticism? This
+program also merits criticism by ifs intrinsic interest;
+although Knuth set out only to display WEB, he hcs
+produced a program that is fascinating in its own right.
+Doug Mcllroy of Bell Labs was kind enough to provide
+this review.-J.B.
+I found Don Knuth’s program convincing as a demonstration of WEB and fascinating for its data structure, but I disagree with it on engineering grounds.
+The problem is to print the K most common words in
+an input file (and the number of their occurrences]
+in decreasing frequency. Knuth’s solution is to tally
+in an associative data structure each word as it is
+read from the file. The data structure is a trie, with
+26-way (for technical reasons actually 27-way) fanout at each letter. To avoid wasting space all the
+(sparse) 26-element arrays are cleverly interleaved
+in one common arena, with hashing used to assign
+homes. Homes may move underfoot as new words
+cause old arrays to collide. The final sorting is done
+by distributing counts less than 200 into buckets and
+insertion-sorting larger counts into a list.
+The presentation is engaging and clear. In WEB one
+deliberately writes a paper, not just comments, along
+with code. This of course helps readers. I am sure
+that it also helps writers: reflecting upon design
+choices sufficiently to make them explainable must
+
+Iune 1986
+
+Volume 29 Number 6
+
+Prograrnn7irzg
+
+help clarify and refine one’s thinking. Moreover, because an explanation in WEB is intimately combined
+with the hard reality of implementation, it is qualitatively different from, and far more useful than, an
+ordinary “specification” or “design” document. It
+can’t gloss over the tough places.
+Perhaps the greatest strength of WEB is that it allows almost any sensible order of presentation. Even
+if you did not intend to include any documentation,
+and even if you had an ordinary cross-referencer at
+your disposal, it would make sense to program in
+WEB simply to circumvent the unnatural order
+forced by the syntax of Pascal. Knuth’s exercise amply demonstrates the virtue of doing so.
+Mere use of WEB, though, won’t assure the best
+organization. In the present instance the central idea
+of interleaving sparsely populated arrays is not mentioned until far into the paper. Upon first reading
+that, with hash tries, “some space is sacrificed,” I
+snorted to myself that some understatement had
+been made of the wastage. Only much later was I
+disabused of my misunderstanding. I suspect that
+this oversight in presentation was a result of documenting on the fly. With this sole exception, the
+paper eloquently attests that the discipline of simultaneously writing and describing a program pays off
+handsomely.
+A few matters of style: First, the program is studded with instances of an obviously important constant, which variously take the guise of “26”, “27”,
+and “52.” Though it is unobjectionable to have such
+a familiar number occur undocumented in a program about words, it is impossible to predict all its
+disguised forms. Just how might one confidently
+change it to handle, say, Norwegian or, more mundanely, alphanumeric “words”? A more obscure example is afforded by a constant alpha, calculated as
+the golden ratio times another constant, trie-size.
+Signaled only by a comment deep inside the program, this relationship would surely be missed in
+any quick attempt to change the table size. WEB,
+unlike Pascal, admits dependent constants. They
+should have been used.
+Second, small assignment statements are grouped
+several to the line with no particularly clear rationale. This convention saves space; but the groupings
+impose a false and distracting phrasing, like “poetry”
+produced by randomly breaking prose into lines.
+Third, a picture would help the verbal explanation of the complex data structure. Indeed, pictures
+in listings are another strong reason to combine programming with typesetting; see Figure 1.
+Like any other scheme of commentary, WEB can’t
+guarantee that the documentation agrees perfectly
+
+June 1986
+
+Volume 29
+
+Number 6
+
+Pearls
+
+Word
+
+link Ip 1
+
+a
+b
+C
+
+1000
+1001
+1002
+1003
+1004
+1005
+
+2
+
+v
+
+2000 .
+
+header
+
+A 1005 ,
+I
+I
+
+5
+
+1000 ’
+
+be
+
+2000
+2014
+2015
+2016
+2017
+2018
+2019
+2020
+2021
+3000
+
+ben
+
+I
+4000
+
+6
+20
+
+I
+af
+
+’ 2014 ’
+2015 ’
+
+bet
+
+<‘::I’
+
+bent
+
+3021
+
+I
+
+I
+
+I
+
+I
+
+FIGURE1. A Picture to Accompany Knuth’s $18’
+
+with the program. For example, the procedure
+read-int expects an integer possibly preceded by
+blanks, although a literal reading of the description
+would require the integer to appear at the exact
+beginning of the text. This, however, was the only
+such case I noticed. The accuracy of the documentation compliments both the author and his method.
+The WEB description led me pleasantly through
+the program and contained excellent cross references to help me navigate in my own ways. It provided important guideposts to the logical structure of
+the program, which are utterly unavailable in
+straight Pascal. For no matter how conscientiously
+commented or stylishly expressed programs in
+Pascal may be, the language forces an organization
+convenient for translating, not for writing or reading.
+In the WEB presentation variables were introduced
+’ I typeset this picture in an hour or two of my time using the PIC language;
+Knuth could have usedT@ features to include such a figure in his WEB
+program. The figure contains a slight mistake for consistency with an off-byone slio in 618 of Knuth’s oroeram: he assumed that “N” was the 15” letter of
+the alihabet, while it is r&111; the 14~“. Knuth insisted that we publish his
+program as he wrote it, warts and all, since it shows that WEB does not totally
+eliminate mistakes.-J.B.
+
+Communications of the ACM
+
+479
+
+Programming Pearls
+
+where needed, rather than where permitted, and
+procedures were presented top-down as well as
+bottom-up according to peda!gogical convenience
+rather than syntactic convention. I was able to skim
+the dull parts and concentrate on the significant
+ones, learning painlessly about a new data structure.
+Although I could have learned about hash tries
+without the program, it was truly helpful to have it
+there, if only to ta.ste the practical complexity of the
+idea. Along the way I even learned some math: the
+equidistribution
+(mod 1) of multiples of the golden
+mean. Don Knuth’s ideas and practice mix into a
+whole greater than the parts.
+Although WEBcircumvents Pascal’s rigid rules of
+order, it makes no attempt to remedy other defects
+of Pascal (and r-igh.tly so, for the idea of WEBtranscends the partimulars of one language]. Knuth tiptoes around the tarpits of Pascal I/O-as I do myself.
+To avoid multiple input files, he expects a numerical
+parameter to be tacked on to the beginning of otherwise pure text. Besides violating the spirit of
+Bentley’s specifica.tion, where the file was clearly
+distinguished from the parameter, this clumsy convention could not conceivably happen in any real
+data. Worse still, how is the parameter, which Knuth
+chose to make optional, to be distinguished from the
+text proper? Finally, by overtaxing Pascal’s higherlevel I/O capabili.ties, the convention compels
+Knuth to write a special, but utterly mundane, read
+routine.
+Knuth’s purpose was to illustrate WEB.Nevertheless, it is instructive to consi.der the program at face
+value as a solution to a problem. A first engineering
+question to ask is: how often is one likely to have to
+do this exact task’? Not at all often, I contend. It is
+plausible, though, that similar, but not identical,
+problems might arise. A wise engineering solution
+would produce-or
+better, exploit-reusable
+parts.
+If the application were so big as to need the efficiency of a sophisticated solution, the question
+of size should be addressed before plunging in.
+Bentley’s original statement suggested middling size
+input, perhaps 10,000 words. But a major piece of
+engineering built for the ages, as Knuth’s program is,
+should have a large factor of safety. Would it, for
+example, work on the Bible? A quick check of a
+concordance reveals that the Bible contains some
+15,000 distinct words, with typically 3 unshared ietters each (supposing a trie solution, which squeezes
+out common prefixes). At 4 integers per trie node,
+that makes 180,000 machine integers. Allowing for
+gaps in the hash trie, we may reasonably round up
+to half a million. Knuth provided for 128K integers;
+the prospects for scaling the trie store are not
+impossible.
+
+480
+
+Communications of the ACM
+
+Still, unless the program were run in a multimegabyte memory, it would likely have to ignore
+some late-arriving words, and not necessarily the
+least frequent ones, either: the word “Jesus” doesn’t
+appear until three-fourths of the way through the
+Bible.
+Very few people can obtain the virtuoso services
+of Knuth (or afford the equivalent person-weeks of
+lesser personnel) to attack nonce problems such as
+Bentley’s from the ground up. But old Unix@ hands
+know instinctively how to solve this one in a jiffy.
+(So do users of SNOBOL and other programmers
+who have associative tables’ readily at hand-for
+almost any small problem, there’s some language
+that makes it a snap.) The following shell script3 was
+written on the spot and worked on the first try. It
+took 30 seconds to handle a 10,000-word file on a
+VAX-11/750@.
+
+tr -cs A-Za-z'
+' I
+(2) tr A-Z a-z )
+(3) sort )
+(4) uniq -c 1
+(5) sort -rn 1
+(1)
+
+(6)
+
+sed
+
+Sjlls
+
+If you are not a Unix adept, you may need a little
+explanation, but not much, to understand this pipeline of processes. The plan is easy:
+1. Make one-word lines by transliterating the complement (-c) of the alphabet into newlines (note
+the quoted newline), and squeezing out (-s)
+multiple newlines.
+2. Transliterate upper case to lower case.
+3. Sort to bring identical words together.
+4. Replace each run of duplicate words with a
+single representative and include a count (-c),
+5. Sort in reverse (-r) numeric (-n) order.
+6. Pass through a stream editor; quit (q) after printing the number of lines designated by the
+script’s first parameter ($(I 1).
+The utilities employed in this trivial solution are
+Unix staples. They grew up over the years as people
+noticed useful steps that tended to recur in real
+problems. Every one was written first for a particular need, but untangled from the specific application.
+Unix is a trademark of AT&T Bell Laboratories. VAX is a trademark of Digital
+Equipment Corporation.
+‘The June 1985 column describes associative arrays as they are implemented
+in the AWK language; page 572 contains a B-line AWK program to count how
+many times each word occurs in a file.-J.B.
+‘This shell script is similar to a prototype spelling checker described in the
+May 1985 column. (That column also described a production-quality spelling
+checker designed and implemented by one-and-the-same Doug Mcllroy.) This
+shell script runs on a descendant of the “seventh edition” UNIX system; trivial
+syntactic changes would adapt it for System V.-J.B.
+
+June 1986
+
+Volume 29
+
+Number 6
+
+Programming Pearls
+
+With time they accreted a few optional parameters
+to handle variant, but closely related, tasks. Sort, for
+example, did not at first admit reverse or numeric
+ordering, but these options were eventually identified as worth adding.
+As an aside on programming methodology, let us
+compare the two approaches. At a sufficiently abstract level both may be described in the same
+terms: partition the words of a document into equivalence classes by spelling and extract certain information about the classes. Of two familiar strategies for constructing equivalence classes, tabulation
+and sorting, Knuth used the former, and I chose the
+latter. In fact, the choice seems to be made preconsciously by most people. Everybody has an instinctive idea how to solve this problem, but the instinct
+is very much a product of culture: in a small poll of
+programming luminaries, all (and only) the people
+with Unix experience suggested sorting as a quickand-easy technique.
+The tabulation method, which gets right to the
+equivalence classes, deals more directly with the
+data of interest than does the sorting method, which
+keeps the members much longer. The sorting
+method, being more concerned with process than
+with data, is less natural and, in this instance, potentially less efficient. Yet in many practical circumstances it is a clear winner. The causes are not far to
+seek: we have succeeded in capturing generic processes in a directly usable way far better than we
+have data structures. One may hope that the new
+crop of more data-centered languages will narrow
+the gap. But for now, good old process-centered
+thinking still has a place in the sun.
+Program transformations between the two approaches are interesting to contemplate, but only
+one direction seems reasonable: sorting to tabulation. The reverse transformation is harder because
+the elaboration of the tabulation method obscures
+the basic pattern. In the context of standard software
+tools, sorting is the more primitive, less irrevocably
+committed method from which piecewise refinements more easily flow.
+To return to Knuth’s paper: everything thereeven input conversion and sorting-is programmed
+monolithically and from scratch. In particular the
+isolation of words, the handling of punctuation, and
+the treatment of case distinctions are built in. Even
+if data-filtering programs for these exact purposes
+were not at hand, these operations would well be
+implemented separately: for separation of concerns,
+for easier development, for piecewise debugging, and
+for potential reuse. The small gain in efficiency from
+integrating them is not likely to warrant the resulting loss of flexibility. And the worst possible even-
+
+lune 1986
+
+Volume 29
+
+Number 6
+
+tuality-being
+forced to combine programs-is not
+severe.
+The simple pipeline given above will suffice to get
+answers right now, not next week or next month. It
+could well be enough to finish the job. But even for
+a production project, say for the Library of Congress,
+it would make a handsome down payment, useful
+for testing the value of the answers and for smoking
+out follow-on questions.
+If we do have to get fancier, what should we do
+next? We first notice that all the time goes into sorting. It might make sense to look into the possibility
+of modifying the sort utility to cast out duplicates as
+it goes (Unix sort already can) and to keep counts. A
+quick experiment shows that this would throw away
+85 percent of a 10,888-word document, even more of
+a larger file. The second sort would become trivial.
+Perhaps half the time of the first would be saved,
+too. Thus the idea promises an easy a-to-1 speedup
+overall-provided
+the sort routine is easy to modify.
+If it isn’t, the next best thing to try is to program the
+tallying using some kind of associative memoryjust as Knuth did. Hash tables come to mind as easy
+to get right. So do simple tries (with list fanout to
+save space, except perhaps at the first couple of
+levels where the density of fanout may justify arrays). And now that Knuth has provided us with the
+idea and the code, we would also consider hash
+tries. It remains sensible, though, to use utilities for
+case transliteration and for the final sort by count.
+With only 15 percent as much stuff to sort (even less
+on big jobs) and only one sort instead of two, we can
+expect an order of magnitude speedup, probably
+enough relief to dispel further worries about sorting.
+Knuth has shown us here how to program intelligibly, but not wisely. I buy the discipline. I do not
+buy the result. He has fashioned a sort of industrialstrength Faberge egg-intricate,
+wonderfully worked,
+refined beyond all ordinary desires, a museum piece
+from the start.
+Principles-J.B.
+
+Literate Programming. Last month’s column sketched
+the mechanics of literate programming. This month’s
+column provides a large example-by
+far the most
+substantial pearl described in detail in this column.
+I’m impressed by Knuth’s methods and his results; I
+hope that this small sample has convinced you to
+explore the Further Reading to see his methods
+applied to real software.
+A New Data Structure. I asked Knuth to provide a
+textbook solution to a textbook problem; he went far
+beyond that request by inventing, implementing
+and lucidly describing a fascinating new data
+structure-the
+hash trie.
+
+Communications of the ACM
+
+481
+
+Progrunrmii~gPearls
+
+Further Reading
+
+“Literate Programming” is the title and the togto of
+Knuth’s article in the May 3984 Cu#~~~~~~~~~~~
+(Volume 27, Number 2, pages97-112). Xtintr~~~~s
+a Xiterate style of pro~amm~ng with the flxamplo d ”
+printing the first WOO prime ~urnb~r~.~~rn~~e~e
+documentation of “The WEBSystem of §~r~~~~red
+Documentation” is available as Stanford ~o~~~ter
+Science technical report 988 (September 19&I, $336
+pages);it contains the WEBsource code far TANGLE
+and WEAVE.
+The small programs in this column and I&t
+month’s hint at the benefits of literate ~rog~ming;
+its full power can only be a~~precia~e~~~~, you see
+it applied to substantial prq~ams. Tw~~~~ WI@
+programs appear in Knuth’s .-five-vol~~~:~~~~~~~r
+and Typesetting,just pubhshed by ~~~~~~~~~~~,
+The source code for.% is Vohkne & e&led :,
+7lX: The Program (xvi f $94 pages).V&me D is
+METAFONT: The Program(xvi + 569 ~a@$. V&nne
+A is The TEXbook,Volume C is The ~~~~~~~~
+and Volume E Is ComputerModem ~y~~u~~~. “’
+Criticism of Programs. The role of any critic is to
+give the reader insight, and McIlroy does that splendidly. He first looks inside this gem, then sets it
+against a background to help us see it in context. He
+admires the execution of the solution, but faults the
+problem on engi-neering grounds. (That is, of course,
+my responsibility as problem assigner; Knuth solved
+the problem he wa:s given on grounds that are important to most engineers-the
+paychecks provided
+by their problem assigners.) Book reviews tell you
+what is in the book; good reviews go beyond that to
+give you insight into the environment that molded
+the work. As Knuth has set high standards for future
+authors of programming literature, McIlroy has
+shown us how to analyze those works.
+Problems
+1. Design and implement programs for finding the
+K most common words. Characterize the tradeoffs among code length, problem definition, resource utilization (time and space), and implementation language and system.
+2. The problem of the K most common words can
+be altered in many ways. How do solutions to
+the original problem handle these new twists?
+Instead of finding the K most common words,
+suppose you want to find the single most frequent word, the frequency of all words in decreasing order, or the K least frequent words.
+
+482
+
+Conrmunicatiot~s of the .4CM
+
+Instead of dealing with words, suppose you wish
+to study the frequency of letters, letter pairs, letter triples, word pairs, or sentences.
+3. Quantify the time and space required by Knuth’s
+version of Liang’s hash tries; use either experimental or mathematical tools (see Problem 4).
+Knuth’s dynamic implementation allows insertions into hash tries; how would you use the
+data structure in a static problem in which the
+entire set of words was known before any lookups (consider representing an English dictionary)?
+4. Both Knuth and McIlroy made assumptions
+about the distribution of words in English documents. For instance, Knuth assumed that most
+frequent words tend to occur near the front of
+the document, and McIlroy pointed out that a
+few frequent words may not appear until relatively late.
+a. Run experiments to test the various assumptions. For instance, does reducing the memory size of Knuth’s program cause it to miss
+any frequent words?
+b. Gather data on the distribution of words
+in English documents to help one answer
+questions like this; can you summarize that
+statistical data in a probabilistic model of
+English text?
+5. A map of the United States has been split into
+25,000 tiny line segments, ordered from north to
+south, for drawing on a one-way plotting device.
+Design a program to reconnect the segments into
+reasonably long connected chains for use on a
+pen plotter.
+Solutions to May’s Problems
+4. J. S. Vitter’s “Faster Methods for Random Sampling” in the July 1984 Communications shows
+how to generate M sorted random integers in
+O(M) expected time and constant space; those
+resource bounds are within a constant factor of
+optimal.
+5. WEB provides two kinds of macros: define for
+short strings and the (Do this now) notation for
+longer pieces of code. Howard Trickey writes
+that “this facility is qualitatively better than the
+C preprocessor macros, because the syntax for
+naming and defining C macros is too awkward
+for use-once code fragments. Even in languages
+with the ability to declare procedures ‘inline’, I
+think most people would resist using procedures
+as prolifically as WEB users use modules. Somehow the ability to describe modules with sentences instead of having to make up a name
+
+lune 1986
+
+Volume 29
+
+Number 6
+
+Programmir~g Pearls
+
+7. [D. E. Knuth] To determine whether two input
+sequences define the same set of integers, insert
+each into an ordered hash table. The two ordered
+hash tables are equal if and only if the two sets
+are equal.
+
+helps me a lot in using lots of modules. Also,
+are defined,
+and they can be defined in pieces (e.g., (Global
+variables)), and that isn’t allowed in any macro
+language I know.”
+6. Howard Trickey observes that “the fact that
+TANGLE produces unreadable code can make it
+hard to use debuggers and other source-level
+software. Knuth’s rejoinder is that if people like
+WEB enough they will modify such software to
+work with the WEB source. In practice, I never
+had much difficulty debugging TANGLE output
+run through a filter to break lines at statement
+boundaries.”
+WEB macros can be used before they
+
+For Correspondence: Jon Bentley, AT&T Bell Laboratories, Room X-317.
+600 Mountain Ave.. Murray Hill, NJ 07974.
+
+Permission to copy without fee all or part of this material is granted
+provided that the copies are not made or distributed for direct commercial advantage, the ACM copyright notice and the title of the publication
+and its date appear, and notice is given that copying is by permission of
+the Association for Computing Machinery. To copy otherwise, or to
+republish, requires a fee and/or specific permission.
+
+ACM SPECIALINTERESTGROUPS
+(Computers and the
+Physically Handicapped) Print Edition
+
+SIGCAPH Newsletter
+
+ARE YOUR TECHNICAL
+INTERESTSHERE?
+
+Cassette Edition
+
+SIGCAPH Newsletter,
+
+TheACMSpecialInterestGroupsfurthertheadSIGCAPH Newsletter, Print and Cassette
+vancement
+of mputer Scienceandpracticein
+Editions
+manyspecialized
+areas.Membersof eachSIG
+receiveasoneof theirbenefitsa periodikalexSIGCAS Newsletter (Computers and
+dusivelydevotedto the specd interest.ThefdSociety)
+lowingarethepublications
+thatareavailableSIGCHI Bulletin (Computer and Human
+throughmembership
+o( specialsubwiption.
+Interaction)
+
+Computability Theory)
+
+SIGCPR Newsletter
+SIGCSE Bulletin
+
+SIGAPL Quote Quad (APL)
+SIGARCH Computer
+
+Architecture
+
+News
+
+(Artificial
+
+Intelligence)
+SIGBDP DATABASE
+
+(Business Data
+(Biomedical
+
+Volume 29
+
+(Design Automation)
+
+Computer
+
+Graphics
+
+(Computer Graphics)
+SIGIR Forum (Information
+
+Number 6
+
+Newsletter
+
+(Numerical
+
+Mathematics)
+SIGOA Newsletter
+
+(Office Automation)
+
+SIGOPS Operating
+
+Systems Review
+
+SIGPLAN Notices (Programming
+
+Languages)
+SIGPLAN FORTRAN
+
+Retrieval)
+
+FORUM (FORTRAN)
+
+(Security, Audit.
+
+and Control)
+(Symbolic and Algebraic
+
+Manipulation)
+SIGSIM Simuletter
+Modeling)
+
+(Systems
+Documentation)
+
+SIGGRAPH
+
+Computing)
+
+june 1986
+
+(Computer Uses in
+
+Education)
+SIGDA Newsletter
+
+SIGNUM
+
+SIGSAM Bulletin
+
+SIGDOC Asterisk
+
+Processing)
+SIGBIO Newsletter
+
+SIGCUE Bulletin
+
+Newsletter
+
+(Microprogramming)
+SIGMOD Record (Management of Data)
+
+SIGSAC Newsletter
+
+(Computer Science
+
+Education)
+
+(Architecture of Computer Systems)
+SIGART Newsletter
+
+(Computer Personnel
+
+Research)
+
+SlGAda Letters (Ada)
+
+Evaluation)
+SIGMICRO
+
+(Operating Systems)
+
+SIGCOMM Computer Communication
+Review (Data Communication)
+
+SIGACT NEWS (Automata and
+
+SIGMETRICS Performance Evaluation
+Review (Measurement and
+
+(Simulation and
+
+SIGSMALL/PC Newsletter (Small and
+Personal Computing Systems and
+Applications)
+SIGSOFT Software
+
+Engineering
+
+Notes
+
+(Software Engineering)
+SIGUCCS Newsletter (University and
+College Computing Services)
+
+Communications of the ACM
+
+483
+
+

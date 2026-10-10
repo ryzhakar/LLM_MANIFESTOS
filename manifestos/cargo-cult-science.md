@@ -8,7 +8,7 @@ description: "Some remarks on science, pseudoscience, and learning how to not fo
 
 # CARGO CULT SCIENCE
 
-*by RICHARD P. FEYNMAN*
+*by RICHARD P. FEYNMAN, 1974*
 
 *Some remarks on science, pseudoscience, and learning how to not fool yourself. Caltech's 1974 commencement address.*
 

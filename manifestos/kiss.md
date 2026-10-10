@@ -152,16 +152,6 @@ Listen to customers. They don't want your elaborate abstractions. They want prob
 
 Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.
 
-### Delete Code
-
-Remove dead code immediately. Delete speculative "future" code. Delete "just in case" functions.
-
-Every line you don't write is a line you don't maintain, test, debug, or understand.
-
-Less code = fewer bugs.
-
-The best code is no code.
-
 ### Write Small Units
 
 Keep methods under 20 lines. Give each function one responsibility.

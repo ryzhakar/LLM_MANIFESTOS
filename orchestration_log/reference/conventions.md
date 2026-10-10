@@ -1,6 +1,6 @@
 # Conventions
 
-_Established: 2026-04-29, first session. Items tagged [ORCHESTRATOR: verify] require confirmation from session history or the human maintainer before being treated as settled._
+_Established: 2026-04-29, first session. Updated 2026-10-11: writing standard by reference, schema facts, entry gate, lessons from the lines-spent build._
 
 ---
 
@@ -20,36 +20,48 @@ These are dispatch guidelines for multi-model orchestration on this project. The
 
 ## Manifesto Writing Process
 
-Established in the 2026-04-29 session (only-fluff-die.md). Verified by execution.
+The writing standard is the `manifesto:manifesto-writing` skill (`manifesto/skills/manifesto-writing/SKILL.md` in the claude-skills marketplace). The entry gate is in `MAINTAINERS_GUIDE.md`, Workflows. This section restates neither.
 
-1. **Research tree** — clone/read source material. Dispatch parallel haiku agents across content facets (philosophy, behavioral spec, implementation, external context). Each writes a structured report to `research/{topic}/categories/`.
-2. **Curated extraction** — Opus subagent reads all category reports + the manifesto-writing skill spec + existing manifestos for calibration. Produces a selective extraction brief: what crosses the manifesto threshold, what doesn't, where the hard decisions lie.
-3. **Deep-dives** — targeted Tier 3 agents (sonnet for reasoning, haiku for mechanical extraction) on specific gaps: writing methodology, operational rules extraction, binding effectiveness analysis.
-4. **Final writer brief** — Opus subagent reads ALL prior reports (pointed to file paths, never relayed content). Produces writer-ready brief organized by the manifesto-writing skill's process.
-5. **Oath-bound writing** — Opus subagent reads manifesto-oath protocol and manifesto-writing skill, executes the binding ceremony (identity-mode), then writes the manifesto under constitutional constraint. Runs self-referential checklist before delivery.
-6. **Validation** — run `just readme` to confirm schema compliance. Commit.
+Dispatch lessons the standard does not carry:
 
-**Critical convention:** The writer agent must always be oath-bound to `/manifesto-writing` via `/manifesto-oath` before receiving source material.
+- **Delete the old draft before reusing its path.** The Write tool requires reading an existing file first; the read carries the old draft into the writer's context.
+- **Read "diagnosis thorough, prescription thin" as structural failure.** Fix the structure, not the register.
+- **Fix register before evaluating structure.** Register problems mask structural problems.
+- **Plan 2-3 rounds of requester escalation ("HARDER").** The orchestrator hits a register ceiling that editorial passes do not break.
+- **Load `instructions/strunk_spr_v3_complete.xml` and `instructions/sparse-priming-representations.md` as writing technique** for the writer, never as content.
 
-**Writing methodology references:** `instructions/strunk_spr_v3_complete.xml` and `instructions/sparse-priming-representations.md` are loaded as writing technique guidance (not content) for the writer agent.
+---
 
-**Lessons from 2026-05-01 session (7 failed drafts before success):**
+## Lessons from 2026-10-11
 
-- **Constrain fury aggressively, structure minimally.** All dispatched agents front-loaded 10+ structural constraints with emotional instruction last. The constraints won every time. Invert: lead with the emotional mandate, give minimal structural requirements.
-- **Prompt register determines output register.** The writer mirrors the orchestrator's tone. A measured prompt produces measured output regardless of "write with fury" instructions.
-- **2-4 source files, not 15.** Information overload → skimming → measured output. Depth over breadth.
-- **The orchestrator edits, not rewrites.** The agent produces the base content (structure, tables, rules). The orchestrator edits the register and form. This is cheaper and more effective than re-dispatching. The $15 orchestrator cost in the 2026-05-01 session was mostly learning what to ask for — the actual value was in two direct edit passes on agent output.
-- **Write tool requires reading existing files → contamination.** Write to a FRESH path when the writer must not inherit from previous drafts. Delete the old file first if reusing the path.
-- **Do not pre-decide branding.** Let the writer choose title, tagline, theme, description unless the user specifies.
+Source: the `lines-spent` build, rulings 6–9 and 15–19 in `orchestration_log/history/2026-10-11/owned-lines/reviews/r1-rulings.md`.
 
-**Lessons from 2026-05-11 session (3 rewrites, register breakthrough):**
+### Register by measurement
 
-- **Full rewrites beat editorial passes for register changes.** Editing measured prose produces measured edits. Write to a fresh path when the register must break. The existing file's voice bleeds through edits.
-- **Unbiased reviewers override orchestrator judgment.** Dispatch 5 specialized reviewers (accuracy, completeness, boundaries, scope, precision) against the substrate. Their findings are authoritative — the orchestrator is biased toward its own output.
-- **Prescription and diagnosis must share the same voice.** Teaching and attacking are not separate passes. Every explanation is something the reader should already know, delivered as an accusation. The feedback "diagnosis thorough, prescription thin" signals structural failure, not register failure.
-- **Anti-Claude patterns are a checklist, not a mindset.** Document them (`anti-claude-patterns.md`), check against them mechanically. The orchestrator cannot self-detect its own patterns by introspection — it needs an external list.
-- **Register ceiling is real.** The orchestrator will hit a register ceiling where editorial passes stop improving. User escalation ("HARDER") is the mechanism that breaks through. Plan for 2-3 rounds of user-driven escalation, not one-shot delivery.
-- **External feedback on structure comes AFTER register work.** Register problems mask structural problems. Fix register first, then evaluate whether the structure serves the audience.
+- Measure register with `corpus_metrics.py` (`orchestration_log/history/2026-10-11/discovery-research/deep-dives/corpus_metrics.py`). Point `MANIFESTO_DIR` in a copy at the draft's folder.
+- Count ALL-CAPS in body text only, headings excluded. Floor: 50 per 1000 words.
+- Count fragments per section. Floor: 50 per 1000 words in every section.
+- Place one identity attack, what the reader IS, in every section. Vary the template; use no job-title noun per section.
+- Write "X is not the enemy" once at most. Deliver every other boundary inside an attack that carries the limit.
+- Write every sentence under 20 words. Allow three fury runs of 25 words or more, each carrying a shift. Count a balanced clause with an abstract tail as no fury run.
+- Cut every quantifier stinger ("Not ONCE.", "EVERY time.") that carries no reframe.
+- Deliver each figure inside an attack, never figure-then-command. Cut a command that does not follow from its figure.
+- Write zero semicolons. Write two colons or fewer per 1000 words.
+- Write at least 8 multi-word ALL-CAPS shouts in the body.
+- Write two comma-balanced joins or fewer per 1000 words (a comma followed by "and", "which", or "until" inside one sentence). Run a long line on without commas, or split it into fragments.
+- Copy no sentence from another manifesto in the collection.
+
+### Demands once, in the checklist
+
+- State every demand once, in "Before you ship", as a checklist item.
+- Carry axioms, figures, and boundaries in the body sections as attacks. Name a demand in the body; never state it as a spec row.
+- Share no sentence between the body and the checklist.
+
+### Narrator with a stake
+
+- Make the narrator the engineer who inherits the reader's lines and gets paged for them. Allow first person.
+- Write one scene: a page, a build broken by a vanished package, or a diff nobody can read.
+- Write one prediction section in the form of stop-yapping's "No Drift": what the reader does by its tenth response, and what that costs.
 
 ---
 
@@ -61,7 +73,7 @@ Established in the 2026-04-29 session (only-fluff-die.md). Verified by execution
 - Git history analysis: Haiku
 - Drafting a new manifesto description/tagline for human review: Sonnet
 - Writing a full manifesto body: Opus
-- Assessing whether a candidate principle meets the manifesto quality bar: Opus or Sonnet with explicit criteria from MAINTAINERS_GUIDE
+- Assessing whether a candidate meets the gate tests: Opus or Sonnet with the entry-gate criteria from MAINTAINERS_GUIDE
 
 ### When NOT to use a sub-agent
 
@@ -71,7 +83,7 @@ Established in the 2026-04-29 session (only-fluff-die.md). Verified by execution
 
 ### Parallelization opportunities
 
-- Frontmatter extraction across all 10 manifestos can be done in a single parallel batch
+- Frontmatter extraction across all 13 files can be done in a single parallel batch
 - Theme discrepancy checks can run concurrently with manifesto reads
 - Research across archive subdirectories can be parallelized
 
@@ -79,54 +91,62 @@ Established in the 2026-04-29 session (only-fluff-die.md). Verified by execution
 
 ## Forbidden Patterns
 
-These are anti-patterns derived from the project's own philosophy and structure. Treat violations as blockers.
+Treat violations as blockers.
 
-**Never manually edit `README.md`.** It is a generated artifact. MAINTAINERS_GUIDE states this explicitly. Any edit will be overwritten on the next `just readme` run and will cause confusion in the interim.
-
-**Never commit a manifesto without running `just readme`.** README drift is silent corruption of the collection's navigation layer.
-
-**Never use patch versions (`x.y.z` where z > 0).** MAINTAINERS_GUIDE states: "Patches — don't use; just edit." The one existing violation (`first-principles.md` at `1.0.1`) is noted as debt in `deferred_items.md`.
-
-**Never create a single-manifesto theme.** MAINTAINERS_GUIDE: "Each theme should contain 2+ manifestos." Do not add a theme until at least two manifestos will use it.
-
-**Never add a manifesto without a theme entry in `themes.yaml`.** The pipeline will warn and render the manifesto without icon or display name. Fix `themes.yaml` first.
-
-**Never treat a manifesto as living documentation.** Manifestos are behavioral constitutions — rare, significant artifacts. Frequent small edits signal the principle has not crystallized yet.
+- **Never manually edit `README.md`.** `just readme` regenerates it.
+- **Never commit a manifesto without running `just readme`.**
+- **Never write a minor or patch version.** Versions are `N.0.0`. `first-principles.md` returned to `1.0.0` in `12ba3f1`; no violation remains.
+- **Never create a single-file theme.** Each theme holds at least two files.
+- **Never add a manifesto without a theme entry in `themes.yaml`.** Fix `themes.yaml` first.
+- **Never treat a manifesto as living documentation.**
+- **Never place a draft in `manifestos/`.** Drafts live under `drafts/<slug>/`; a draft enters the collection through the entry gate.
 
 ---
 
 ## Frontmatter Schema
 
-Source: `generate.py` `ManifestoMetadata` Pydantic model (lines 20–34) and MAINTAINERS_GUIDE Reference section.
+Source: `generate.py`, `ManifestoMetadata` (Pydantic model). Tests: `tests/test_generate.py`, 18 tests.
 
 ```yaml
 ---
-title: string       # Human-readable name. Any string. Required.
-tagline: string     # Memorable hook. Any string. Required.
-version: string     # Semver. Must match ^\d+\.\d+\.\d+$ (e.g., "1.0.0"). Required.
-theme: string       # Must be a key in themes.yaml (warns if missing, does not fail). Required.
-description: string # One sentence explaining why this matters. Any string. Required.
+title: string        # required. Any string.
+tagline: string      # required. At most 8 words unless kind is canon.
+version: string      # required. ^\d+\.\d+\.\d+$; write N.0.0.
+theme: string        # required. Key in themes.yaml.
+description: string  # required. One line.
+kind: string         # optional. manifesto (default) | canon
+register: string     # optional. contemptuous | declarative | parable | lecture | aphoristic
+reader: string       # optional. model | human | unspecified
 ---
 ```
 
 **Validation behavior:**
-- Missing any required field: file is skipped with error panel; pipeline continues with remaining files
-- Invalid `version` format: same as above
-- Theme not in `themes.yaml`: warning panel printed, but file IS included in output (degrades gracefully — renders without icon/name)
-- Extra fields in frontmatter: not validated; Pydantic ignores them by default [ORCHESTRATOR: verify — `ManifestoMetadata` does not set `model_config = ConfigDict(extra='forbid')`, so extra fields are silently ignored]
+- Missing required field, invalid `version`, unknown `kind`, `register`, or `reader`, or a tagline over 8 words on a non-canon file: file skipped with error panel; pipeline continues with remaining files.
+- The tagline rule is a model validator; it runs only after every field validates.
+- Theme not in `themes.yaml`: warning panel; file included, rendered without icon or name.
+- Duplicate tagline (lowercase, punctuation stripped): warning panel naming each file; never rejects.
+- Extra frontmatter keys: ignored (`ManifestoMetadata` sets no `extra` policy; verified 2026-10-11).
+- `register` shadows `ABCMeta.register`; `generate.py` filters that single Pydantic warning by message.
+- `README.md` shows `kind: canon` as a `canon` badge, and `register` and `reader` in the Quick Reference table and each entry heading.
 
-**Version conventions (from MAINTAINERS_GUIDE):**
-- `x.0.0 → x+1.0.0`: Major thesis change. Rare and significant.
-- Minor/patch bumps: discouraged. Just edit the file without incrementing.
-- Current major-version manifestos: `kiss.md` (2.0.0), `simple-made-easy.md` (2.0.0)
+**Species:** `kind: manifesto` obeys the writing standard. `kind: canon` is verbatim, exempt from form rules (tagline length included), carries register and reader, and carries `*by [author], [year]*`.
+
+**Version conventions:**
+- Major only. `N.0.0 → (N+1).0.0` on a thesis change, or when a re-cut removes an enemy-section row.
+- Minor and patch segments are forbidden. `generate.py` accepts any `x.y.z`.
+- Current major-version manifestos: `kiss.md` (2.0.0), `simple-made-easy.md` (2.0.0).
 
 ---
 
 ## File Naming
 
-**Manifestos:** kebab-case `.md` files in `manifestos/`. No spaces. No `Manifesto,` prefix (despite MAINTAINERS_GUIDE examples showing `Manifesto, <principle>.md` — actual files use plain kebab-case like `correct-by-construction.md`).
+**Manifestos:** kebab-case `<slug>.md` files in `manifestos/`. No spaces. No `Manifesto,` prefix (for example `correct-by-construction.md`).
 
-> Note: MAINTAINERS_GUIDE workflow examples show `touch "manifestos/Manifesto, <principle>.md"` with a comma and capital M. Actual files in the repo do NOT follow this pattern. Treat the kebab-case convention (matching existing files) as authoritative. The MAINTAINERS_GUIDE examples are illustrative, not prescriptive.
+**Drafts:** `drafts/<slug>/` holding `SPEC.md`, `v1.md`, `v2.md`, `reviews/`. At ship, `SPEC.md` and `reviews/` move to `orchestration_log/history/<date>/<slug>/`; the draft versions are deleted.
+
+**Re-cut records:** `orchestration_log/history/<date>/recut-<slug>.md` (`<slug>` names the cut; for one file, the file's base name), for a re-cut without a draft.
+
+**Substrate:** `resources/<date>-<slug>/`.
 
 **Themes:** kebab-case keys in `themes.yaml` (e.g., `software-engineering`, `cognitive-science`).
 
@@ -150,4 +170,4 @@ orchestration_log/
     └── conventions.md
 ```
 
-`orchestration_log/history/*/cost.md` is gitignored per `.gitignore`. All other orchestration log content is tracked.
+Entry-gate discovery trees live under `history/<date>/discovery-research/`; shipped specs and reviews under `history/<date>/<slug>/`; re-cut records at `history/<date>/recut-<slug>.md`. `orchestration_log/history/*/cost.md` is gitignored per `.gitignore`. All other orchestration log content is tracked.

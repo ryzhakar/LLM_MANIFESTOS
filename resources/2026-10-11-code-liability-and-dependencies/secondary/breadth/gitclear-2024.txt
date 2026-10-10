@@ -1,0 +1,115 @@
+
+
+Home
+ »
+Measurement and Research
+ »
+AI Velo & Quality Research
+ »
+PDF Download: Coding on Copilot
+
+Get the research cited by industry leaders
+
+"Is AI helping or hurting our overall application complexity? I found GitClear's report illuminating."
+--
+Lee Atchison
+
+Coding on Copilot: 2023 Data Suggests Downward Pressure on Code Quality
+
+Including 2024 projections for specific code reuse
+
+GitHub and other sources have reported more than 50% of developers
+adopting AI Assisted-development during 2023. What these sources haven't reported is
+how the composition of code changes when AI is used.
+
+We examine 4 years worth of data, encompassing more than 150m changed lines of
+code, to determine how AI Assistants influence the quality of code being written. We find a significant
+uptick in churn code, and a concerning decrease in code reuse.
+
+Code Churn by Year
+
+Start reading to learn:
+
+What are the three significant changes since Copilot's introduction?
+
+What do Technical Leaders need to be on the lookout for 2024?
+
+How can you measure the impact of AI on your team's code quality?
+
+Business Email
+
+*
+
+First and Last Name
+
+*
+
+Job Title
+
+Choose role
+
+VP of Engineering
+
+CTO
+
+Lead Developer
+
+Senior Developer
+
+CEO
+
+Developer
+
+Product Manager
+
+Project Manager
+
+Other (technical)
+
+Other (non-technical)
+
+I would like to occasional emails with industry research & product updates
+
+GitClear needs the contact information you provide to us to contact you about our products
+and services. You may unsubscribe from these communications at any time. For information on
+how to unsubscribe, as well as our privacy practices and commitment to protecting your privacy,
+please review our
+
+Privacy Policy
+.
+
+Abstract
+
+2023 marked the coming out party for GitHub Copilot. In less than two
+years' time, the AI programming assistant shot from “prototype” to
+“cornerstone,” used by millions of developers across hundreds of
+thousands of businesses. Its unprecedented growth defines a new era
+in “how code gets written.”
+
+GitHub has published several insightful pieces of research on the growth and impact
+of AI on software development. Among their findings is that developers
+write code “55% faster” when using Copilot. This profusion of
+LLM-generated code begs the question: how does the code quality and
+maintainability compare to what would have been written by a human? Is
+it more similar to the careful, refined contributions of a Senior Developer, or
+more akin to the disjointed work of a short-term contractor?
+
+To investigate, GitClear analyzed approximately 153 million changed lines of code,
+authored between January 2020 and December 2023 [A1]. This is the
+largest known database of highly structured code change data that has
+been used to evaluate code quality differences [A2].
+We find disconcerting trends for maintainability. Code churn -- the
+percentage of lines that are reverted or updated less than two weeks after
+being authored -- is projected to double in 2024 compared to its 2021,
+pre-AI baseline. We further find that the percentage of "added code" and
+"copy/pasted code" is increasing in proportion to “updated,” “deleted,” and
+“moved” code. In this regard, code generated during 2023 more resembles an itinerant
+contributor, prone to violate the DRY-ness of the repos visited.
+
+We conclude with suggestions for managers seeking to maintain high code
+quality in spite of the forces currently opposing it.
+
+GitClear uses cookies to ensure you get the best experience on our website.
+
+Learn more about our cookie policy
+

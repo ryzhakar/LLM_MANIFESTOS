@@ -1,0 +1,312 @@
+Call Me Fishmeal.: Pimp My Code, Part 14: Be Inflexible!
+
+Call Me Fishmeal.
+
+I write software. I'm obsessive-compulsive. I like good stuff. Kittens are fuzzy.
+
+ I write the software for
+ Delicious Monster
+
+Recent Posts
+
+Is Apple done with the iMac?
+
+CS OMG WTF?
+
+Blah blah blah Leopard delay
+
+I crack me up.
+
+Crazy talk.
+
+I ♥ spam.
+
+TED2007, Days 3 and 4
+
+TED2007, Days 1 and 2
+
+TED2007, Day 0.
+
+Four days off!
+
+Pimp My Code
+
+Free Programming Tips are Worth Every Penny.
+
+I will insult your code!
+
+Part 1: Code Insults, Mark I
+
+Part 2: self = [stupid init];
+
+Part 3: Gradient TableViews
+
+Part 4: Returning late to return early
+
+JPEG2000: Cool but SLOW.
+
+Unit testing is teh suck, Urr.
+
+Part 5: Special Apple Sample Code Edition...
+
+Interlude: Free Code
+
+Pimp, Pimp Thyself.
+
+Frameworks are Teh Suck, Err.
+
+Part 6: The Pimp Before Christmas
+
+Thinking, boxes, & what kittens can do to them.
+
+Part 7: Pimplette?
+
+Part 8: Mary, Mary, why you buggin?
+
+Part 9: Beginner Code
+
+Part 10: Whining about Cocoa
+
+Part 11: This Sheet is Tight
+
+Other Blogs
+
+Delicious Monster
+
+Ridiculous Fish
+
+Thought Palace
+
+Mike Matas
+
+ RSS Feed
+ I Power Blogger
+
+ Wednesday, May 30
+
+Pimp My Code, Part 14: Be Inflexible!
+
+I ask you, grasshopper, which is better: flexible code or tiny code?
+
+"Ah," you exclaim, "Learned master, it is a trick question: code which is tiny yet flexible is best!"
+
+WRONG! Tiny code is always best. Now you must carry water up the hill for the rest of the day.
+
+--
+
+What can we learn from this simple tale? Well, one thing is, I'm not very good at writing stories. But is there something deeper?
+
+When I first started coding, way, long ago (on a PDP-11, which was essentially when I'd get eleven Pterodactyl Dinosaurs to sit down and do some Processing for me), I thought code should be flexible at all costs. If I were creating, say, a program to write a one-line message to the screens of other people logged in to the same machine, I'd write it, say, so you could plug in other kinds of screen-manipulation packages besides curses(3). Even though, you know, none would be invented until "time sharing" was something you did with condos, not processors.
+
+The fundamental nature of coding is that our task, as programmers, is to recognize that every decision we make is a trade-off. To be a master programmer is to understand the nature of these trade-offs, and be conscious of them in everything we write.
+
+You've probably seen some variant of this, but I'll show you my version. In coding, you have many dimensions in which you can rate code:
+
+- Brevity of code
+- Featurefulness
+- Speed of execution
+- Time spent coding
+- Robustness
+- Flexibility
+
+Now, remember, these dimensions are all in opposition to one another. You can spend a three days writing a routine which is really beautiful AND fast, so you've gotten two of your dimensions up, but you've spent THREE DAYS, so the "time spent coding" dimension is WAY down.
+
+So, when is this worth it? How do we make these decisions?
+
+The answer turns out to be very sane, very simple, and also the one nobody, ever, listens to:
+
+"START WITH BREVITY. Increase the other dimensions AS REQUIRED BY TESTING."
+
+--
+
+In Delicious Library 2 we have a feature where we will automatically find the libraries of your friends if they have published them. Of course, with any matching system, the trick is, how do you know this is really *my* friend named "Mike Lee", and not one of the other 17 million "Mike Lee"s around the world (that whore).
+
+So, I came up with a basic algorithm for pulling all Delicious Libraries by the owner's name first, then disambiguating within those afterwards. One of my programmers said, "Well, what happens if we get 1,000 hits for John Smith?"
+
+And my reply, not at all tongue-in-cheek, was, "Well, then we would be very, very rich." Seriously, if 1,000 John Smiths had registered our program, think of how many customers we'd have total: millions. Multiply that by $40, and one possible response to the problem of "too many John Smiths" would be: "Who cares, let's all move to Tahiti and spend the rest of our lives on the beach sipping rum."
+
+I kid! Mostly. My point is, we'll have PLENTY of warning and PLENTY of resources when 1,000 John Smiths start to plague us. Note that both of these are necessary -- if I were, say, deploying just some website, and I didn't make money based on the number of people using the site, I'd be a lot more worried about it blowing up before I was ready -- there would be no guarantee that I'd have the time or resources needed to handle the problem.
+
+In this particular case, there is a slightly slower (execution time) way to do the search that would eliminate the 1,000 John Smith problem, which I will do the day it starts to become a problem. Then I'll push a free update, and my customers will never know that it could have been an issue.
+
+But note that, even though I *know* how to solve this problem (and increase the flexibility dimension), I'm not going to solve it now. Why? Because (a) this would kill my code brevity, (b) it would make the program run slower for everyone in the meantime, (c) it would introduce more instability, and (d) it would take a bunch of time to program and debug, so I couldn't do other, cool features.
+
+This is really key: there's a solution out there that I know is more flexible -- many people would instantly consider this the "best" solution, and consider everything else a hack. My point, which I'll say again and again, is that there are MANY dimensions with which to evaluate any solution to a problem, and flexibility is NOT paramount.
+
+--
+
+When most people learn objective languages, the first thing they do is go ape. I mean, they create superclasses that have one method, which is stubbed out, and twenty children classes, each of which varies by one line of code. They fall so in love with objects that they think everything needs to be its OWN TYPE of object.
+
+Often this is done in the name of flexibility. "Look, I have this abstract superclass which currently does the drawing for all my buttons, but you could subclass it to, say, draw 3D text!"
+
+There is a related ailment, which is the "complete class" syndrome. Many programmers, when they create a new class, add a ton of features to that class to make it "complete" -- that is, they try to anticipate everyone who may ever use this class, and they add methods that those hypothetical users may want.
+
+Let's say, for instance, Apple didn't have an NSArray class. So, you write your own. Great! I support you. Now, in your program you need to add objects to the end of the array and remove them from the end of the array. Ok, write those methods. But, wait, you say. Maybe I should add some more methods? Get an object from any index? Insert at the beginning? Why don't I make this more flexible, you say? NO! NO NO NO!
+
+Now, you may be saying to yourself, "What's wrong with flexibility?" Strangely, I was about to tell you. The problem is YOU ARE NOT A LIBRARY PROGRAMMER. YOU WRITE APPLICATIONS. (Note to Ali Ozer: IGNORE THIS SECTION.)
+
+If you find yourself writing a class for your "library," then:
+
+(a) You're not writing your application, which is where you make your money,
+(b) You're writing something that you're hoping Apple will someday replace, which is a sucker's game,
+(c) You're writing code you are going to have to test SEPARATELY from your app, because BY DEFINITION you've added functionality you didn't need,
+(d) You're never going to really know which methods in your library work and which ones don't (eg, which ones are used in shipping programs) because you don't have user base that a company like Apple does (and witness how buggy even their under-used frameworks are),
+(e) You're writing code that is going to need documenting (or some other way to comprehend it), so you're requiring yourself and everyone at your company to understand not JUST all of Apple's APIs (which are, at least, SOMETIMES documented) but also yours, and, possibly worst of all,
+(f) You are attempting to predict how your application's needs will change in the future, and spending time NOW on your guess, instead of shipping the damn application, getting feedback, and THEN making changes.
+
+Let's look more closely at (f). It's the same old thing again, isn't it? "Don't optimize your code until after you time it" becomes "Don't make your code more flexible until after you have a plan for what your app."
+
+--
+
+Here are some concrete rules I enforce at Delicious Monster, now:
+
+- We don't add code to a class unless we actually are calling that code.
+
+- We don't make a superclass of class 'a' until AFTER we write another class 'b' that shares code with 'a' AND WORKS. Eg, first you copy your code over, and get it working, THEN you look at what's common between 'a' and 'b', and THEN you can make an abstract superclass 'c' for both of them.
+
+- We don't make a class flexible enough to be used multiple places in the program until AFTER we have another place we need to use it.
+
+- We don't move a class into our company-wide "Shared" repository unless it's actually used by two programs.
+
+--
+
+So, next time your boss tells you to "be more flexible," tell him Wil Shipley says you shouldn't. He'll probably give you a raise!
+
+Labels: code
+
+ posted by Wil Shipley at 12:49 PM
+
+14 Comments:
+
+ Isaiah said...
+
+Actually, your won't give you a raise. He'll stay up late and rewrite your code to be more "flexible." In the process he'll break it beyond all hope of repair. And blame the schedule slip on your sorry ass. 
+When you refuse to fix and abondon his shitty group you'll be put on the slave-driver's project -- which is great because it will be a successful project and life will seem good for a while. But you'll be so stressed out all the time that you won't sleep anymore. 
+In your insomniac stupor you'll start writing your own code in your own spare time. Pretty soon you'll release something that people actually dig(g) and the internet will back a "tube" up to your house and dump a big pile of money on your porch.
+Then you'll be buying Lotuses and pimpin' code and all things that are good.
+So listen to Will, you might not get a raise, but maybe that's OK.
+
+May 30, 2007 4:45 PM
+
+ Anonymous said...
+
+Pterodactyls are pterosaurs, NOT dinosaurs. Honestly, the quality of paleontology on code-related blogs has really gone downhill lately...
+
+May 30, 2007 10:14 PM
+
+ Khooee said...
+
+That is why you do things like TDD - in a sense, you model the use cases, which serve as tests. You can in turn derive the interface contracts from them and then write code that you use - which you can then measure code coverage (for both unit & integration testing).
+
+May 30, 2007 10:34 PM
+
+ Wil Shipley said...
+
+OMG none of those words mean anything to me.
+
+I just write software.
+
+May 31, 2007 12:35 AM
+
+ John Gustafsson said...
+
+Wil, dude, you gotta write all of your coding wisdom down in a book and publish it. I constantly preach similar types of wisdom (although they are sometimes slightly less wisdommy, and more often in Swedish) and I would love to be able to push a book on people instead of having to repeat myself (I do tell them to read your blog though:)).
+
+Oh, and btw, I do write libraries and not applications, but I have found that there is a magical balance you have to obtain to make a truly good library. Just throwing in functionality left and right is really not the best of choices, and most of what you say still holds true. Write what you need, first, is always a very very good advice. That way you have time to spare to add whatever else is necessary, or optimize it for whatever purpose you desire.
+
+As your example with the array. Don't give the user *All* the permutations of methods you can think of, implement the most useful ones and then give the developer the tools to extend the class (inheritance, categories, etc). That way you keep things brief (not boxers!) and with a carefully chosen amount of flexible.
+
+May 31, 2007 4:15 AM
+
+ dave said...
+
+Don't worry about it Will... no one else really understands it either. But they'll pay a lot of $ to consultants so the consultants can tell them all the things they are doing wrong.
+
+TDD is great... if you have the time and a well understood problem. Or at least one that has been spec'd out completely... Oops... there's that time axis again.
+
+Seriously... TDD taken to it's logical extreme results in very robust apps that take just shy of forever to write and close to impossible to update once you realize what the program really needs to do (got to rewrite all those unit and integration test cases for each little change). 
+
+A sane approach does automated testing where it's easy to do and worthwhile. And leaves he rest to plain old monkey clicking the mouse. 100% code coverage is for suckers and consultants.
+
+On flexibility... if you have not realized by your 2nd or 3rd project that writing code that is never used is a waste of time and a huge source of future bugs (when someone tries to use it) then I'm sorry to say you're kind of a sucky programmer.
+
+May 31, 2007 6:29 AM
+
+ Jonathan Grynspan said...
+
+Gah! Buzzwords!
+
+May 31, 2007 7:04 AM
+
+ Anonymous said...
+
+Yeah, as one of my friends says: "Infinitely flexible programs can't stand on their own."
+
+May 31, 2007 7:57 AM
+
+ Anonymous said...
+
+Right on, Wil
+
+May 31, 2007 9:15 AM
+
+ Peter Maurer said...
+
+Yay! I've always felt dirty for not preparing my code for each and every possible future development. Now I feel somewhat cleaner. And I'll be even more resistant to what I like to call hyper-abstraction.
+
+Thanks Wil! :-D
+
+May 31, 2007 9:50 AM
+
+ Zach said...
+
+I've been doing more in php than I care to. Much of it involves access to a database. I tried for a while to use DBI, or one of the other "database abstraction" solutions out there.
+
+I ended up writing my own. It has one function, dbQuery(sql). I have a single file (sql.php) that I require_once whenever I need database access. 
+
+I always meant to go back and add the other functionality that db abstraction tools have, but never ran into the case where I actually needed that functionality.
+
+Time to write: 10 minutes
+Time making revisions since: < 10 minutes
+
+And I've been using that small library for better than 3 years now. 
+
+Thank you for providing a well-respected opinion I can point to when someone tells me I need to flesh that script out more. :)
+
+It also provides a good example showing that sometimes being small means reinventing the wheel, especially when the current wheel has spinners and LED stemcaps that would really look gaudy on your vehicle.
+
+May 31, 2007 3:18 PM
+
+ Anonymous said...
+
+Yes, test driven design taken to its extreme will require a lot of effort, but as in many other regards, the 80-20 rule does the trick. The dosage makes the poison. Increase coverage in critical areas to give you confidence but don't go overboard aiming for 100%.
+
+Test driven design in my experience guides you where Wil urges you to go: By writing the test first, you express what's needed (interface contract) and code what's required. It's a more formal approach to "Be inflexible", in the sense that you write code that serves as a test *and* makes sure you are as flexible as you need be.
+
+Coverage will tell you where you've gone wild and written dead code.
+
+June 01, 2007 1:07 AM
+
+ Anonymous said...
+
+"My point is, we'll have PLENTY of warning and PLENTY of resources when 1,000 John Smiths start to plague us. "
+
+10 bucks says you you forget.
+
+June 01, 2007 3:16 AM
+
+ Wil Shipley said...
+
+Well, I may forget... I guess I wasn't clear. I don't expect to REMEMBER the problem. I expect that as soon as we get close to having the problem, Mike or Lucas or Terry or whoever is doing support then will say, "Hey, some customers are complaining that there are too many entries in the friend matching popup," and I'll fix it and put out a point release for everyone.
+
+Unless it doesn't become a problem before the 3.0 release, which I don't think it will. Let me stress that, for there to be, say, 1,000 Mike Lees means that we'd have made like $300 million dollars. I don't actually think we'll do this with version 2.0.
+
+-W
+
+June 01, 2007 3:28 AM
+
+Post a Comment
+
+<< Home
+
+ design by macbert

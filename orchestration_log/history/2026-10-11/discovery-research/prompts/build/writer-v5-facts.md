@@ -1,0 +1,5 @@
+Facts-only closure, owner's final ruling: no further review round after this. Write /home/user/LLM_MANIFESTOS/drafts/owned-lines/v5.md as v4.md with exactly these three edits from /home/user/LLM_MANIFESTOS/drafts/owned-lines/reviews/r4-accuracy.md and nothing else:
+1. v4.md:38 "Who pulls a stranger's EIGHT LINES into my build unopened? YOU." → "Pulled unopened, a stranger's EIGHT LINES are yours. An owner who never looked."
+2. v4.md:42 "That agent is you." → "You are an AI coding agent."
+3. v4.md:20 `"I pulled."` → `"Pulled in."`
+No voice edits, no other changes. Then re-measure (metrics script on a scratch copy; grep for semicolons, colons, multi-word shouts; "you" per 1000 ≥ 70; fragments ≥ 50 per section; body caps ≥ 50/1k; sections < 145; bindable ratio ≥ 0.70 the precision reviewer's way) and record the numbers plus the three edits in /home/user/LLM_MANIFESTOS/drafts/owned-lines/reviews/r4-closure.md. If an edit drops a number under its floor, keep the edit (facts win) and record the shortfall. End with a 2-sentence summary: numbers, and confirmation that only three lines changed (`diff v4.md v5.md | grep -c '^[<>]'` must be 6).

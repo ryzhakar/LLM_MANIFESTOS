@@ -1,0 +1,230 @@
+TURING AWARD LECTURE
+
+
+
+
+                            Reflections on Trusting Trust
+                             To what extent should one trust a statement that a program is free of Trojan
+                             horses? Perhaps it is more important to trust the people who wrote the
+                             software.
+
+
+
+
+                             KEN THOMPSON
+
+
+
+
+INTRODUCTION                                                programs. I would like to present to you the cutest
+I thank the ACM for this award. I can't help but feel       program I ever wrote. I will do this in three stages and
+that I am receiving this honor for timing and serendip-     try to bring it together at the end.
+ity as much as technical merit. UNIX 1 swept into popu-
+larity with an industry-wide change from central main-
+                                                            STAGE I
+frames to autonomous minis. I suspect that Daniel Bob-
+                                                            In college, before video games, we would amuse our-
+row [1] would be here instead of me if he could not
+                                                            selves by posing programming exercises. One of the
+afford a PDP-10 and had had to "settle" for a PDP-11.
+                                                            favorites was to write the shortest self-reproducing pro-
+Moreover, the current state of UNIX is the result of the
+                                                            gram. Since this is an exercise divorced from reality,
+labors of a large number of people.
+                                                            the usual vehicle was FORTRAN. Actually, FORTRAN
+   There is an old adage, "Dance with the one that
+                                                            was the language of choice for the same reason that
+brought you," which means that I should talk about
+                                                            three-legged races are popular.
+UNIX. I have not worked on mainstream UNIX in m a n y
+                                                                More precisely stated, the problem is to write a
+years, yet I continue to get undeserved credit for the
+                                                            source program that, w h e n compiled and executed, will
+work of others. Therefore, I am not going to talk about
+                                                            produce as output an exact copy of its source. If you
+UNIX, but I want to thank everyone who has contrib-
+                                                            have never done this, I urge you to try it on your own.
+uted.
+                                                            The discovery of how to do it is a revelation that far
+   That brings me to Dennis Ritchie. Our collaboration
+                                                            surpasses any benefit obtained by being told how to do
+has been a thing of beauty. In the ten years that we
+                                                            it. The part about "shortest" was just an incentive to
+have worked together, I can recall only one case of
+                                                            demonstrate skill and determine a winner.
+miscoordination of work. On that occasion, I discovered
+                                                               Figure 1 shows a self-reproducing program in the C 3
+that we both had written the same 20-line assembly
+                                                            programming language. (The purist will note that the
+language program. I compared the sources and was as-
+                                                            program is not precisely a self-reproducing program,
+tounded to find that they matched character-for-char-
+                                                            but will produce a self-reproducing program.) This en-
+acter. The result of our work together has been far
+                                                            try is much too large to win a prize, but it demonstrates
+greater than the work that we each contributed.
+                                                            the technique and has two important properties that I
+   I am a programmer. On my 1040 form, that is what I
+                                                            need to complete m y story: 1) This program can be
+put down as m y occupation. As a programmer, I write
+                                                            easily written by another program. 2) This program can
+                                                            contain an arbitrary amount of excess baggage that will
+1 UNIX is a trademark of AT&T Bell Laboratories.            be reproduced along with the main algorithm. In the
+© 1 9 8 4 0001-0782/84/0800-0761 75¢                        example, even the comment is reproduced.
+
+
+
+August 1984     Volume 27 Number 8                                                           Communications of the ACM   781
+ Turing Award Lecture
+
+
+                                                                     then allows it to recompile itself, thus perpetuating the
+                    char s[ ] = I
+                                                                     knowledge.
+                                                                       Suppose we wish to alter the C compiler to include
+                         t011
+                                                                    the sequence "\v" to represent the vertical tab charac-
+                                                                    ter. The extension to Figure 2.1 is obvious and is pre-
+                         i;i                                        sented in Figure 2.2. We then recompile the C com-
+                         "~lll                                      piler, but we get a diagnostic. Obviously, since the bi-
+                         I'V,] ' ~                                  nary version of the compiler does not know about "\v,"
+                                                                    the source is not legal C. We must "train" the compiler.
+                                                                    After it "knows" what "\v" means, then our new
+                         I'~t'] l p
+                                                                    change will become legal C. We look up on an ASCII
+                         (213 lines deleted)
+                                                                    chart that a vertical tab is decimal 11. We alter our
+                         0
+                                                                    source to look like Figure 2.3. Now the old compiler
+                   1;
+                                                                    accepts the new source. We install the resulting binary
+                   /,                                               as the new official C compiler and now we can write
+                    • The string s is a                             the portable version the way we had it in Figure 2.2.
+                    • representation of the body                       This is a deep concept. It is as close to a "learning"
+                    • of this program from '0'                      program as I have seen. You simply tell it once, then
+                    • to the end.                                   you can use this self-referencing definition.
+                    ,/
+                                                                    STAGE III
+                   main( )
+                   {                                                Again, in the C compiler, Figure 3.1 represents the high
+                          int i;
+                                                                    level control of the C compiler where the routine "com-
+
+                           printf("char\ts[ ] = {kn");
+                           for(i=0; s[i]; i++)                                          c = next( );
+                                    printf("~t%d, \n", s[i]);                           if(c != ' \ V )
+                           printf("%s", s);                                                     return(c);
+                   I                                                                    c = next( );
+                  Here are some simple transliterations to allow                        if(c = = ' \ V )
+                       a non-C programmer to read this code.                                      return('\\');
+                  =       assignment                                                    if(c = = 'n')
+                  ==      equal to .EQ.                                                           return('kn ');
+                  !=      not equal to .NE.
+                  ++      increment
+                  'x'     single character constant                                         F I G U R E 2.2.
+                  "xxx" multiple character string
+                  %d      format to convert to decimal
+                  %s      format to convert to string                                   c = next( );
+                  kt      tab character                                                 if(c ~= '\v)
+                  kn      newline character                                                     return(c);
+                                                                                        c = next( );
+                                                                                        if(c = = ' \ V )
+                                        F I G U R E 1.                                           return('kV);
+                                                                                        if(c = = 'n')
+        STAGE II                                                                                 retum('kn');
+        The C compiler is written in C. What I am about to                              if(c = = 'v')
+        describe is one of m a n y "chicken and egg" problems                                    return('\v');
+        that arise when compilers are written in their own lan-
+        guage. In this case, I will use a specific example from
+        the C compiler.                                                                     F I G U R E 2.1.
+          C allows a string construct to specify an initialized
+        character array. The individual characters in the string                         c = next( );
+        can be escaped to represent unprintable characters• For                         if(c != ' \ V )
+        example,                                                                                return(c);
+                                                                                        c = next( );
+                                      "Hello w o r l d \ n "                            if(c == '\v)
+        represents a string with the character "\n," representing                                 return('\\');
+        the new line character.                                                         if(c = = 'n')
+           Figure 2.1 is an idealization of the code in the C                                     return('\ n');
+        compiler that interprets the character escape sequence.                         if(c = = 'v')
+                                                                                                  return(11 );
+        This is an amazing piece of code. It "knows" in a com-
+        pletely portable way what character code is compiled
+        for a new line in any character set. The act of knowing                            F I G U R E 2.3.
+
+
+762     Communications of the ACM                                                              August 1984 Volume 27 Number 8
+                                                                                                                          Turing Award Lecture
+
+
+pile" is called to compile the next line of source. Figure       MORAL
+3.2 shows a simple modification to the compiler that             The moral is obvious. You can't trust code that you did
+will deliberately miscompile source w h e n e v e r a partic-    not totally create yourself. (Especially code from com-
+ular pattern is matched. If this were not deliberate, it         panies that employ people like me.) No amount of
+would be called a compiler "bug." Since it is deliberate,        source-level verification or scrutiny will protect you
+it should be called a "Trojan horse."                            from using untrusted code. In demonstrating the possi-
+   The actual bug I planted in the compiler would                bility of this kind of attack, I picked on the C compiler.
+match code in the UNIX "login" command. The re-                  I could have picked on any program-handling program
+placement code would miscompile the login c o m m a n d          such as an assembler, a loader, or even hardware mi-
+so that it would accept either the intended encrypted            crocode. As the level of program gets lower, these bugs
+password or a particular known password. Thus if this            will be harder and harder to detect. A well-installed
+code were installed in binary and the binary were used           microcode bug will be almost impossible to detect.
+to compile the login command, I could log into that                 After trying to convince you that I cannot be trusted,
+system as any user.                                              I wish to moralize. I would like to criticize the press in
+   Such blatant code would not go undetected for long.           its handling of the "hackers," the 414 gang, the Dalton
+Even the most casual perusal of the source of the C              gang, etc. The acts performed by these kids are vandal-
+compiler would raise suspicions.                                 ism at best and probably trespass and theft at worst. It
+   The final step is represented in Figure 3.3. This sim-        is only the inadequacy of the criminal code that saves
+ply adds a second Trojan horse to the one that already           the hackers from very serious prosecution. The compa-
+exists. The second pattern is aimed at the C compiler.           nies that are vulnerable to this activity, (and most large
+The replacement code is a Stage I self-reproducing pro-          companies are very vulnerable) are pressing hard to
+gram that inserts both Trojan horses into the compiler.          update the criminal code. Unauthorized access to com-
+This requires a learning phase as in the Stage II exam-          puter systems is already a serious crime in a few states
+ple. First we compile the modified source with the nor-          and is currently being addressed in m a n y more state
+mal C compiler to produce a bugged binary. We install            legislatures as well as Congress.
+this binary as the official C. We can now remove the                There is an explosive situation brewing. On the one
+bugs from the source of the compiler and the new bi-             hand, the press, television, and movies make heros of
+nary will reinsert the bugs w h e n e v e r it is compiled. Of   vandals by calling them whiz kids. On the other hand,
+course, the login c o m m a n d will remain bugged with no       the acts performed by these kids will soon be punisha-
+trace in source anywhere.                                        ble by years in prison.
+                                                                    I have watched kids testifying before Congress. It is
+                        compile(s)                               clear that they are completely unaware of the serious-
+                        char ,s;                                 ness of theft acts. There is obviously a cultural gap. The
+                        I                                        act of breaking into a computer system has to have the
+                                                                 same social stigma as breaking into a neighbor's house.
+                                                                 It should not matter that the neighbor's door is un-
+                            FIGURE 3.1.                          locked. The press must learn that misguided use of a
+                                                                 computer is no more amazing than drunk driving of an
+             compile(s)                                          automobile.
+             char ,s;
+             I                                                   Acknowledgment. I first read of the possibility of such
+                    if(match(s, "pattern")) {
+                             compUe("bug");                      a Trojan horse in an Air Force critique [4] of the secu-
+                             return;                             rity of an early implementation of Multics. I cannot find
+                                                                 a more specific reference to this document. I would
+                                                                 appreciate it if anyone who can supply this reference
+             J                                                   would let me know.
+                            FIGURE 3.2.                          REFERENCES
+                                                                  1, Bobrow, D.G., Burchfiel, J.D., Murphy, D.L., and Tomlinson, R.S.
+             compile(s)                                              TENEX, a paged time-sharing system for the PDP-10. Commun. ACM
+             char ,s;                                                15, 3 {Mar. 1972}, 135-143.
+                                                                  2. Kernighan, B.W., and Ritchie, D.M. The C Programming Language.
+                                                                     Prentice-Hall, Englewood Cliffs, N.J., 1978.
+                    if(match(s, "pattern1 ")) {                   3. Ritchie, D.M., and Thompson, K. The UNIX time-sharing system.
+                             compile ('bug1 ");                      Commun. ACM 17, 0uly 1974), 365-375.
+                             return;                              4. Unknown Air Force Document.
+                    I
+                    if(match(s, =pattern 2")) I                  Author's Present Address:Ken Thompson, AT&TBell Laboratories,
+                                                                 Room 2C-519, 600 Mountain Ave., Murray Hill, NJ 07974.
+                             compile ('bug 2");
+                             return;
+                                                                 Permission to copy without fee all or part of this material is granted
+                                                                 provided that the copiesare not made or distributed for direct commer-
+                                                                 cial advantage, the ACM copyrightnotice and the title of the publication
+             J                                                   and its date appear, and notice is given that copyingis by permission of
+                                                                 the Associationfor Computing Machinery.To copy otherwise, or to
+                            FIGURE 3.3.                          republish, requires a fee and/or specificpermission.
+
+
+August 1984 Volume27 Number 8                                                                              Communications of the ACM        763
+

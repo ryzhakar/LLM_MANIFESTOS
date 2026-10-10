@@ -1,0 +1,662 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><script type="text/javascript" src="https://web-static.archive.org/_static/js/bundle-playback.js?v=lGQTDXxZ" charset="utf-8"></script>
+<script type="text/javascript" src="https://web-static.archive.org/_static/js/wombat.js?v=o9P2E1FK" charset="utf-8"></script>
+<script>window.RufflePlayer=window.RufflePlayer||{};window.RufflePlayer.config={"autoplay":"on","unmuteOverlay":"hidden","showSwfDownload":true};</script>
+<script type="text/javascript" src="https://web-static.archive.org/_static/js/ruffle/ruffle.js"></script>
+<script type="text/javascript">
+    __wm.init("https://web.archive.org/web");
+  __wm.wombat("http://wilshipley.com:80/blog/2007/05/pimp-my-code-part-14-be-inflexible.html","20070601154320","https://web.archive.org/","web","https://web-static.archive.org/_static/",
+	      "1180712600");
+</script>
+<link rel="stylesheet" type="text/css" href="https://web-static.archive.org/_static/css/banner-styles.css?v=1utQkbB3" />
+<link rel="stylesheet" type="text/css" href="https://web-static.archive.org/_static/css/iconochive.css?v=3PDvdIFv" />
+<!-- End Wayback Rewrite JS Include -->
+
+  <title>Call Me Fishmeal.: Pimp My Code, Part 14: Be Inflexible!</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="MSSmartTagsPreventParsing" content="true"/>
+<meta name="generator" content="Blogger"/>
+<link rel="alternate" type="application/atom+xml" title="Call Me Fishmeal. - Atom" href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/feed.xml"/>
+<link rel="alternate" type="application/rss+xml" title="Call Me Fishmeal. - RSS" href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/rss.xml"/>
+<link rel="service.post" type="application/atom+xml" title="Call Me Fishmeal. - Atom" href="http://www.blogger.com/feeds/11049281/posts/default"/>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.blogger.com/rsd.g?blogID=11049281"/>
+<link rel="alternate" type="application/atom+xml" title="Call Me Fishmeal. - Atom" href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/feed.xml"/>
+<style type="text/css">
+@import url("https://web.archive.org/web/20070601154320cs_/http://www.blogger.com/css/blog_controls.css");
+@import url("https://web.archive.org/web/20070601154320cs_/http://www.blogger.com/dyn-css/authorization.css?blogID=11049281");
+</style>
+
+
+  <style type="text/css">
+    /*
+    -----------------------------------------------
+    Wil Shipley's Blogger Template
+    Designer: Alex Bendiken (Macbert)
+    URL:      www.macbert.com
+    Date:     15 Nov 2005
+    -----------------------------------------------
+    */
+    
+    html { height: 100%; }
+		body {
+		  margin: 0;
+		  padding: 10px 0 0 0;
+		  font: 76%/150% normal "Lucida Grande", "Trebuchet MS", Arial, sans-serif;
+		  color: #39260B;
+		  border-bottom: 10px solid #8E9F00;
+		  background: #4B3617 url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-body.png") repeat-x fixed left bottom;
+		}
+		a {
+		  text-decoration: none;
+		}
+		a:link {
+		  color: #CB4800;
+		}
+		a:active, a:hover {
+		  text-decoration: underline;
+		}
+		a:visited {
+		  color: #CB4833;
+		}
+		div#wrapper {
+		  width: 100%;
+		  min-width: 760px;
+		  margin: -10px 0 0 0;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-wrapper.gif") no-repeat center top;
+		}
+		
+		
+		/* HEADER
+		***************************/
+		div#header {
+		  margin: 0;
+		  padding: 18px 0 0 0;
+		  text-align: center;
+		  border-top: 5px solid #6996C3;
+		}
+		h1#site-title {
+		  width: 760px;
+		  margin: 0 auto;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-site-title.gif") no-repeat 177px bottom;
+		}
+		h1#site-title,
+    h1#site-title a {
+      padding: 20px 0 15px 0;
+      text-decoration: none;
+      font-size: 22px;
+		  color: #fff;
+		}
+		h1#site-title a:hover {
+		  color: #fa0;
+	  }
+	  div#slogan {
+	    width: 760px;
+	    padding: 7px 0 8px 0;
+	    margin: 0 auto;
+	    background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-slogan.gif") no-repeat center bottom;
+	  }
+		div#slogan span {
+		  margin: 0;
+		  padding: 0;
+		  text-transform: uppercase;
+		}
+		div#slogan span,
+		div#slogan span a {
+		  letter-spacing: 1px;
+		  text-decoration: none;
+		  font-size: 10px;
+		  font-weight: bold;
+		  color: #fff;
+		}
+		div#slogan span a {
+		  margin: 0 3px;
+		}
+		
+		
+		/* CONTENT
+		***************************/
+		div#main {
+		  width: 740px;
+		  margin: 0 auto;
+		  padding: 0 10px 39px 10px;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-main.png") no-repeat left bottom;
+		}
+		div#content {
+		  min-height: 1000px;
+		  width: 718px;
+		  margin: 0;
+		  padding: 0 22px 0 0;
+		  background: #fff url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-sidebar.gif") repeat-y 718px top;
+		}
+		
+		
+		/* SIDEBAR
+		***************************/
+		div#sidebar {
+		  float: right;
+		  width: 210px;
+		  padding: 25px 0 0 0;
+		  font-size: 95%;
+		}
+		div#sidebar h2 {
+		  height: 20px;
+		  width: 100%;
+		  margin: 10px 0;
+		  padding: 4px 10px 1px 12px;
+		  font-size: 14px;
+		  color: #fa0;
+		  background: #5C431E url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-sidebar.gif") repeat-y 210px top;
+		}
+		div#sidebar ul {
+		  margin: 0;
+		  padding: 0 10px 0 12px;
+		}
+		div#sidebar ul li {
+		  padding: 0 0 5px 20px;
+		  list-style-type: none;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-bullet.png") no-repeat left 2px;
+		}
+		div#sidebar a#rss {
+		  float: left;
+		  display: block;
+		  width: 62px;
+		  height: 24px;
+		  margin: 20px 10px 0 10px;
+		  clear: both;
+		  text-indent: -9000px;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/btn-rss.png") no-repeat right top;
+		}
+		div#sidebar a#rss:hover,
+		div#sidebar a#rss:active {
+		  background-position: right -39px;
+	  }
+	  div#sidebar a#blogger {
+	    float: left;
+		  display: block;
+		  width: 102px;
+		  height: 24px;
+		  margin: 20px 0 0 0;
+		  text-indent: -9000px;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/btn-blogger.png") no-repeat right top;
+	  }
+	  div#sidebar a#blogger:hover,
+		div#sidebar a#blogger:active {
+		  background-position: right -39px;
+	  }
+	  div#profile-container {
+      padding: 0;
+    }
+    div#profile-container p {
+      padding: 0 10px;
+    }
+    dl.profile-datablock {
+      margin: 0 0 5px 0;
+      padding: 0 10px;
+    }
+    .profile-img {
+      display: inline;
+    }
+    .profile-img img {
+      float: left;
+      padding: 4px;
+      border: 1px solid #222;
+      margin: 0 8px 3px 0;
+    }
+    dd.profile-data {
+      margin: 0;
+      font-size: 95%;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: bold;
+    }
+    dd.profile-data strong {
+      display:none;
+    }
+    p.profile-textblock {
+      margin:0 0 .5em;
+    }
+    p.profile-link {
+      margin: 0;
+      font-size: 90%;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+		
+	
+		/* FOOTER
+		***************************/
+		div#footer {
+		  width: 760px;
+		  height: 55px;
+		  margin: 0 auto;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-footer.gif") no-repeat left top;
+		}
+		
+		
+		/* POSTS
+		***************************/
+		div.post {
+		  float: left;
+		  width: 450px;
+		  margin: 0;
+		  padding: 15px 20px 15px 20px;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/bg-post.png") no-repeat left bottom;
+		}
+		div.post span.date {
+		  text-transform: uppercase;
+		  font-size: 90%;
+		  color: #6996C3;
+		}
+		div.post h1 {
+		  margin: 5px 0;
+		  padding: 0;
+		  font-size: 130%;
+		  font-weight: bold;
+		  color: #CB4800;
+		}
+		div.post p {
+		  margin-bottom: 0;
+		  font-size: 95%;
+		}
+		div.post div.post-footer {
+		  margin: 15px 0 0 0;
+		  font-size: 85%;
+		  text-transform: uppercase;
+		  color: #6996C3;
+		}
+		div.post div.post-footer a:link {
+		  color: #CB4800;
+		  text-decoration: none;
+		}
+		div.post div.post-footer span {
+		  margin: 0 10px 0 0;
+		}
+		div.post span.post-info {
+		}
+		div.post span.code-title {
+		  display: block;
+		  width: 90%;
+		  padding: 3px 4%;
+		  margin: 0;
+		  color: #fa0;
+		  font-weight: bold;
+		  border-left: 5px solid #fa0;
+		  background: #39260B;
+		}
+		div.post pre {
+		  width: 90%;
+		  padding: 5px 4% 10px 4%;
+		  margin: 0;
+		  font: 90% Monaco, Serif;
+		  color: #fff;
+		  border: none;
+		  border-left: 5px solid #899A00;
+		  background: #39260B;
+		}
+		
+		
+		/* COMMENTS
+		***************************/
+		div#comments {
+		  float: left;
+		  width: 450px;
+		  padding: 0 20px 15px 20px;
+		}
+		div#comments a.comment-link {
+		  display: block;
+		  width: 102px;
+		  height: 24px;
+		  margin: 20px 0 0 0;
+		  text-indent: -9000px;
+		  background: url("/web/20070601154320im_/http://wilshipley.com/blog/images/btn-post-a-comment.png") no-repeat right top;
+		}
+		div#comments a.comment-link:hover,
+		div#comments a.comment-link:active {
+		  background-position: right -39px;
+		}
+		div#comments dt.comment-poster {
+		  display: block;
+		  width: 92%;
+		  padding: 3px 3% 2px 3%;
+		  margin: 0;
+		  font-style: italic;
+		  border-left: 5px solid #fa0;
+		}
+		div#comments dd.comment-body {
+		  width: 92%;
+		  padding: 2px 3% 0 3%;
+		  margin: 0 0 20px 0;
+		  border: none;
+		  border-left: 5px solid #899A00;
+		}
+		div#comments dd.comment-body p {
+		  margin: 0;
+		  padding: 0;
+		}
+		div#comments dd.comment-body p.comment-timestamp {
+		  margin: 5px 0 0 0;
+		}
+		
+		
+		/* MISC
+		***************************/
+		.codeTable {
+		  border-style: none;
+		}
+		.codeHeader {
+		  border-left: 1pt dashed #878787;
+		  text-align: left;
+		  font: 11px;
+		  padding: 4px;
+		}
+		.codeCell {
+		  border-left: 1pt solid #878787;
+		  vertical-align: text-top;
+		  font: 11px Helvetica;
+		  padding: 4px;
+		  white-space: pre; /* CSS2 */
+		  white-space: pre-wrap; /* CSS 2.1 */
+		}
+		span.designby {
+		  float: right;
+		  margin: 0 35px 0 0;
+		  font-size: 85%;
+		  color: #ccc;
+		}
+		span.designby a {
+		  color: #ccc;
+		}
+	</style>
+</head>
+<body>
+<!--[if IE]>
+<style>
+  #sidebar {
+    width: 200px;
+    margin: 0 -11px 0 0;
+  }
+</style>
+<![endif]-->
+<div id="wrapper">
+  <div id="header">
+    <h1 id="site-title"><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/" title="Call Me Fishmeal.">Call Me Fishmeal.</a></h1>
+    <div id="slogan"><span><a href="https://web.archive.org/web/20070601154320/http://www.delicious-monster.com/" target="_blank" title="Mmm... Delicious...">I write software.</a> <a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2005/05/on-being-crazy.html" title="Say what?">I'm obsessive-compulsive.</a> <a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2005/06/this-is-really-long-pointless-story.html" title="Shirts, cars, et al.">I like good stuff.</a> <a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2005/11/cat-news-site-redesign-contest.html" title="Kittens? Fuzzy?">Kittens are fuzzy.</a></span></div>
+  </div>
+  <div id="main">
+    <div id="content">
+      <div id="sidebar">
+        I write the software for<br><a href="https://web.archive.org/web/20070601154320/http://www.delicious-monster.com/"><img src="https://web.archive.org/web/20070601154320im_/http://delicious-monster.com/favicon.png" align="top" height="16" width="16/"> Delicious Monster</a>
+        <h2 class="sidebar-title">Recent Posts</h2>
+        <ul id="recently">
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/05/is-apple-done-with-imac.html">Is Apple done with the iMac?</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/01/cs-omg-wtf.html">CS OMG WTF?</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/04/blah-blah-blah-leopard-delay.html">Blah blah blah Leopard delay</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/03/i-crack-me-up.html">I crack me up.</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/03/crazy-talk.html">Crazy talk.</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/03/i-heart-spam.html">I ♥ spam.</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/03/ted2007-days-3-4.html">TED2007, Days 3 and 4</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/03/ted-2007-days-1-and-2.html">TED2007, Days 1 and 2</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/03/ted-2007-day-0.html">TED2007, Day 0.</a></li>
+          
+            <li><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/03/four-days-off.html">Four days off!</a></li>
+          
+        </ul>
+      
+        <h2 class="sidebar-title">Pimp My Code</h2>
+        <ul id="recently">
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/02/free-programming-tips-are-worth-every.html">Free Programming Tips are Worth Every Penny.</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/07/i-will-insult-your-code.html">I will insult your code!</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/07/code-insults-mark-i.html">Part 1: Code Insults, Mark I</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/07/self-stupid-init.html">Part 2: self = [stupid init];</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/07/pimp-my-code-part-3-gradient.html">Part 3: Gradient TableViews</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/08/pimp-my-code-part-4-returning-late-to.html">Part 4: Returning late to return early</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/09/jpeg2000-cool-but-slow.html">JPEG2000: Cool but SLOW.</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/09/unit-testing-is-teh-suck-urr.html">Unit testing is teh suck, Urr.</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/10/pimp-my-code-part-5-special-apple.html">Part 5: Special Apple Sample Code Edition...</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/10/pimp-my-code-interlude-free-code.html">Interlude: Free Code</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/10/pimp-pimp-thyself.html">Pimp, Pimp Thyself.</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/11/frameworks-are-teh-suck-err.html">Frameworks are Teh Suck, Err.</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2005/12/pimp-my-code-part-6-pimp-before.html">Part 6: The Pimp Before Christmas</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2006/01/thinking-boxes-what-kittens-can-do-to.html">Thinking, boxes, &amp; what kittens can do to them.</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2006/01/pimp-my-code-part-7-pimplette.html">Part 7: Pimplette?</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2006/03/pimp-my-code-part-8-mary-mary-why-you.html">Part 8: Mary, Mary, why you buggin?</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2006/03/pimp-my-code-part-9-beginner-code.html">Part 9: Beginner Code</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2006/04/pimp-my-code-part-10-whining-about.html">Part 10: Whining about Cocoa</a></li>
+            <li><a href="/web/20070601154320/http://wilshipley.com/blog/2006/07/pimp-my-code-part-11-this-sheet-is.html">Part 11: This Sheet is Tight</a></li>
+       </ul>
+
+        
+      
+        <h2 class="sidebar-title">Other Blogs</h2>
+        <ul class="archive-list">
+          <li><a href="https://web.archive.org/web/20070601154320/http://www.delicious-monster.com/blog/" target="_blank">Delicious Monster</a></li>
+          <li><a href="https://web.archive.org/web/20070601154320/http://ridiculousfish.com/blog/" target="_blank">Ridiculous Fish</a></li>
+          <li><a href="https://web.archive.org/web/20070601154320/http://mooseyard.com/Jens/" target="_blank">Thought Palace</a></li>
+          <li><a href="https://web.archive.org/web/20070601154320/http://www.mikematas.com/blog/" target="_blank">Mike Matas</a></li>
+        </ul>
+       <a id="rss" href="/web/20070601154320/http://wilshipley.com/blog/feed.xml" target="_blank" title="RSS Feed">RSS Feed</a>
+       <a id="blogger" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/" title="I Power Blogger">I Power Blogger</a><br><br><br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://web.archive.org/web/20070601154320/http://www.eff.org/bloggers/join/"><img src="https://web.archive.org/web/20070601154320im_/http://www.eff.org/bloggers/badges/blog_150x60.gif" alt="Support Bloggers' Rights!" width="150" height="60" border="0" align="middle"/></a><br><br><br>
+	<center><!--Creative Commons License--><a rel="license" href="https://web.archive.org/web/20070601154320/http://creativecommons.org/licenses/by-nc-nd/2.5/"><img alt="Creative Commons License" border="0" src="https://web.archive.org/web/20070601154320im_/http://creativecommons.org/images/public/somerights20.png"/></a><br/><!--/Creative Commons License--><!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+		<Work rdf:about="">
+			<license rdf:resource="http://creativecommons.org/licenses/by-nc-nd/2.5/" />
+	<dc:title>Wil Shipley's Blog</dc:title>
+	<dc:date>2005</dc:date>
+	<dc:creator><Agent><dc:title>William Jon Shipley</dc:title></Agent></dc:creator>
+	<dc:rights><Agent><dc:title>William Jon Shipley</dc:title></Agent></dc:rights>
+	<dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+	<dc:source rdf:resource="http://wilshipley.com/" />
+		</Work>
+		<License rdf:about="http://creativecommons.org/licenses/by-nc-nd/2.5/"><permits rdf:resource="http://web.resource.org/cc/Reproduction"/><permits rdf:resource="http://web.resource.org/cc/Distribution"/><requires rdf:resource="http://web.resource.org/cc/Notice"/><requires rdf:resource="http://web.resource.org/cc/Attribution"/><prohibits rdf:resource="http://web.resource.org/cc/CommercialUse"/></License></rdf:RDF> --></center>
+        </ul>
+      </div> <!-- sidebar -->
+      <!-- google_ad_section_start -->
+      
+        
+        <a name="6270751375274434717"></a>
+        <div class="post">
+          <span class="date">Wednesday, May 30</span>
+          <h1><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/05/pimp-my-code-part-14-be-inflexible.html" title="Pimp My Code, Part 14: Be Inflexible!">Pimp My Code, Part 14: Be Inflexible!</a></h1>
+          <p><div style="clear:both;"></div>I ask you, grasshopper, which is better: flexible code or tiny code?<br/><br/>"Ah," you exclaim, "Learned master, it is a trick question: code which is tiny yet flexible is best!"<br/><br/>WRONG! Tiny code is always best. Now you must carry water up the hill for the rest of the day.<br/><br/>--<br/><br/>What can we learn from this simple tale? Well, one thing is, I'm not very good at writing stories. But is there something deeper?<br/><br/>When I first started coding, way, long ago (on a PDP-11, which was essentially when I'd get eleven Pterodactyl Dinosaurs to sit down and do some Processing for me), I thought code should be flexible at all costs. If I were creating, say, a program to write a one-line message to the screens of other people logged in to the same machine, I'd write it, say, so you could plug in other kinds of screen-manipulation packages besides curses(3). Even though, you know, none would be invented until "time sharing" was something you did with condos, not processors.<br/><br/>The fundamental nature of coding is that our task, as programmers, is to recognize that every decision we make is a trade-off. To be a master programmer is to understand the nature of these trade-offs, and be conscious of them in everything we write.<br/><br/>You've probably seen some variant of this, but I'll show you my version. In coding, you have many dimensions in which you can rate code:<br/><br/>- Brevity of code<br/>- Featurefulness<br/>- Speed of execution<br/>- Time spent coding<br/>- Robustness<br/>- Flexibility<br/><br/>Now, remember, these dimensions are all in opposition to one another. You can spend a three days writing a routine which is really beautiful AND fast, so you've gotten two of your dimensions up, but you've spent THREE DAYS, so the "time spent coding" dimension is WAY down.<br/><br/>So, when is this worth it? How do we make these decisions?<br/><br/>The answer turns out to be very sane, very simple, and also the one nobody, ever, listens to:<br/><br/>"START WITH BREVITY. Increase the other dimensions AS REQUIRED BY TESTING."<br/><br/>--<br/><br/>In Delicious Library 2 we have a feature where we will automatically find the libraries of your friends if they have published them. Of course, with any matching system, the trick is, how do you know this is really *my* friend named "Mike Lee", and not one of the other 17 million "Mike Lee"s around the world (that whore).<br/><br/>So, I came up with a basic algorithm for pulling all Delicious Libraries by the owner's name first, then disambiguating within those afterwards. One of my programmers said, "Well, what happens if we get 1,000 hits for John Smith?"<br/><br/>And my reply, not at all tongue-in-cheek, was, "Well, then we would be very, very rich." Seriously, if 1,000 John Smiths had registered our program, think of how many customers we'd have total: millions. Multiply that by $40, and one possible response to the problem of "too many John Smiths" would be: "Who cares, let's all move to Tahiti and spend the rest of our lives on the beach sipping rum."<br/><br/>I kid! Mostly. My point is, we'll have PLENTY of warning and PLENTY of resources when 1,000 John Smiths start to plague us. Note that both of these are necessary -- if I were, say, deploying just some website, and I didn't make money based on the number of people using the site, I'd be a lot more worried about it blowing up before I was ready -- there would be no guarantee that I'd have the time or resources needed to handle the problem.<br/><br/>In this particular case, there is a slightly slower (execution time) way to do the search that would eliminate the 1,000 John Smith problem, which I will do the day it starts to become a problem. Then I'll push a free update, and my customers will never know that it could have been an issue.<br/><br/>But note that, even though I *know* how to solve this problem (and increase the flexibility dimension), I'm not going to solve it now. Why? Because (a) this would kill my code brevity, (b) it would make the program run slower for everyone in the meantime, (c) it would introduce more instability, and (d) it would take a bunch of time to program and debug, so I couldn't do other, cool features.<br/><br/>This is really key: there's a solution out there that I know is more flexible -- many people would instantly consider this the "best" solution, and consider everything else a hack. My point, which I'll say again and again, is that there are MANY dimensions with which to evaluate any solution to a problem, and flexibility is NOT paramount.<br/><br/>--<br/><br/>When most people learn objective languages, the first thing they do is go ape. I mean, they create superclasses that have one method, which is stubbed out, and twenty children classes, each of which varies by one line of code. They fall so in love with objects that they think everything needs to be its OWN TYPE of object.<br/><br/>Often this is done in the name of flexibility. "Look, I have this abstract superclass which currently does the drawing for all my buttons, but you could subclass it to, say, draw 3D text!"<br/><br/>There is a related ailment, which is the "complete class" syndrome. Many programmers, when they create a new class, add a ton of features to that class to make it "complete" -- that is, they try to anticipate everyone who may ever use this class, and they add methods that those hypothetical users may want.<br/><br/>Let's say, for instance, Apple didn't have an NSArray class. So, you write your own. Great! I support you. Now, in your program you need to add objects to the end of the array and remove them from the end of the array. Ok, write those methods. But, wait, you say. Maybe I should add some more methods? Get an object from any index? Insert at the beginning? Why don't I make this more flexible, you say? NO! NO NO NO!<br/><br/>Now, you may be saying to yourself, "What's wrong with flexibility?" Strangely, I was about to tell you. The problem is YOU ARE NOT A LIBRARY PROGRAMMER. YOU WRITE APPLICATIONS. (Note to Ali Ozer: IGNORE THIS SECTION.)<br/><br/>If you find yourself writing a class for your "library," then:<br/><br/>(a) You're not writing your application, which is where you make your money,<br/>(b) You're writing something that you're hoping Apple will someday replace, which is a sucker's game,<br/>(c) You're writing code you are going to have to test SEPARATELY from your app, because BY DEFINITION you've added functionality you didn't need,<br/>(d) You're never going to really know which methods in your library work and which ones don't (eg, which ones are used in shipping programs) because you don't have user base that a company like Apple does (and witness how buggy even their under-used frameworks are),<br/>(e) You're writing code that is going to need documenting (or some other way to comprehend it), so you're requiring yourself and everyone at your company to understand not JUST all of Apple's APIs (which are, at least, SOMETIMES documented) but also yours, and, possibly worst of all,<br/>(f) You are attempting to predict how your application's needs will change in the future, and spending time NOW on your guess, instead of shipping the damn application, getting feedback, and THEN making changes.<br/><br/>Let's look more closely at (f). It's the same old thing again, isn't it? "Don't optimize your code until after you time it" becomes "Don't make your code more flexible until after you have a plan for what your app."<br/><br/>--<br/><br/>Here are some concrete rules I enforce at Delicious Monster, now:<br/><br/>- We don't add code to a class unless we actually are calling that code.<br/><br/>- We don't make a superclass of class 'a' until AFTER we write another class 'b' that shares code with 'a' AND WORKS. Eg, first you copy your code over, and get it working, THEN you look at what's common between 'a' and 'b', and THEN you can make an abstract superclass 'c' for both of them.<br/><br/>- We don't make a class flexible enough to be used multiple places in the program until AFTER we have another place we need to use it.<br/><br/>- We don't move a class into our company-wide "Shared" repository unless it's actually used by two programs.<br/><br/>--<br/><br/>So, next time your boss tells you to "be more flexible," tell him Wil Shipley says you shouldn't. He'll probably give you a raise!<div style="clear:both; padding-bottom:0.25em"></div><p class="blogger-labels">Labels: <a rel="tag" href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/labels/code.html">code</a></p></p>
+          <div class="post-footer">
+            <span class="post-info">posted by Wil Shipley at <a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/2007/05/pimp-my-code-part-14-be-inflexible.html" title="permanent link">12:49 PM</a></span>
+            
+            <span class="item-action"><a href="https://web.archive.org/web/20070601154320/http://www.blogger.com/email-post.g?blogID=11049281&amp;postID=6270751375274434717" title="Email Post"><span class="email-post-icon">&nbsp;</span></a></span><span class="item-control blog-admin pid-1610337279"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/post-edit.g?blogID=11049281&amp;postID=6270751375274434717" title="Edit Post"><span class="quick-edit-icon">&nbsp;</span></a></span>
+          </div>
+        </div>
+      
+        
+          <div id="comments">
+            
+              <a name="comments"></a>
+              <h4>14 Comments:</h4>
+              <dl id="comments-block">
+                
+      
+                  <dt class="comment-poster" id="c1941045761117212394"><a name="c1941045761117212394"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.yourhead.com/" rel="nofollow">Isaiah</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Actually, your won't give you a raise.  He'll stay up late and rewrite your code to be more "flexible."  In the process he'll break it beyond all hope of repair.  And blame the schedule slip on your sorry ass.  <br/>When you refuse to fix and abondon his shitty group you'll be put on the slave-driver's project -- which is great because it will be a successful project and life will seem good for a while.  But you'll be so stressed out all the time that you won't sleep anymore.  <br/>In your insomniac stupor you'll start writing your own code in your own spare time.  Pretty soon you'll release something that people actually dig(g) and the internet will back a "tube" up to your house and dump a big pile of money on your porch.<br/>Then you'll be buying Lotuses and pimpin' code and all things that are good.<br/>So listen to Will, you might not get a raise, but maybe that's OK.</p>
+                    <p class="comment-timestamp"><a href="#c1941045761117212394" title="comment permalink">May 30, 2007 4:45 PM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=1941045761117212394" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c882739657034915453"><a name="c882739657034915453"></a>
+                    <span class="anon-comment-author">Anonymous</span> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Pterodactyls are pterosaurs, NOT dinosaurs.  Honestly, the quality of paleontology on code-related blogs has really gone downhill lately...</p>
+                    <p class="comment-timestamp"><a href="#c882739657034915453" title="comment permalink">May 30, 2007 10:14 PM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=882739657034915453" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c3670012788740579148"><a name="c3670012788740579148"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.blogger.com/profile/01317999098468254099" rel="nofollow">Khooee</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>That is why you do things like TDD - in a sense, you model the use cases, which serve as tests.  You can in turn derive the interface contracts from them and then write code that you use - which you can then measure code coverage (for both unit &amp; integration testing).</p>
+                    <p class="comment-timestamp"><a href="#c3670012788740579148" title="comment permalink">May 30, 2007 10:34 PM</a></p>
+                    <span class="item-control blog-admin pid-1905096051"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=3670012788740579148" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c8616450801181076076"><a name="c8616450801181076076"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.blogger.com/profile/04429428424208378747" rel="nofollow">Wil Shipley</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>OMG none of those words mean anything to me.<br/><br/>I just write software.</p>
+                    <p class="comment-timestamp"><a href="#c8616450801181076076" title="comment permalink">May 31, 2007 12:35 AM</a></p>
+                    <span class="item-control blog-admin pid-1610337279"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=8616450801181076076" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c3265953202659340492"><a name="c3265953202659340492"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.blogger.com/profile/05751388378637391134" rel="nofollow">John Gustafsson</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Wil, dude, you gotta write all of your coding wisdom down in a book and publish it. I constantly preach similar types of wisdom (although they are sometimes slightly less wisdommy, and more often in Swedish) and I would love to be able to push a book on people instead of having to repeat myself (I do tell them to read your blog though:)).<br/><br/>Oh, and btw, I do write libraries and not applications, but I have found that there is a magical balance you have to obtain to make a truly good library. Just throwing in functionality left and right is really not the best of choices, and most of what you say still holds true. Write what you need, first, is always a very very good advice. That way you have time to spare to add whatever else is necessary, or optimize it for whatever purpose you desire.<br/><br/>As your example with the array. Don't give the user *All* the permutations of methods you can think of, implement the most useful ones and then give the developer the tools to extend the class (inheritance, categories, etc). That way you keep things brief (not boxers!) and with a carefully chosen amount of flexible.</p>
+                    <p class="comment-timestamp"><a href="#c3265953202659340492" title="comment permalink">May 31, 2007 4:15 AM</a></p>
+                    <span class="item-control blog-admin pid-2122259406"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=3265953202659340492" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c5041789052738613899"><a name="c5041789052738613899"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.blogger.com/profile/11819582249490963890" rel="nofollow">dave</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Don't worry about it Will... no one else really understands it either.  But they'll pay a lot of $ to consultants so the consultants can tell them all the things they are doing wrong.<br/><br/>TDD is great... if you have the time and a well understood problem.  Or at least one that has been spec'd out completely... Oops... there's that time axis again.<br/><br/>Seriously... TDD taken to it's logical extreme results in very robust apps that take just shy of forever to write and close to impossible to update once you realize what the program really needs to do (got to rewrite all those unit and integration test cases for each little change).  <br/><br/>A sane approach does automated testing where it's easy to do and worthwhile.  And leaves he rest to plain old monkey clicking the mouse.  100% code coverage is for suckers and consultants.<br/><br/>On flexibility... if you have not realized by your 2nd or 3rd project that writing code that is never used is a waste of time and a huge source of future bugs (when someone tries to use it) then I'm sorry to say you're kind of a sucky programmer.</p>
+                    <p class="comment-timestamp"><a href="#c5041789052738613899" title="comment permalink">May 31, 2007 6:29 AM</a></p>
+                    <span class="item-control blog-admin pid-507172169"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=5041789052738613899" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c7842524282606200950"><a name="c7842524282606200950"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.ghosttiger.com/" rel="nofollow">Jonathan Grynspan</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Gah! Buzzwords!</p>
+                    <p class="comment-timestamp"><a href="#c7842524282606200950" title="comment permalink">May 31, 2007 7:04 AM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=7842524282606200950" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c8989944367547808057"><a name="c8989944367547808057"></a>
+                    <span class="anon-comment-author">Anonymous</span> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Yeah, as one of my friends says: "Infinitely flexible programs can't stand on their own."</p>
+                    <p class="comment-timestamp"><a href="#c8989944367547808057" title="comment permalink">May 31, 2007 7:57 AM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=8989944367547808057" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c2718423726601373585"><a name="c2718423726601373585"></a>
+                    <span class="anon-comment-author">Anonymous</span> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Right on, Wil</p>
+                    <p class="comment-timestamp"><a href="#c2718423726601373585" title="comment permalink">May 31, 2007 9:15 AM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=2718423726601373585" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c181414828427715029"><a name="c181414828427715029"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.petermaurer.de/" rel="nofollow">Peter Maurer</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Yay! I've always felt dirty for not preparing my code for each and every possible future development. Now I feel somewhat cleaner. And I'll be even more resistant to what I like to call hyper-abstraction.<br/><br/>Thanks Wil! :-D</p>
+                    <p class="comment-timestamp"><a href="#c181414828427715029" title="comment permalink">May 31, 2007 9:50 AM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=181414828427715029" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c2295534485152474067"><a name="c2295534485152474067"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://darkstar.frop.org/~zwhite/blog" rel="nofollow">Zach</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>I've been doing more in php than I care to. Much of it involves access to a database. I tried for a while to use DBI, or one of the other "database abstraction" solutions out there.<br/><br/>I ended up writing my own. It has one function, dbQuery(sql). I have a single file (sql.php) that I require_once whenever I need database access. <br/><br/>I always meant to go back and add the other functionality that db abstraction tools have, but never ran into the case where I actually needed that functionality.<br/><br/>Time to write: 10 minutes<br/>Time making revisions since: &lt; 10 minutes<br/><br/>And I've been using that small library for better than 3 years now. <br/><br/>Thank you for providing a well-respected opinion I can point to when someone tells me I need to flesh that script out more. :)<br/><br/>It also provides a good example showing that sometimes being small means reinventing the wheel, especially when the current wheel has spinners and LED stemcaps that would really look gaudy on your vehicle.</p>
+                    <p class="comment-timestamp"><a href="#c2295534485152474067" title="comment permalink">May 31, 2007 3:18 PM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=2295534485152474067" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c7229224860114575384"><a name="c7229224860114575384"></a>
+                    <span class="anon-comment-author">Anonymous</span> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Yes, test driven design taken to its extreme will require a lot of effort, but as in many other regards, the 80-20 rule does the trick. The dosage makes the poison. Increase coverage in critical areas to give you confidence but don't go overboard aiming for 100%.<br/><br/>Test driven design in my experience guides you where Wil urges you to go: By writing the test first, you express what's needed (interface contract) and code what's required. It's a more formal approach to "Be inflexible", in the sense that you write code that serves as a test *and* makes sure you are as flexible as you need be.<br/><br/>Coverage will tell you where you've gone wild and written dead code.</p>
+                    <p class="comment-timestamp"><a href="#c7229224860114575384" title="comment permalink">June 01, 2007 1:07 AM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=7229224860114575384" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c7823887887320949998"><a name="c7823887887320949998"></a>
+                    <span class="anon-comment-author">Anonymous</span> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>"My point is, we'll have PLENTY of warning and PLENTY of resources when 1,000 John Smiths start to plague us. "<br/><br/>10 bucks says you you forget.</p>
+                    <p class="comment-timestamp"><a href="#c7823887887320949998" title="comment permalink">June 01, 2007 3:16 AM</a></p>
+                    <span class="item-control blog-admin pid-2041477889"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=7823887887320949998" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+      
+                  <dt class="comment-poster" id="c2522509321192831447"><a name="c2522509321192831447"></a>
+                    <a href="https://web.archive.org/web/20070601154320/http://www.blogger.com/profile/04429428424208378747" rel="nofollow">Wil Shipley</a> said...
+                  </dt>
+                  <dd class="comment-body">
+                    <p>Well, I may forget... I guess I wasn't clear. I don't expect to REMEMBER the problem. I expect that as soon as we get close to having the problem, Mike or Lucas or Terry or whoever is doing support then will say, "Hey, some customers are complaining that there are too many entries in the friend matching popup," and I'll fix it and put out a point release for everyone.<br/><br/>Unless it doesn't become a problem before the 3.0 release, which I don't think it will. Let me stress that, for there to be, say, 1,000 Mike Lees means that we'd have made like $300 million dollars. I don't actually think we'll do this with version 2.0.<br/><br/>-W</p>
+                    <p class="comment-timestamp"><a href="#c2522509321192831447" title="comment permalink">June 01, 2007 3:28 AM</a></p>
+                    <span class="item-control blog-admin pid-1610337279"><a style="border:none;" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/delete-comment.g?blogID=11049281&amp;postID=2522509321192831447" title="Delete Comment"><span class="delete-comment-icon">&nbsp;</span></a></span>
+                  </dd>
+                
+              </dl>
+              <p class="comment-timestamp"><a class="comment-link" href="https://web.archive.org/web/20070601154320/http://www.blogger.com/comment.g?blogID=11049281&amp;postID=6270751375274434717">Post a Comment</a></p>
+            	    
+            
+      	    <p class="comment-timestamp"><a href="https://web.archive.org/web/20070601154320/http://wilshipley.com/blog/">&lt;&lt; Home</a></p>
+          </div>
+        
+      
+      
+      <!-- google_ad_section_end -->
+      <br style="clear:both"/>
+    </div> <!-- content -->
+  </div> <!-- main -->
+</div> <!-- wrapper -->
+<div id="footer">
+  <span class="designby"><a href="https://web.archive.org/web/20070601154320/http://www.macbert.com/" target="_blank" title="I Do Web Design. I'm a Perfectionist. I Like Simple Stuff. 42.">design by macbert</a></span>
+</div>
+</body>
+</html><!--
+     FILE ARCHIVED ON 15:43:20 Jun 01, 2007 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 10:56:41 Oct 11, 2026.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  captures_list: 0.615
+  exclusion.robots: 0.087
+  exclusion.robots.policy: 0.078
+  esindex: 0.022
+  cdx.remote: 4.416
+  LoadShardBlock: 93.635 (3)
+  PetaboxLoader3.datanode: 88.167 (4)
+  PetaboxLoader3.resolve: 1123.233 (2)
+  load_resource: 1193.384
+-->

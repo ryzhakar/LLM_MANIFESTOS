@@ -1,0 +1,18 @@
+Read /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/_binding.md first and obey it.
+
+ROLE: You are writing the session record for 2026-10-11 in the collection's orchestration log, in the format its prior records use, from the tracked artifacts of the day.
+
+CONTEXT: Repository /home/user/LLM_MANIFESTOS, branch claude/manifesto-design-discussion-liuuvf. Prior records to match in shape: orchestration_log/history/2026-05-11/session.md and 2026-05-01/session.md (header block; Checkpoint narrative by phase; Decisions table; Failures table; Working State; Quantitative Summary; Next Session Priorities; Artifacts committed and recon). Single-line conventional commit, no attribution.
+
+INPUT FILES (read in full): orchestration_log/history/2026-10-11/build-log.md (the event log, authoritative for sequence and rulings); orchestration_log/history/2026-10-11/discovery-research/INDEX.md and discovery/candidates.md; orchestration_log/history/2026-10-11/owned-lines/SPEC.md and owned-lines/reviews/r1-rulings.md (after the ship step archived them; if absent, read drafts/owned-lines/ instead); orchestration_log/history/2026-10-11/recut-kiss.md if present; orchestration_log/history/2026-10-10/manifesto-definition.md; `git -C /home/user/LLM_MANIFESTOS log --format='%h %ad %s' --date=iso --since=2026-10-10` and `git -C /home/user/claude-skills log --format='%h %ad %s' --date=iso --since=2026-10-11 manifesto-binding-channel` (run both); the resources README.
+
+TASK:
+1. Write orchestration_log/history/2026-10-11/session.md with: header (Orchestrator: Claude Fable 5.1 per the session's configured model; session id from any `Claude-Session` line in git history or "unrecorded"; duration from first to last commit timestamps of the day; code changes from `git diff --stat` between the first and last commits of the day; outcome in one sentence); Checkpoint narrative by phase (preparation synthesis → research tree on the manifesto definition → substrate discovery tree → owner decisions 1–18 → plugin fix, skill rewrite, schema, guide → spec → v1..v4 with review rounds r1..r4 and the 21 rulings → ship and kiss re-cut); Decisions table (every owner ruling recorded in build-log and r1-rulings, one row each, with context and rationale as the records state them); Failures table (rate-limit restart killing r4; the gitignore `research/` depth match; the lane-1 Wayback 403; the register ceiling across v1–v3; the QuickDraw licence; anything else the log records); Working State; Quantitative Summary (commit counts per repo, agents dispatched if the log states them, drafts and review rounds, findings per round, final metrics of the shipped manifesto); Next Session Priorities (merge manifesto-binding-channel; anything the log leaves open); Artifacts (committed, by path; recon, by path and gitignored status).
+2. Update orchestration_log/reference/codebase_state.md "Last verified" line and the inventory row for the new manifesto if the ship step did not; update conventions.md with the lessons the log records under rulings 6–9, 15–19 (register by measurement, demands once in the checklist, narrator with a stake) as one new "Lessons from 2026-10-11" block, commands only, no rationale.
+3. Commit `doc: session 2026-10-11 LEAVE protocol — session record + reference updates`; push with retries; never force.
+
+OUTPUT PATH: /home/user/LLM_MANIFESTOS/orchestration_log/history/2026-10-11/session.md (the deliverable) and a 3-sentence notification summary.
+
+SCOPE: The record and the two reference files. No manifesto edits. Facts from the records only; "unrecorded" where a record is silent.
+
+TOOLS: Read; Bash; Write; Edit; Grep.

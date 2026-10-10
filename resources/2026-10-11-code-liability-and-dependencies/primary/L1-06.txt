@@ -1,0 +1,36 @@
+ID: L1-06
+TITLE: Source Code Is A Liability, Not An Asset
+AUTHOR: Eric Lee
+YEAR: 2009 (page date "March 11, 2009"; updated December 14, 2018; "originally posted on my MSDN blog")
+URL FETCHED: https://saintgimp.org/2009/03/11/source-code-is-a-liability-not-an-asset/
+EXTRACTION METHOD: curl -sSL; BeautifulSoup/lxml; article div.entry-content p/blockquote; sharing widgets, related posts, comments (pingbacks only) dropped; underline spans flattened; blockquote prefixed "> "
+
+(I originally posted this on my MSDN blog.)
+
+In my previous job, I once scribbled something on a window that caused a bit of head-scratching by people who read it:
+
+> “Source code is a liability, not an asset!”
+
+Of course, the idea isn’t original with me. I got it from (I think) Tim Ottinger and Alan Cooper said it earlier, and for all I know someone else said it even earlier.
+
+(As an aside, one of the painful realizations that have dawned on me as a new blogger is that I’m not very likely to invent and blog about a truly unique idea. I’m very thankful that I’m standing on the shoulders of so many giants, but the bar for originality is, um . . . rather high. That’s ok. I can still restate other people’s ideas in my own terms, within my own context, and I think that adds value to the community.)
+
+Anyway – source code is a liability. That doesn’t make much sense at first. Don’t we spend our entire professional careers designing, writing, and testing code? That’s what we do, right? Well, no. What we actually do is deliver business value, or solutions to real-world problems, or however you want to state it. That’s why companies employ software developers. Source code is merely the necessary evil that’s required to create value. With few exceptions, source code itself is not a valuable commodity.
+
+Source code is akin to financial debt. Suppose you want to buy a house to live in. Most people don’t have the financial wherewithal to pay cash for a house, so you take out a mortgage instead. The mortgage is the instrument that allows you to have a house to live in. But the mortgage itself is not a great thing to have. It’s a liability. You have to pay interest on your debt every month. You always want your mortgage to be as small as possible while still allowing you to buy a house that meets your needs.
+
+And as we’ve seen in the news recently, if you don’t do some careful thinking about the terms and implications of your mortgage before you buy a house, you can wind up in a load of trouble. It’s possible to end up underwater in a situation where your debt is actually bigger than your house is worth.
+
+So too in software development. We start with a value proposal; something we want to accomplish. Writing code is the means we use to realize that value. However, the code itself is not intrinsically valuable except as tool to accomplish some goal. Meanwhile, code has ongoing costs. You have to understand it, you have to maintain it, you have to adapt it to new goals over time. The more code you have, the larger those ongoing costs will be. It’s in our best interest to have as little source code as possible while still being able to accomplish our business goals.
+
+This has implications for the way we do metrics and the way we design software. For example, LOC (lines of code) numbers should never be taken as an asset measurement. “This week our team wrote 10k LOC! We’re very productive!” Well, no, that number doesn’t say anything about whether you’re being productive, any more than saying, “This week we took on $10,000 in new debt!” indicates whether you’re being productive. The question is entirely, “What did you do with that LOC/debt?”
+
+Taking the long term view, probably one of the most productive statements a team can make is, “This week we removed 10K LOC while preserving all existing functionality!” That doesn’t sound very sexy on the face of it but it contributes to your organization’s long-term health in the same way as reducing your financial debt.
+
+Software designs that favor less code tend to be better designs that give you a higher return on your investment. You can take that too far, certainly; well-written, maintainable code is often more verbose than dense, impenetrable code, but you should always favor maintainability. The difference between the two is relatively minor compared to decisions about whether to use a third-party library or write your own implementation, or whether to refactor existing code to meet changing requirements vs. simply piling your new stuff on top of the old stuff.
+
+(Another aside – ever notice how companies will happily spend multiple months of an employee’s time, at a true cost of at least $10,000 a month, counting benefits, office space, and the like, in order to avoid paying $1000 or even $500 to license a third-party software package that does the same thing?)
+
+I’m looking right now at a project that’s been passed through the hands of several different owners over several years. It has 134K LOC checked in to source control, and it could likely be implemented in about 10% of that, maybe 5%, using common, industry-standard libraries available today. Granted, many of those libraries didn’t exist when this project was first started, but the code wasn’t refactored to keep up with the times. In some respects, it’s underwater now in terms of its debt-to-value ratio.
+
+When you’re faced with a project like that, one of the most beneficial things you can do is to start paying down the debt. Bust out your delete key and start whacking. Until you do, that debt is going to paralyze any other efforts to deliver new value to your customers. Of course, it’s got to be done very carefully, especially if you don’t have the safety net of unit or automated acceptance tests (and in situations like this, you usually don’t). Nonetheless, it’s absolutely critical that you get yourself above water as soon as possible.
