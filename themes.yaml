@@ -3,21 +3,6 @@ software-engineering:
   name: "Software Engineering Principles"
   description: "Core principles for building maintainable, understandable software"
 
-design-methodology:
-  icon: "🎨"
-  name: "Design Methodology"
-  description: "Systematic approaches to design thinking and practice"
-
-ai-instructions:
-  icon: "🤖"
-  name: "AI Instructions"
-  description: "Protocols and frameworks for language model behavior"
-
-research-protocols:
-  icon: "🔬"
-  name: "Research Protocols"
-  description: "Methodologies for analyzing and replicating creative processes"
-
 cognitive-science:
   icon: "🧠"
   name: "Cognitive Science"
