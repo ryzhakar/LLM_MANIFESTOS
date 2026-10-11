@@ -1,0 +1,2 @@
+Shared three-line launch for the seven Tier 2 discovery surveyors (one per category):
+Read /home/user/LLM_MANIFESTOS/research/manifesto-craft/DISCOVERY-BRIEF.md for instructions and /home/user/LLM_MANIFESTOS/research/manifesto-craft/DISCOVERY-DISPATCH.md for your row. Your category: {enemies | distinctions-vocabulary | evidence | demands | tensions | collection-fit | breadth}. Write to the output path your row names under /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/.
