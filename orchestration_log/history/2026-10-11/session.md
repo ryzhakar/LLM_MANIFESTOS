@@ -259,7 +259,7 @@ claude-skills, branch `manifesto-binding-channel` (9ff0b6a):
 
 Path `research/manifesto-craft/`, ignored by `.gitignore:3`; 72 MB, container-local. The session transcript is a JSONL file outside the repository.
 - `recon/` (245 files) — copied into `resources/` except binaries that `resources/…/README.md` lists as "Not copied"
-- `discovery/*-report.md` — 8 agent reports (close-open-items, collection-schema, maintainers-guide, plugin-hooks-fix, research-commit, resources-commit, ship, skill-rewrite); copied nowhere; not regenerable
-- `prompts/build/*.md` — 17 prompts (`spec-writer`, `writer-v1` to `writer-v7` with `writer-v4-surgical`, `review-shared`, `ship`, `plugin-hooks-fix`, `collection-schema`, `skill-rewrite`, `maintainers-guide`, `close-open-items`, `_binding-writer`, `session-record`); copied nowhere
+- `discovery/*-report.md` — 8 agent reports (close-open-items, collection-schema, maintainers-guide, plugin-hooks-fix, research-commit, resources-commit, ship, skill-rewrite); copied to `orchestration_log/history/2026-10-11/discovery-research/build-reports/` (4eb183f); not regenerable
+- `prompts/build/*.md` — 17 prompts (`spec-writer`, `writer-v1` to `writer-v7` with `writer-v4-surgical`, `review-shared`, `ship`, `plugin-hooks-fix`, `collection-schema`, `skill-rewrite`, `maintainers-guide`, `close-open-items`, `_binding-writer`, `session-record`); copied to `orchestration_log/history/2026-10-11/discovery-research/prompts/build/` (4eb183f; 18 files with `final-cleanup.md`)
 - `discovery/build-log.md` — symlink to the tracked log
 - `categories/`, `synthesis/` — empty

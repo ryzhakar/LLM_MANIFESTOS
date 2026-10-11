@@ -75,7 +75,7 @@ Dependencies are injected inline via `uv run --with`; no separate virtualenv or 
 ### What is tracked vs. ignored
 
 - `orchestration_log/history/*/cost.md` — gitignored
-- `research/` directory — gitignored
+- `/research/` (repo root only) — gitignored (`563ab6d`); `archive/research/` is tracked and not matched
 - `*.DS_Store` — gitignored
 - `drafts/` — not scanned by `generate.py`; at ship, `SPEC.md` and `reviews/` move to `orchestration_log/history/<date>/<slug>/` and the draft versions are deleted
 - `orchestration_log/history/<date>/recut-<slug>.md` — re-cut records for re-cuts without a draft
