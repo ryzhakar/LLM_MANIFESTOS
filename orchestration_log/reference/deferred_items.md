@@ -1,6 +1,6 @@
 # Deferred Items
 
-_First session — 2026-04-29. Updated 2026-10-11: OQ-001 and OQ-002 resolved; OQ-004 and OQ-005 opened from the 2026-10-11 build log; OQ-006 opened._
+_First session — 2026-04-29. Updated 2026-10-11: OQ-001, OQ-002, OQ-004, and OQ-005 resolved; OQ-006 narrowed to two files._
 
 ---
 
@@ -22,22 +22,21 @@ _First session — 2026-04-29. Updated 2026-10-11: OQ-001 and OQ-002 resolved; O
 `only-fluff-die.md` replaced by `stop-yapping.md`. Theme stays `cognitive-science`. The `ai-instructions` theme was explicitly rejected: all manifestos in LLM_MANIFESTOS are AI instructions by definition, so the theme fails to differentiate within the collection. The compression manifesto addresses communication discipline — a cognitive framework — not tool configuration.
 
 ### OQ-004 — ETHOS.md names PostCompact
-**Status:** Open (deferred to the owner)  
+**Status:** Resolved (2026-10-11, on claude-skills branch manifesto-binding-channel)  
 **Source:** Build log 2026-10-11, plugin track (B1)  
-`/home/user/claude-skills/ETHOS.md` line 37 lists PostCompact among the one-time hooks. The manifesto plugin deleted PostCompact in `a390757` (plugin 3.3.0).  
-**Action needed:** The owner edits the line in ETHOS.md.
+`/home/user/claude-skills/ETHOS.md` line 37 listed PostCompact among the one-time hooks. The manifesto plugin deleted PostCompact in `a390757` (plugin 3.3.0).
 
 ### OQ-005 — Two manifesto-dir paths
-**Status:** Open (deferred to the owner)  
+**Status:** Resolved (2026-10-11, on claude-skills branch manifesto-binding-channel)  
 **Source:** Build log 2026-10-11, plugin track (B1)  
-The manifesto-oath skill names `.claude/manifesto-repo/LLM_MANIFESTOS/manifestos/` (project-relative). The hook text names `manifesto_dir` on its `Manifesto repo:` line.  
-**Action needed:** The owner decides which path governs and aligns the other.
+The manifesto-oath skill named `.claude/manifesto-repo/LLM_MANIFESTOS/manifestos/` (project-relative). The hook text names `manifesto_dir` on its `Manifesto repo:` line.
 
 ### OQ-006 — Attribution backfill
-**Status:** Open (owner ruling 2026-10-11: leave open)  
+**Status:** Partly resolved (2026-10-11, `64ef632`)  
 **Source:** MAINTAINERS_GUIDE attribution rule; `codebase_state.md` Known Limitations  
-`intervention.md`, `postgres.md`, `self-documenting-code.md`, and `zen-of-python.md` carry no attribution line. `cargo-cult-science.md` carries `*by RICHARD P. FEYNMAN*` without a year. Each fix edits a manifesto body.  
-**Action needed:** The owner assigns the backfill.
+`64ef632` (`chore: attribution lines on three manifestos`) added `*Original, 2026*` to `intervention.md` and `*After the maintainer's raw materials, 2026-05-11*` to `postgres.md`, and set the `cargo-cult-science.md` byline to `*by RICHARD P. FEYNMAN, 1974*`.  
+Open: `self-documenting-code.md` carries no attribution line; its archive source `archive/software_building_principles/SELF_DOCUMENTING_CODE.md` names no author. `zen-of-python.md` carries no attribution line; it lay outside the closing scope.  
+**Action needed:** The owner rules the attribution line for both files.
 
 ---
 
