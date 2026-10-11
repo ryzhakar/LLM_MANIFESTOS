@@ -7,7 +7,7 @@ Every file below was copied unchanged with `cp -p` and verified with `sha256sum`
 | folder | origin |
 |---|---|
 | `primary/` | `recon/sources/*.txt` (15 files) |
-| `secondary/` | `recon/discovery/**` text files (194 files; subfolders `evidence/` and `breadth/` kept) |
+| `secondary/` | `recon/discovery/**` text files plus `breadth/naur-theory.pdf` and `breadth/naur-pages/p-01.png` to `p-14.png` (209 files; subfolders `evidence/` and `breadth/` kept) |
 | `index/` | `recon/index-lane1.md`, `recon/index-lane2.md`, `sources.md` (3 files) |
 
 ## primary/
@@ -34,7 +34,7 @@ file, ID, title, author, year, and URL fetched come from the header lines of eac
 
 ## secondary/
 
-Title or URL is the `<title>` element (HTML files with a title) or the first non-blank lines (other files; up to 3 lines joined by ` / ` until 40 characters) of each copy, with a URL from the first 12 lines or the canonical link appended when present. Values longer than 200 characters end in `…`.
+Title or URL is the `<title>` element (HTML files with a title) or the first non-blank lines (other files; up to 3 lines joined by ` / ` until 40 characters) of each copy, with a URL from the first 12 lines or the canonical link appended when present. Values longer than 200 characters end in `…`. Binary files read `(binary file; no text header)`.
 
 | file | title or URL as given in its own header or first lines | survey |
 |---|---|---|
@@ -232,10 +232,25 @@ Title or URL is the `<title>` element (HTML files with a title) or the first non
 | `evidence/lp003/package/README.md` | `## left-pad / String left pad / ## Install` | evidence |
 | `evidence/lp003/package/index.js` | `module.exports = leftpad; / function leftpad (str, len, ch) {` | evidence |
 | `evidence/lp003/package/package.json` | `{ / "name": "left-pad", / "version": "0.0.3",` | evidence |
+| `breadth/naur-theory.pdf` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-01.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-02.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-03.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-04.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-05.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-06.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-07.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-08.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-09.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-10.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-11.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-12.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-13.png` | `(binary file; no text header)` | breadth |
+| `breadth/naur-pages/p-14.png` | `(binary file; no text header)` | breadth |
 
 ## Not copied
 
-34 binary files under `recon/discovery/` (extensions `.pdf`, `.png`, `.zip`, `.tgz`) are not copied. Origin path, bytes, sha256:
+19 binary files under `recon/discovery/` (extensions `.pdf`, `.tgz`, `.zip`) are not copied. Origin path, bytes, sha256:
 
 | origin | bytes | sha256 |
 |---|---|---|
@@ -248,26 +263,11 @@ Title or URL is the `<title>` element (HTML files with a title) or the first non
 | `recon/discovery/breadth/dora2024.pdf` | 38970381 | `45a1b62564c603e0e356a951e4553d01eafaa200de801480feed5a4c4685e40e` |
 | `recon/discovery/breadth/equifax-house.pdf` | 2545932 | `d59b6463f2c3e197836946e72112e69dcc896a055e900cf0138729192851fc17` |
 | `recon/discovery/breadth/lehman-1980.pdf` | 1887238 | `71f1d6793741114ce808080295967b03e902233a3fd03cc8dd0718ae5139da24` |
-| `recon/discovery/breadth/naur-theory.pdf` | 908308 | `0bcd908a5862694cd228527edaf7a4b5a1f118da8c7edfaf8ad34c1e5fcbc9c4` |
 | `recon/discovery/breadth/parnas-aging.pdf` | 933476 | `5f1f89b966e92367fb44d144ace46f366cff3e88fa84b7346d7147cb17e256b9` |
 | `recon/discovery/breadth/pike-kernighan-1984.pdf` | 25998 | `c58e6c8e3cb6c0974720084f819ef0e307292ab78b6162abab4d285c2145f757` |
 | `recon/discovery/breadth/ritchie-evolution.pdf` | 30159 | `075482a570140e93720c99f5b49939fb3b78a9b375798ce037c44ff0de3adaab` |
 | `recon/discovery/breadth/thompson-trust.pdf` | 225044 | `8ab9d339a2c2781382e6aa4c3c472a94edfcc05d10e3eedf63cbaac9530e9932` |
 | `recon/discovery/breadth/unixhaters.pdf` | 3639172 | `ff9c923728d9653e4babdec3b05731543054f932241f267df6232d7a7e1e68ba` |
-| `recon/discovery/breadth/naur-pages/p-01.png` | 130439 | `d733477d2a339f0be729bfcb81e37bd5dae0be358a80045bf2538a36b712eb3f` |
-| `recon/discovery/breadth/naur-pages/p-02.png` | 175822 | `21858de4879a471cc5cfbfb6307885168b2121fac379cb5332288edc64482d74` |
-| `recon/discovery/breadth/naur-pages/p-03.png` | 144029 | `dcde8a3c3ae5d8b6fa23b285d8561c122ba62ce02878de5df4cb16f70be27900` |
-| `recon/discovery/breadth/naur-pages/p-04.png` | 171525 | `289be39ce2904e8de70017f31fa1b35476e66ae3b84bbf0869b688ca01391668` |
-| `recon/discovery/breadth/naur-pages/p-05.png` | 142640 | `a55157992081df65652f1a3b7fca252752381a28a8a5f24304103948a4ecfd79` |
-| `recon/discovery/breadth/naur-pages/p-06.png` | 170352 | `b4d3514e405a3b6507874cd55a01541c44ea6b81b00d50c03e9e9aefd976172a` |
-| `recon/discovery/breadth/naur-pages/p-07.png` | 148406 | `cbbecf557e733efdc2f08a032bab2b0277cb3a9590021430b1e618ca573c06a0` |
-| `recon/discovery/breadth/naur-pages/p-08.png` | 175932 | `0f162c6150e936c89f41d15e0b0588bb50530bfc6f09aee6341ace7702d2204b` |
-| `recon/discovery/breadth/naur-pages/p-09.png` | 156271 | `0c81f3077eb90282cda0c85e5a3be62ddb934413da9ee860b7c00da9f227eec6` |
-| `recon/discovery/breadth/naur-pages/p-10.png` | 173850 | `d65d774c7bd5575d0d0abb6a2cacc53c6f784a8650853623749b75842c42f7c5` |
-| `recon/discovery/breadth/naur-pages/p-11.png` | 141217 | `232e0cd3bfb49c6016730539406d250d308e34197de950e84a1a299537d318cc` |
-| `recon/discovery/breadth/naur-pages/p-12.png` | 147812 | `dd0217184e544df76fbe0bed8316ca0eae6f5e62e60ac53c3824ea928d708bc6` |
-| `recon/discovery/breadth/naur-pages/p-13.png` | 137776 | `1dcb6519e8a11550fd71f26e7850b9bdcedca40632423dca4a1caa265df81a87` |
-| `recon/discovery/breadth/naur-pages/p-14.png` | 122846 | `3792b35ddfaa05c4c8fe0a2e7fbbfa6608b891e866e3f3d12710ceb29ac38d87` |
 | `recon/discovery/evidence/equifax-house-report.pdf` | 2545932 | `d59b6463f2c3e197836946e72112e69dcc896a055e900cf0138729192851fc17` |
 | `recon/discovery/evidence/ewd249.pdf` | 2103476 | `77f1ef68c6514f4b2cb577bdb1203ca156e9c12e802c361bebe553613b7c6f43` |
 | `recon/discovery/evidence/leftpad-0.0.3.tgz` | 664 | `d074b43a3bfb595c93e5da9eeb58c726a1e547ce358afdbfc0e1db27a20c641d` |
@@ -492,3 +492,18 @@ Origin and copy hashes are equal in every row.
 | `index/index-lane1.md` | `recon/index-lane1.md` | `0d53379c382c79f9a65063be1623ac15f08686e2843588242425a26ba5eec18b` | `0d53379c382c79f9a65063be1623ac15f08686e2843588242425a26ba5eec18b` |
 | `index/index-lane2.md` | `recon/index-lane2.md` | `e6a1463572883b3b8c4095a6e913f5531c92746b117088ca3445d797dccfe02c` | `e6a1463572883b3b8c4095a6e913f5531c92746b117088ca3445d797dccfe02c` |
 | `index/sources.md` | `sources.md` | `58fbf68ec5d07fe990a543fb79fba3416b408828a6015a446457dcfb578e7a8d` | `58fbf68ec5d07fe990a543fb79fba3416b408828a6015a446457dcfb578e7a8d` |
+| `secondary/breadth/naur-theory.pdf` | `recon/discovery/breadth/naur-theory.pdf` | `0bcd908a5862694cd228527edaf7a4b5a1f118da8c7edfaf8ad34c1e5fcbc9c4` | `0bcd908a5862694cd228527edaf7a4b5a1f118da8c7edfaf8ad34c1e5fcbc9c4` |
+| `secondary/breadth/naur-pages/p-01.png` | `recon/discovery/breadth/naur-pages/p-01.png` | `d733477d2a339f0be729bfcb81e37bd5dae0be358a80045bf2538a36b712eb3f` | `d733477d2a339f0be729bfcb81e37bd5dae0be358a80045bf2538a36b712eb3f` |
+| `secondary/breadth/naur-pages/p-02.png` | `recon/discovery/breadth/naur-pages/p-02.png` | `21858de4879a471cc5cfbfb6307885168b2121fac379cb5332288edc64482d74` | `21858de4879a471cc5cfbfb6307885168b2121fac379cb5332288edc64482d74` |
+| `secondary/breadth/naur-pages/p-03.png` | `recon/discovery/breadth/naur-pages/p-03.png` | `dcde8a3c3ae5d8b6fa23b285d8561c122ba62ce02878de5df4cb16f70be27900` | `dcde8a3c3ae5d8b6fa23b285d8561c122ba62ce02878de5df4cb16f70be27900` |
+| `secondary/breadth/naur-pages/p-04.png` | `recon/discovery/breadth/naur-pages/p-04.png` | `289be39ce2904e8de70017f31fa1b35476e66ae3b84bbf0869b688ca01391668` | `289be39ce2904e8de70017f31fa1b35476e66ae3b84bbf0869b688ca01391668` |
+| `secondary/breadth/naur-pages/p-05.png` | `recon/discovery/breadth/naur-pages/p-05.png` | `a55157992081df65652f1a3b7fca252752381a28a8a5f24304103948a4ecfd79` | `a55157992081df65652f1a3b7fca252752381a28a8a5f24304103948a4ecfd79` |
+| `secondary/breadth/naur-pages/p-06.png` | `recon/discovery/breadth/naur-pages/p-06.png` | `b4d3514e405a3b6507874cd55a01541c44ea6b81b00d50c03e9e9aefd976172a` | `b4d3514e405a3b6507874cd55a01541c44ea6b81b00d50c03e9e9aefd976172a` |
+| `secondary/breadth/naur-pages/p-07.png` | `recon/discovery/breadth/naur-pages/p-07.png` | `cbbecf557e733efdc2f08a032bab2b0277cb3a9590021430b1e618ca573c06a0` | `cbbecf557e733efdc2f08a032bab2b0277cb3a9590021430b1e618ca573c06a0` |
+| `secondary/breadth/naur-pages/p-08.png` | `recon/discovery/breadth/naur-pages/p-08.png` | `0f162c6150e936c89f41d15e0b0588bb50530bfc6f09aee6341ace7702d2204b` | `0f162c6150e936c89f41d15e0b0588bb50530bfc6f09aee6341ace7702d2204b` |
+| `secondary/breadth/naur-pages/p-09.png` | `recon/discovery/breadth/naur-pages/p-09.png` | `0c81f3077eb90282cda0c85e5a3be62ddb934413da9ee860b7c00da9f227eec6` | `0c81f3077eb90282cda0c85e5a3be62ddb934413da9ee860b7c00da9f227eec6` |
+| `secondary/breadth/naur-pages/p-10.png` | `recon/discovery/breadth/naur-pages/p-10.png` | `d65d774c7bd5575d0d0abb6a2cacc53c6f784a8650853623749b75842c42f7c5` | `d65d774c7bd5575d0d0abb6a2cacc53c6f784a8650853623749b75842c42f7c5` |
+| `secondary/breadth/naur-pages/p-11.png` | `recon/discovery/breadth/naur-pages/p-11.png` | `232e0cd3bfb49c6016730539406d250d308e34197de950e84a1a299537d318cc` | `232e0cd3bfb49c6016730539406d250d308e34197de950e84a1a299537d318cc` |
+| `secondary/breadth/naur-pages/p-12.png` | `recon/discovery/breadth/naur-pages/p-12.png` | `dd0217184e544df76fbe0bed8316ca0eae6f5e62e60ac53c3824ea928d708bc6` | `dd0217184e544df76fbe0bed8316ca0eae6f5e62e60ac53c3824ea928d708bc6` |
+| `secondary/breadth/naur-pages/p-13.png` | `recon/discovery/breadth/naur-pages/p-13.png` | `1dcb6519e8a11550fd71f26e7850b9bdcedca40632423dca4a1caa265df81a87` | `1dcb6519e8a11550fd71f26e7850b9bdcedca40632423dca4a1caa265df81a87` |
+| `secondary/breadth/naur-pages/p-14.png` | `recon/discovery/breadth/naur-pages/p-14.png` | `3792b35ddfaa05c4c8fe0a2e7fbbfa6608b891e866e3f3d12710ceb29ac38d87` | `3792b35ddfaa05c4c8fe0a2e7fbbfa6608b891e866e3f3d12710ceb29ac38d87` |
