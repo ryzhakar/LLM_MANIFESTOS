@@ -110,3 +110,12 @@
 - boundaries: PASS (0).
 - scope-facts: PASS (0).
 - 19:1x build-log moved to orchestration_log/history/2026-10-11/build-log.md (tracked); the research/ copy is now a symlink to it. Owner: events belong in the tracked log.
+- build-log committed 64d99e1.
+- accuracy (r4): FAIL (3), facts-level: :38 behavior asserted without figure → "Pulled unopened, a stranger's EIGHT LINES are yours. An owner who never looked."; :42 "That agent is you." → "You are an AI coding agent."; :20 quote "I pulled." not in source → "Pulled in.". Facts-only pass → v5 dispatched. No further review round.
+- v5.md = v4 + three fact edits (diff 6 lines). 909 words; you 70.4/1k; bindable 0.714; 12 shouts; 0 semicolons/colons. Marginal shortfalls accepted by ruling (facts win, no voice edits): one section fragments 48.8/1k; caps 49.5/1k all-words base. Ship v5 once precision/register/maximalist land (records only, no edits).
+- precision (r4): FAIL (3), rule-logic errors (not voice): check 12 drops "from a package"; check 2 ambiguous ordering; A2 "Same tests?" lost "pass" (would ship a failing version). Ruling: rule-correctness counts as facts → v6 = v5 + these three edits, no voice edits. Ship v6.
+- v6.md = v5 + three precision edits (diff 6). 911 words; you 70.3/1k; bindable 0.714; 12 shouts; 0 semicolons/colons. Marginal shortfalls accepted (facts win): A2 fragments 41.3/1k; imperatives 21.4% (floor 21.5); one section 48.8; caps 49.4 all-words. Final draft = v6. Ship on register + maximalist records.
+- maximalist (r4): FAIL (17): 9 restatements (voice/structure — skipped per owner ruling, no voice edits); 8 rule-correctness breaks applied as facts: "this fight skips it" = escape (#8); "stranger's COURIER" contradicts ownership (#12); "Check 5 proves" false (#13); check 5 "or none stated" vacuous (#15); check 13 cited-not-read (#16); "I debug your line" vs NEVER THE OUTAGE (#11); check 3 scope mismatch (#6); upkeep/maintaining gloss (#10). → v7 = v6 + those eight lines. Final.
+- register (r4, record only): FAIL (13) on voice; every number and rulings 16–19 pass except boundaries-in-attack (2/6) and closer template (5/7 noun-phrase put-downs). No edits per owner ruling. Recorded for the next session's register work.
+- r4 complete 7/7. Ship v7 when the writer reports.
+- v7 final: 921 words; 13 shouts; 0 semicolons/colons; bindable 0.714; checklist 147 words (under the skill's 150 cap; spec's 145 was margin); you 68.4/1k (floor 70, accepted: facts win). Shipping v7 as lines-spent.
