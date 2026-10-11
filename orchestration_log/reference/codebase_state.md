@@ -93,7 +93,7 @@ Dependencies are injected inline via `uv run --with`; no separate virtualenv or 
 
 - **No `archive/deprecated/` path exists.** MAINTAINERS_GUIDE describes an archival workflow using `archive/deprecated/`, but the directory does not exist. First archival action will need to create it.
 - **`generate.py` accepts any `x.y.z` version.** MAINTAINERS_GUIDE forbids minor and patch segments; the generator does not enforce it. All 13 files hold `N.0.0`.
-- **Attribution gaps.** MAINTAINERS_GUIDE makes the attribution line mandatory. `intervention.md`, `postgres.md`, `self-documenting-code.md`, and `zen-of-python.md` carry none. `cargo-cult-science.md` carries `*by RICHARD P. FEYNMAN*` without a year.
+- **Attribution complete.** MAINTAINERS_GUIDE makes the attribution line mandatory. All 13 manifestos carry one. `64ef632` added lines to `intervention.md` and `postgres.md` and the year to `cargo-cult-science.md` (`*by RICHARD P. FEYNMAN, 1974*`); `40323db` added lines to `self-documenting-code.md` and `zen-of-python.md`.
 - **`reader` below the standard.** Only `stop-yapping.md` and `lines-spent.md` declare `reader: model`; 7 files declare `human` and 4 declare `unspecified`.
 - **No CI/CD gate.** `just readme` is a manual step. Nothing prevents committing a manifesto without regenerating README, creating drift. The MAINTAINERS_GUIDE calls this out as a responsibility but does not enforce it mechanically.
 - **`stop-yapping.md` replaced `only-fluff-die.md`** (2026-05-01). Same function (language compression), completely different manifesto — abusive register, model-addressed, no security escape hatch. Theme: cognitive-science.
@@ -107,5 +107,5 @@ Dependencies are injected inline via `uv run --with`; no separate virtualenv or 
 These are observations, not commitments. An orchestrator or maintainer should evaluate each.
 
 - Add a CI step (e.g., a pre-commit hook or GitHub Action) that runs `just readme` and fails if `README.md` has uncommitted changes.
-- Add the missing attribution lines and the missing year (see Known Limitations). Each edit touches a manifesto body.
+- Attribution is complete: every manifesto carries an attribution line (`64ef632`, `40323db`). No attribution edit remains.
 - Decide whether to migrate `reader` values on pre-standard manifestos through re-cuts.
