@@ -1,6 +1,6 @@
 # Deferred Items
 
-_First session — 2026-04-29. Updated 2026-10-11: OQ-001, OQ-002, OQ-004, and OQ-005 resolved; OQ-006 narrowed to two files._
+_First session — 2026-04-29. Updated 2026-10-11: OQ-001, OQ-002, OQ-004, OQ-005, and OQ-006 resolved._
 
 ---
 
@@ -32,11 +32,9 @@ _First session — 2026-04-29. Updated 2026-10-11: OQ-001, OQ-002, OQ-004, and O
 The manifesto-oath skill named `.claude/manifesto-repo/LLM_MANIFESTOS/manifestos/` (project-relative). The hook text names `manifesto_dir` on its `Manifesto repo:` line.
 
 ### OQ-006 — Attribution backfill
-**Status:** Partly resolved (2026-10-11, `64ef632`)  
+**Status:** Resolved (2026-10-11, `64ef632`, `40323db`)  
 **Source:** MAINTAINERS_GUIDE attribution rule; `codebase_state.md` Known Limitations  
-`64ef632` (`chore: attribution lines on three manifestos`) added `*Original, 2026*` to `intervention.md` and `*After the maintainer's raw materials, 2026-05-11*` to `postgres.md`, and set the `cargo-cult-science.md` byline to `*by RICHARD P. FEYNMAN, 1974*`.  
-Open: `self-documenting-code.md` carries no attribution line; its archive source `archive/software_building_principles/SELF_DOCUMENTING_CODE.md` names no author. `zen-of-python.md` carries no attribution line; it lay outside the closing scope.  
-**Action needed:** The owner rules the attribution line for both files.
+`64ef632` (`chore: attribution lines on three manifestos`) added `*Original, 2026*` to `intervention.md` and `*After the maintainer's raw materials, 2026-05-11*` to `postgres.md`, and set the `cargo-cult-science.md` byline to `*by RICHARD P. FEYNMAN, 1974*`. `40323db` (`chore: attribution lines on self-documenting-code and zen-of-python`) added `*Original, 2026*` to `self-documenting-code.md` (its archive source names no author) and `*by TIM PETERS, 2004*` to `zen-of-python.md`.
 
 ---
 
