@@ -1,6 +1,6 @@
 # Conventions
 
-_Established: 2026-04-29, first session. Updated 2026-10-11: writing standard by reference, schema facts, entry gate._
+_Established: 2026-04-29, first session. Updated 2026-10-11: writing standard by reference, schema facts, entry gate, lessons from the lines-spent build._
 
 ---
 
@@ -29,6 +29,39 @@ Dispatch lessons the standard does not carry:
 - **Fix register before evaluating structure.** Register problems mask structural problems.
 - **Plan 2-3 rounds of requester escalation ("HARDER").** The orchestrator hits a register ceiling that editorial passes do not break.
 - **Load `instructions/strunk_spr_v3_complete.xml` and `instructions/sparse-priming-representations.md` as writing technique** for the writer, never as content.
+
+---
+
+## Lessons from 2026-10-11
+
+Source: the `lines-spent` build, rulings 6–9 and 15–19 in `orchestration_log/history/2026-10-11/owned-lines/reviews/r1-rulings.md`.
+
+### Register by measurement
+
+- Measure register with `corpus_metrics.py` (`orchestration_log/history/2026-10-11/discovery-research/deep-dives/corpus_metrics.py`). Point `MANIFESTO_DIR` in a copy at the draft's folder.
+- Count ALL-CAPS in body text only, headings excluded. Floor: 50 per 1000 words.
+- Count fragments per section. Floor: 50 per 1000 words in every section.
+- Place one identity attack, what the reader IS, in every section. Vary the template; use no job-title noun per section.
+- Write "X is not the enemy" once at most. Deliver every other boundary inside an attack that carries the limit.
+- Write every sentence under 20 words. Allow three fury runs of 25 words or more, each carrying a shift. Count a balanced clause with an abstract tail as no fury run.
+- Cut every quantifier stinger ("Not ONCE.", "EVERY time.") that carries no reframe.
+- Deliver each figure inside an attack, never figure-then-command. Cut a command that does not follow from its figure.
+- Write zero semicolons. Write two colons or fewer per 1000 words.
+- Write at least 8 multi-word ALL-CAPS shouts in the body.
+- Write two comma-balanced joins or fewer per 1000 words (a comma followed by "and", "which", or "until" inside one sentence). Run a long line on without commas, or split it into fragments.
+- Copy no sentence from another manifesto in the collection.
+
+### Demands once, in the checklist
+
+- State every demand once, in "Before you ship", as a checklist item.
+- Carry axioms, figures, and boundaries in the body sections as attacks. Name a demand in the body; never state it as a spec row.
+- Share no sentence between the body and the checklist.
+
+### Narrator with a stake
+
+- Make the narrator the engineer who inherits the reader's lines and gets paged for them. Allow first person.
+- Write one scene: a page, a build broken by a vanished package, or a diff nobody can read.
+- Write one prediction section in the form of stop-yapping's "No Drift": what the reader does by its tenth response, and what that costs.
 
 ---
 

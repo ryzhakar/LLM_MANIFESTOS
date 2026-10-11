@@ -119,3 +119,6 @@
 - register (r4, record only): FAIL (13) on voice; every number and rulings 16–19 pass except boundaries-in-attack (2/6) and closer template (5/7 noun-phrase put-downs). No edits per owner ruling. Recorded for the next session's register work.
 - r4 complete 7/7. Ship v7 when the writer reports.
 - v7 final: 921 words; 13 shouts; 0 semicolons/colons; bindable 0.714; checklist 147 words (under the skill's 150 cap; spec's 145 was margin); you 68.4/1k (floor 70, accepted: facts win). Shipping v7 as lines-spent.
+
+## 19:1x SHIPPED
+- manifestos/lines-spent.md b348908 (v7 byte-identical); README b4dd804; kiss re-cut e3181dd (Delete Code block out, 321→311 lines, 2.0.0 kept); recut record e025d27; archive d28dbb1 (SPEC, rulings, 33 reviews → orchestration_log/history/2026-10-11/owned-lines/); reference 1e11d8f. Pushed. 13 manifestos. Session record next.
