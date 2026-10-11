@@ -109,7 +109,9 @@ reader: string       # optional. model | human | unspecified
 
 **Manifestos:** kebab-case `<slug>.md` files in `manifestos/`. No spaces. No `Manifesto,` prefix (for example `correct-by-construction.md`).
 
-**Drafts:** `drafts/<slug>/` holding `SPEC.md`, `v1.md`, `v2.md`, `reviews/`.
+**Drafts:** `drafts/<slug>/` holding `SPEC.md`, `v1.md`, `v2.md`, `reviews/`. At ship, `SPEC.md` and `reviews/` move to `orchestration_log/history/<date>/<slug>/`; the draft versions are deleted.
+
+**Re-cut records:** `orchestration_log/history/<date>/recut-<slug>.md` (`<slug>` names the cut; for one file, the file's base name), for a re-cut without a draft.
 
 **Substrate:** `resources/<date>-<slug>/`.
 
@@ -135,4 +137,4 @@ orchestration_log/
     └── conventions.md
 ```
 
-Entry-gate discovery trees live under `history/<date>/discovery-research/`. `orchestration_log/history/*/cost.md` is gitignored per `.gitignore`. All other orchestration log content is tracked.
+Entry-gate discovery trees live under `history/<date>/discovery-research/`; shipped specs and reviews under `history/<date>/<slug>/`; re-cut records at `history/<date>/recut-<slug>.md`. `orchestration_log/history/*/cost.md` is gitignored per `.gitignore`. All other orchestration log content is tracked.

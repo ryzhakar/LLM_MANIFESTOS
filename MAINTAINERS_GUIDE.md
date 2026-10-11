@@ -102,7 +102,7 @@ Run the stages in order. Start a stage only after the previous stage's artifact 
 | 3 | Gate test, then spec | `drafts/<slug>/SPEC.md` |
 | 4 | Draft by a writer bound to the writing standard and a register reference | `drafts/<slug>/v1.md` |
 | 5 | Review: five unbiased reviewers, a register reviewer, a maximalist self-pass | `drafts/<slug>/reviews/`, `drafts/<slug>/v2.md` |
-| 6 | Ship | `manifestos/<slug>.md`, `orchestration_log/history/<date>/reviews/` |
+| 6 | Ship | `manifestos/<slug>.md`, `orchestration_log/history/<date>/<slug>/` |
 
 **Stage 2** holds four artifacts:
 1. Ground-truth audits of the collection.
@@ -121,11 +121,11 @@ Run the stages in order. Start a stage only after the previous stage's artifact 
 
 **Stage 6.**
 1. Move the final version to `manifestos/<slug>.md`. A draft enters the collection only by moving there.
-2. Archive `drafts/<slug>/reviews/` under `orchestration_log/history/<date>/reviews/`.
+2. Move `SPEC.md` and `reviews/` to `orchestration_log/history/<date>/<slug>/` (`SPEC.md` and `reviews/` inside). Delete the draft versions.
 3. Complete the frontmatter as the writing standard states.
 4. If the theme is new, add it first (see *Adding a New Theme*).
 5. Run `just readme`. Require exit 0 and no warning panel.
-6. Commit: `git add -A drafts/<slug>/ manifestos/ themes.yaml orchestration_log/ README.md`, then `git commit -m "feat: add <slug> manifesto"`. The ship commit deletes `drafts/<slug>/`.
+6. Commit, staging explicit paths and never `git add -A`: `manifestos/<slug>.md`, `themes.yaml`, `README.md`, `orchestration_log/history/<date>/<slug>/`, and the removed files under `drafts/<slug>/`. Then `git commit -m "feat: add <slug> manifesto"`. The ship commit deletes `drafts/<slug>/`.
 
 **Orchestrators:** Check that the artifact path exists before dispatching the next stage.
 
@@ -165,7 +165,7 @@ A **row** is one claim a manifesto holds, cited as `file:line`.
 
 1. Name every row that moves as `file:line`, with its destination.
 2. State the held ground of each affected manifesto after the move.
-3. Record both in the `SPEC.md` of the draft that causes the re-cut. A re-cut without a draft goes in `orchestration_log/history/<date>/recut-<file>.md`, which names the rows moved and the held ground after (`<file>`: the manifesto's file name without `.md`).
+3. Record both in the `SPEC.md` of the draft that causes the re-cut. A re-cut without a draft goes in `orchestration_log/history/<date>/recut-<slug>.md`, which names the rows moved and the held ground after (`<slug>` names the cut; for one file, the file's base name).
 4. Apply the version rule:
 
 | Re-cut | Version |
@@ -281,7 +281,7 @@ Two files with the same tagline (lowercase, punctuation ignored) trigger a warni
 manifestos/                    # scanned; <slug>.md, kebab-case, no spaces, no prefix
 drafts/<slug>/                 # not scanned: SPEC.md, v1.md, v2.md, reviews/; the ship commit deletes it
 resources/<date>-<slug>/       # substrate, verbatim; not scanned
-orchestration_log/             # history/<date>/ (discovery-research/, reviews/, recut-<file>.md), reference/
+orchestration_log/             # history/<date>/ (discovery-research/, <slug>/, recut-<slug>.md), reference/
 archive/                       # not scanned
 research/                      # gitignored working area
 tests/test_generate.py         # schema tests

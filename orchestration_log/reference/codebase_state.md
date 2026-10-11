@@ -76,7 +76,8 @@ Dependencies are injected inline via `uv run --with`; no separate virtualenv or 
 - `orchestration_log/history/*/cost.md` — gitignored
 - `research/` directory — gitignored
 - `*.DS_Store` — gitignored
-- `drafts/` — not scanned by `generate.py`
+- `drafts/` — not scanned by `generate.py`; at ship, `SPEC.md` and `reviews/` move to `orchestration_log/history/<date>/<slug>/` and the draft versions are deleted
+- `orchestration_log/history/<date>/recut-<slug>.md` — re-cut records for re-cuts without a draft
 - `resources/` — tracked; not scanned by `generate.py`
 - `archive/` — exists but NOT scanned by `generate.py`; contents do not appear in README
 - `README.md` — generated artifact; tracked in git (committed after each `just readme` run)
