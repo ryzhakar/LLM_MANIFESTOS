@@ -4,6 +4,8 @@ tagline: "the confusion is killing you"
 version: "2.0.0"
 theme: "cognitive-science"
 description: "Distinguishes simple (untangled) from easy (familiar). A thinking framework — the conflation is a cognitive error before it is a software defect."
+register: "lecture"
+reader: "human"
 ---
 
 # The Simplicity Manifesto

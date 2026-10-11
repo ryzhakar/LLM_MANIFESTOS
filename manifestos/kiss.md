@@ -4,6 +4,8 @@ tagline: "incidental is Latin for your fault"
 version: "2.0.0"
 theme: "software-engineering"
 description: "Complexity from braiding is killing software. Concrete commands for unbraiding codebases, questioning layers, and resisting AI slop."
+register: "declarative"
+reader: "human"
 ---
 
 # DECOMPLECT

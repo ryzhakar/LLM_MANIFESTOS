@@ -4,6 +4,8 @@ tagline: "you use 5% of what you bought."
 version: "1.0.0"
 theme: "software-engineering"
 description: "Postgres is a precision instrument. You use it as a filing cabinet. The schema is the architecture. The application is the view layer. Everything else you believe is wrong."
+register: "contemptuous"
+reader: "human"
 ---
 
 # RESPECT THE ENGINE
