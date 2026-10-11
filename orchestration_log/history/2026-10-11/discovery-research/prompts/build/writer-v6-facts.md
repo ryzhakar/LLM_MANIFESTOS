@@ -1,0 +1,5 @@
+Facts-only closure, final. Write /home/user/LLM_MANIFESTOS/drafts/owned-lines/v6.md as v5.md with exactly these three edits from /home/user/LLM_MANIFESTOS/drafts/owned-lines/reviews/r4-precision.md and nothing else (the line numbers below are v4's; find the same lines in v5):
+1. check 12: `Copy of a function. Its license and copyright notice carried?` → `Function copied from a package. Package's license and copyright notice carried?`
+2. check 2: `existing code and non-code starting with no code` → `Ruled-out options, existing code and non-code, named before any added line, no code first?` (replace the whole check-2 sentence with that one)
+3. A2: `Two versions. Same tests?` → `Two versions pass the same tests?`
+No other changes. Re-measure (same script and greps as before, sections < 145, bindable ≥ 0.70 the precision way) and append the numbers and the three edits to /home/user/LLM_MANIFESTOS/drafts/owned-lines/reviews/r4-closure.md under "## v6". `diff v5.md v6.md | grep -c '^[<>]'` must be 6. End with a 2-sentence summary.

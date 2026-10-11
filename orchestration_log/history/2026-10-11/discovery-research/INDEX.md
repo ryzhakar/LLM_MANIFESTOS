@@ -38,5 +38,32 @@
 | prompts/tier4-resolve-skrenta.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/tier4-resolve-skrenta.md | 62a5c417e5c0882d8ff0cfabb62b5c5cbfa08921bc525cc5982b6e608a068762 | 2636 |
 | prompts/verify-runtime-defects.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/verify-runtime-defects.md | 74e9d9543e6cfa2e3bbd978e9c47e7aef5257828d799f518c29a3af812074c70 | 3471 |
 | discovery/candidates.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/candidates.md | e73dbfd5bf7c0cef4e144cb556802a4342848707636f1b6150bd54617f1826c2 | 38230 |
+| build-reports/close-open-items-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/close-open-items-report.md | e0a0eada10b90530c43b8d3d0ba792e19735b6658018f5556ccec290e3e987c9 | 9880 |
+| build-reports/collection-schema-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/collection-schema-report.md | a4aeb8198eb2a884e73746b287bcf5f6cbb99531275889a80f05d9e888d793cc | 13463 |
+| build-reports/maintainers-guide-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/maintainers-guide-report.md | ea2f9d17e6142dcb7cab7e80dbe10c7eb1d806143458f75407e8ff72b1c18eb8 | 10655 |
+| build-reports/plugin-hooks-fix-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/plugin-hooks-fix-report.md | 586a81dcd365de3d46af037c90c67c9b2390e8887487e3c70d8ffd0f4091a080 | 26475 |
+| build-reports/research-commit-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/research-commit-report.md | a69b6779544d9984c6ed239b0252b417204d6f15831fb208bb0ae4d0c17fd500 | 8124 |
+| build-reports/resources-commit-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/resources-commit-report.md | 6daabc250badbf5126b83fc330a8a5f4b264a44accfe257bde787ec715df46b3 | 41797 |
+| build-reports/ship-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/ship-report.md | 12881fa706182d5c0e0f26af758f09f5adc10e30b37ecae08cea3adafc0087f5 | 7008 |
+| build-reports/skill-rewrite-report.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/skill-rewrite-report.md | bd83b8b5b97660b2b5862cf408c94d93a6c816306e81cf165338d8608e11a6ca | 6197 |
+| build-reports/final-cleanup-report.md | written in place (no origin copy) | bd43e9195eb20139a017663ce01e0bb46b917ad3633ce442a4f1153548110724 | 5357 |
+| prompts/build/_binding-writer.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/_binding-writer.md | 92522591cb151708f3e77d272bcc223a7d3d68537b9d551444e25e5645af5f78 | 1045 |
+| prompts/build/close-open-items.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/close-open-items.md | 921a9d34d675b82ded39eb81a9acb7d50706d125f8fadeed326df7ce6ea124ef | 3563 |
+| prompts/build/collection-schema.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/collection-schema.md | e40f7029053caba6a00d2edb544b1eccc96f36042e51c1e6e06e1bc3357293b8 | 3842 |
+| prompts/build/final-cleanup.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/final-cleanup.md | 5b9408d55dbba092d34a174b85ea964df8ac807e3faef4fee244e00e545c7242 | 2577 |
+| prompts/build/maintainers-guide.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/maintainers-guide.md | 18c07286917fa809d4f8d6c5e0e26af77cc10548934d7f539d26454356a75a35 | 5856 |
+| prompts/build/plugin-hooks-fix.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/plugin-hooks-fix.md | cceba960b79bcacde199ea53c26692e0d9bdc484b481e021c0e70fe80e44ec74 | 5561 |
+| prompts/build/review-shared.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/review-shared.md | 36ef158cf3732d232e711831a4392939da89a9fd72ff923803d203872faae626 | 2591 |
+| prompts/build/session-record.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/session-record.md | 1e16b193eabfc2fa6c78b508739bc45609c40a4697b23b8e8eae08c0294c29cb | 3668 |
+| prompts/build/ship.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/ship.md | e87ea710e582db258af74a2717bb8607fb3fe94525b4b341f77637e6462e38ad | 3469 |
+| prompts/build/skill-rewrite.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/skill-rewrite.md | 4f444763db768e17ae602abb7be5cfe760b984720e80e6c7a6a76a85bf50da19 | 6416 |
+| prompts/build/spec-writer.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/spec-writer.md | f26b5bb0f72381d7fb38a7c8774960605014b55888571b2f7a75d4d51cd25b42 | 5611 |
+| prompts/build/writer-v1.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/writer-v1.md | fa69d94b4411065bdb5ce39e6d67ee00c1e4ca6e5840bce2192ca70d41fdce88 | 2319 |
+| prompts/build/writer-v2.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/writer-v2.md | cbe393968aa9820fbf0c6083bba3ca1a90d36f78df788917cc73a03afeb5449a | 2862 |
+| prompts/build/writer-v3.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/writer-v3.md | 7051ce474a76a4ef28d376a1d56decf5caa6068990ce147190260c687a2af339 | 4452 |
+| prompts/build/writer-v4-surgical.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/writer-v4-surgical.md | b18ab6fc26935b348d6b288db27460f9fee541d7377c802b1a62c7f93cd86c2b | 4133 |
+| prompts/build/writer-v5-facts.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/writer-v5-facts.md | 1e639bc7a1d8c263a4be4af48fc1d760c0e8a5a94141f47b1ccdf3561f1f8dfe | 1166 |
+| prompts/build/writer-v6-facts.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/writer-v6-facts.md | c60df1686ceb4cd617b991b1fdf80bb5e9aa168283780884bb95675a286f12ce | 1049 |
+| prompts/build/writer-v7-facts.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/build/writer-v7-facts.md | 219d08b84b9a6f7fb4a41c3043abcf40f62abaf7a004de34f3ea559640da9e96 | 859 |
 
 The recon/ texts live under resources/2026-10-11-code-liability-and-dependencies/ (commits 9e8c738, c1bae5e); candidates.md is included.
