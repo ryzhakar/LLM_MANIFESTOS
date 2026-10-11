@@ -1,0 +1,19 @@
+BOUND: First Principles — /home/user/LLM_MANIFESTOS/manifestos/first-principles.md — full; Strunk SPR v3 — /home/user/LLM_MANIFESTOS/instructions/strunk_spr_v3_complete.xml — full (2,923 lines); manifesto-oath — /home/user/claude-skills/manifesto/skills/manifesto-oath/SKILL.md — full; manifesto-writing — /home/user/claude-skills/manifesto/skills/manifesto-writing/SKILL.md — full
+INTERPLAY: First Principles and the oath both demand the located atom over its name, Strunk demands the definite claim over the vague one, and manifesto-writing demands the flat fact; Strunk's judgment latitude pulls against First Principles' refusal to inherit, and the owner rulings resolve it: a ruling overrules the spec, and a claim with no source row is a finding.
+COMMIT: I must trace every claim in the draft to a SPEC §4–§10 row and its primary-text line, and I will list each claim that has none; I must not rewrite the draft or judge outside scope-facts, and I will give only the smallest rewrite or the correct fact with its location; I must apply r1-rulings over the spec, and I will not flag a line that follows a ruling.
+
+# Review — scope-facts — v3.md
+Verdict: FAIL (3)
+
+## Findings
+| # | draft line | quoted text | rule failed | fix or correct fact | source |
+|---|---|---|---|---|---|
+| 1 | v3.md:38 | "Good software is out there, and reusing it is your job, until you pull a package unopened." | Every claim traces to §4–§10. B5 (vetted reuse is not the enemy) sources say reuse is beneficial and to be done safely; no row makes reuse the reader's job. The sentence adds a mandate. | "Good software is out there, and reuse is not my complaint. The unopened package is." | SPEC.md:138 (B5); L2-05.txt:177 "Software reuse is finally here"; L2-05.txt:195 "There's a lot of good software out there. Let's work together to find out how to reuse it safely." |
+| 2 | v3.md:34 | "Least means least work for ME, the one you wake at three." | Every claim traces to §4–§10. A2's rule defines least as the volume a reader must read; the draft redefines it as the narrator's work, a measure no source states. The tie test beside it ("Ship the one I change faster") already carries maintainability. | "Least means least code I must read." | SPEC.md:53 (A2 writer rule); L1-05.txt:35 "reduce the volume of code an individual programmer has to read to understand how a program works" |
+| 3 | v3.md:28 | table row 5, right cell: "SPENT TWICE." | Every claim traces to §4–§10. "Twice" is a multiple no source gives. The source names piling new on old as the worse choice and states no ratio. | right cell: "SPENT. Piled on the old." | SPEC.md:70 (demand 8, D50); L1-06.txt:30 "simply piling your new stuff on top of the old stuff" |
+
+## Notes
+- Clean: frontmatter matches §14 (eight fields in order; tagline 6 words, binary, unique after normalize_tagline against the 12 live files; theme carried by 7 files; title distinct); attribution line equals SPEC.md:244; V1–V4, V6, V7 wording matches §7; D1, D2, B1, B2 (both limits, ruling 2), B3, B4, B6 trace; no §8 claim; no HUMAN-only demand; checks 1–13 cover demands 1–16.
+- Clean: no phrase of kiss's enemy, yagni's "presumptive", postgres's "what ships in the box" or "permanent line item", dry's duplication. "parser we already had" (v3.md:16) is demand 8 (L1-06.txt:30), not dry. "itemize your bill" (v3.md:38) borders on postgres's "line item"; judged not restated.
+- Not findings, per r1-rulings 16: the v3.md:16 scene and the v3.md:64 prediction in No Drift form. "Response four" and "response eleven" carry no §7 figure; the ruling sanctions the prediction, ruling 3 bars asserted present behavior.
+- v3.md:38 "change lands on most of your code" widens L1-04-full.txt:26 "most of the interesting parts"; SPEC.md:54 and ruling 4 state "most code, not all", so the draft follows them.
