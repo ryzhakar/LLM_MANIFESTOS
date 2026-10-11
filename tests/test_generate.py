@@ -72,6 +72,10 @@ def test_tagline_of_nine_words_is_rejected():
     assert is_rejected(tagline=' '.join(['word'] * (MAX_TAGLINE_WORDS + 1)))
 
 
+def test_canon_tagline_of_nine_words_is_accepted():
+    assert not is_rejected(kind='canon', tagline=' '.join(['word'] * (MAX_TAGLINE_WORDS + 1)))
+
+
 def test_duplicate_tagline_warns_naming_both_files():
     warnings = generate.tagline_warnings([
         entry('manifestos/a.md', 'build for today'),
