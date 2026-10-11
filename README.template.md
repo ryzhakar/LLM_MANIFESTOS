@@ -4,10 +4,10 @@
 
 ## Quick Reference
 
-| Manifesto | Theme | Version |
-|-----------|-------|---------|
+| Manifesto | Theme | Version | Register |
+|-----------|-------|---------|----------|
 {% for m in manifestos | sort(attribute='title') -%}
-| [{{ m.title }}]({{ m.path }}) | {{ themes[m.theme].name if m.theme in themes else m.theme }} | `{{ m.version }}` |
+| [{{ m.title }}]({{ m.path }}){% if m.kind == 'canon' %} `canon`{% endif %} | {{ themes[m.theme].name if m.theme in themes else m.theme }} | `{{ m.version }}` | {{ m.register or '' }} |
 {% endfor %}
 ---
 {%- for theme_key in manifestos | map(attribute='theme') | unique | list | sort %}
@@ -19,7 +19,7 @@
 {% endif -%}
 {%- for m in manifestos | selectattr('theme', 'equalto', theme_key) | sort(attribute='title') %}
 
-### [{{ m.title }}]({{ m.path }}) `{{ m.version }}`
+### [{{ m.title }}]({{ m.path }}){% if m.kind == 'canon' %} `canon`{% endif %} `{{ m.version }}`{% if m.register %} · {{ m.register }}{% endif %}
 *"{{ m.tagline }}"*
 
 {{ m.description }}
@@ -44,6 +44,7 @@ This README is generated from manifesto frontmatter. **For complete maintainer w
 
 **Adding a new manifesto:**
 - Create `manifestos/<name>.md` with required frontmatter (title, tagline, version, theme, description)
+- Tagline: at most 8 words. Optional fields: `kind` (manifesto | canon), `register` (contemptuous | declarative | parable | lecture | aphoristic), `reader` (model | human | unspecified)
 - If using a new theme, add it to `themes.yaml` first
 - See [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) for philosophy and detailed workflows
 
