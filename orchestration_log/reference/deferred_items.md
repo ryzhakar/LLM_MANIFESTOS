@@ -1,6 +1,6 @@
 # Deferred Items
 
-_First session — 2026-04-29. Updated 2026-10-11: OQ-001 and OQ-002 resolved; OQ-004 and OQ-005 opened from the 2026-10-11 build log._
+_First session — 2026-04-29. Updated 2026-10-11: OQ-001 and OQ-002 resolved; OQ-004 and OQ-005 opened from the 2026-10-11 build log; OQ-006 opened._
 
 ---
 
@@ -32,6 +32,12 @@ _First session — 2026-04-29. Updated 2026-10-11: OQ-001 and OQ-002 resolved; O
 **Source:** Build log 2026-10-11, plugin track (B1)  
 The manifesto-oath skill names `.claude/manifesto-repo/LLM_MANIFESTOS/manifestos/` (project-relative). The hook text names `manifesto_dir` on its `Manifesto repo:` line.  
 **Action needed:** The owner decides which path governs and aligns the other.
+
+### OQ-006 — Attribution backfill
+**Status:** Open (owner ruling 2026-10-11: leave open)  
+**Source:** MAINTAINERS_GUIDE attribution rule; `codebase_state.md` Known Limitations  
+`intervention.md`, `postgres.md`, `self-documenting-code.md`, and `zen-of-python.md` carry no attribution line. `cargo-cult-science.md` carries `*by RICHARD P. FEYNMAN*` without a year. Each fix edits a manifesto body.  
+**Action needed:** The owner assigns the backfill.
 
 ---
 
