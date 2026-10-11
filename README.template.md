@@ -44,7 +44,7 @@ This README is generated from manifesto frontmatter. **For complete maintainer w
 
 **Adding a new manifesto:**
 - Create `manifestos/<name>.md` with required frontmatter (title, tagline, version, theme, description)
-- Tagline: at most 8 words. Optional fields: `kind` (manifesto | canon), `register` (contemptuous | declarative | parable | lecture | aphoristic), `reader` (model | human | unspecified)
+- Tagline: at most 8 words (`kind: canon` exempt). Optional fields: `kind` (manifesto | canon), `register` (contemptuous | declarative | parable | lecture | aphoristic), `reader` (model | human | unspecified)
 - If using a new theme, add it to `themes.yaml` first
 - See [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) for philosophy and detailed workflows
 
