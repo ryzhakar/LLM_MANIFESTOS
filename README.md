@@ -121,10 +121,6 @@ This README is generated from manifesto frontmatter. **For complete maintainer w
 2. Run `just readme`
 3. Commit changes
 
-**Adding a new manifesto:**
-- Create `manifestos/<name>.md` with required frontmatter (title, tagline, version, theme, description)
-- Tagline: at most 8 words (`kind: canon` exempt). Optional fields: `kind` (manifesto | canon), `register` (contemptuous | declarative | parable | lecture | aphoristic), `reader` (model | human | unspecified)
-- If using a new theme, add it to `themes.yaml` first
-- See [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) for philosophy and detailed workflows
+**Adding a new manifesto:** pass the entry gate in [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) (Workflows, The Entry Gate).
 
 **Schema validation:** Powered by Pydantic. Invalid frontmatter will be caught with detailed error messages.
