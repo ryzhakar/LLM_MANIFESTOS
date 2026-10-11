@@ -1,6 +1,6 @@
 # Codebase State
 
-_Last verified: 2026-10-11. Generation pipeline confirmed working: `just readme` produced 12 manifestos cleanly (exit 0, no panel); `tests/test_generate.py` passes 18 of 18._
+_Last verified: 2026-10-11. Generation pipeline confirmed working: `just readme` produced 13 manifestos cleanly (exit 0, no panel); `tests/test_generate.py` passes 18 of 18._
 
 ---
 
@@ -14,6 +14,7 @@ _Last verified: 2026-10-11. Generation pipeline confirmed working: `just readme`
 | `first-principles.md` | The First Principles | "atoms, not analogies" | cognitive-science | 1.0.0 | manifesto | parable | unspecified |
 | `intervention.md` | Trust Nothing, Restore Everything | "roots, not canopy" | cognitive-science | 1.0.0 | manifesto | parable | unspecified |
 | `kiss.md` | Decomplect | "incidental is Latin for your fault" | software-engineering | 2.0.0 | manifesto | declarative | human |
+| `lines-spent.md` | Lines Spent | "spent, not produced. yours, not theirs." | software-engineering | 1.0.0 | manifesto | contemptuous | model |
 | `postgres.md` | Respect the Engine | "you use 5% of what you bought." | software-engineering | 1.0.0 | manifesto | contemptuous | human |
 | `self-documenting-code.md` | Code Speaks | "comments are lies" | software-engineering | 1.0.0 | manifesto | lecture | human |
 | `simple-made-easy.md` | The Simplicity Manifesto | "the confusion is killing you" | cognitive-science | 2.0.0 | manifesto | lecture | human |
@@ -21,7 +22,7 @@ _Last verified: 2026-10-11. Generation pipeline confirmed working: `just readme`
 | `yagni.md` | Build For Today | "build for today" | software-engineering | 1.0.0 | manifesto | declarative | human |
 | `zen-of-python.md` | The Zen of Python | "refuse to guess" | software-engineering | 1.0.0 | canon | aphoristic | unspecified |
 
-**Total:** 12 files. 10 `manifesto`, 2 `canon` (`cargo-cult-science.md`, `zen-of-python.md`). 7 software-engineering, 5 cognitive-science.
+**Total:** 13 files. 11 `manifesto`, 2 `canon` (`cargo-cult-science.md`, `zen-of-python.md`). 8 software-engineering, 5 cognitive-science.
 
 ---
 
@@ -31,7 +32,7 @@ Defined in `themes.yaml`. Two themes exist; both are in use. `design-methodology
 
 | Key | Icon | Name | In Use |
 |-----|------|------|--------|
-| `software-engineering` | 🔧 | Software Engineering Principles | Yes (7 files) |
+| `software-engineering` | 🔧 | Software Engineering Principles | Yes (8 files) |
 | `cognitive-science` | 🧠 | Cognitive Science | Yes (5 files) |
 
 ---
@@ -91,9 +92,9 @@ Dependencies are injected inline via `uv run --with`; no separate virtualenv or 
 ## Known Limitations
 
 - **No `archive/deprecated/` path exists.** MAINTAINERS_GUIDE describes an archival workflow using `archive/deprecated/`, but the directory does not exist. First archival action will need to create it.
-- **`generate.py` accepts any `x.y.z` version.** MAINTAINERS_GUIDE forbids minor and patch segments; the generator does not enforce it. All 12 files hold `N.0.0`.
+- **`generate.py` accepts any `x.y.z` version.** MAINTAINERS_GUIDE forbids minor and patch segments; the generator does not enforce it. All 13 files hold `N.0.0`.
 - **Attribution gaps.** MAINTAINERS_GUIDE makes the attribution line mandatory. `intervention.md`, `postgres.md`, `self-documenting-code.md`, and `zen-of-python.md` carry none. `cargo-cult-science.md` carries `*by RICHARD P. FEYNMAN*` without a year.
-- **`reader` below the standard.** Only `stop-yapping.md` declares `reader: model`; 7 files declare `human` and 4 declare `unspecified`.
+- **`reader` below the standard.** Only `stop-yapping.md` and `lines-spent.md` declare `reader: model`; 7 files declare `human` and 4 declare `unspecified`.
 - **No CI/CD gate.** `just readme` is a manual step. Nothing prevents committing a manifesto without regenerating README, creating drift. The MAINTAINERS_GUIDE calls this out as a responsibility but does not enforce it mechanically.
 - **`stop-yapping.md` replaced `only-fluff-die.md`** (2026-05-01). Same function (language compression), completely different manifesto — abusive register, model-addressed, no security escape hatch. Theme: cognitive-science.
 - **`postgres.md` added (2026-05-11).** Application Postgres manifesto — abusive register, 269 lines, 5337 words. Covers 5 paradigm shifts (schema-as-architecture, set-thinking, planner collaboration, physical cost model, constraints-as-law) plus "use what ships." Three full rewrites, 5 content reviewers, 29 technical fixes. Source: user-prepared substrate. Theme: software-engineering.

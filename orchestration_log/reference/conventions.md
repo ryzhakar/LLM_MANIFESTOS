@@ -50,7 +50,7 @@ Dispatch lessons the standard does not carry:
 
 ### Parallelization opportunities
 
-- Frontmatter extraction across all 12 files can be done in a single parallel batch
+- Frontmatter extraction across all 13 files can be done in a single parallel batch
 - Theme discrepancy checks can run concurrently with manifesto reads
 - Research across archive subdirectories can be parallelized
 
