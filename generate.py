@@ -10,7 +10,7 @@ from typing import Literal
 import frontmatter
 import yaml
 from jinja2 import Template
-from pydantic import BaseModel, field_validator, ValidationError
+from pydantic import BaseModel, field_validator, model_validator, ValidationError
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -39,15 +39,14 @@ class ManifestoMetadata(BaseModel):
     register: Register | None = None
     reader: Reader | None = None
 
-    @field_validator('tagline')
-    @classmethod
-    def validate_tagline_length(cls, v: str) -> str:
-        word_count = len(v.split())
-        if word_count > MAX_TAGLINE_WORDS:
+    @model_validator(mode='after')
+    def validate_tagline_length(self) -> 'ManifestoMetadata':
+        word_count = len(self.tagline.split())
+        if self.kind != 'canon' and word_count > MAX_TAGLINE_WORDS:
             raise ValueError(
-                f'Tagline must be at most {MAX_TAGLINE_WORDS} words, got {word_count}: {v}'
+                f'Tagline must be at most {MAX_TAGLINE_WORDS} words, got {word_count}: {self.tagline}'
             )
-        return v
+        return self
 
     @field_validator('version')
     @classmethod
