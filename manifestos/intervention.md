@@ -93,3 +93,7 @@ Or take the soil core. Map the network. Find what remains clean. Begin the work 
 The canopy is green. The death is underground.
 
 Choose.
+
+---
+
+*Original, 2026*
