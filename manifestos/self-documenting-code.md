@@ -290,3 +290,7 @@ You have two paths:
 Choose Path 2. Delete your comments. Rewrite your code. Make it speak.
 
 Every line of code you write is teaching someone about your domain. Make it a good teacher.
+
+---
+
+*Original, 2026*

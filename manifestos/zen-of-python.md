@@ -25,3 +25,7 @@ There should be one-- and preferably only one --obvious way to do it.
 Now is better than never.
 If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
+
+---
+
+*by TIM PETERS, 2004*
