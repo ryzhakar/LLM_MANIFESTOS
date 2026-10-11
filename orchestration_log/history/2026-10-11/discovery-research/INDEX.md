@@ -37,5 +37,6 @@
 | prompts/tier3-verify-axioms.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/tier3-verify-axioms.md | 077ef3bb9f3386b35fb1bafd8d31a462a093c8630747473e0748baed75b45395 | 2748 |
 | prompts/tier4-resolve-skrenta.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/tier4-resolve-skrenta.md | 62a5c417e5c0882d8ff0cfabb62b5c5cbfa08921bc525cc5982b6e608a068762 | 2636 |
 | prompts/verify-runtime-defects.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/prompts/verify-runtime-defects.md | 74e9d9543e6cfa2e3bbd978e9c47e7aef5257828d799f518c29a3af812074c70 | 3471 |
+| discovery/candidates.md | /home/user/LLM_MANIFESTOS/research/manifesto-craft/discovery/candidates.md | e73dbfd5bf7c0cef4e144cb556802a4342848707636f1b6150bd54617f1826c2 | 38230 |
 
-The recon/ texts live under resources/2026-10-11-code-liability-and-dependencies/ (commits 9e8c738, c1bae5e); candidates.md follows in a later commit.
+The recon/ texts live under resources/2026-10-11-code-liability-and-dependencies/ (commits 9e8c738, c1bae5e); candidates.md is included.
