@@ -12,6 +12,7 @@ Behavioral constitutions for language models
 | [Correct By Construction](manifestos/correct-by-construction.md) | Software Engineering Principles | `1.0.0` | declarative | human |
 | [Decomplect](manifestos/kiss.md) | Software Engineering Principles | `2.0.0` | declarative | human |
 | [Knowledge Has One Home](manifestos/dry.md) | Software Engineering Principles | `1.0.0` | declarative | human |
+| [Lines Spent](manifestos/lines-spent.md) | Software Engineering Principles | `1.0.0` | contemptuous | model |
 | [Respect the Engine](manifestos/postgres.md) | Software Engineering Principles | `1.0.0` | contemptuous | human |
 | [Stop Yapping](manifestos/stop-yapping.md) | Cognitive Science | `1.0.0` | contemptuous | model |
 | [The First Principles](manifestos/first-principles.md) | Cognitive Science | `1.0.0` | parable | unspecified |
@@ -94,6 +95,13 @@ Complexity from braiding is killing software. Concrete commands for unbraiding c
 *"knowledge has one home"*
 
 Knowledge duplication (not code duplication) is the enemy. Every piece of knowledge must have one authoritative representation.
+
+---
+
+### [Lines Spent](manifestos/lines-spent.md) `1.0.0` · contemptuous · model
+*"spent, not produced. yours, not theirs."*
+
+Every line a model types or pulls is spent, never produced, and the one who ships it owns its cost.
 
 ---
 
