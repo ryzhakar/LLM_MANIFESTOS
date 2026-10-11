@@ -1,0 +1,281 @@
+
+
+Computer Science > Software Engineering
+
+arXiv:2508.21634
+ (cs)
+
+  [Submitted on 29 Aug 2025]
+
+Title:
+Human-Written vs. AI-Generated Code: A Large-Scale Study of Defects, Vulnerabilities, and Complexity
+
+Authors:
+Domenico Cotroneo
+,
+Cristina Improta
+,
+Pietro Liguori
+
+View a PDF of the paper titled Human-Written vs. AI-Generated Code: A Large-Scale Study of Defects, Vulnerabilities, and Complexity, by Domenico Cotroneo and 2 other authors
+
+View PDF
+
+HTML (experimental)
+
+Abstract:
+As AI code assistants become increasingly integrated into software development workflows, understanding how their code compares to human-written programs is critical for ensuring reliability, maintainability, and security. In this paper, we present a large-scale comparison of code authored by human developers and three state-of-the-art LLMs, i.e., ChatGPT, DeepSeek-Coder, and Qwen-Coder, on multiple dimensions of software quality: code defects, security vulnerabilities, and structural complexity. Our evaluation spans over 500k code samples in two widely used languages, Python and Java, classifying defects via Orthogonal Defect Classification and security vulnerabilities using the Common Weakness Enumeration. We find that AI-generated code is generally simpler and more repetitive, yet more prone to unused constructs and hardcoded debugging, while human-written code exhibits greater structural complexity and a higher concentration of maintainability issues. Notably, AI-generated code also contains more high-risk security vulnerabilities. These findings highlight the distinct defect profiles of AI- and human-authored code and underscore the need for specialized quality assurance practices in AI-assisted programming.
+
+Comments:
+
+Accepted to the 36th IEEE International Symposium on Software Reliability Engineering (ISSRE, 2025)
+
+Subjects:
+
+Software Engineering (cs.SE)
+
+Cite as:
+
+arXiv:2508.21634
+ [cs.SE]
+
+(or
+
+arXiv:2508.21634v1
+ [cs.SE]
+ for this version)
+
+https://doi.org/10.48550/arXiv.2508.21634
+
+Focus to learn more
+
+                  arXiv-issued DOI via DataCite
+
+Submission history
+ From: Cristina Improta [
+view email
+]
+
+[v1]
+
+        Fri, 29 Aug 2025 13:51:28 UTC (126 KB)
+
+Full-text links:
+
+Access Paper:
+
+View a PDF of the paper titled Human-Written vs. AI-Generated Code: A Large-Scale Study of Defects, Vulnerabilities, and Complexity, by Domenico Cotroneo and 2 other authors
+View PDF
+HTML (experimental)
+TeX Source
+
+view license
+
+Current browse context:
+
+cs.SE
+
+< prev
+
+  |  
+
+next >
+
+new
+
+ |
+
+recent
+
+ |
+2025-08
+
+    Change to browse by:
+
+cs
+
+References & Citations
+
+NASA ADS
+Google Scholar
+
+Semantic Scholar
+
+export BibTeX citation
+
+Loading...
+
+BibTeX formatted citation
+
+×
+
+loading...
+
+Data provided by:
+
+Bookmark
+
+Bibliographic Tools
+
+Bibliographic and Citation Tools
+
+Bibliographic Explorer Toggle
+
+Bibliographic Explorer
+
+(
+What is the Explorer?
+)
+
+Connected Papers Toggle
+
+Connected Papers
+
+(
+What is Connected Papers?
+)
+
+Litmaps Toggle
+
+Litmaps
+
+(
+What is Litmaps?
+)
+
+scite.ai Toggle
+
+scite Smart Citations
+
+(
+What are Smart Citations?
+)
+
+Code, Data, Media
+
+Code, Data and Media Associated with this Article
+
+alphaXiv Toggle
+
+alphaXiv
+
+(
+What is alphaXiv?
+)
+
+Links to Code Toggle
+
+CatalyzeX Code Finder for Papers
+
+(
+What is CatalyzeX?
+)
+
+DagsHub Toggle
+
+DagsHub
+
+(
+What is DagsHub?
+)
+
+GotitPub Toggle
+
+Gotit.pub
+
+(
+What is GotitPub?
+)
+
+Huggingface Toggle
+
+Hugging Face
+
+(
+What is Huggingface?
+)
+
+ScienceCast Toggle
+
+ScienceCast
+
+(
+What is ScienceCast?
+)
+
+Demos
+
+Demos
+
+Replicate Toggle
+
+Replicate
+
+(
+What is Replicate?
+)
+
+Spaces Toggle
+
+Hugging Face Spaces
+
+(
+What is Spaces?
+)
+
+Spaces Toggle
+
+TXYZ.AI
+
+(
+What is TXYZ.AI?
+)
+
+Related Papers
+
+Recommenders and Search Tools
+
+Link to Influence Flower
+
+Influence Flower
+
+(
+What are Influence Flowers?
+)
+
+Core recommender toggle
+
+CORE Recommender
+
+(
+What is CORE?
+)
+
+Author
+
+Venue
+
+Institution
+
+Topic
+
+        About arXivLabs
+
+arXivLabs: experimental projects with community collaborators
+
+arXivLabs is a framework that allows collaborators to develop and share new arXiv features directly on our website.
+
+Both individuals and organizations that work with arXivLabs have embraced and accepted our values of openness, community, excellence, and user data privacy. arXiv is committed to these values and only works with partners that adhere to them.
+
+Have an idea for a project that will add value for arXiv's community?
+Learn more about arXivLabs
+.
+
+Which authors of this paper are endorsers?
+ |
+
+Disable MathJax
+ (
+What is MathJax?
+)
+

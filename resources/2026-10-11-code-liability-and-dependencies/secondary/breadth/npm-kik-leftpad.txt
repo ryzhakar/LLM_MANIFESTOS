@@ -1,0 +1,271 @@
+
+
+                            The npm blog has been discontinued.
+
+                            Updates from the npm team are now published on the
+
+GitHub Blog
+ and
+                            the
+GitHub
+                            Changelog
+.
+
+kik, left-pad, and npm
+
+Earlier this week, many npm users suffered a disruption when a package
+that many projects depend on — directly or indirectly — was
+unpublished by its author, as part of a dispute over a package name.
+The event generated a lot of attention and raised many concerns,
+because of the scale of disruption, the circumstances that led to this
+dispute, and the actions npm, Inc. took in response.
+
+Here’s an explanation of what happened.
+
+Timeline
+
+In recent weeks,
+Azer Koçulu
+ and
+
+Kik
+ exchanged
+
+correspondence
+
+over the use of the module name
+kik
+.  They weren’t able to come to an
+agreement. Last week, a representative of Kik contacted us to ask for
+help resolving the disagreement.
+
+This hasn’t been the first time that members of the community have
+disagreed over a name. In a global namespace for unscoped modules,
+collisions are inevitable. npm has a
+package name dispute
+resolution policy
+ for this
+reason.  That policy encourages parties to attempt an amicable
+solution, and when one is impossible, articulates how we resolve the
+dispute.
+
+The policy’s overarching goal is this:
+provide npm users with the
+package they expect
+. This covers spam, typo-squatting, misleading
+package names, and also more complicated cases such as this one.
+Entirely on this basis, we concluded that the package name “kik”
+ought to be maintained by Kik, and informed both parties.
+
+So far, this followed a process that is routine, though rare.
+What happened next, though, was unprecedented.
+
+Under our dispute policy, an existing package with a disputed name
+typically remains on the npm registry; the new owner of the name
+publishes their package with a breaking version number. Anyone using
+Azer’s existing
+kik
+ package would have continued to find it.
+
+In this case, though, without warning to developers of dependent
+projects, Azer unpublished his
+kik
+ package and 272 other packages.
+One of those was
+left-pad
+.
+This impacted many thousands of projects. Shortly after 2:30 PM
+(Pacific Time) on Tuesday, March 22, we began observing hundreds of
+failures per minute, as dependent projects — and their dependents, and
+
+their
+ dependents… — all failed when requesting the now-unpublished
+package.
+
+Within ten minutes,
+Cameron Westland
+
+stepped in and published a functionally identical version of
+
+left-pad
+. This was possible because
+left-pad
+ is open source, and we
+allow anyone to use an abandoned package name as long as they don’t
+use the same version numbers.
+
+Cameron’s
+left-pad
+ was published as version
+1.0.0
+, but we
+continued to observe many errors. This happened because a number of
+dependency chains, including
+babel
+ and
+atom
+, were bringing it in
+via
+line-numbers
+, which explicitly requested
+0.0.3
+.
+
+We conferred with Cameron and took the unprecedented step of
+re-publishing the original
+0.0.3
+. This required relying on a backup,
+since re-publishing isn’t otherwise possible. We
+announced this plan
+at 4:05 PM
+ and
+
+completed the
+operation
+ by
+4:55 PM.
+
+The duration of the disruption was 2.5 hours.
+
+What worked
+
+We stand by our package name dispute resolution policy, and the
+decision to which it led us.
+
+Given two packages vying for the name
+kik
+, we believe that a
+substantial number of users who type
+npm install kik
+ would be
+confused to receive code unrelated to the messaging app with over 200
+million users.
+
+The dispute resolution policy minimizes disruption.
+
+Transferring ownership of a package’s name doesn’t remove current
+versions of the package.  Dependents can still retrieve and install
+it.  Nothing breaks.
+
+Had Azer taken no action, Kik would have published a new version of
+
+kik
+ and everyone depending upon Azer’s package could have continued
+to find it.
+
+It was abrupt unpublishing, not our resolution policy, that led
+to yesterday’s disruptions.
+
+The community stepped in.
+
+It’s pretty remarkable that Cameron stepped in to replace
+left-pad
+
+within ten minutes. The other 272 affected modules were adopted by
+others in the community in a similar time. They either re-published
+forks of the original modules or created “dummy” packages to prevent
+malicious publishing of modules under their names.
+
+We’re grateful to everyone who stepped in. With their explicit
+permission, we are working with them to transfer these to npm’s direct
+control.
+
+What didn’t work
+
+Unrestricted un-publishing caused a lot of pain.
+
+There are historical reasons for why it’s possible to un-publish
+a package from the npm registry. However, we’ve hit an inflection
+point in the size of the community and how critical npm has become to
+the Node and front-end development communities.
+
+Abruptly removing a package disrupted many thousands of developers and
+threatened everyone’s trust in the foundation of open source software:
+that developers can rely and build upon one another’s work.
+
+npm needs safeguards to keep anyone from causing so much disruption.
+If these had been in place yesterday, this post-mortem wouldn’t be
+necessary.
+
+Poor communication made matters worse.
+
+In the immediate wake of yesterday’s disruption, and continuing even
+now on blogs and Twitter, a lot of impassioned debate was based on
+falsehoods.
+
+npm did not “steal” Azer’s code.
+
+left-pad
+ was open-source code, and explicitly allows
+republishing by any other author. That’s what happened in this
+case.
+
+This incident did not arise because of intellectual property law.
+
+We’re aware that Kik and Azer discussed the legal issues
+surrounding the “Kik” trademark, but that wasn’t pertinent.  Our
+decision relied on our dispute resolution policy.  It was solely an
+editorial choice, made in the best interests of the vast majority
+of npm’s users.
+
+npm won’t suddenly take your package name.
+
+Our guiding principle is to prevent confusion among npm users. In
+the rare event that another member of the community requests our
+help resolving a conflict, we work out a resolution by
+communicating with both sides.  In the overwhelming majority of
+cases, these resolutions are amicable.
+
+It took us too long to get you this update.  If this were a purely
+technical operations outage, our internal processes would have been
+much more up to the challenge.
+
+What happens next
+
+There are technical and social aspects to this problem. Any
+reasonable course of action must address both of these.
+
+We will make it harder to un-publish a version of a package if
+doing so would break other packages.
+
+We are still fleshing out the technical details of how this will
+work. Like any registry change, we will of course take our time to
+consider and implement it with care.
+
+We will make it harder to maliciously adopt an abandoned package name.
+
+If a package with known dependents is completely unpublished,
+we’ll replace that package with a
+placeholder
+package
+ that prevents
+immediate adoption of that name. It will still be possible to get
+the name of an abandoned package by contacting npm support.
+
+We are updating our internal policies to help our team stay in sync
+and address community conflict more effectively.
+
+To Recap (tl;dr)
+
+We dropped the ball in not protecting you from a disruption caused
+by unrestricted unpublishing.  We’re addressing this with technical
+and policy changes.
+
+npm’s well-established and
+documented dispute resolution
+policy
+ was followed to the
+letter.  This is not a legal dispute.
+
+We’ll continue to do everything we can to reduce friction in
+the lives of JavaScript developers.
+
+In a community of millions of developers, some conflict is inevitable.
+We can’t head off every disagreement, but we can earn your trust that
+our policies and actions are biased to supporting as many developers
+as possible.
+
+ March 23rd, 2016 6:21pm
+
+@izs
+

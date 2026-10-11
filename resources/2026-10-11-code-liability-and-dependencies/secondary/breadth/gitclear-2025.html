@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html class='themeable' lang='en'>
+<head>
+<title>AI Copilot Code Quality: 2025 Data Suggests 4x Growth in Code Clones - GitClear</title>
+<link rel="stylesheet" href="https://asset.gitclear.com/assets/application-0c65311ae9e86aa2b3989924a3f9f5f83e6895eb0457d01cbdfb9c99cd33f74f.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Roboto:300,400,500,700" />
+<link rel="stylesheet" href="https://asset.gitclear.com/assets/pages-4ed35608f2c13f412588e50135d9372e079be8221e06c7296e331f6f2c293562.css" />
+<link rel="stylesheet" href="https://asset.gitclear.com/packs/css/9029-5aac757f.css" />
+<link rel="stylesheet" href="https://asset.gitclear.com/packs/css/global-66f6b4f4.css" />
+<script crossorigin='anonymous' integrity='sha384-cRQDJUZkpn4UvmWYrVsTWGTyulY9B4H5Tp2s75ZVjkIAuu1TIxzabF3TiyubOsQ8' src='https://browser.sentry-cdn.com/9.34.0/bundle.tracing.min.js'></script>
+<script src="https://asset.gitclear.com/assets/application-ead64902d0cb4fc247264411bcd885c0956d082728f87c5a8d93bb2ab116a1d8.js"></script>
+<script src="https://asset.gitclear.com/assets/vendor/sweet_alert-09e782dc1e5b5610ac4d4d1991821b92d05e7271ddcc31c4ca1bd775c0eb5c78.js"></script>
+<script src="https://asset.gitclear.com/assets/vendor/tippy.popper.min-8b2215d337df7e179df483986cafebfa52ad5050e0e1134bbd1dba5ee263c9c5.js"></script>
+<script src="https://asset.gitclear.com/assets/vendor/tippy.all.min-40f824ca7ff313db0e3221042a12ed40570d36b83b6f16b2978e37a541b416ea.js"></script>
+<script src="https://asset.gitclear.com/assets/pages-4f3a05f6319b5a993235ac6dc1dec2053805f8fe5ceb7cc0a84482ee7e3cc458.js"></script>
+
+<script async="async" data-api="/plausible-proxy/api/event" data-domain="gitclear.com" defer="defer" src="/plausible-proxy/js/script.js"></script>
+<script type='application/ld+json'>
+{
+"@context": "http://schema.org",
+"@type": "Organization",
+"url": "http://www.gitclear.com",
+"Logo": "http://images.gitclear.com/uploads/remote_images/1528239594-377033-0001-6953.png",
+"name": "GitClear",
+"Brand": "GitClear",
+"sameAs": [
+"https://twitter.com/gitclear",
+"https://www.linkedin.com/company/gitclear/"
+]
+}
+</script>
+
+<script>
+!function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};
+  p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js?pixel_id=a2_iyk68eost5vu",t.async=!0;var s=d.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_iyk68eost5vu');rdt('track', 'PageVisit');
+</script>
+
+
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<meta content='pk_live_zU3F2FRllpbks0mnIyd7JKqh' name='stripe_api_key'>
+<meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="PCFGouEihQ5T0OaRCWp8Ko1u6TXfpOYGj7xpxZ6nobKf60dCFviiakCSC9TBZv_NSUT6Iwu70sKpTp0UEn-RKw" />
+</head>
+<body class="gitclear_body show_body pages_ai_assistant_code_quality_2025_body   pages_controller" data-pull-request-inquiry-enabled="false" data-s3-base="https://s3.us-west-1.amazonaws.com/images.gitclear.com">
+<header class='public'>
+<div class='public_header width_wrapper'>
+<a class="public_header_logo" aria-label="Go to GitClear homescreen" href="/"><svg class='gitclear_logo' viewBox='0 0 100 24' xmlns='http://www.w3.org/2000/svg'>
+<path class='logo_icon' d='M6.77 4.68C6.54 5.24 6.67 5.88 7.1 6.31C7.53 6.74 8.17 6.87 8.73 6.64C9.29 6.4 9.66 5.86 9.66 5.25C9.66 5.05 9.62 4.86 9.55 4.68C9.47 4.49 9.36 4.33 9.22 4.19C9.08 4.05 8.92 3.94 8.73 3.86C8.55 3.79 8.36 3.75 8.16 3.75C7.55 3.75 7.01 4.12 6.77 4.68Z M13.75 2.14C13.4 2.98 13.6 3.95 14.24 4.59C14.88 5.23 15.85 5.43 16.69 5.08C17.53 4.73 18.08 3.91 18.08 3C18.08 2.85 18.07 2.71 18.04 2.56C18.01 2.42 17.97 2.27 17.91 2.14C17.85 2 17.78 1.87 17.7 1.75C17.62 1.63 17.53 1.51 17.42 1.41C17.32 1.31 17.2 1.21 17.08 1.13C16.96 1.05 16.83 0.98 16.69 0.92C16.55 0.87 16.41 0.82 16.27 0.79C16.12 0.76 15.98 0.75 15.83 0.75C14.92 0.75 14.1 1.3 13.75 2.14Z M21.52 1.85C21.05 2.97 21.31 4.26 22.17 5.12C23.03 5.98 24.32 6.24 25.44 5.77C26.56 5.31 27.29 4.21 27.29 3C27.29 2.61 27.21 2.22 27.06 1.85C26.91 1.49 26.69 1.16 26.41 0.88C26.13 0.6 25.8 0.38 25.44 0.23C25.07 0.08 24.68 0 24.29 0C23.08 0 21.98 0.73 21.52 1.85Z M0.4 11.43C0.17 11.99 0.3 12.63 0.73 13.06C1.16 13.49 1.8 13.62 2.36 13.39C2.92 13.15 3.29 12.61 3.29 12C3.29 11.8 3.25 11.61 3.18 11.43C3.1 11.24 2.99 11.08 2.85 10.94C2.71 10.8 2.55 10.69 2.36 10.61C2.18 10.54 1.99 10.5 1.79 10.5C1.18 10.5 0.64 10.87 0.4 11.43ZM8.16 9.75C7.09 9.76 6.18 10.52 5.98 11.57C5.78 12.61 6.35 13.66 7.33 14.06C8.32 14.47 9.45 14.12 10.05 13.23C10.64 12.35 10.52 11.17 9.77 10.41C9.66 10.31 9.55 10.21 9.43 10.13C9.3 10.05 9.17 9.98 9.03 9.92C8.9 9.87 8.76 9.82 8.61 9.79C8.47 9.77 8.32 9.75 8.17 9.75L8.16 9.75ZM13.06 10.85C12.59 11.97 12.85 13.26 13.71 14.12C14.57 14.98 15.86 15.24 16.98 14.77C18.1 14.31 18.83 13.21 18.83 12C18.83 11.61 18.75 11.22 18.6 10.85C18.45 10.49 18.23 10.16 17.95 9.88C17.67 9.6 17.34 9.38 16.98 9.23C16.61 9.08 16.22 9 15.83 9C14.62 9 13.52 9.73 13.06 10.85ZM8.16 17.25C7.55 17.25 7.01 17.62 6.77 18.18C6.54 18.74 6.67 19.38 7.1 19.81C7.53 20.24 8.17 20.37 8.73 20.14C9.29 19.9 9.66 19.36 9.66 18.75C9.66 18.55 9.62 18.36 9.55 18.18C9.47 17.99 9.36 17.83 9.22 17.69C9.08 17.55 8.92 17.44 8.73 17.36C8.55 17.29 8.36 17.25 8.16 17.25ZM13.75 20.14C13.4 20.98 13.6 21.95 14.24 22.59C14.88 23.23 15.85 23.43 16.69 23.08C17.53 22.73 18.08 21.91 18.08 21C18.08 20.7 18.02 20.41 17.91 20.14C17.8 19.87 17.63 19.62 17.42 19.41C17.21 19.2 16.96 19.03 16.69 18.92C16.42 18.81 16.13 18.75 15.83 18.75C14.92 18.75 14.1 19.3 13.75 20.14ZM23.14 18.23C22.78 18.38 22.45 18.6 22.17 18.88C21.89 19.16 21.67 19.49 21.52 19.85C21.37 20.22 21.29 20.61 21.29 21C21.29 22.21 22.02 23.31 23.14 23.77C24.26 24.24 25.55 23.98 26.41 23.12C27.27 22.26 27.53 20.97 27.06 19.85C26.6 18.73 25.5 18 24.29 18C23.9 18 23.51 18.08 23.14 18.23Z'></path>
+<path class='logo_type' d='M42.09 17.69C41.76 17.8 41.43 17.89 41.1 17.97C40.76 18.06 40.43 18.13 40.09 18.18C39.75 18.24 39.4 18.28 39.06 18.32C38.72 18.35 38.37 18.37 38.03 18.37C37.59 18.4 37.14 18.39 36.7 18.34C36.25 18.29 35.82 18.19 35.39 18.05C34.97 17.91 34.56 17.73 34.18 17.5C33.79 17.28 33.43 17.02 33.09 16.73C32.8 16.44 32.54 16.13 32.32 15.79C32.1 15.45 31.91 15.09 31.76 14.71C31.62 14.33 31.51 13.94 31.44 13.53C31.38 13.13 31.35 12.73 31.37 12.32C31.37 8.32 34.37 5.97 38.37 5.97C38.66 5.96 38.94 5.97 39.23 5.99C39.52 6.01 39.8 6.04 40.09 6.09C40.37 6.14 40.65 6.2 40.92 6.28C41.2 6.36 41.47 6.45 41.74 6.56L41.16 8.76C40.94 8.67 40.71 8.58 40.48 8.52C40.25 8.45 40.01 8.39 39.77 8.35C39.54 8.3 39.3 8.27 39.05 8.25C38.81 8.24 38.57 8.23 38.33 8.24C37.8 8.19 37.26 8.26 36.76 8.44C36.26 8.62 35.8 8.91 35.42 9.28C35.04 9.65 34.75 10.11 34.56 10.61C34.37 11.1 34.29 11.64 34.33 12.17C34.28 12.69 34.34 13.22 34.51 13.72C34.68 14.21 34.96 14.67 35.32 15.05C35.69 15.43 36.13 15.72 36.61 15.92C37.1 16.11 37.63 16.2 38.15 16.17C38.26 16.17 38.37 16.17 38.47 16.17C38.58 16.16 38.69 16.15 38.8 16.14C38.9 16.13 39.01 16.11 39.12 16.08C39.22 16.06 39.33 16.03 39.43 16L39.43 13.43L37.56 13.43L37.56 11.29L42.09 11.29L42.09 17.69ZM46.77 7.55C46.7 7.72 46.59 7.88 46.45 8.01C46.31 8.13 46.14 8.23 45.97 8.3C45.79 8.36 45.6 8.38 45.41 8.37C45.23 8.38 45.04 8.35 44.87 8.29C44.7 8.22 44.54 8.12 44.41 7.99C44.27 7.86 44.17 7.71 44.1 7.54C44.03 7.37 44 7.18 44 7C43.99 6.81 44.02 6.62 44.1 6.44C44.17 6.27 44.27 6.11 44.41 5.98C44.55 5.85 44.71 5.75 44.89 5.68C45.07 5.62 45.26 5.59 45.45 5.61C45.64 5.6 45.82 5.63 46 5.7C46.18 5.76 46.34 5.86 46.47 5.99C46.61 6.12 46.71 6.28 46.79 6.45C46.86 6.63 46.89 6.81 46.89 7C46.89 7.19 46.85 7.38 46.77 7.55ZM44.06 18.25L44.06 9.43L46.8 9.43L46.8 18.25L44.06 18.25ZM51.92 6.9L51.92 9.43L53.92 9.43L53.92 11.43L51.92 11.43L51.92 14.62C51.92 15.69 52.17 16.17 53 16.17C53.07 16.17 53.14 16.17 53.2 16.17C53.27 16.16 53.34 16.16 53.41 16.15C53.47 16.15 53.54 16.14 53.61 16.13C53.68 16.12 53.74 16.11 53.81 16.1L53.81 18.18C53.67 18.22 53.52 18.26 53.37 18.29C53.23 18.32 53.08 18.35 52.93 18.37C52.78 18.39 52.63 18.4 52.48 18.41C52.33 18.41 52.18 18.42 52.03 18.41C51.85 18.42 51.66 18.41 51.48 18.38C51.3 18.35 51.12 18.3 50.94 18.24C50.77 18.18 50.6 18.1 50.44 18C50.29 17.91 50.14 17.79 50 17.67C49.86 17.49 49.73 17.29 49.62 17.09C49.52 16.88 49.43 16.66 49.37 16.44C49.3 16.22 49.26 15.99 49.24 15.76C49.22 15.52 49.22 15.29 49.24 15.06L49.24 11.45L48.06 11.45L48.06 9.45L49.23 9.45L49.23 7.52L51.92 6.9ZM64.35 17.91C64.1 18.01 63.85 18.09 63.59 18.16C63.34 18.23 63.08 18.28 62.82 18.33C62.55 18.37 62.29 18.4 62.03 18.42C61.76 18.44 61.5 18.44 61.23 18.43C57.02 18.43 54.86 15.81 54.86 12.35C54.86 8.2 57.86 5.89 61.5 5.89C61.76 5.88 62.01 5.88 62.27 5.9C62.52 5.92 62.78 5.95 63.03 6C63.28 6.05 63.53 6.11 63.78 6.18C64.02 6.25 64.26 6.34 64.5 6.44L63.94 8.62C63.76 8.54 63.57 8.48 63.38 8.42C63.19 8.36 63 8.31 62.81 8.28C62.61 8.24 62.42 8.21 62.22 8.19C62.02 8.18 61.83 8.17 61.63 8.17C61.1 8.14 60.57 8.22 60.08 8.41C59.58 8.6 59.14 8.89 58.77 9.27C58.4 9.65 58.12 10.11 57.95 10.61C57.77 11.11 57.71 11.64 57.76 12.17C57.7 12.7 57.77 13.23 57.94 13.74C58.11 14.24 58.4 14.7 58.77 15.08C59.14 15.46 59.59 15.76 60.09 15.95C60.59 16.13 61.12 16.21 61.65 16.17C61.84 16.17 62.04 16.16 62.23 16.14C62.43 16.13 62.62 16.1 62.81 16.07C63 16.04 63.19 15.99 63.38 15.94C63.57 15.89 63.76 15.84 63.94 15.77L64.35 17.91ZM65.86 5.44L68.61 5.44L68.61 18.25L65.86 18.25L65.86 5.44ZM72.66 14.71C72.75 15.85 73.87 16.39 75.15 16.39C75.36 16.39 75.56 16.38 75.77 16.36C75.98 16.35 76.18 16.32 76.39 16.29C76.59 16.26 76.79 16.22 76.99 16.17C77.19 16.12 77.39 16.06 77.59 16L78 17.89C77.75 17.98 77.49 18.07 77.22 18.14C76.96 18.21 76.7 18.26 76.43 18.31C76.16 18.35 75.89 18.39 75.62 18.41C75.35 18.43 75.08 18.44 74.81 18.43C71.81 18.43 70.1 16.7 70.1 13.94C70.06 13.34 70.14 12.73 70.35 12.16C70.55 11.6 70.87 11.07 71.28 10.63C71.69 10.19 72.19 9.84 72.75 9.6C73.3 9.36 73.9 9.23 74.5 9.23C77.35 9.23 78.43 11.45 78.43 13.63C78.43 13.72 78.43 13.81 78.42 13.9C78.42 13.99 78.42 14.08 78.41 14.17C78.4 14.26 78.39 14.35 78.38 14.44C78.37 14.53 78.36 14.62 78.35 14.71L72.66 14.71ZM75.89 12.84C75.92 12.62 75.9 12.39 75.83 12.18C75.77 11.97 75.66 11.77 75.51 11.6C75.36 11.43 75.19 11.3 74.98 11.2C74.78 11.11 74.56 11.06 74.34 11.05C74.11 11.06 73.89 11.12 73.69 11.22C73.48 11.31 73.3 11.45 73.14 11.61C72.99 11.78 72.86 11.97 72.78 12.18C72.69 12.39 72.65 12.61 72.65 12.84L75.89 12.84ZM84.93 18.25L84.77 17.37L84.71 17.37C84.55 17.55 84.38 17.71 84.19 17.85C84 17.98 83.79 18.1 83.57 18.19C83.35 18.29 83.13 18.36 82.9 18.4C82.66 18.44 82.43 18.46 82.19 18.45C81.82 18.47 81.45 18.42 81.11 18.29C80.76 18.16 80.45 17.96 80.18 17.71C79.91 17.46 79.7 17.15 79.56 16.81C79.41 16.47 79.34 16.11 79.34 15.74C79.34 13.45 81.34 12.35 84.51 12.37L84.51 12.24C84.51 11.77 84.26 11.11 82.91 11.11C82.7 11.11 82.48 11.13 82.27 11.16C82.06 11.19 81.85 11.23 81.65 11.28C81.44 11.34 81.24 11.41 81.04 11.49C80.85 11.57 80.65 11.66 80.47 11.77L80 10C80.26 9.87 80.54 9.75 80.81 9.65C81.09 9.55 81.38 9.46 81.67 9.4C81.96 9.33 82.25 9.28 82.54 9.25C82.84 9.22 83.13 9.21 83.43 9.22C86.36 9.22 87.3 10.95 87.3 13.03L87.3 16.1C87.3 16.28 87.3 16.46 87.3 16.64C87.3 16.82 87.31 17 87.32 17.18C87.33 17.36 87.35 17.54 87.37 17.71C87.38 17.89 87.41 18.07 87.43 18.25L84.93 18.25ZM84.6 14.08C83.16 14.08 82.04 14.41 82.04 15.47C82.04 15.61 82.07 15.75 82.12 15.87C82.18 16 82.26 16.11 82.36 16.21C82.46 16.3 82.58 16.37 82.71 16.42C82.84 16.46 82.98 16.48 83.12 16.47C83.28 16.47 83.43 16.45 83.58 16.4C83.73 16.36 83.87 16.29 84 16.2C84.12 16.11 84.24 16 84.33 15.88C84.42 15.75 84.5 15.62 84.55 15.47C84.56 15.43 84.56 15.39 84.56 15.35C84.56 15.31 84.57 15.27 84.57 15.23C84.57 15.2 84.56 15.16 84.56 15.12C84.56 15.08 84.56 15.04 84.55 15L84.6 14.08ZM89.3 12.33C89.3 11.04 89.3 10.19 89.22 9.43L91.59 9.43L91.68 11.05L91.75 11.05C91.85 10.75 92 10.46 92.19 10.21C92.39 9.96 92.63 9.75 92.91 9.59C93.18 9.42 93.49 9.31 93.8 9.26C94.11 9.2 94.44 9.21 94.75 9.27L94.75 11.85C94.69 11.84 94.63 11.83 94.57 11.82C94.51 11.81 94.44 11.8 94.38 11.79C94.32 11.78 94.26 11.78 94.2 11.78C94.13 11.77 94.07 11.77 94.01 11.77C93.8 11.75 93.58 11.77 93.38 11.83C93.17 11.89 92.98 11.98 92.81 12.11C92.64 12.24 92.49 12.39 92.37 12.57C92.26 12.75 92.18 12.95 92.13 13.16C92.12 13.21 92.12 13.26 92.12 13.31C92.12 13.37 92.11 13.42 92.11 13.47C92.11 13.52 92.12 13.57 92.12 13.63C92.12 13.68 92.12 13.73 92.13 13.78L92.13 18.25L89.3 18.25L89.3 12.33Z'></path>
+</svg>
+
+</a><a class="link_to_mobile_menu" aria-label="Open GitClear navigation dropdown" href="#"><i class="far fa-bars fa_icon"></i></a>
+<div class='public_header_actions'>
+<div class='action_links'>
+<div class='features_opener'>
+<a class="features_popper padded_action research_learning_link " href="/how_to_measure_developer_productivity_and_other_measurement_research">Research &amp; Learning</a>
+<div class='features_popout'>
+<div class='popout_top_row'>
+<ul class='feature_list'>
+<li><a href="/help">Documentation</a></li>
+</ul>
+</div>
+<div class='popout_columns'>
+<div class='popout_column'>
+<h2>Signature Features</h2>
+<ul class='feature_list'>
+<li><a href="/help/quick_start_guide_cab">Commit Activity Browser</a></li>
+<li><a href="/best_github_alternative_pull_request_review_tool">30% slimmer pull requests</a></li>
+<li><a href="/best_github_alternative_pull_request_review_tool#offline_first">Diff Digest: downloadable PR review</a></li>
+<li><a href="/github_profile_dynamic_readme_free">Snap Changelogs: AI-Powered visual change snapshots</a></li>
+<li><a href="/blog/introducing_file_browser_a_deeper_look_into_the_repo">Directory Browser</a></li>
+<li><a href="/help">Help Center index</a></li>
+</ul>
+</div>
+<div class='popout_column'>
+<h2>Developer Experience</h2>
+<ul class='feature_list'>
+<li><a href="https://www.gitclear.com/help/top_gitclear_benefits_for_positive_developer_experience">Top 7 GitClear benefits for devs</a></li>
+<li><a href="https://www.gitclear.com/help/setting_up_team_goals_to_improve_developer_experience">30 goals for healthy dev teams</a></li>
+<li><a href="/popular_software_engineering_metrics_and_how_they_are_gamed">Best software engineering metrics</a></li>
+<li><a href="https://www.gitclear.com/help/measuring_developer_satisfaction_via_periodic_sentiment_surveys">Developer satisfaction survey tool</a></li>
+<li><a href="https://www.gitclear.com/blog/research_suggests_diff_delta_has_higher_correlation_with_software_effort_than_other_git_metrics">Diff Delta™ correlation research</a></li>
+<li><a href="/measuring_tech_debt_a_guide_for_data_driven_technical_managers">Tech debt: measure and fix it</a></li>
+</ul>
+</div>
+<div class='popout_column'>
+<h2>Manager Corner</h2>
+<ul class='feature_list'>
+<li><a href="https://www.gitclear.com/developer_metrics_encyclopedia_illustrated_software_metrics_and_measurements">Encyclopedia of Dev Analytics</a></li>
+<li><a href="/recent_ai_developer_productivity_code_quality_research">2025-2026 AI Research</a></li>
+<li><a href="https://www.gitclear.com/help/annual_developer_performance_reviews_without_recency_bias">Annual performance reviews: <em>Fast</em></a></li>
+<li><a href="/popular_software_engineering_metrics_and_how_they_are_gamed">Popular software engineering metrics, and how they&#39;re gamed</a></li>
+<li><a href="/how_to_measure_developer_productivity_and_other_measurement_research">All Research &amp; Learning</a></li>
+</ul>
+</div>
+</div>
+<div class='showcase_feature'>
+<i class="fas fa-star fa_icon"></i> <b>January 2026 research</b>:
+<a href="/developer_ai_productivity_analysis_tools_research_2026">AI Coding Tools Attract Top Performers - But Do They <b>Create</b> Them?</a>
+</div>
+</div>
+</div>
+<a class="padded_action download_link " href="/download_diff_digest">Download</a>
+<a class="padded_action public_header_security " href="/security">Security</a>
+<a class="padded_action pricing_container " href="/pricing">Pricing
+</a><a class="padded_action blog_link " href="/blog">Blog</a>
+</div>
+<div class='public_header_buttons'>
+<a class="log_in_link" href="/users/login">Log in</a>
+<a class="button_primary" href="/users/register">Sign up</a>
+</div>
+</div>
+</div>
+<div class='flash_messages'>
+</div>
+
+</header>
+
+<div class='main blog_styled' id='main'>
+<script>
+//<![CDATA[
+window.onload = () => { document.querySelector("#email_field") && document.querySelector("#email_field").focus() }
+//]]>
+</script>
+<div class='width_wrapper body_content'>
+<div class="breadcrumb_container"><a href="https://www.gitclear.com/">Home</a> &raquo; <a href="/how_to_measure_developer_productivity_and_other_measurement_research">Measurement and Research</a> &raquo; <a href="/recent_ai_developer_productivity_code_quality_research">AI Velo &amp; Quality Research</a> &raquo; <span>PDF Download: 2025 AI Copilot Code Quality Report</span></div>
+<div class='in_the_news_container'>
+<h2 class='title'>Get the latest installment of AI code quality research that has been cited by industry leaders like</h2>
+<div class='image_line_container'>
+<img src="https://asset.gitclear.com/assets/home/DevClass_logo-7b652934a597f763354ed2554ebbaf4f91725e64386139f8f31d9e123a6f580b.png" />
+<img src="https://asset.gitclear.com/assets/home/information-age-logo-15de79bfd10feb47ffdef4b6d58e898821fb601a81e19bb4349f4f8553c2d368.png" />
+<img src="https://asset.gitclear.com/assets/home/visual-studio-logo-313aa0b0c69d344030ac60343b2d99fb484c9422c4a6d4efe1350e48622c6bbd.png" />
+<img src="https://asset.gitclear.com/assets/home/geekwire-logo-569ba6feb0106bf193862b7868be1f0ea75b92d2812e278b06c2c77fe45c4f2f.png" />
+<img src="https://asset.gitclear.com/assets/home/stack-overflow-logo-d7d90eaabd38eeacdfe889ac6bac4882044479f721a38f6e050ac8fc617b0a9c.png" />
+<img src="https://asset.gitclear.com/assets/home/primetime-logo-6dca65ccf00b07ddc4ecd8347db8c9157cf9620fbb1a532f6c6666631c1f7a1e.png" />
+<img src="https://asset.gitclear.com/assets/home/devops-logo-9549e36966d912f8bc337c549d0da1970946a19f0b7e1ad46cb072b175052954.png" />
+<img src="https://asset.gitclear.com/assets/home/arc-dev-logo-6a02aac8d9cf2f39fb3ece955009800629476865cc285823878fd89d27582a61.png" />
+</div>
+<div class='quote_below'>
+"Is AI helping or hurting our overall application complexity? I found GitClear's AI report illuminating."
+-- <a target="_blank" rel="noopener noreferrer" href="https://softwarearchitectureinsights.com/complexity/is-ai-code-automation-contributing-to-code-complexity/317">Lee Atchison</a>
+</div>
+</div>
+<div class='split_container'>
+<div class='left_side'>
+<h1>AI Copilot Code Quality: 2025 Look Back at 12 Months of Data</h1>
+<div class='subtitle'>Emerging trends: 4x more code cloning, "copy/paste" exceeds "moved" code for first time in history. Includes 2025 projections.</div>
+<p>
+Stack Overflow's 2024 Developer Survey showed that 63% of professional developers are
+currently using AI in their development process, with another 14% saying they plan to begin using
+AI soon.
+</p>
+<p>
+We examine 5 years worth of data (2020-2024), using the largest dataset that has been brought to bear --
+211 million changed lines from repos owned by Google, Microsoft, Meta, and enterprise C-Corps. The focus was to
+understand how AI Assistants influence the type of code being written. Are there measurable differences in
+code quality metrics between <b>AI-assisted blocks</b> and <b>non-AI-assisted</b> code?
+</p>
+<p>
+We observe a spike in the prevalence of duplicate code blocks, along with increases in short-term churn code,
+and the continued decline of moved lines (code reuse).
+</p>
+<div class='sample_image'>
+<img alt="Prevalence of cloned code blocks by year" class="wide_screenshot" title="Learn how AI-assisted development could beget cloned blocks of code in 10% of all authored commits" src="https://asset.gitclear.com/assets/pages/duplicate-by-year-wide-3396f6f6bd745a9871fe4cadc99fff82de5379821a81ebf2fbdad3eb5a9ec37f.png" />
+</div>
+<h2>Start reading to learn:</h2>
+<ul>
+<li>What code quality metrics are threatened by the proliferation of AI?</li>
+<li>What do Technical Leaders need to be on the lookout for 2025?</li>
+<li>How can you measure the impact of AI on your team's code quality?</li>
+</ul>
+</div>
+<div class='right_side'>
+<img alt="2025 AI Assistant Code Quality Report" class="screenshot" src="https://asset.gitclear.com/assets/pages/ai-assistant-spread-2025-e010c7d4cb0f41c18c84ef4061951910c1cb2caaf523ef43ab90409419d34d8e.png" />
+<form class="new_proto_user" id="new_proto_user" action="/proto_users" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="u_UiLw5CI3iQJFRCNX8GOU3KfuUDoLygtGskTTKDlwlBKVo3tHhyv4XZU0qhbwkH8gTY-HsP29oT_7_xxFtPDQ" autocomplete="off" /><input value="ai_assistant_code_quality_2025" autocomplete="off" type="hidden" name="proto_user[signup_source_em]" id="proto_user_signup_source_em" />
+<div class='form_line'>
+<div class='label'>
+Business Email
+<span class='required'>*</span>
+</div>
+<input class="form-control" required="required" id="email_field" tabindex="1" type="email" name="proto_user[unverified_email]" />
+</div>
+<div class='form_line'>
+<div class='label'>
+First and Last Name
+<span class='required'>*</span>
+</div>
+<input class="form-control" required="required" tabindex="2" type="text" name="proto_user[full_name]" id="proto_user_full_name" />
+</div>
+<div class='form_line'>
+<div class='label'>
+Job Title
+</div>
+<select class="form-control" tabindex="3" name="proto_user[job_title_em]" id="proto_user_job_title_em"><option selected="selected" value="">Choose role</option>
+<option value="VP of Engineering">VP of Engineering</option>
+<option value="CTO">CTO</option>
+<option value="Lead Developer">Lead Developer</option>
+<option value="Senior Developer">Senior Developer</option>
+<option value="CEO">CEO</option>
+<option value="Developer">Developer</option>
+<option value="Product Manager">Product Manager</option>
+<option value="Project Manager">Project Manager</option>
+<option value="Other (technical)">Other (technical)</option>
+<option value="Other (non-technical)">Other (non-technical)</option></select>
+</div>
+<div class='form_line'>
+<input name="proto_user[industry_email_opt_in]" type="hidden" value="0" autocomplete="off" /><input tabindex="4" type="checkbox" value="1" name="proto_user[industry_email_opt_in]" id="proto_user_industry_email_opt_in" />
+<label class='opt_in_label' for='proto_user_industry_email_opt_in'>
+I would like to occasional emails with industry research & product updates
+</label>
+</div>
+<p class='contact_info_container'>
+GitClear needs the contact information you provide to us to contact you about our products
+and services. You may unsubscribe from these communications at any time. For information on
+how to unsubscribe, as well as our privacy practices and commitment to protecting your privacy,
+please review our
+<a target="_blank" rel="noopener noreferrer" href="https://www.gitclear.com/help/general/privacy_policy">Privacy Policy</a>.
+</p>
+<div class='form_line'><input type="submit" name="commit" value="Download Whitepaper" class="button_primary" tabindex="4" data-disable-with="Download Whitepaper" /></div>
+</form></div>
+</div>
+<div class='more_details_container'>
+<h2>Abstract</h2>
+<p>
+Code assistants diligently accepted a far greater share of code-writing
+responsibility during 2024 than ever before. According to Stack Overflow’s
+2024 Developer Survey, 63% of Professional Developers said they
+currently use AI in their development process. Another 14% say they plan
+to soon.
+</p>
+<p>
+The 36,894 developers who answered “most important benefit you’re
+hoping to achieve with AI” overwhelmingly picked “Increased
+productivity.” Developers seem to view AI as a means to write more code,
+faster. Through the lens of “does more code get written?” common sense
+and research agree: resounding yes. AI assistants do beget more lines.
+</p>
+<p>
+But if you ask a Senior Developer “what would unlock your team’s full
+potential?” their answer won’t be “more code lines added.” To retain high
+project velocity over years, research suggests that a DRY (Don’t Repeat
+Yourself), modular approach to building is essential [4] [5]. Canonical
+systems are documented, well-tested, reused, and periodically upgraded.
+This research aims to evaluate how today’s profusion of LLM-authored
+code is influencing the maintainability of tomorrow’s systems.
+</p>
+<p>
+To investigate, we analyze the largest known database of highly
+structured code change data. 211 million changed lines of code,
+authored between January 2020 and December 2024, are
+assessed on quantifiable “code quality” metrics. The research finds that
+the percentage of changed code lines (associated with refactoring) sunk
+from 25% of changed lines in 2021, to less than 10% in 2024, while
+lines classified as "copy/pasted" (cloned) rose from 8.3% to 12.3%
+in the same period.
+</p>
+</div>
+</div>
+
+</div>
+<footer>
+<div data-supposed-environment='production' id='supposed_current_user_detail'></div>
+<div class='footer_wrapper'>
+<div class='footer_subwrapper is_left'>
+<div class='footer_topline'>
+<div class='footer_topline_logo'><a href="/"><img alt="GitClear Footer Logo" src="https://asset.gitclear.com/assets/logos/gitclear_logo_400-81d94dd935cff455d14e7307aa86ef4ed73d1ba0ad9d7b131f0586e1997c5150.png" /></a></div>
+</div>
+<div class='footer_navigation'>
+<div class='footer_navigation_list'>
+<h2>Product</h2>
+<ul>
+<li><a href="/recent_ai_developer_productivity_code_quality_research">AI Velo &amp; Code Quality Research</a></li>
+<li><a href="/best_ai_diff_viewer">Best AI diff viewer</a></li>
+<li><a href="https://www.gitclear.com/snap_changelogs/17820cfb-a1e0-4269-8aeb-658ddbe2ed4a">Changelog</a></li>
+<li><a href="/databricks">Databricks Enrichment for Enterprise</a></li>
+<li><a href="/download_diff_digest">Download Diff Digest</a></li>
+<li><a href="/mathematical_proof_of_diff_delta_factors">Diff Delta™ mathematics</a></li>
+<li><a href="https://www.gitclear.com/developer_metrics_encyclopedia_illustrated_software_metrics_and_measurements">Encyclopedia of Developer Metrics</a></li>
+<li><a href="/open_repos">Open Repos</a></li>
+<li><a href="/popular_software_engineering_metrics_and_how_they_are_gamed">Software engineering metrics</a></li>
+<li><a href="/best_dx_alternative_screenshots_pricing">Compare to DX</a></li>
+<li><a href="/best_pluralsight_flow_alternative_for_ai_roi_stats">Compare to Pluralsight Flow</a></li>
+<li><a href="/best_jellyfish_alternative_screenshots">Compare to Jellyfish</a></li>
+<li><a href="/compare_linearb_price_screenshots">Compare to LinearB</a></li>
+</ul>
+</div>
+<div class='footer_navigation_list'>
+<h2>Company</h2>
+<ul>
+<li><a href="/best_git_diff_viewers_2026">Best Git Diff Viewers of 2026</a></li>
+<li><a title="Best GitHub alternate pull request tool, 2-way sync all code review between GitClear and GitHub" href="/best_github_alternative_pull_request_review_tool">Best GitHub alternative PR tool</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a href="/about">Company</a></li>
+<li><a href="https://www.gitclear.com/help/policy_for_developer_friendly_data_analytics">Ensuring dev-friendly metrics</a></li>
+<li><a href="/suggested_features">Feature voting</a></li>
+<li><a href="/research_studies">Software metrics research</a></li>
+<li><a href="/github_profile_dynamic_readme_free">GitHub Profile widget</a></li>
+<li><a href="/press_mentions">Media &amp; Press</a></li>
+<li><a href="/pricing">Pricing</a></li>
+<li><a href="/security">Security</a></li>
+</ul>
+</div>
+<div class='footer_navigation_list'>
+<h2>Resources</h2>
+<ul>
+<li><a href="/api_reference">API</a></li>
+<li><a href="/ai_assistant_code_quality_2025_research">2025 AI Code Quality research</a></li>
+<li><a href="https://www.gitclear.com/help/google_dora_practical_implementation_guide">DORA in Detail: Implementation</a></li>
+<li><a target="_blank" rel="noopener noreferrer" href="https://engineeringanalytics.tools">Engineering Analytics tools compared</a></li>
+<li><a href="/gallery_of_free_git_stats_screenshots_examples">Free git stats</a></li>
+<li><a href="/free_code_quality_2024_dora_report">Free Code Quality Report &amp; DORA</a></li>
+<li><a href="/ambassadors/learn_more">GitClear Ambassadors</a></li>
+<li><a href="/help">Product reference documentation</a></li>
+<li><a href="/rich_diff_checker">Rich Diff Checker</a></li>
+<li><a href="//support.gitclear.com/hc/en-us/requests/new">Contact us</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class='footer_subwrapper is_right'>
+<div class='footer_subwrapper_header'>
+<span class='code_label'>Code.</span>
+<span class='learn_label'>Learn.</span>
+<span class='repeat_label'>Repeat.</span>
+</div>
+<div class='footer_contact'>
+<div class='footer_contact_list has_full_span'>
+<h2>See the latest blog post</h2>
+<a href="/blog/annual_ai_code_quality_research_2026_diff_digest_git_ai_diff_viewer">Annual AI Code Quality Research, Plus a Tool to Expedite Diff Viewing</a>
+</div>
+<div class='footer_contact_list has_full_span'>
+<h2>Now on the internet</h2>
+<ul>
+<li>
+<a class="footer_navigation_list_icon" aria-label="Go to the GitClear Twitter/X page" href="https://twitter.com/gitclear"><i class="fab fa-twitter fa_icon"></i></a>
+<a class="footer_navigation_list_icon" aria-label="Go to the GitClear LinkedIn page" href="https://www.linkedin.com/company/7931514/"><i class="fab fa-linkedin fa_icon"></i></a>
+<a class="footer_navigation_list_icon" aria-label="Go to the GitClear YouTube channel" href="https://www.youtube.com/channel/UCq94-Ffu39uFVIs7pLAZIRw"><i class="fab fa-youtube fa_icon"></i></a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class='footer_extras'>
+<div class='left_side'>
+<div class='footer_small_print'>&copy; 2026 GitClear. All rights reserved.</div>
+<ul class='footer_links'>
+<li><a href="https://www.gitclear.com/help/general/privacy_policy">Privacy policy</a></li>
+<li><a href="https://www.gitclear.com/help/general/terms_of_service">Terms of use</a></li>
+<li><a href="https://www.gitclear.com/help/general/cookie_tracking_policy">Cookies policy</a></li>
+</ul>
+</div>
+<div class='footer_subwrapper is_right'>
+<div class='footer_security_credentials'>
+<a href="/security"><img class="footer_security_image" title="Accredited ISO-27001 vendor" src="https://asset.gitclear.com/assets/security/footer-soc2-fe44c1eed30a83032a5b2d7a2e1a56834ff4ebfd473d95435be19874708f82de.png" /></a>
+<a href="/security"><img class="footer_security_image" title="Certified ISO-27001 vendor" src="https://asset.gitclear.com/assets/security/footer-iso-27001-8f2c022fab6e7813ceaf9a350c0e9c664aa1cf045907c030c2c68e317303b90b.png" /></a>
+<a href="/security"><img class="footer_security_image" title="Security penetration test completed 2026" src="https://asset.gitclear.com/assets/security/footer-pentest-481889b3fa7aae49548c355ef5242cee09bc949e451e2de8cc149ea0f8009d23.png" /></a>
+</div>
+</div>
+</div>
+</footer>
+
+
+
+<div class='cookie_banner needs_gdpr_validation' data-url='/users/verify_gdpr'>
+<div class='cookie_banner_content'>
+GitClear uses cookies to ensure you get the best experience on our website.
+<a target="_blank" href="https://www.gitclear.com/help/general/cookie_tracking_policy">Learn more about our cookie policy</a>
+</div>
+<div class='cookie_banner_close' data-url='/acknowledge_cookie_policy'>
+<i class="fas fa-times fa_icon"></i>
+</div>
+</div>
+
+
+<link rel="stylesheet" href="https://asset.gitclear.com/packs/css/content_pages-0b167b0d.css" />
+<script src="https://asset.gitclear.com/assets/vendor/react/react.production.min-43e078436c226d8d7511e4860ccd2a8678211367072b01c4713aa758306a9a6b.js"></script>
+<script src="https://asset.gitclear.com/assets/vendor/react/react-dom.production.min-14725583ba11aa935d1d508020480945185de06aedcf08e43b0cbdfe0a366ad7.js"></script><script src="https://asset.gitclear.com/packs/js/runtime-70d7523e5a1a2f2e0e87.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/7405-6cbfab125f820389785c.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/2807-f21bb8a5c9d694aff87c.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/5582-83916bba766a435e53d0.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/8564-4091b46feb7d3dd21bc4.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/6919-a74be5acfe8399e90fae.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/2346-2955fe54fb80474a35f6.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/7203-63b1b1cf6c9251a4263f.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/5980-ed94450b0916ac3eadf1.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/8507-e0dde0b35107899ca481.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/8808-165678e48b76bb15435e.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/9029-97e0f9d7ee3432d57a20.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/2681-df080485a0769d224eae.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/global-411a8d96f8523b989b5b.js" defer="defer"></script>
+<script src="https://asset.gitclear.com/packs/js/content_pages-a3e2d2a4563938acc29f.js" defer="defer"></script></body><script src="https://asset.gitclear.com/assets/gitclear/gitclear.retina-74f0b0660125f17e1ab2fd08749d67b6d26707c3da43d7398685d101ff6e1b2f.js"></script>
+</html>

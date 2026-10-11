@@ -1,0 +1,2242 @@
+PROCEEDINGS OF THE IEEE, VOL. 68, NO. 9 , SEPTEMBER 1980
+
+1060
+
+Programs, Life Cycles, and Laws of
+Software Evolution
+
+serious problems in the provision and upkeep of satisfactory
+programs. It also yielded new insights. Rogramming as then
+practiced required the breakdown of the problem to besolved
+intostepsfarmoredetailedthanthoseinterms
+of which
+people thought about it and its solution. The manual generation of programs at this low level was tedious and error prone
+for those whose primary concern was the result; for whom
+programming was a means to an end and not an end in itself.
+This could notbe the basis for widespread computer application.
+I. BACKGROUND
+Thusthere was borntheconceptof
+high-level, problemA . The Nature of the Problem
+oriented, languages created to simplify thedevelopment of
+HE TOTAL U.S. expenditure on programming in 1977is computer applications. These languages did not just raise the
+estimated to have exceeded $50 billion, and may have
+level of detail to whichprogrammershad
+to developtheir
+been as high as $100 billion. This figure,which repre- viewof theautomatedproblem-solving
+process. They also
+sents more than 3 percent of the U.S. GNP for that year, is removed at least some of the burdens of procedural organizaalready an awesome figure. It has increased ever since in real tion, resource allocation and scheduling, burdens which were
+terms and will continue to do so as the microprocessor finds further reduced through the development
+of operating systems
+ever wider application. Programming effectiveness is clearly a and their associated job-control languages. Above all, however,
+significant component of nationaleconomichealth.
+Even the high-level language trend permitted a fundamental shift in
+small percentage improvements in productivity can make sig- attitude. To the
+discerning, atleast,itbecame
+clear that it
+nificant financial impact. The potential for saving is large.
+was nottheprogrammer'smainresponsibilitytoinstructa
+Economic considerations are, however, not
+necessarily the machine by defining astep-by-stepcomputational
+process.
+main cause of widespread concern. As computers play an ever His task was to state an algorithm that correctly and unambiglarger role in society and the life of the individual, it becomes uously defines a mechanical procedure for obtaining
+a solution
+more and more critical to be able to create and maintain effec- to a given problem [ 21 , [ 31 . The transformation of this into
+tive, cost-effective, and timely software. For more than two
+executable and efficient code sequences could be more safely
+decades,however, theprogrammingfraternity,andthrough
+entrusted to automatic mechanisms. The objective of language
+them the computer-user community, has
+faced serious prob- design was to facilitate that task.
+lems in achieving this [ 11. As the application of microprocesLanguages hadbecomeamajortool
+in thehands of the
+sors extends ever deeper into the fabric
+of society the problems programmer. Like all tools, they sought to reduce the manual
+will be compounded unless very basic solutions are found and effort of the worker and at the same time improve the quality
+developed.
+of his work. They permitted and encouraged concentration on
+the intellectual tasks which are the real province of the human
+B. Programming
+mindand skill. Thus, ever since, the search forbetter IanThe early 1950's had been a pioneering period in programguages and for improving methodologies for their
+use, has conming. The sheer ecstasy of instructing a machine step by step tinued [ 4 ] .
+to achieve automaticcomputationat
+speeds previously unThere are those who believe that the development of prodreamedof,completely
+hid theintellectuallyunsatisfying
+gramming methodology , high-level languages andassociated
+aspects of programming; the lack of a guiding theory and dis- concepts, is by far the most important step forsuccessful comcipline; the largely hit or miss nature of the process through puter usage. That may well be, but it is by no means sufficient.
+whichan acceptable program was finally achieved; the ever There exists aclear need for additional methodologies and tools,
+present uncertainty about the accuracy, even the validity, of a need thatarises primarily from program maintenance.
+the final result.
+More immediately, the gradual penetration of the computer C. Program Maintenance
+into the academic, industrial, and commercial worlds
+led to
+Thesheer level of programmingandprogramming-related
+activity makes its disciplining important. But a second statisticcarries an equally signifkant message. Of the total U.S.
+Manuscript received February 27, 1980; revised May 22, 1980.
+expenditure for 1977, some 70 percent was spent on program
+The author is with the Department of Computing, Imperial College of
+Science and Technology, 180 Queen's Gate, London SW7 ZBZ, England. maintenance and only about 30 percent on program developAbsfmcr-By clppsitying programs according to their relationship to
+the environment m which they ne executed, the paper identities the
+sources of evolutionary pressure on computer rpplicitim andprograms and shows why this results in a process of never ending maintenance activity. The resultant Life cyde processes ne then briefly discussed. The paper then introduces laws of Rognm Evdution that have
+been formulated fdlowing quantitative studies of the evolution of a
+number of different systems. Finally an example is pravided of the
+application of Evdution Dynamics models to program release plnnning.
+
+T
+
+0018-9219/80/0900-1060$00.75 @ 1980 IEEE
+
+LEHMAN: PROGRAMS, LIFE CYCLES, AND LAWS OF SOFTWARE EVOLUTION
+
+Fig. 1 . S-programs.
+
+ment. This ratio is generally accepted by the software community as characteristicof the stateof the art.
+Some clarification is, however, necessary. For software the
+term maintenance is generallyused to describe all changes
+made to a program after its first installation. It therefore differs significantly from the more general concept that describes
+the -restoration of a system or system component to its former
+state. Deterioration that
+has occurred as a result of usage or
+the passage of time, is corrected by repair or replacement. But
+software does not, deteriorate spontaneously or by interaction
+with itsoperationalenvironment.
+Programs do not suffer
+from wear, tear, corrosion, or pollution. They do not change
+unless and until people change them, and this is done whenever the current behavior of a program in execution is found
+to be wrong, inappropriate, or too restricted. Repair actually
+involves changes away fromthe
+previous implementation.
+Faults being corrected during maintenance can originate in any
+phase of the program life cycle (Section 111).
+Moreover, in hardware systems, major changes to a product
+are achieved by redesign, retooling, and the construction of a
+new model. With programs improvements and adaptations to
+a changing environment are achieved by alterations, deletions,
+andextensions to existingcode.
+New capability,oftennot
+recognized during the earlierlife of the system, is superimposed on an existing structure without redesign of the system
+as a whole.
+Since thetermsoftwaremaintenance
+covers such a wide
+range of activities, the very high ratio of maintenance to
+development cost does not necessarily have to be deprecated.
+We shall, in fact, argue that the need for continuing change is
+intrinsic to the nature of computer usage. Thus the question
+raised by the high cost of maintenance is not exclusively how
+tocontrolandreducethat
+costbyavoidingerrors
+or by
+detectingthem earlier inthedevelopmentand
+usage cycle.
+The unit cost o f change must initially be made as low as possible and its growth, as the system ages, minimized. Programs
+must be made more alterable, and the alterability maintained
+throughout their lifetime. The change process itself must be
+planned and controlled. Assessments of the economic viability
+of a program must include total lifetime costs and their life
+cycle distribution, and not be based exclusively on the initial
+development costs. We must be concerned with the cost and
+effectiveness of the life-cycle process itself and not just thatof
+its product.
+
+1061
+
+The opening paragraph highlighted the high cost of software
+and software maintenance. The economic benefit and potential of the application of computers is, however, so high that
+present expenditure levels may well be acceptable, at least for
+certain classes of programs. But we must be concerned with
+the fact that performance, capability, quality in general, cannot at present be designed and built into a program ab initio.
+Ratherthey aregradually achieved by evolutionary change
+and refinement. Moreover, when desirable changes are identified and authorized they can usually not be implemented on a
+time scale fixed by external need. Responsiveness is poor.
+And as mankind relies more and more on the software that
+controls the computers that in turn guide society, it becomes
+crucial that people control absolutely the programsand the
+processes by which they are produced, throughout the useful
+life of the program. To achieve this requires insight, theory,
+models, methodologies, techniques, tools: a discipline. That is
+what software engineering is all about [SI-[ 81.
+
+11. PROGRAMS
+AS MODELS
+A . Programs
+Program evolutiondynamics [9 andits bibliography] and
+the laws [2], [31, [ l o ] , [ l l ] discussed in the next section,
+have always been associated with a concept of largeness, implying a classification into large and nonlarge programs. Great
+difficulty has, however,beenexperiencedindefining
+these
+classes. Recent discussions [ 121 have produced a more satisfying classification. This is based on a recognition of the fact
+that, at the very least, any program is a model o f a model
+within a theory o f a model o f an abstraction o f some portion
+of the world or o f some universe o f discourse. The classification categorizes programs into three classes, S, P,and E. Since
+programsconsidered
+large by our previous definition will
+generally be of class P or E , the new classification represents a
+broadening and firming of the previous viewpoint.
+B. S- Programs
+
+S-programs are programs whose function is formally defined
+by and derivable from a specification. It is the programming
+form from which most advancedprogramming methodology
+and related techniquesderive, and towhich they directly relate.
+We shall suggest that as programming methodology evolves
+still further, all large programs (software systems) will be constructed as structures of S-programs.
+A specificproblem is stated: lowest commonmultiple oP
+two integers; function evaluation in a specified domain; eight
+queens; diningphilosophers;generation
+of arectangle of a
+size within given limits on a specific type of visual display
+unit (VDU). Each suchproblem relates to its universe of
+discourse. It may also relate directlyand primarily to the
+external world, but be completely defined, e.g., the classical
+travelling salesman problem.
+As suggested by Fig. 1 the specification, as a formal definition of the problem, directs and controls the programmer in
+his creation of the program that defines the desired solution.
+Correct solution of the problem as stated, in terms of the programming language being used,becomes
+the programmer’s
+sole concern. At most,questions of elegance or efficiency
+may also creep in.
+The problem statement, the program and the solution when
+obtained may relate to an external world. But it is a casual,
+noncausal relationship. Even, when it exists we arefree to
+
+1062
+
+change our interest by redefining the problem. But then it has
+a new program for its solution. It may be possible and timesaving to derive the new program from the old. But it is a different program that defines a solution to a different problem.
+When this view can be legitimately taken the resultant program is conceptually static. One may change it to improve its
+clarityorits
+elegance, t o decreaseresource usage when the
+program is executed, even to increase confidence in its correctness. But any such changes must not effect the mapping between input and output that the
+program defines and that it
+achieves in
+execution.
+Whenever program text has been
+changed ortransformed [ 131, 1141 itmust be shownthat
+eithertheinput-outputrelationship
+remainsunchanged, or
+that the new program satisfies a new specification defining a
+solution to a new problem. We return to the problem of correctness proving in Section 11-E.
+
+PROCEEDINGS OF THE IEEE, VOL. 68, NO. 9, SEPTEMBER 1980
+
+w
+
+L
+
+I
+
+,,
+I
+
+I
+
+C. P-Programs
+Consider a program to play chess. The program is completely
+specified by the rules of chess plus procedure rules. The latter
+Fig. 2. P-programs.
+must indicate how the program is to analyze the state of the
+gameanddeterminepossiblemoves.
+Itmust also providea
+embedded. The solution obtained
+willbe evaluatedbycomdecisionrule to select anext move. Theproceduremight,
+parison
+with
+the
+real
+environment.
+That
+is, the critical diffor example, be t o form the tree of all games that may develop
+ference between S and P-programs is expressed by the comfrom any current state and adopt a minimax evaluation strategy
+t o select the next move.Suchadefinition,while
+complete, parison cloud in Fig. 2. In S-programs, judgments about the
+is naive, since it is not implementable as an executing program. correctness, and therefore the value, of the programs relate by
+The tree structure at any
+given stage is simply too large, by definition only to its specification,the problem statement that
+many orders of magnitude, to be developed or t o be scanned the latter reflects. In P-programs, the concern is not centered
+in feasibletime.
+Thusthe chessprogrammust
+introduce on the problem statement but on the value and validity of the
+Differencesbeapproximation to achieve practicality, judged as it begins t o solutionobtained in itsreal-worldcontext.
+tween
+data
+derived
+from
+observation
+and
+from
+computation
+be used, byits performance in actual games.
+A further example of a problem that can be precisely formu- may cause changes in the world view, the problem perception,
+program specification and/or
+lated but whose solution must inevitably reflect an approxima- its formulation, the model, the
+tion of the real world is found in weather prediction.In theory, the program implementation. Whatever the source of the difthe program, its documentation
+global weather can be modeledas accurately as desired by a set ference, ultimately it causes
+or both to
+be changed.And
+theeffectorimpact
+of such
+of hydrodynamic equations. In the actual worldofweather
+change cannot be eliminated by declaring the problem a new
+prediction, approximate solutions
+of modified equations are
+problem, for the
+real problem has alwaysbeen as now percomparedwiththeweatherpatternsthatoccur.Theresults
+is
+the
+perception
+of users, analysts and/or programceived.
+It
+of such comparisons are interpreted and used to improve the
+technology of prediction, t o yield ever more usable programs, mers that has changed.
+There is also another fact of life that needs to be considered.
+whose outputs, however, always retain some degree of uncerDissatisfaction
+will arise not only because information received
+tainty.
+is incomplete or incorrect, or because the
+from
+the
+program
+Finally consider the travelling salesman problem as it arises
+in practice, for example from a desire
+to optimize continuously original model was less than perfect. These are imperfections
+in some vaguely defined fashion, the travel schedule of sales- that can be overcome given time and care. But the world too
+menpicking up goods from warehouses and
+visiting clients. changes andsuchchangesresultinadditionalpressurefor
+likely to undergoneverThe required solution can be based on known approaches and change. ThusP-programsarevery
+also involve ending change or to become steadily less and less effective and
+solutions to the classical problem.Butitmust
+considerations of cost, time, work schedules, timetables, value cost effective.
+judgments, and even salesmens’ idiosyncracies.
+D. E-Programs
+The problem statement can now, in
+general, no longerbe
+The third class, E-programs, are inherently even more change
+precise. It is a model of an abstraction of a real-world situaprone. They are programs that mechanize a human or societal
+tion,containinguncertainties,unknowns,arbitrarycriteria,
+continuous variables. To some extent it must reflect the per- activity .
+Consider again the travelling salesman problem but in a situsonal viewpoint of the analyst. Both the problem statement
+ation where several persons are continuouslyen route, carrying
+and its solution approximate the real-world situation.
+products that change rapidly in value as a function of both
+Programs such as these are termed P-programs (real world
+problem solution). The process of creating such programs
+is time and location, and with the patternof demand also changing continuously. One will inevitably be tempted to see this
+modeledby Fig. 2 whichshows the intrinsic feedback loop
+situation as an application in which the system is t o act as a
+that is present in theP-situation. Despite the fact that the
+thejourneys
+problem to be solved can be precisely defined,
+the acceptability continuousdispatcher,dynamicallycontrolling
+of a solution is determined by the environment in which it is and calls of each individual. The objective will be to maximize
+
+1063
+
+LEHMAN:PROGRAMS, LIFE CYCLES, AND LAWS OF SOFTWARE EVOLUTION
+
+jw1
+Fig. 3. E-programs-The basic cycle.
+
+Fig. 4. E-programs.
+
+profit, minimizeloss, expedite deliveries, maintain customer
+ates and the programexecutes. New hardware will be introsatisfaction or achieve some optimum combination of the fac- duced,trafficpatternsanddemand
+change,technologyadtors that are accepted as the criteria for success. How does this vance and society itself evolve. Moreover the nature and rate
+situation differ from that discussed in theprevious sections?
+of thisevolution will be markedlyinfluencedby
+program
+The installation of the program together with its associated characteristics, with a new release at intervals ranging from one
+system-radio links to the salesmen, for example-change the month to two years, say. Unlike other artificial systems [ 151
+very nature of theproblemto be solved. The program has where, relative to the life cycle of process participants, change
+become a part o f the world it models, it is embedded in it. is occasional, hereitappearscontinually.The
+pressure for
+Conceptually at least the program as amodel contains elements change is built in. It is intrinsic to the nature of computing
+that model itself, the consequences of its execution.
+systems and the way they are developed and used. P and E
+The situation is depicted in Figs. 3 and 4. Even without con- programsare
+clearly closely related.They
+differ from Ssidering program execution and evaluation of its output in the programs in that they represent a computer upplication in the
+operational environment, the E-situation contains an intrinsic real world. We shall refer to members of theunion of the
+feedback loopas in Fig. 3. Analysis of the application to deter- P and E classes as A-type programs.
+mine requirements, specification, design, implementation now
+all involve extrapolation and predictionof the consequences of
+system introduction and the resultant potential for applicationE. Program Correctness
+and system evolution. This prediction must inevitably involve
+The f i t consequence of the SPE program classification is a
+opinion and judgment. Ingeneral, several views of the situation clarification of the concepts of program correctness and prowill be combined to yield the model, the system specifica- gram proving. The meaning, reality, and significance of these
+tionand,ultimately, a program.Once
+the program is com- concepts have recently been examined at great length [ 161,
+pleted and begins to be used, questions of correctness, appro- [ 171. Many of the viewpoints and differences expressed by
+priateness and satisfaction arise as in Fig. 4 and inevitably lead the participants in that discussion become reconcilable or irt o additional pressure for change.
+relevant under an adequateprogram classification scheme.
+Examples of E-programs abound: computer operating
+sysFor the SPE scheme, the concept of verificationtakes on
+tems, air-traffic control, stock control. Inall cases, the behavior significantly different meanings for the S and the A classes. If
+of the application system, the demands on the user, and the a completely specified problem is computable, its specification
+supportrequired will dependon programcharacteristics as may be taken as the starting point for the creation
+of an Sexperienced by the users. As they become familiar with a sys- program. In principle a logically connected sequence of statetem whose design and attributes depend atleast in part onuser ments can always be found, that demonstrates the validity of
+attitudesand practicebeforesystem
+installation, users wiU the program as a solution of the specified problem. Detailed
+modify their behavior to minimize effort or maximize effecinspection of and reasoning about the codemay itself produce
+tiveness. Inevitably this leads to pressure for systemchange.
+the conviction thatthe program satisfies the specification
+In addition,system exogenous pressures will also cause changes completely. A true proof must satisfy the accepted standards
+in the application environment within which the system oper- of mathematics. Even when the correctness
+argument
+is
+
+1064
+
+PROCEEDINGS OF THE IEEE, VOL. 68, NO. 9, SEPTEMBER 1980
+
+expressed in mathematical terms, a lengthy or complex chain The analysis and partitioning process will identify some funcof reasoning maybe difficult to understand, theproof sequence tional elements that can be fully specified and therefore develmay even contain an error. But this does not invalidate the oped as S-program modules. Any specification may of course
+concept of program correctness proving, merely this instance be less than fully satisfactory. It may even prove to be wrong
+in relation to what the system purpose demands, in itself or in
+of its application.
+We cannot discuss here the range of S-programs for which relation to the remainder of the design. For example thespecproving is a practical or a valuable technique, the range of ap- ification may not mention input validity checks, the specified
+plicability of constructive methods for simultaneous construc- output accuracy may be insufficient or the specified range of
+tion of a program and itsproof [ 181 , [ 191 ;whether confidence an input variable may be wrong. But each of these represents
+in the validity of an S-program can always be increased by a
+in the specification. Thus it
+an omission fromoranerror
+proof. We simply notethat since, by definition,the sole is rectified by first correcting the specification and then crestcriterion of correctness of an S-program is the satisfaction of ing, by one means or another,a new program that satisfies the
+its specification, (correct)S-programs are always provably new specification.
+correct.
+The remainder of the system is required to implement funcThis is not purely a philosophical observation. Many impor- tions that are at least partly heuristic or behavioral in nature
+tant components of a large program, mathematical procedures andtherefore defineA-elements.
+Nevertheless, we suggest
+for example, in conjunction with specified interface rules (call- that it is always possible to continue the system partitioning
+ing and output), are certainly S-type. It becomes part of the process until all modules areimplementable as S-programs.
+design process to recognize such potential constituents during That is, any imprecision or uncertainty emanating from model
+the partitioning process and to specifyandimplement them reflections of incomplete world views will beimplicit or, if
+recognized when the specification is formulated, explicit in
+accordingly. In fact it will be postulated in the next section
+the specification statement. The final modules will all be dethat an A-program may always be partitioned and structured
+so that all its elements are S-programs. If this is indeed true, rived fromand associated with precise specifications,which
+no individual programmer should ever be permitted to begin for the moment,may be treated as complete and correct.
+The design may now be viewed and constructed as a dataprogramming until his task has been d e f i e d and delimited by
+a complete specification against which his completed program flow structure with the inputs of one modulebeing the outputs
+of others (unless emanating from outside the system).
+Each
+can be validated.
+For an E-program as an entity on the other hand, validity module will bedefined as an abstract data type [251-[271
+depends on human assessment of its effectivenessin the in- defining, in turn, one or more input-to-output transformations.
+tendedapplication.correctnessand
+proof of correctness of Module specifications include thoseof the individual interfaces,
+the program as awhole are,in general,irrelevantin that a but for the system as a whole, the lattershould, in some sense
+program may be formally
+correct but useless, or incorrect in be standardized [281. Moreover, given appropriate system and
+interface architecture and module design, each module could
+thatit does not satisfy some stated specification, yetquite
+usable, even satisfactory. Formal techniques of representation be implemented as a program running on its ownmicroprocesand proof have a place in the universe of A-programs but their sor and the system implemented as a distributed system [9],
+role changes. It is the detailed behavior of the program under [ 241, [ 281, [ 921. The potential advantages for both execution
+(parallelism) and maintainability (localization of change) canoperational conditions that is of concern.
+Parts of the program that can be completely specified should not be discussed here.
+Many problems in connection with the design and construcbe demonstrablycorrect.
+But 'the environment cannot be
+tion of such systems needstill to be solved. Adequate solutions
+completely described without
+abstraction
+and,
+therefore,
+approximation. Hence absolute correctness of the program will represent a major advance in the development of a process
+as a whole is not the real issue. It is the usability of the pro- methodology (Section 111-C). We observe,however, that the
+gram and the relevance of its output in a changing world that conceptspresented followdirectly
+fromour brief analysis
+and classification of program types. Interestingly, the conclumust be the main concern.
+sions are completely compatible with those
+of the programming
+F. Program Structures and Structural Elements
+methodologists [ 24 I , [ 29 1 , [ 30 1 .
+The classification created above relates to program entities.
+III. THE LIFE CYCLE
+Any such program will, ingeneral, consist of manyparts
+variously referred to as subsystems, components, modules, A. The General Case
+The dynamic evolutionary nature of computer applications,
+procedures,routines.Thetermsare,
+of course, not used
+of the software that implements them and of the process that
+synonymously but carry imputations of functional identity,
+produces both, has in recent years given rise to a concept of
+level, size, and so on.
+The literature discusses criteria [ 201 and techniques [211- a program life cycle and to techniques for life-cycle management. The need for suchmanagement has, in fact, been recog[23] forpartitioningsystemsintosuch
+elements.Related
+design methodologies and techniques seek to achieve optimum nized infar wider spheres,particularly bynational defense
+assignment, insome sense, of elementcontentand overall agencies and other organizations concerned with the managesystem structure. In the present context we consider only one ment of complex artificial systems. In pursuing their responaspect of partitioning using the term module for convenience. sibilities, these must ensure continuingeffectiveness of systems
+The discussion completes the presentation of the SPE classifi- whose elements may involve many different andfast developing
+cationand provides a link toothercurrent methodological technologies. Often they must guarantee utterlyreliable operation under harsh, hostile, andunforgiving conditions. The outthinking 1241.
+Consider the end result of the design process for an A-pro- come is an ever increasingfinancial commitment. Onlylifegram to be constructed of primitive elements we term modules. time-orientated management
+techniques applied from project
+
+1065
+
+LEHMAN:PROGRAMS, LIFE CYCLES, AND LAWS OF SOFTWARE EVOLUTION
+
+Structure
+
+ToD-level
+Descrlptlon
+
+V
+initiation can permit the attainment of lifetime effectiveness
+and cost effectiveness.
+The problems in the more
+general situation are essentially
+those we have already explored, except that the time interval
+between generations is perhaps an order of magnitude greater
+than in the case of pure software systems. In briefly examining the nature of the life cycle and its management in this section, we use the terminology of programming andsoftware
+engineering. The reader will be able to generalize and to
+interpret the remarks inhis own area of interest.
+
+1 REVALIMTIOW)
+
+implemented as the system is used. If maintenance is taken to
+refer to permanent changes, effected through new releases by
+the system originator,thenthestructure
+becomes recursive
+with each maintenance phase comprised of all seven indicated
+phases. With this interpretation the single recursive model reflects the composite life-cycle structure of all the above levels.
+The remainder of this paper is chiefly concerned with the
+intermediate level, the life cycle of a generation as represented
+byasequence of releases. It is at this level that analysis in
+terms of the S and A classification is particularly relevant and
+enlightening.
+
+B. Software Life Cycles
+C. Assembly Line Processes
+In studying program evolution, repetitive phenomena that
+An assembly line manufacturing process is possible when a
+define alifecyclecan
+be observed ondifferenttime scales
+representingvarious levels of abstraction.The highest level system can be partitionedinto subsystems thatare simply
+concerns successive generations of systemsequences.
+Each coupled andwithout invisible links. Moreover, the process
+of system releases. must be divisible into separate phases without significant feedgeneration is represented byasequence
+This level corresponds most closely to that found in the more back control over phases and with relatively little opportunity
+general systems situation, with each generation having a life for tradeoff between them.
+Unfortunately, present day programming is not like that. It
+span of from, say, five to twenty years. Because of the relaactivities thatinteract in
+tively slow rate of change it is difficult for any individual to is constituted of tightlycoupled
+observe this evolution phenomenon, measure its dynamics and many ways. For example, at least some aspects of the specifimodel it as a life-cycle process since in the relevant portion of cationand design processes are left over, usually implicitly,
+to the implementation (coding)phase. Fault detection through
+his professional career he will not observe more than two or
+three generations. It might therefore beargued
+that this inspection [90]is not yet universal practice and by default is
+level shouldnot be treated as an instance of the life-cycle often delayed till a system integration or system testing phase.
+phenomenon. The present author has,however, had at least One of the main concerns of life-cycle process methodology
+one opportunity to examine
+programevolution at this level researchmustbe
+to develop techniques,tools, newsystem
+and to make meaningful and significant observations [ 3 11. architectures (Section 11-F) and programming support environments[32] -[ 341 thatpermitpartitioning
+of the program
+These indicated that much could be gained in cost effectiveness in the software industry if more attention were paid to development and maintenanceprocess into separatedactivities.
+the earlier creation of replacement generations, something that
+can be achieved effectively only if the appropriate predictive D. The Significance o f the Life-Cycle Concept
+For assembly line processes the life-cycle concept is not,
+models are available.
+The second level is concerned with a sequence of releases. generally, of prime importance. For software and other highly
+The latter term is also appropriate when a concept of contin- complex systems it becomes critical if effectiveness, cost effecuous release is followed, that is wheneach change is made, tiveness, and long life are to be achieved. At each moment in
+validated, and immediately installed in user instances of the time, a manager’s concern concentrates on thesuccessful completion of his current assignment. His success will be assessed
+system.
+Fig. 5 shows one view [ 6 ] of the sequence of activities or by immediately observable productattributes,quality,cost,
+life-cycle phases that constitute the lowest level, the develop- timeliness, and so on. It is his success in areas such as these
+ment of an individual release, if it is assumed that “mainte- that determine the furtherance of his career. Managerial stratnance” in the seventh box refers to onsite fixes and repairs egy will inevitably be dominated by a desire to achieve maxi-
+
+1066
+
+PROCEEDINGS OF THE IEEE, VOL. 68, NO. 9, SEPTEMBER 1980
+
+[45 1- [49], [ 9 1 1 , but a widely accepted language does not yet
+exist. Given amachinablespecification
+it is conceptually
+possible to reduce it mechanically t o executable [ 501 and even
+efficient [ 141 codebutthese
+technologies too are notyet
+ready for general exploitation.
+Thus, for the time
+being, the specification process will be
+followed by a design phase [49], [51] . The prime objective
+of this activity is to identify and structure data, data transformationanddata
+flow [ 2 3 ] . Itmust also achieve, in some
+defined sense, optimal partitioning of system function [ 201,
+select computational algorithms and procedures, and identify
+system components, afld the relationships between them. It
+is now generally accepted that iterative t o p d o w n [52] analysis and partitioning processes are required to achieve successive
+refinement [ 21 1 of the system design to the point where the
+identifiedobjects,
+procedures, andtransformations
+can be
+directly implemented.
+3) Implementation: Following the completionof the design,
+however,
+system implementation may begin. In practice,
+design and implementation overlap. Thus, as the hierarchical
+partitioning process proceeds, analysis of certain aspects of the
+system may be considered sufficient for implementation,while
+othersrequirefurther
+analysis. In a softwareproject,time
+always appears to be at a premium. A work force comprising
+many different abilities is available and must be kept
+busy.
+E. Life-Cycle Phases
+Thus, regrettably, implementation of subsystems, components,
+procedures, or modules will be initiated despite the fact that
+1 ) The Major Activity Classes: At its grossest level alife
+cycle consists of three phases: definition, implementation and the overall, or even the local design, is not yet complete.
+As theimplementationproceedscodemust
+be validated
+maintenance. As indicated in Fig. 5 , these three phases corre[ 531, [ 5 4 1 . Present dayproceduresconcentrate
+primarily
+spondapproximately to the activities described in t h e f i i t
+three, the second three and the seventh box respectively of on testing [551, though in recent years increasing usehas been
+Boehm’s model. In practice, however, many of these activities made of design walkthrough and code inspection [go]. These
+latter procedures are intended to disclose both design and imare overlapped, interwoven, and repeatediteratively.
+2) System Definition: For E-class systems in particular, the plementation errors before their consequences become hidden
+development process begins with a pragmatic analysis leading in the program code. The ratio of costs of removing a fault
+into a systematic systems analysis t o determine total system discovered in usage as against the cost of removing the same
+and program requirements [35]-[38]. The analysis must first fault if discovered during the design or f i t implementation
+establish the real need and objectivesand may examine the phase is sometimes two or three ordersof magnitude. Clearly,
+manualtechniques whereby the same purpose is currently it pays to frnd faults early in the process.
+In any case, testing by meansof program execution is carried
+achieved. Where appropriate, it may be based on mathematical
+out, generally bottom up, first at the unit (module or proceor other formal analysis. Whatever the approach, it has now
+been recognized thatthe analysis mustbe disciplined and dural) level, then functionally, component by component. As
+structured [291, [ 301, the term structured analysis now being tested components become available they are then assembled
+into a system in an integration process and system test is initiwidely used [91, [411, [421.
+By their very nature initial requirements, being an expression ated. Finally, after some degree of independent certification
+of the user’sview of his needs, are likely to include incom- of system function and performance, the system is designated
+patibilities or even contradictions. Thus the analysis and the ready forrelease.
+negotiation process by and between analystsand potential
+The above very brief summary has identified some of the
+users that produces the final requirements specification, must activities that are typically undertaken in asystem creation
+identify a balanced set that, in some sense, provides the opti- process. Individualactivities as described may overlap, be
+mum compromise between conflicting desires.
+iterated, merged, or not undertaken at all. Design of an eleThe requirements set will be expressed in the concepts and ment, for example, may be followed immediately bya test
+language of theapplicationandits
+users. It must then be implementationand preliminary performance evaluation to
+transformed into a technical specification. The specification ensure feasibility of a design before its implications spread to
+process [431, [44] mustaim to produce a correcttechnical
+other parts of the system.Clearly, there should be a set of
+overall controlled procedures to take a concept from the f i t
+statement, complete in its coverage of the requirements and
+of anapplicationfor
+consistent in its defiiition of the implementation. It may in- pragmaticevaluation ofthepotential
+cludeadditionaldeterminationsorconstraintsthat
+follow mechanization to the final program product executing in defrom a technical evaluation of the requirements in relation to fined hardware o r software and hardware environment(s).
+4) Maintenance: once the system has been released, the
+what is feasible, available and appropriate in the judgment of
+maintenance process begins. Faults will be observed, reported,
+the analyst and designer in agreement with the user.
+It has long been the aim of computer scientists to provide and corrected. If user progress is blocked because of a fault,
+formal languages for the expression of specifications so as to a temporary bypass of the faulty code may be authorized. In
+fix may be
+permit mechanical checking of completeness and consistency othercircumstances a temporaryorpermanent
+mum local payoff with visible short-term benefit. It will not
+oftentakeintoaccount
+long-termpenalties, thatcannot be
+precisely predicted and whose cost cannot be assessed. Toplevel managerial pressure to apply life-cycle evaluation is therefore essential if a development and maintenance process is to
+beattainedthatcontinuously
+achieves, say, desired overall
+balance betweentheshortand long-term objectives of the
+organization. Neglect will inevitably result inalifetimeexpenditure on the system that exceeds many times theassessed
+development cost on the basis of which the system or project
+was initially authorized.
+To overcome long time lags and the high cost of software,
+one may also seek to extend the useful lifetime of a system.
+The decision to replace a system is taken when maintenance
+has become too expensive, reliability too low, change responsiveness too sluggish, performance unacceptable, functionality
+too limiting; in short, when it is economically more satisfactory
+to replace the system than to maintain it. But itsexpected
+life time to that point is determined primarily in its conception, design and initial implementation stages. Hence management planning and control during the formative period of system life, based on lifetime projections and assessment, can be
+critical in achieving long life software and lifetime cost effectiveness [ 11 .
+
+LEHMAN: PROGRAMS, LIFE CYCLES, AND LAWS OF SOFTWARE EVOLUTION
+
+1067
+
+applied in some or all user locations. The permanent repair or objectives. The resulting pseudohierarchical structure of selfthe products, the processes, the
+change to the program can then be held over for a new release stabilizingsystemsincludes
+of the system. In other cases, a permanent change will be pre- environments and theorganizations involved. The interactions
+pared for immediate installation by all those running the sys- between and within the various constituents, and the overall
+tem.The
+particularstrategy
+adopted inanyinstance
+will pattern of behavior must be understood if a program product
+depend on the nature and severity of the fault, the size and and itsusage are to be effectively planned and maintained.
+The organizational and
+environmental
+feedback,
+links,
+difficulty of the change required, the number and nature of
+focuses, and transmits the evolutionary pressure to yield the
+program installations and user organizations, and so on. The
+aggregate strategy will have a profound impact on the rate of continuing change process. A similar situation holds, of course,
+for any human organized activity, any artificialsystem. But
+system complexity growth, on its life-cycle costs, and on its
+some significant differences are operative in the case of softlife expectancy.
+The faults that are fixed in the maintenanceprocess may be ware. In the f m t instance there is n o room in programming
+due to changes external to the system, incorrect or incomplete for imprecision, no malleability to accommodate uncertainty
+specification, design or
+implementation
+errors, hardware orerror. Programming is a mathematical discipline. In relachanges or to somecombination of these.Sinceeach
+user tion to a specific objective, a program is either right or wrong.
+exposes the system in different ways, all installations do not Once an instruction sequence has been fixed and unless and
+experience all faults, nordotheyautomaticallyapply
+all until it is manuallychanged, its behavior in execution on a
+given machine is determined solely by its inputs.
+manufacturer-supplied fvres or changes. On the other hand,
+Secondly,a software system is soft. Changes can be iminstallations having their own programming staff may very well
+develop and install localized changes or system modifications plemented using a pencil, paper, and/ora keyboard. Moreover,
+to suit their specific needs. These patches, insertions, or dele- once a change has been designed and implemented ona develtions may in turn cause new difficulties when
+further incre- opment system it can be applied mechanically to any number
+mental changes are received from the manufacturer, or at a of instances of the same system without further significant
+later date when a new release is received. The inevitable con- physical or intellectual effort using only computing resources.
+sequences of themaintenance processapplied
+to systems Thus the temptation is to implement changes in the existing
+installed for more than oneuser, is that the system drifts apart. system, change upon change upon change, rather than to colMultiple versions of system elements develop to encompass the lect changes into groups and implement them in a totally new
+variations andcombinations
+[ 561 . System configuration instance. As the number of superimposed changes increases,
+managementbecomesa
+major task. Supportenvironments
+the system and the metasystembecome more complex, stiffer,
+[331-[35] that automatically collect and maintain total activ- more resistant to change. The cost, the time required, and the
+ity records become an essential tool in programming process probability of an erroneous or unsatisfactory
+change all increase.
+management.
+Thirdly, the rate atwhich a program executes, the frequency
+of usage, usage interaction with the operating environment,
+economic
+and social dependence of external process on proF. Life-Cycle Planning and Management
+gram execution, all cause deficiencies to be exposed.The
+The preceding discussion, while presenting a simplified view
+resultant pressure for correction and improvement leads to a
+of the life cycle, will have made clear the difficulty associated
+system rate of change with a time scale measured in days and
+with cycle planning. In recent years this problem has received
+monthsratherthaninthe
+years and decades thatseparate
+much attention [ 571, [ 581 . A variety of techniques have been
+hardware generations.
+developed to improve estimation of cost, time, and other resources required for software development and maintenance
+[59]-[64]. These techniques are based on extrapolation of B. Dynamics and Laws o f Program Evolution
+past experience and tend t o produce results in the nature of
+The resultant evolutionof software appearsto be driven and
+self-fulfilling prophecies. In general, it has notyet proved controlled by human decision, managerial edict, and programpossible t o develop techniques that estimate projectrequiremer judgment. Yet as shown by extended studies [68]-[76],
+ments on the basis of objective measurement of such attrib- measures of itsevolution
+display patterns, regularity and
+utes as application complexity and size and the work required trendsthat
+suggest an underlyingdynamics
+that may be
+to create a satisfactory system.Techniques such as software modeledand used for planning, for process control, and for
+science 1651, [661 seek to do just this but to date
+lack subprocess improvement.
+stantiation (671 andinterpretation. Major research andadOnce observed the reasons for this unexpected regularity is
+vances arerequired if software engineering is to become as easily understood. Individualdecisions in the lifecycle of a
+manageable as are other engineering disciplines, though funda- software system generally appear localized in the system and
+mentally the peculiar nature of software systems [28] will in time. The
+considerations on which they are based appear
+always leave software engineering in a class of its own.
+independent. Managerial decisions are largely taken in relative
+isolation, concerned to achieve local control and optimization,
+Iv. LAWSOF PROGRAM EVOLUTION
+concentrated on some aspect of the process, some phase of
+A . Evolution
+systemevolution.
+Buttheir aggregation, moderatedbythe
+The analysis of Section I1 associated withthe life-cycle many feedbackrelationships, produces overall systems response
+description of Section III, has indicated that evolution is an which is regular and often normally distributed.
+In its early stages of development a system is more or less
+intrinsic, feedback driven, property of software. Themetaunder the control of those involved in its analysis, design, and
+system within which a program
+evolves contains many more
+feedback relationships than those identified above. Primitive implementation. As it ages, those working on or with the sysinstincts of survival and growth result in the evolutionof stabi- tem become increasingly constrained by earlier decisions, by
+lizing mechanisms in response to needs, events and changing existing code, by established practices and habits of users and
+
+PROCEEDINGS OF THE IEEE, VOL. 68, NO. 9 , SEPTEMBER 1980
+
+1068
+
+TABLE I
+LAWSOF P R f f i R f i EVOLUTION
+I. Continuing Change
+A program that is used and that as an implementation of its specification reflects some other reality, undergoes continual change or
+becomes progressively less useful. Thechange or decay process
+continues until it is judged more cost effective to replace the system with a recreated version.
+
+II. Increosing Complexity
+As an evolving program is continually changed, itscomplexity,
+reflecting deteriorating structure, increases unless work is done to
+maintain or reduce it.
+III. The Fundamentalk w of Rogrom Evolution
+Program evolution is .subject to a dynamics which makes the programming process, andhence measures of global project and system
+attributes, self-regulating with statistically determinable trends and
+invariances.
+Iv. Conservotion of Orgonizotionol Stobility (Invorirmt WorkRate)
+During the active life of a program the global activity rate in a programming project is statistidy invariant.
+
+V. Conservotion of Fomiliority (Perceived Complexity)
+During the active life of a program the release content (changes,
+additions, deletions) of the successive releases of an evolving program is statistically invariant.
+
+implementors alike. Local controlremainswithpeople.
+But organizations, human interactions in the process, reactions to
+process and system-internal links, dependencies, and interac- usage, the rigidity of programcode, all combine to yield
+as that observed and measured
+tions cause the global characteristics of system evolution to be statistically regular behavior such
+in the systems studied.
+determined by organization, processandsystemparameters.
+The fourth law, conservation of organizational stability, and
+Atthe global level themetasystemdynamics
+have largely
+the fifth, conservation of familiarity, represent instances of
+taken over.
+led to the third law.
+Since the original observation [63], studies of program evo- theobservationswhosegeneralization
+lution have continued, based on measurements obtained from The fourth reflects the steadiness of multiloop self-stabilizing
+a variety of systems. Typical examplesof the resultant models systems. It is believed to arise from organizational striving for
+have been reported [ 691 - [ 721, [ 741, [ 761 including also one stability. The managements of well-established organizations
+in
+detailed example of their application to release planning [ 771. avoid dramaticchangeandparticularlydiscontinuities
+It was repeated observation of phenomenologically similar growth rates. Moreover, the number of people and the investbehaviorandthecommoninterpretation
+of independent ments involved, the unions, the time delays in implementing
+phenomena, that led to a set of five laws, that have themselves decisions, all operatetogether to preventsuddenordrastic
+evolved as insight and understanding have increased. The laws, change. Wide fluctuations may in fact lead to instability and
+as currently formulated to include the
+new viewpoint emerging the breakup of an organization.
+The reader may fmd
+it difficult to accept the implication
+from the SPE classification, are given in Table I. Their early
+is independent of the amount
+developmentcan be followed in [91, [ 101, [721. We note that thework output of a project
+that the laws are abstractions of observed behavior based on of resources employed, though the same observation has also
+been recorded by others [ 811. The underlying truth
+is that
+statistical models. They have no meaninguntilasystem,a
+miniproject and the organizational metasystem are
+well established. activities of the type considered, though initiated with
+More detailed discussion of their nature and of their technical mal resources, rapidly attract more and more as commitment
+to the project, and therefore the consequences of success or
+andmanagerialimplications
+willbe
+found in [ 111,[77],
+failure, increase. Our observations as formalized in the fourth
+[781 and [771, [791,[801, respectively.
+The fmt law, continuing change, originally [ 3 ] , [ l o ] , [ 7 9 ] law imply that the resources that can be productively applied
+expressed the universally observed fact that large programs are becomes limited as a software project ages. The magnitude of
+never completed. They just continue to evolve. Following our the limit depends on many factors including attributes of the
+new insight, however, referenceto largeness is now replaced by total environment. But the pressure for success leads to investment to the point where it is exceeded. The project reaches
+the phrase . . . “that reflect some other reality. . .”
+The second law, increasing complexity, could be seen as an the stage of resource saturation and further changes have no
+instance of the second law of thermodynamics. It would seem visible effect on realoverall output.
+While the fourth laws p r i n ~from a pattern of organizational
+morereasonable to regard both as instancesofsomemore
+behavior, thefifthreflectsthe
+collective consequences of
+fundamentalnaturaltruth.
+But fromeitherviewpointits
+message is clear.
+the characteristics of the manyindividuals within the organizaThe third law, the fundamental law of program evolution, is tion. It is discussed at len@ in 111 . Suffice it to say here
+that the law arises from the nonlinear relationship between the
+in the nature of an existence rule. It abstracts the observed
+fact that the number of decisions driving the process of evolu- magnitude of a system change and the intellectual effort and
+tion, the many feedback paths, the checks and
+balances of time required to absorb that change.
+
+1069
+
+LEHMAN: PROGRAMS, LIFE CYCLES, AND LAWS OF SOFTWARE EVOLUTION
+
+TABLE I1
+SYSTEM
+X STATISTICS
+Release I9 Statistics
+Size
+
+4800 Modules
+1.3 Assembly M-statements
+410 Modules
+2650 Modules
+0.55
+275 Days
+
+growth
+Incremental
+changed0
+Modules
+Fraction of modules
+changed
+interval Release
+System Statistics
+Age
+Change rate
+Average incremental growth
+Maximum safe growth rate
+
+4.3 Years
+10.7 Modules/day
+200 Modules/release
+400 Modules/release
+
+Most Recent Releases
+
+Release
+
+16
+
+Incrementalgrowth(A Mod)
+Fraction changed
+Change rate
+Interval (Days)
+Oldmods,Changed/Mod
+
+15
+135
+0.33
+12.5
+96
+7.9
+
+171
+0.43
+0.12
+137
+8.6
+
+17
+
+18
+
+19
+
+183
+0.48
+9.6
+201
+10.0
+
+354
+0.50
+9.9
+221
+5.1
+
+410
+0.56
+9.6
+275
+5.4
+
+% x " s that are changed in any way in release i + 1 relative to release i are counted as one changed module, independently of the number of changes or of their magnitude.
+
+V. APPLIEDDYNAMICS
+A . Introduction
+The previous sections have emphasized the phenomenological
+basis for the laws of program evolution, indicating how they
+are rooted in phenomena underlying the activity of programming itself.
+The origin of the laws inindividual and societal behavior
+makes their impact on the construction and maintenance
+of
+software more thanjust
+descriptions of the evolutionary
+process. The laws represent principles in software engineering.
+They are, however, clearly not immutable, as for example, are
+the laws of physics or chemistry. Since they arise from the
+habits and practices of people and organizations, their modification or change requires one to go outside the discipline of
+computer science into the realms of sociology, economics and
+management. The laws therefore form an environment within
+which the effectiveness of programmingmethodologies and
+managementstrategiesand
+techniques can be evaluated, a
+backdrop against which better methodologies and techniques
+can be developed.
+Their implications, technical and managerial, have been previously discussed in the literature [3], [9], [ll], [79], [80].
+In the present paper, we restrict the discussion to outlining
+an example of the application of evolution dynamics models
+to release planning.
+
+B. A Case Study-System X
+1 ) The System and its Characteristics: System X is a general
+purposebatchoperating
+system runningon a range of machines. The eighteenth release (R18) of the system is operational in some tens of installations running a variety of work
+loads. The nineteenth release (R19)is about to be shipped.
+Table I1 and Fig. 6(a)-(g) present the system and release
+dataandmodels
+available forthe purposes of the present
+exercise. We cannot, however, provide here the details of statistical analysis and model validation [ 761, based on this data
+
+and that from other systems that gives us confidence in our
+conclusions and predictions.
+Examining the systemdynamicsasimplied
+by modelsderived from the data and as illustrated by the figures, Fig. 6(a)
+shows the continuing growthof the system (first law) albeit at
+a declining rate (demonstrably due to increasing difficulty of
+change, growing complexity-second law).
+Fig. 6(b) indicates that as a function of release sequence
+number (RSN) the system growth (measured in modules) has
+been linear but with a superimposed ripple (a strong indicator
+of feedback stabilization).
+Fig. 6(c) shows the net incremental growthper release (fifth
+law).
+For system architectures such as that of system X,the fraction of system modules that are changed during a release may
+be taken as a gross indicator of system complexity. Fig. 6(d)
+shows that system X complexity, as measured in this way,
+shows an increasing trend (second law).
+Fig. 6(e) is an example of the repeatedly observed constant
+average work rate (fourth law).
+Fig. 6(f) illustrateshow the average work rate achieved in
+individual releases, as measured by the rate of module change
+(changed modules per release interval day (m/d) oscillates, a
+period of high rate activity being followed by one or more in
+which the activity rate is much lower (third law).
+Finally, Fig. 6(g) plotsthe release interval against release
+sequence number. It has been argued that release interval depends purely on management decision that is itself based on
+market considerations and technicalaspects
+of the release
+content and environment. Data such as that of Fig. 6(g) indicates, however, that the feedback mechanisms that, amongst
+other process attributes, also control the release interval, while
+including human decision taking processes, are apparently not
+dominatedbythem.
+As aconsequence, the release interval
+pattern is sufficiently regular to be modelable, and is statistically predictable once enough data pointshave been established.
+2) TheProblem: Already prior to the completion (and re-
+
+n
+
+3
+
+E
+
+i
+
+m
+
+k
+
+B
+
+P
+R
+
+m
+v)
+
+0
+
+N
+
+VI
+
+0
+
+m
+
+0
+
+0
+
+m
+I
+
+I
+
+bl
+
+Cd
+91
+
+Q,
+
+I
+
+I
+
+I
+
+G
+
+F
+0
+
+MODULESCHANGEDPERDAY
+
+--
+
+'\,
+
+I
+
+0
+
+N
+
+I
+
+VI
+
+N
+
+!VI
+
+m
+
+CUMULATIVE NUMBER OF
+MODULES
+CHANGED
+
+INCREASE I N NUMBER OF MODULES
+
+!-
+
+m
+
+\
+\
+
+\o
+
+0
+
+N
+
+.L -
+
+(thousands)
+
+''h
+
+B
+
+W
+
+I
+
+N
+
+I
+
+0
+0
+
+F
+
+0
+0
+
+0
+0
+0
+
+N
+
+0
+
+0
+
+0
+0
+0
+0
+0
+0
+
+0
+
+I
+
+0
+
+c
+I
+
+0
+
+\'
+
+4
+
+\
+
+o f modules)
+
+d\
+
+&
+
+b\
+
+'0
+
+t
+
+c
+
+I
+
+,
+
+I
+
+0
+
+b
+
+O f modules)
+
+W
+
+SYSTEM SIZE(thousands
+
+IC
+
+r
+
+SYSTEM SIZE(thousands
+
+VI
+
+1
+
+VI
+
+I
+
+m
+
+m
+I
+
+1071
+
+LEHMAN: PROGRAMS, LIFE CYCLES, AND LAWS OF SOFTWARE EVOLUTION
+
+TABLE I11
+RELEASE
+20 PLANNED
+CONTENT
+
+Functional Enhancement
+
+OldMods
+
+Mods
+
+(OMC)
+
+(NM + OMC)
+
+OMC/NM
+(IR)
+
+2
+
+380
+
+382
+
+-
+
+0
+
+600
+
+600
+
+-
+
+750
+
+1783
+
+25 33
+
+2.4
+
+170
+57
+17
+
+1500
+462
+124
+
+1670
+5 19
+141
+
+8.8
+8.1
+7.3
+
+3
+8
+12
+2
+
+29
+74
+80
+157
+
+32
+82
+92
+159
+
+9.7
+9.3
+6.7
+
+ChgdChgd
+ModsNew
+(NM)
+
+Description
+No.
+~
+
+1.
+2.
+3.
+
+4.
+
+5.
+6.
+7.
+8.
+9.
+10.
+
+Identifed faults
+@RE. u s . 19)
+Expected faults
+(RLS. 19)
+Interactive terminal
+support (ITS)
+Dynamic storage
+management (DSM)
+Remote job entry (RJE)
+New disk support (NDS)
+Batch scheduler
+improvements (BSI)
+File access system (FAS)
+Paper tape support (PTS)
+Performance improvements
+6210
+
+5189
+
+-
+
+1021
+
+Detail of Interactive Terminal Support (ITS)
+
+Mods Old Mods
+Description
+New No.
+
+3C
+
+Terminal
+support
+Scheduling
+Telecom
+support
+
+3D
+
+Misc. 226
+
+3A
+3B
+1.9
+
+Chgd
+
+2.3 444
+2.3 127
+4.0
+58
+121
+
+1032
+293
+232
+
+750
+
+1783
+
+lease) of R19,work has begun on a further version R20,whose
+main component is to be the addition of interactive access to
+complement current batch facilities. This new facility“ITS”
+togetherwithother
+changes andadditions
+summarized in
+Table 111, are to be made available eighteen months after first
+customer installation of R19.
+For each major planned functional change, the table lists the
+number of new modules to be added (NM), the number of R19
+modules that are to be changed in the course of creating R20
+(OMC), the total number of modules changed (NM + OMC),
+and the ratio of OMC to NM (the interconnectivity ratio (IR),
+an indicator of complexity). No modules are planned for removal in the creation of R20 hence the planned net system
+growth is 1021 modules.
+Management has also accepted that a further release R21,
+will follow twelve months after R20, to include any leftovers
+from R20. It may also include additional changes for which a
+demand develops over the next two years. The current exercise is to endorse the overall plan, or if it can be shown to be
+defective, to prepare an alternative recommendation.
+3) Process Dynamics:
+a ) Workrate: From Fig. 6(e) the work rate has averaged
+10.4 m/dl over the lifetime of the system. Fig. 6(f) indicates
+that the maximum rate achieved so far has been 27 m/d. Evidence that cannot be detailed here reveals, however, that that
+data point is misleading and that a peak rate of about 20 m/d
+is a better indicator of the maximum achievable with current
+methodologyand tools. Moreover, there is strong circumModules per day =
+
+number of modules changed in release
+release interval in days
+
+OMC/NM
+
+stantial evidence that releases achieved withsuch high work
+rates were extremely troublesome and had to be followed by
+considerable clean-up inafollow-uprelease,
+as also implied
+by Fig. 6(c). Thus, if R20 is planned so as to require a work
+rate in the region of 20 m/d, it would be wise to limit R21 to
+at most 1 0 m/d, the system average. If on the other hand, the
+process is further stabilized by working on R20 at near average
+rate, one could then, with a high degree of confidence, approach R21 with a higher work rate plan.
+b ) Incremental growth: The maintained average incremental growth for system X has been around 200 modules/release.
+Once again circumstantial evidence indicates that releases (for
+which, in this case, the growth rate (incremental growth per
+release) has exceeded twice the average) have slipped delivery
+dates, a poor quality record and a subsequent need for drastic
+corrective activity. Fig. 6(c) andTable I1 indicate that R19
+willlie
+in this region and that R18 had high incremental
+growth. That is, R19, once released, is likely to prove a poor
+quality base. The first evidence emerges that maybe R20
+should be a clean-up release.
+c) Growth rate in modules for release: The same indication follows from Figs. 6(a) and (b) where the ripple periods
+are seen t o be three, four, and five intervals, respectively over
+the first three cycles. In the fourth cycle, six intervals of increasing growth rate have passed with the R18-Rl9 growth
+the largest ever. Without even considering the planned growth
+to R20 (Point X),it seems apparent that a clean-up release is
+due.
+4 ) R20 Plan Analysis:
+a ) Initialanalysis: The first observation onthe plan as
+summarizedbyTable
+111 stemsfromthe column (6) of IR
+
+VOL. 68, NO. 9, SEPTEMBER 1980
+
+1072
+
+PROCEEDINGS
+IEEE,
+OF THE
+
+factors. It has not been calculated for items 1 , 2 , and 10 since
+these represent activities that only rarely require the provision
+of entirely new (nonreplacement) modules. For items 4-9 the
+ratio lies in the range 8.2 f 1.5, a remarkably small range for
+widely varying functional changes. Yet the predicted ratio for
+ITS is only 2.4. One must ask whether it is reasonable to suppose that the code implementing an interactive facility is far
+more loosely coupled to the remaining system than, for example, a specialist facility such as paper tape support? Is it not
+far morelikely
+that ITShasbeeninadequatelydesigned;
+viewed perhaps as an independent facility that requires only
+loose coupling into the existing system? Thus, when it is integrated with the remainder of the system to form R20, will it
+not require many more changes to obtain correctand adequate
+performance?Fromthe
+evidencebefore us, thequestion is
+undecidable.Experience
+based intuition, however, suggests
+that it is rather likely that the number of changes required
+elsewhere in the system has been underestimated. Thus a highpriority design reappraisal is appropriate. If the suspicion of
+incomplete planning proves to be correct, it would suggest
+delaying R20, so that the planning and design processes may
+be completed. An alternative strategy of delaying at least ITS
+to R21 should also be evaluated.
+b ) Number of modules to be changed: The situation may
+of course not be quite as bad as directcomparison of the
+present estimate of the ITS interconnectionratio (IR) with
+that of theotheritems,
+suggests. Inviewof
+the 750 new
+modules involved, its IR factor could not exceed 6.4 even if
+all 4800 modules of R19 were effected by the ITS addition.
+Such a 100 percent change is, in fact, very unlikely, but the
+IR factor of 2.4 remains very suspect.
+Moreover, even with the low ratio for ITS the sum of the
+individual OMC estimatesfortheentire
+plan exceeds the
+number of modules in R19. This suggests a new situation
+Multiple changes applied to thesame module must have become
+a significant occurrence. Even ignoring the fact that even independent changes applied in the same release to the same
+module generally demand significantly more
+effort
+than
+similar changes applied to independentmodules,thetotal
+effort and time required must clearly increase with both the
+number of changes implemented and the number of modules
+changed. The presently defined measure “modules changed”
+is inadequate.The new situation demandsconsideration of
+more sensitive measures such as “number of module changes”
+and “average number of changes per module.”
+‘These cannot be derived from the available data. We may,
+however,proceedbyconsideringamodel
+based on the data
+of Fig. 6(d). Extrapolating the fraction changed trend, reveals
+that R20 may be expected to require a change of, say, 64 perthisestimate
+cent,or 3725 changed modules.2Comparing
+with the total of 621 0 obtained if the estimates for individual
+items are summed,itappearsthatthe
+average number of
+changes to be applied to R19 modules according to the present
+plan is at least of order two. We have already observed that
+multiple changes cause additional complications. Hence any
+prognosis made under the implied assumption of single changes
+(or of a somewhat lower interconnection ratio) will lead to an
+optimistic assessment.
+
+c) Rate of work: The current plan calls for R20 with its
+3725 module changes to be available in 18 months, that is 548
+days.Thisimpliesa
+change rate of less than 6.8 m/d. This
+relatively low rate, following a period of average rate activity
+suggests that work rate pressures are unlikely to prove a source
+of trouble, even with multiple changes to many of the modules.
+d ) Growth rate: In Figs. 6(a) and (b), we have indicated
+the position of R20 as per plan, with an X. Both modules indicate that the planned growth represents amajordeviation
+from the previous history. Thus confirmation that the plan is
+realistic requires a demonstration that thespecial nature of the
+release, or changes in methodology, makes it reasonable t o expect a significant change in the systemdynamics. In the absence of such a demonstration, the suspicion that all is not
+well is strengthened.
+e ) Incremental growth: Thecurrent
+R20 plan calls for
+system growth of over 1000 modules.Thisfigurewhich
+is
+five times the average and two and a half times the recommended maximum, must be interpreted as a danger signal.
+We have already suggested that the low interconnection ratio
+for ITS suggests that the planners saw the new component as a
+stand alone mechanism that interfaces with the remainder of
+the system via a narrow and restricted interface. If this view
+proves justified, the large incremental growth need not be disturbing.But
+it seemsreasonable to questionit. With the
+architecture and structure that
+system X is known to have,
+such a relatively narrow interface is unlikely to be able to provide thecommunicationandcontrolbandwidththat
+safe,
+effective, and high capacityoperation must demand. This
+is apparentfrom comparisons with,say,the
+paper tapeor
+disk support changes or the RJE addition. The onus must be
+put onto the ITS designers to demonstrate the completeness
+of their analysis, design, and implementation.
+Without such a demonstration one must conclude that the
+present plan is not technically viable. Marketing orother
+considerations may, of course, make it desirable to stay with
+the presentplan even if this impliesslipped delivery dates,
+poor and unreliable performance of the new release, limited
+facilities, and so on. But if such considerations force adoption
+of the plan, the implications
+mustbe noted, andcorrective
+action planned. Ways and means will have to becreated to
+enable users to cope with the resultantsystem and usage problems and the inevitable need for a major clean-up release. It
+might, for example, bewise to set up specialized customer support teams to assist in the installation, local adaptation and
+tuning of the system.
+f) Release interval: Fig. 6(g) indicates two possible models
+for the prediction of the most likely (desirable.!) release interval for R20 and R21. Linear extrapolation suggests a release
+period of under one year for each of the two releases. If this
+is valid, the apparent desire for a release after the 18 months
+is of itself unlikely t o prove a source of problems. On the
+basis of evidence not reproduced here, however, the exponential extrapolation is likely to be more realistic and this yields
+an R20 release intervalforecast of about 15 months and an
+R21 interval of some 3 years.
+g ) Recommendation-Summary: On the basis of the available data we have concluded that
+
+’HistoricaZNote: In the system on which this example is based the
+release including the interactive facilityultimately involved some58
+percent of modules changed. Moreover the first release was significantly
+delayed, and was of limited quality and performance. More than 7 0 percent of its modules had subsequently t o be changed again t o attain an
+acceptable product. Our estimate is clearly good.
+
+1) to proceed with the plan as it stands is courting delivery
+and quality problems forR20;
+2) a clean-up release appears due in any case;
+3) failure to provide it will leave ‘a weak base for the next
+
+1073
+
+LEHMAN: PROGRAMS, LIFE CYCLES, AND LAWS OF SOFTWARE EVOLUTION
+TABLE V
+MODIFIED
+RELEASE
+20 STATISTICS
+(FROMTABLE
+III)
+IN ORDER
+OF PRIORITY
+
+TABLE IV
+MODIFIEDRELEASE
+20 CONTENT
+
+Items
+ClaSS
+Fault Repair
+Hardware Support
+Performance
+Improvement
+
+Reason
+Clean-up
+of
+base
+2
+Revenue
+Producing
+Install-but do not
+announce. Will be
+12
+available to counter3
+act ITS performance
+deterioration in 2R21’
+
+1, 2.
+6, 9.
+7, 10.
+
+8
+
+ITS Related
+Components
+To
+receive
+early
+user
+
+3c, 5 , 8.
+
+exposure
+
+ItemMods. New
+
+Running
+Total
+
+1
+2
+6
+9
+7
+10
+8
+5
+3c
+
+382 2
+982 2
+19
+1123
+31
+34
+1247
+1406
+36
+44
+101
+159
+2529
+
+0
+17
+
+57
+58
+
+Running
+
+Total
+Changes
+382
+600
+141
+92
+32
+159
+82
+519
+522
+
+1215
+1488
+2007
+
+quality of R21’ has developed. The detailed analysis is left as
+an exercise to the reader.
+The inherent problem in the design of the ITS release is the
+fact that the component has a size almost twice the maximum
+recommended incremental growth. Moreover, with the possible exception of itstelecommunicationssupport (Table 111,
+item3c),none of the component subsystems would receive
+usage exposure in the absence of the others. Thus a clean ITS
+release cannot be achieved except by releasing the component
+in one fell swoop.Similarly,
+dynamic storagemanagement
+(DSM) is exposed to user testing only when the ITSfacility
+is operational. We may, however, investigate whether the teleThe following recommendations follow:
+communication facility (3c) will be usable in conjunction with
+the
+RJE facility, item 5 . If it is, there will be some advantage
+8) initiate immediately an intensive and detailed reexamito
+be
+gained by releasing 3c and 5 before the remainder of ITS
+nation of the ITS design and its interaction with the
+and
+DSM.
+remainder of System X ;
+Strictlyspeaking, Fig. 6(c) suggests that R20’ should be a
+9) from the integration records of R19 and by comparison
+very
+low content release dedicated to system clean-up and rewith the records of earlier releases, make quality and
+structuring.
+But the six preceding releases were achieved with
+error rate models and obtain a prognosis for R19 and
+average
+change
+ratesand,fromthatpoint
+of view, did not
+an improved estimate for R20 correction activity; integration and error rate models have not been considered stress the process. Thus, if R20’is also an average rate release,
+in the present paper but have been extensively studied it should not cause problems, and it would seem alow risk
+strategy to include R20’ in all those items as in Table IV, that
+by the present author and by others[85];
+10) assess the business consequences of, on the one hand, a will simplify the subsequent creation and integration of the
+slippage of one or twoyears in the release of ITS and on excessively large ITS release.
+The list, in priority order, of the new proposal shows a maxithe other, a poor quality, poor performancerelease with
+mum
+incrementalgrowth (159) well under average. It is a
+a slippage of, say,some months (due toacceptable work
+matter of some judgment and experience whether it would be
+rate but excessive growth);
+1 1 ) in the absence of positive indication of a potential for wiser to delay item 3c with 58 new modules and item 5 with
+major deviations from previous dynamic characteristics 5 7 to R21’ thereby achieving the very low content release
+or the existence of a genuine business need that is more mentioned above. With the information before the reader it
+pressing thanthe losses that could arise from a poor is not possible to resolve this question since additional information, at the very least answers to the questions raised in
+quality product, abandon thepresent plan;
+Section
+V-B4g, would berequired.
+However, the desire to
+12) instead redesign release 20 to yield R20‘;a clean, wellminimize
+R21’
+problems
+suggests
+the
+adoption of the comstructured, base on which to build an ITS release, R21‘;
+13) tentatively release intervals of 9 months and 15 months plete plan as in Tables IV and V.
+In assessing achievable release intervals for these releases, we
+are proposed for R20’and R21’,respectively;
+base
+ourestimatesonlyonthe
+module change count and
+14) R21’ shouldbearestricted
+release for installationin
+change
+rate.
+The
+constraints
+on
+the
+presentexample do not
+selected sites;
+based
+15) it would befollowed after 1 year bya general release permit the full analysis whichwouldconsidermodels
+on Fig. 6(g),andtakeintoaccountadditionaldata.
+At 10
+R22’.
+m/d change rate, implementation of the complete plan appears
+to require 253 days, say 9 months, whereas exclusion of 3c
+h ) Recommendations-Details: Assuming that the further
+investigation as per paragraphs 8 to 10 of Section V-B4g rein- and 5 would reduce the predicted time required to some seven
+forces the conclusions reached, three releases would have to be months. This recommendation cannot be taken further withdefined. We outline hereproposals for R20‘ and R21 ’. The out more information of both atechnical and amarketing
+of other interval models. But
+third, R22‘ will be a clean-up but its content cannot be identi- nature,andanexamination
+fied indetailuntil
+afeel fortheperformanceand
+general the need for a clean base for R21’ suggests adoption of the
+release; at the very least the number of expected faults
+(Table 111, item 2) is likely to prove an underestimate;
+4) the absolute size of the ITS component and the related
+incremental system growth would representa major
+challenge even on a clean base;
+5 ) there are indications that the ITS aspect of the release
+design is incomplete;
+6) change rateneedsfor
+R20 are not likely to prove a
+source of problems;
+7) nor is the demand for attainment of a next release in
+eighteen months.
+
+1074
+
+PROCEEDINGS OF THE IEEE, VOL. 68, NO. 9, SEPTEMBER 1980
+
+maximum acceptable release interval. R21’ will now include,
+at the very least, ITS (except 3c) and DSM. This involves at
+least 920 new modules, an excessive growth that cannot usefully be further splitbetween two or more releases. Assuming a change fraction of, say, 70 percent (Fig. 6(d)), of a system that is expected to contain5911 modules, we estimate
+a total of 4200 changed modules in the release, many with
+multiple changes. Since there will now have been seven near
+average change-rate releases, it seems possible to plan for a
+change rate of 15-20 m/d, yielding a potential release interval
+of under 9 months. That is, it would appear that, by adopting
+the new strategy, all of the original changes andadditions
+couldbe achieved inaboutthe same time,butmuch
+more
+reliably. More complete analysis, however, based on additional data, other models and taking into account the special
+nature of the releases might well lead to a recommendation to
+increase the combined release interval to, say, twoyears.
+A further qualification must also be added. As proposed in
+the revised plan, R21‘ will still be a release with excessive incremental growth and is therefore likely to yield significant
+problems. The additional fact that the
+evidence indicates incomplete planning,reinforces
+concernandexpectation
+of
+trouble ahead. It is therefore also recommended that R21’ be
+announced as an experimental release for exposureto usage by
+selected users inavariety of environments. It would be followed afteran interval of perhapsone year by an R22’, a
+cleaned up system, suitable for further evolution.
+i ) Final comments: The preceding section has presented a
+critique of a plan, and outlined an alternative which is believed
+technically more sound. The case considered is based on a real
+situation, though in the absence of complete information details have had to be invented. But the details are not important
+since the objectivehasbeen to demonstrate a methodology.
+Software planning can and shouldbe based on processand
+system measures andmodels, obtainedand maintainedasa
+continuing process activity. Plans must be related to dynamic
+characteristics of the process and system, and to the statistics
+of change. By rooting the planning process in facts, figures
+and models, alternatives can be quantitativelycompared,
+decisions can be related to reality and risks can be evaluated.
+Software planning must no longer be based solely on apparent
+business needs andmarketconsiderations;on
+management’s
+local perspective and intuition.
+
+source,
+and
+reliability models
+[83]-[85].
+Approaches to
+process modeling based on continuous models [73], [75] have
+also not been included,nor has the vital topic of software
+complexity 1861-[891.
+Recognizing the intrinsic nature of programchange, the
+laws that appear to govern the dynamics of the evolution process were introduced. Among theirotherimplications,the
+laws indicate that project plansmust be related to dynamic
+characteristics of the process and system, and to the statistics
+of change. By rooting the planning process in facts, figures,
+and models,
+alternatives
+can bequantitativelycompared,
+decisions can be related to reality and risks can be evaluated.
+Software planning must no longer be based solely on apparent business needs and marketconsiderations;on
+management’s localperspective and intuition. To illustrate this,
+we
+have included a brief example of the application of evolution
+dynamics models to release planning.
+Manyof
+theconcepts and techniques presentedin
+this
+paper couldfind wide applicationsoutsidethe specific area
+of software systems,in other industries, and to social and
+economic systems. Unfortunately
+that
+theme
+cannot
+be
+pursued here.
+
+V I . CONCLUSION
+
+This paper rationalizes the widely held view, first expressed
+in Garmisch [82], that there is an urgent need for a discipline
+of software engineering. This
+should
+facilitate
+the costeffectiveplanning, design, construction,andmaintenance of
+effective programs that provide, and then continue toprovide,
+valid solutions tostated
+(possibly changing) problems, or
+satisfactory implementations of (possibly changing) computer
+applications.
+Following a brief discussion of the nature of computer usage
+and of the programs, the paper introduced the new SPE classificationthat addresses the essentialevolutionary natureof
+various types of programs and establishes the existence of a
+determining specification as the criterion for nonevolution.
+In the subsequent discussion of the concepts, significance
+and phases of the program life cycle, no details of lifecycle
+planningandmanagementmodels,
+as such, have been included. In particular, we have not here discussed cost, re-
+
+ACKNOWLEDGMENT
+First and foremost, thanksmust be extended to L. A. Belady,
+a close collaborator for almost ten years. Many others, particularly colleagues and associates at ALMSA, IBM, Imperial College, and WG 2.3 have contributed through their comments,
+questions, critique, and original thoughts. All of them deserve
+and receive the author’s grateful acknowledgments and thanks
+for their individualandcollective contributions. The author
+would like to single out Prof. W. M. Turski for the major contribution he made on his recent visit to London. Also, sincere
+thanks to Dr. G. Benyon-Tinker, Dr. P. G. Hamson, and Dr. C.
+Jones for their detailed and constructive criticism of an early
+draft of this paper and R. Bailey for his artistic support. Finally,
+the author would like to acknowledge the constant support of
+his wife, without which neither the work itself nor this paper
+would have been possible.
+
+REFERENCES
+J. Goldberg, Ed., in Roc. Symp. High Cost of software (Naval
+Post-grad. School,Monterey, CA). Menlo Park, CA: SRI, 1973,
+138 pp.
+M. M. Lehman, “The environment o f design methodology,” Keynote Address, in Roc. Symp. Formal Design Methodology, T. A.
+Cox,Ed. (Cambridge, England), Apr. 1979. Harlow, England:
+STL Ltd., 1980, pp. 18-38.
+-, “The software engineering environment,” Infotech State o f
+the Art Rep., ‘‘Structured software development,” P. J. L. Wallis,
+Ed., VOI. 2, pp. 147-163, 1979.
+W. A. Wulf, “Languages andstructured programs,” in Current
+Trends in Programming Methodology, R. T. Yeh,Ed.
+Englewood Cliffs, NJ: Prentice-Hall, 1977, pp. 33-60.
+L. A. Belady, Ed., Roc. IEEE Special Issue on Softwore Engineering, vol. 68, Sept. 1980.
+B.W. Boehm “Software engineering,” IEEE Trans. Comput., vol.
+C-25, pp. 1226-1241, Dec. 1976.
+W. M. Turski, Computer ProgrammingMethodology. London,
+England: Heyden, 1 9 7 8 , 2 0 8 pp.
+B. W. Boehm,“Software engineering-& it is,” in Roc. 4th
+Int. Conf. S o w e Engineehg (Munich, Germany), pp. 11-21,
+Sept. 1979. (IEEE Cat. no. 79CH1479-SC.)
+L. A. Belady and M. M. Lehman, “Characteristics of large systems,” in Research Directionsin Software Technology,P. Wegner,
+Ed. Cambridge, MA: M.I.T. Rem, 1979, part I, cn.3, pp. 106142 (sponsored by the Tri-Services Committee o f OoD); and in
+Proc. Con5 Research Directions in Software Technology (Brown
+University, Rovidence, RI), Oct. 10-12, 1977.
+M.M. Lehman, “Programs, cities, students-Limits t o growth?”
+Inaugural Lecture, May 14, 1974, ICSTInauguml Lecture Series,
+
+LEHMAN: PROGRAMS, LIFE CYCLES, AND
+
+LAWS OF SOFTWARE EVOLUTION
+
+vol. 9, pp. 211-229, 1970-1974; and
+in ProgramrningMethodology, D. Gries, Ed. New York: Springer-Verlag, 1979, pp. 4269.
+[ 11 ] -,
+“On understanding laws, evolution and conservation in the
+largeprogramlife-cycle,”
+J. Syst.Software, vol. 1,no.3,pp.
+213-232, 1980.
+[ 121 W.M.
+Turski,“Report
+on anSRC-sponsored visit t o Imperial
+College,” Dep. Computing, Imperial College of Science and Technoiogy, Univ. of London, London, England, Oct. 1979, 2 pp.
+[ 131 F. L. Bauer, H. Partsch, P. Pebber, and H. Wessner, “Notes o n t h e
+project-CIP: An outline of a transformation system,” TUM-INFO7729, Tech. Univ. Munich, 67 pp, 1977.
+[ 141J.Darlington,“Programmingtransformation:
+An introduction
+and survey,” Comput. Bull., ser. 2, no. 22, pp. 22-24,Dec. 1979.
+[ 151H. A. Simon, TheSciences oftheArtificial.
+Cambridge, MA:
+M.I.T. Press, 1969, 123 pp.
+[ 161 R. A. Demillo, R. J. Lipton, and A. J.
+Perlis, “Social processes
+Commun. Ass. Comput.
+and proofs of theorems and programs,”
+Mach., vol. 22,no.
+5 , pp.271-280,
+May 1979;andno.11,
+pp. 621-630, Nov. 1979.
+[ 171 C. A. R. Hoare, “Review of a paper by Demillo, Lipton and Perlis:
+ACM
+‘Social processes and proofs of theorems and programs,”’
+Comput. Rev., vol. 22, no. 8, rev. no. 34897, p. 324, Aug. 1979.
+[ 181 E. W. Dijkstra, “A constructive approach to the problem of program correctness,” Nordisk TiMftf o r Informations. Bahandling,
+Sweden, vol. 8, pp. 174- 186, 1969.
+[ 191 C. A. R. Hoare, “An axiomatic basis for computer programming,”
+Commun.Ass.Comput.Mach.,
+vol. 12,no.10,pp.576-583,
+Oct. 1969.
+[ 2 0 ] D.L. Parnas, “On t h e criteria t o b e used in decomposing systems
+vol. 15, no. 12,
+intomodules,” Commun. Ass. Comput. Mach.,
+pp. 1053-1058, Dec. 1972.
+[ 2 1 ] N. Wuth,
+“Program
+development
+by
+stepwise
+refinement,”
+Commun.Ass.Comput.Mach.,
+vol. 14, no. 4, Apr.1971,pp.
+221-227.
+1221E. W. Dijkstra,“Notesonstructuredprogramming,”in
+StructuredProgramming, 0.J.Dahl,E.
+W. Dijkstra,and C. A. R.
+Hoare, Eds. New York: Academic Press, 1972, pp. 1-81.
+[ 2 3 ] M. A. Jackson, Principles o f Program Design. London, England:
+Academic Press, 1975, 299 pp.
+[ 2 4 ] N. Wirth,“Themodule:Asystemstructuringfacilityinhighlevel
+programming
+languages,”
+in
+Proc.Symp.Programming
+Lunguages and ProgrammingMethods
+(Sydney,Austral.),
+J.
+Tobias, Ed. Lucas Hts., New South
+Wales: AAEC, 1979.
+[ 25 ] B. Liskov and S. Zilles, “An introduction to formal specification
+of data abstraction,” in Current Trends in Programming Methodology, vol. 1, Software Specification and P e s i g n , R. T. Yeh, Ed.
+Englewood Cliffs, NJ: Prentice-Hall, 1977, pp. 1-32.
+1261 C. Jones, Software Development-A Rigorous Approach,
+Englewood Cliffs, NJ: Prentice-Hall, 1980, 400 pp.
+[ 2 7 ] M. Shaw, “The impact
+of abstraction concerns on modern programming languages,” this issue, pp.1119-1 130.
+[ 2 8 ] M. M. Lehman,“Thefunnel-Afunctionalchannel,”Imperial
+College, Dep. Computing, Univ. of London, Res. Rep. 77/29, July
+1977, 14 pp.;andIBM Tech. Disclosure Bull., 1976.
+1291 0. J. Dahl, E. W. Dijkstra, and C. A. R. Hoare, Structured Programming. New York: Academic Press, 1972,220 pp.
+large,
+[ 3 0 ] R. C. Linger,and H. D. Mills, “Onthedevelopmentof
+reliable programs,” in Current Trends in Programming Methodology, vol. 1 , SofrwDre Specification and D e s i g n , R. T. Yeh, Ed.
+Englewood Cliffs, NJ: Rentice-Hall, 1977, pp. 120-139.
+[ 3 1 ] M. M. Lehman,“OS-VS2-MVSlongrangeprognosis,”Private
+communication, MML-104, 1 3 pp. Aor. 15, 1975.
+[ 3 2 ] T. A. Dolottaand J. R. Mashey, “An introductiontotheprogrammer’s workbench,” in Proc.2nd Int. Conf. Software Engineering (SanFrancisco,CA)Oct.1976.(IEEECat.no.76CH1125-4C, Oct. 1976,PP. 164-168.)
+[ 3 3 ] A. F. Hutchings, R. W. McGuffin, A. E. Elliston,
+B. R. Trauter,
+and P. N. Westmacott,“CADES-SoftwareengineeringinPractice,” Proc. 4th Int. Conf. Software Engheering
+(Munich,Germany), Sept. 1979. (IEEE Cat. no. 79CH-1479-5C, Sept. 1979,
+PP. 136-152.)
+[ 341 J. N. Buxton,“Requirements
+for ADAprogrammingsupport
+environment-STONEMAN,” U.S. Dep. of Defense. Washinbon.
+,
+D C , 4 4 pp., Feb. 1980.
+351 T. E. Bell, D.C. Bixler, and M. E. Dyer, “An extendable approach
+tocomputer-aidedsoftwarerequirementsengineering,”
+IEEE
+Trans. Software Eng., vol. SE-3. pp. 49-59, Jan. 1977.
+3 6 ) M.W. Alford, “Software requirements engineering methodology
+(SREM) at the age of two,” in Proc. COMPSAC 78, pp. 332-339,
+Nov. 1978. (IEEE Cat. no. 7XCH1338-3C.)
+371 K. Heninger,“Specifyingrequirements
+tor complexsystems:
+New techniques and their application,” in R o c . Specification of
+Reliable SofnVare Conf., pp.1-14, Mar. 1979.(IEEECat.no.
+74CH1401-9C.)
+[ 38) R. T. Yeh, a n d P. Zave, “Specifying software requirements,” this
+
+1075
+
+issue, pp. 1077-1085.
+[ 3 9 ] W. P. Stevens, G. J. Myers,and L. L. Constantine,“Structured
+design,” IBM Syst. J . , vol. 13, no. 2, pp. 115-1 39, 1974.
+[ 4 0 ] G. J. Myers, Composite/StructuredDesign.
+NewYork:Van
+Nostrand Reinhold, 1978, 134 pp.
+[ 4 1 ] D. T. Ross, and K. E. Schoman, “Structuring analysis for requirements definition,” IEEE Trans. Software Eng., vol. SE-3, pp. 615, Jan. 1977.
+[ 4 2 ] -,
+“Structuredanalysis(SA):Alanguageforcommunicating
+ideas,” IEEE Trans. SoftwareEng., vol. SE-3, pp. 16-33, Jan.
+1977.
+(431 T. Demarco, Structured Analysis and System Specification. New
+York: Yourdon Press, 1978, 352 pp.
+I441 B.W. Liskov and V. Berzins, “An appraisal of program specifications,” in Research Directionsin Software Technology,P. Wegner,
+Ed. Cambridge, MA:M.I.T. Press, 1979, Part 2.1, ch. 7, pp. 106142 (sponsored by the Tri-Services Committee of DoD); and in
+Proc. Conf. Research Directions in Software Technology (Brown
+University, Providence. RI). ao. 276-301. Oct. 10-12, 1977.
+I’451 J. N. Buxton, and E. Randeli, Eds., “Software engineering techniques,’’ Rep. Conf. sponsored by the NATO Science Committee
+(Rome, Italy), Oct. 1969. (Brussels, 164 pp, 1970.)
+461 P. VanLeer,“Top-downdevelopmentusingaprogram
+design
+language,”ZBMSyst. J.,vol. 15,110. 2,pp. 155-170, 1976.
+471 Teichroew and E. A. Hershey 111, “PSL/PSA: A computer-aided
+technique for structured documentation and analysis of information processing systems,” IEEE Trans. Software Eng., vol. SE-3,
+pp. 41-48, Jan. 1977.
+481R. P. Yeh,“Currenttrendsinprogrammingmethodology,”
+vol.
+1 , SoftwareSpecificationandDesign.
+EnglewoodCliffs,NJ:
+Prentice-Hall. 1977. 275 DD.
+1491 T. A. Cox, Ed., Proc. Symp. Formal Design Methodology (Cambridge,
+England),
+1977.
+Harlow,
+England:
+STL
+Ltd.,
+1980,
+350 pp.
+[SO]F. W. Zurcherand B. Randell,“Iterativemulti-levelmodellingAmethodologyforcomputersystem
+design,”in
+R o c . IFIP
+C o n e . 1968 (Edinburgh, Scotland), pp. D138-142, Aug. 1968.
+[ S l ] L.Peters,“Softwaredesignengineering,”thisissue,pp.10851093.
+[ 5 2 ] G.H.Swaum,
+Top-DownStructured Design Techniques. New
+York: Petrocelli Books, 1978, 140 pp.
+[ 531 E. Miller and W. E. Howden, Eds., “Tutoria1:Software testing and
+IEEE Comput.SOC., 4 2 3 pp., 1978.
+validation
+technique,”
+(IEEE Cat. no. EHO-138-8.)
+[ 5 4 ] J. B. Goodenoughand L. M. Clement,“Softwarequalityassurance testing and validation,” this issue, pp. 1093-1098.
+[ 551 J. B. Goodenough and S. L. Gerhart, “Toward a theory of test
+data selection,” IEEE Trans. Software Eng., vol. SE-1, pp. 156173, June 1975.
+1561 L. A. Belady and P. M. Merlin, “Evolving parts and relations-A
+model of system families,” IBM Res. Rep. RC6677, 14 pp, Aug.
+1977.
+[ 5 7 ] M. M. LehmanandL.H.Putnam,Eds.,“Softwarephenomenology, working papers of the (first) software life cycle managementworkshop
+(Airlie,
+VA),
+Aug. 1977.FortBelvoir,VA:
+ISRAD/AIRMICS,ComputerSystemsCommand,
+U.S. Army,
+Dec. 1977,682 pp.
+[ 5 8 ] U. R. Basili, E. Ely, and D. Young, Eds., “Second software lifecycle management workshop, 21-22
+Aug. 1978 (Atlanta, GA),”
+220 pp., Dec. 1978. (IEEE Publ. no. 78CH1390-4C.)
+[ 591 C. P. Felix and C. E. Walston, “A method of programming measurement andestimation,”IBMSyst. J . , vol. 16, no. 1, pp. 54-73,
+1977.
+[ 6 0 ] L. H. Putnam and R. W. Wolverton, “Quantitative managementSoftware cost estimating,”
+in Proc. Comp. SOC. 77, IEEE Computer SofnOare andApplicationsConf.(Tutorial),
+326 pp.,
+Nov. 1977. (IEEE cat. no. EH0129-7.)
+(611 L. H. Putnam,“Theinfluenceofthetime-difficultyfactorin
+Proc.
+Software
+Phenomenology
+large
+scale
+development”
+in
+Working Papers of the (first) Software Life-cycle
+Management
+Workshop (AirlieVA),Aug.1977.FortBelvoir,VA:ISRAD/
+AIRMICS, Computer Systems Command, U.S. Army, Dec. 1977,
+PP. 307-312.
+1621 B.W. Boehm, and R. W. Wolverton, “Software cost modellingSome lessons learned,” in Proc. 2nd Software Life-cycle Managemen? Workshop, Aug. 21-22, 1978 (Atlanta, GA) pp. 129-132,
+Dec. 1978. (IEEE Publ. no. 78CH1390-4C.)
+[ 6 3 ] F. N. Parr, “An alternative to the Rayleigh curve model for software development effort,” IEEE Trans. Software Eng., vol. SE-6,
+May 1980, pp. 291-296.
+[ 641 S. C. Aron, The Program Development Process, Part 11 The RL
+gramming Team. Reading, MA: Addison-Wesley, 1980.
+[ 65 1 M. Halstead, Elements of Software Science. New York: Elsevier,
+1977, 127 pp.
+[ 6 6 ] A. Fitzsimmons and T. Love. “A review and evaluation
+of soft.~
+ware science,” Computing Survey, vol. 10, no. 1, pp. 3-18, Mar.
+
+1076
+
+PROCEEDINGS OF THE IEEE, VOL. 68, NO. 9, SEPTEMBER 1980
+
+[SO] M. M. Lehman and F. N. Parr, “Program evolution and its impact
+1978.
+(671 D. B. Johnston and A. M. Lister, “Software science and student
+on software engineering,” in h o c . 2nd Znt. Con$ Software Enprograms,” S o f w r e : R a c t . and Exp., vol. 10, no. 2, pp. 159gineering (SanFrancisco,CA),pp.
+350-357,Oct. 1976. (IEEE
+1960, Feb. 1980.
+Cat. no. 76CH1125-4C.)
+(681 M. M. Lehman,“Theprogrammingprocess,”
+IBM Res. Rep.
+(811 F. P. Brooks, TheMythicalMan-Month-Essays
+on Softwrrre
+RC2722, p. 47, Dec. 1969.
+Engineering. Reading, MA: Addison-Wesley, 1975, 195
+pp.
+( 691 L. A. Belady and M. M . Lehman, “Programming system dynamics
+(821 P. Naur and B. Randell, Eds., “Software engineering: Report on
+or the rneta-dynamics of systems in maintenance and growth,”
+aconferencesponsoredbytheNATOscienceCommittee,”
+IBM Res. Rep. RC3516, 30 pp, Sept. 1971.
+7-11, 1968.’Brussels, Belgium:Sci(Garmisch,Germany),Oct.
+[71] M. M. Lehman, “Programming systems growth dynamics,” infoentific Affairs Division, NATO, 1969,231 pp.
+tech State of the Art Lectures, no. 18, “Computer reliability,”
+(831 B.W. Boehm, J . R. Brown, and M. Lipow, “Quantitative evaluaState of the Art Lectures, no. 20, pp. 391-412,1974.
+tion of software quality,” in R o c . 2nd Int. Con$ Software Engi[72] L. A. Belady and M. M . Lehman,“Amodelof
+largeprogram
+neering (San Francisco,CA),pp.
+592-605, Oct. 1976. (IEEE
+1976.
+development,” IBMSyst. J . , vol. 15,no. 3,pp. 225-252,
+Cat. no. 76CH1124-4C.)
+[73] J. S. Riordan, “An evolution dynamics model” in h o c . Software
+(841 F. N. Parr and M. M . Lehman, “State of the art survey of softPhenomenology,Working Papers ofthe ( f i r s f ) SoftwareLifewarereliability,”Dep.Computing,ImperialCollege,London,
+cycle Management Workshop (Airlie, VA) Aug. 1977,” ISRAD/
+England, Res. Rep. 77/15, 102
+pp.
+AIRMICS,ComputerSystemsCommand,
+U.S. Army,(Fort
+[85] J. D. Musa, “The measurement and management of software reliBelvoir, VA), pp. 339-360,Dec. 1977.
+ability,” this issue, pp. 1131-1 143.
+(741 J. K. Patterson and M . M. Lehman,“PreliminaryCCSSsystems
+I861 T. J. McCabe,“AcomplexityMeasure,”
+ZEEE TransSoftware
+analysisusingevolutiondynamicstechniques,”
+in Prm. SoftEng., vol. 2,pp. 308-320,Dec. 1976.
+warePhenomenology,
+Working Papers ofthe(first)Software
+( 871 M. M . Lehman, “Complexity and complexity change of a large
+Life-cycle
+Management
+Workshop
+(Airlie,
+VA),
+Aug. 1977,
+applicationsprogram,”EROResearchProposal,
+32 pp, Mar.
+ISRAD/AIRMICS,ComputerSystemsCommand,
+US. Army,
+1977.
+Fort Belvoir, VA, Dec. 1977,pp. 324-332.
+h o c . SoftwarePheI 881 L. A. Belady,“Softwarecomplexity,”in
+[75] M. Woodside, “A mathematical model for the evolution of softnomenology, Working Papers of the cfirst) Software Life Cycle
+ware,” J. Syst Software, vol. 1, no. 3, 1980.
+ManagementWorkshop
+(AirlieVA)
+Aug. 1977. Fort Belvoir,
+Main[76] C. K. S. Chon Hok Yuen, “A Phenomenology of Program
+US.
+VA:
+ISRAD/AIRMICS,
+Computer
+Systems
+Command,
+tenanceandEvolution,”
+Ph.D. dissertation,Dep.Computing,
+Army, Dec. 1977, pp. 371-384.
+Imperial College of Science and Technology,
+Univ. of London,
+891 E. T. Chen, “Program complexity and programmer productivity,”
+London, England, t o b epublished.
+ZEEE Trans. Software Eng., vol. SE-1. pp. 187-193, May 1978.
+[77] M. M. Lehman, “PTograms, programming and the software lifeto reduce errors in
+901 M. E.Fagan,“Designandcodeinspections
+cycle,” CCD-ICST Res. Rep. 80/6,48pp, Apr. 1980.
+program development,” IBMSyst. J., vol. 15, no. 3, pp. 182-21 1,
+[78] -, “Hunlan thought and action as an ingredient of system be1976.
+havior,”in
+EncyclopaediaofIgnorance,
+DuncanandWeston(911 C. B. Jones, “The role of formal specifications in software develEngland:
+Pergamon
+Press, 1977, pp.
+Smith, E&., Oxford,
+opment,” in h o c . Infotech State of the A r t Cons on Life-cycle
+347-354.
+Management, 1980.
+(791 -, “Laws of program evolution-Rules and tools for program(921 H. Kopetz, F. Lohnert, and W. Merker, “An outline of project
+ming management,” Infotech State of the Art Conf., ‘Why softMARS-maintainablereal-timesystem,”TechnischeUniversitat,
+wareprojectsfai1,”pp. 11/1-11/25,Apr.9-11,1978.
+Berlin, Germany, Bericht 79-09, pp,
+19 July 1979.
+
+

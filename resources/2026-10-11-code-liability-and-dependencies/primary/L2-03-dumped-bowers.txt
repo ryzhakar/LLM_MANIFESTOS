@@ -1,0 +1,40 @@
+ID: L2-03-dumped-bowers
+Title: CPAN is 20! (the secondary blog post the dumped URL serves; supplementary, NOT Hietaniemi's announcement)
+Author: Neil Bowers
+Year: 2015 (posted August 16, 2015)
+URL fetched: https://blogs.perl.org/users/neilb/2015/08/cpan-is-20.html
+Extraction method: curl -sSL; python3 bs4 extraction of div.entry-body (title, byline, comments, sidebar dropped)
+
+Perl hackers have now, as of today the 16th August 2015, been uploading Perl modules onto CPAN via PAUSE for 20 years. Andreas König, who did that first upload, is still releasing to CPAN, and as I write this his most recent upload is the same module that was first released to CPAN.
+
+This post is a brief summary of CPAN's history.
+
+The Perl Packrats
+
+Before CPAN there were various Perl ftp sites spread around the internet, each with their own curator. In late 1993, Bill Middleton formed the packrats mailing list for people who were archiving Perl things.
+
+Also in late 1993, Jared Rhine emailed the list saying "I propose that we cooperate to create a unified structure, much like the CTAN project".
+
+The idea was kicked around, people got distracted, Perl 5 was released, and people started sharing Perl 5 modules.
+
+Let's do this CPAN Thing!
+
+In February 1995, Jarkko Hietaniemi proposed an initial directory structure and said he was going to get on with it.
+
+In April of that year, Andreas König proposed a "MASTER site for modules", where the set of modules would be just one part of CPAN. These days most people consider the set of modules and CPAN synonymous. Initially Andreas wasn't thinking about an upload capability.
+
+On the 1st August 1995, Jarkko announced a "private showing" of CPAN, for the packrats to check out and comment on.
+
+How will everyone upload stuff?
+
+On 15th August, Andreas emailed that he'd rethought the master site for modules and upload capability. He invited comments, but said people better be quick, as he was hacking away, and on a roll. He was creating what would become PAUSE, the Perl Authors Upload SErver.
+
+The next day, while still working on it, he uploaded what is now time-stamped as the first CPAN upload. The module was Symdump, which has since been renamed Devel::Symdump. You can see the release in Devel::Symdump's Changes file.
+
+Jarkko officially announced CPAN on 26th October 1995, and the rest, as they say, is history.
+
+CPAN Day
+
+CPAN Day only became a thing in 2014, when various people (initially prompted by Philippe Bruhat) decided to use the date of the first upload as an excuse to celebrate CPAN.
+
+Not long after CPAN celebrates its 20th birthday, we'll all be enjoying the first public release of Perl 6.

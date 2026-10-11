@@ -1,0 +1,95 @@
+Folklore.org: -2000 Lines Of Code
+
+Home | About Folklore | Quotes
+
+The Original Macintosh:  
+
+ 38 of 125 
+
+-2000 Lines Of Code
+
+Author:
+Andy Hertzfeld
+
+Date:
+February 1982
+
+Characters:
+Bill Atkinson
+
+Topics:
+Software Design, Management, Lisa
+
+Summary:
+It's hard to measure progress by lines of code
+
+In early 1982, the Lisa software team was trying to buckle down for the big push to ship the software within the next six months. Some of the managers decided that it would be a good idea to track the progress of each individual engineer in terms of the amount of code that they wrote from week to week. They devised a form that each engineer was required to submit every Friday, which included a field for the number of lines of code that were written that week.
+
+Bill Atkinson, the author of Quickdraw and the main user interface designer, who was by far the most important Lisa implementer, thought that lines of code was a silly measure of software productivity. He thought his goal was to write as small and fast a program as possible, and that the lines of code metric only encouraged writing sloppy, bloated, broken code.
+
+He recently was working on optimizing Quickdraw's region calculation machinery, and had completely rewritten the region engine using a simpler, more general algorithm which, after some tweaking, made region operations almost six times faster. As a by-product, the rewrite also saved around 2,000 lines of code.
+
+He was just putting the finishing touches on the optimization when it was time to fill out the management form for the first time. When he got to the lines of code part, he thought about it for a second, and then wrote in the number: -2000.
+
+I'm not sure how the managers reacted to that, but I do know that after a couple more weeks, they stopped asking Bill to fill out the form, and he gladly complied.
+
+Signing Party
+
+Back to The Original Macintosh
+
+Rosing's Rascals
+
+Rating
+
+Overall Rating: 4.72
+
+(best)
+
+Your rating:
+
+  1
+
+  2
+
+  3
+
+  4
+
+  5
+
+6 Comments
+
+ Show Comments
+
+from Niloc on January 27, 2004 13:55:46
+
+Just found this site and I must admit I really enjoy these stories. Great job.
+
+from Mohit Aggarwal on August 01, 2006 17:35:43
+
+Awesome!!! Every IT manager should learn from this story.
+
+from a_flj_ on August 12, 2010 05:01:35
+
+IMO, this just shows that any useful tool can be used in a stupid way.
+
+from Ken Lee on June 01, 2012 05:25:44
+
+It happened years ago, but I kind of blew up when they anounced they were going to rate performance by lines of code. I had just converted a 500 line routine into 200, it ran faster, and did more than the original. OK, you want lines of code, I can write i=1; and copy it, and repeat. How many lines of code do you want? 10,000 a day? Sure, I can do that, how about 10,000 an hour? No prob. Or maybe you'd like me to do something useful instead?
+
+from Rohit on October 03, 2012 05:10:52
+
+Indeed Amazing. Great for any IT or <a href="http://java67.blogspot.tw">Java</a> manager.
+
+from Eduardo Salas on June 12, 2019 05:10:50
+
+You get what you ask for...
+
+User Name:
+
+Password:
+
+Your Comment:
+
+The text of this story is licensed under a
+Creative Commons License.

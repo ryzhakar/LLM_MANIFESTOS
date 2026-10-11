@@ -1,0 +1,144 @@
+S2-032 - Apache Struts 2 Wiki - Apache Software Foundation
+
+DUE TO SPAM, SIGN-UP IS DISABLED. Goto Selfserve wiki signup and request an account.
+
+ Log in
+
+Linked Applications
+
+Loading…
+
+Apache Software Foundation
+
+ Spaces
+
+Hit enter to search
+
+ Help
+
+ Online Help
+
+ Keyboard Shortcuts
+
+ Feed Builder
+
+ What’s new
+
+ What’s new
+
+ About Confluence
+
+ Log in
+
+Apache Struts 2 Wiki
+
+Edit space details
+
+Child pages
+
+Security Bulletins
+
+S2-032
+
+Browse pages
+
+ConfigureSpace tools
+
+ Attachments (0)
+
+ Page History
+
+ Resolved comments
+
+ Page Information
+
+ View in Hierarchy
+
+ View Source
+
+ Export to PDF
+
+ Export to Word
+
+ Copy Page Tree
+
+ Pages
+
+ Home
+
+ Security Bulletins
+
+Jira links
+
+S2-032
+
+ Created by Lukasz Lenart, last updated on Feb 13, 2021
+
+ 1 minute read
+
+Summary
+Remote Code Execution can be performed via method: prefix when Dynamic Method Invocation is enabled.
+
+Who should read this
+
+All Struts 2 developers and users
+
+Impact of vulnerability
+
+Possible Remote Code Execution
+
+Maximum security rating
+
+Important
+
+Recommendation
+
+Disable Dynamic Method Invocation if possible. Alternatively upgrade to Struts 2.3.20.3, Struts 2.3.24.3 or Struts 2.3.28.1.
+
+Affected Software
+
+Struts 2.3.20 - Struts Struts 2.3.28 (except 2.3.20.3 and 2.3.24.3)
+
+Reporter
+
+Nike Zheng nike dot zheng at dbappsecurity dot com dot cn
+
+CVE Identifier
+
+CVE-2016-3081
+
+Problem
+
+It is possible to pass a malicious expression which can be used to execute arbitrary code on server side when Dynamic Method Invocation is enabled.
+
+Solution
+
+Disable Dynamic Method Invocation when possible or upgrade to Apache Struts versions 2.3.20.3, 2.3.24.3 or 2.3.28.1.
+
+Backward compatibility
+
+No issues expected when upgrading to Struts 2.3.20.3, 2.3.24.3 and 2.3.28.1
+
+Workaround
+
+Disable Dynamic Method Invocation or implement your own version of ActionMapper based on a source code of the recommended Apache Struts versions.
+
+ No labels
+
+Overview
+
+Content Tools
+
+ Powered by a free Atlassian Confluence Open Source Project License granted to Apache Software Foundation. Evaluate Confluence today.
+
+Powered by Atlassian Confluence 9.2.21
+
+Printed by Atlassian Confluence 9.2.21
+
+Report a bug
+
+Atlassian News
+
+Atlassian
+
+ {"serverDuration": 69, "requestCorrelationId": "b6fce2ca93d85d2b"}

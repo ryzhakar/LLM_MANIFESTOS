@@ -1,0 +1,251 @@
+        <!DOCTYPE HTML>
+        <html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+                <link rel="stylesheet" type="text/css" href="/style.css"/>
+                <title>npm Blog Archive: kik, left-pad, and npm</title>
+                <meta name="description" content="npm Blog (Archive); updates from the npm team are now published on the GitHub Blog and the GitHub Changelog"/>
+                <meta name="og:title" content="npm Blog Archive: kik, left-pad, and npm"/>
+                <meta name="og:description" content="npm Blog (Archive); updates from the npm team are now published on the GitHub Blog and the GitHub Changelog"/>
+                <meta name="og:image" content="https://user-images.githubusercontent.com/29712634/81721690-e2fb5d80-9445-11ea-8602-4b2294c964f3.png"/>
+                <link rel="icon" href="/favicon-32x32.png" type="image/png"/>
+                <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png"/>
+                <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png"/>
+                <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png"/>
+                <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png"/>
+                <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/>
+                <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png"/>
+                <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png"/>
+                <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png"/>
+            </head>
+            <body>
+                <div id="rainbar"></div>
+                <header>
+                    <div id="logo_and_title">
+                        <a href="/" class="logo"><svg height="32" width="32" viewBox="0 0 700 700" fill="currentColor"><polygon fill="#cb0000" points="0,700 700,700 700,0 0,0"></polygon><polygon fill="#ffffff" points="150,550 350,550 350,250 450,250 450,550 550,550 550,150 150,150 "></polygon></svg></a>
+                        <a href="/" class="title">npm Blog (Archive)</a>
+                    </div>
+                    <div id="links">
+                        <a href="https://npmjs.com/">npmjs.com</a>
+                        <a href="https://status.npmjs.com/">Status</a>
+                        <a href="https://npmjs.com/support/">Support</a>
+                    </div>
+                </header>
+
+                <main>
+                    <div id="retired">
+                        <p>
+                            The npm blog has been discontinued.
+                        </p>
+
+                        <p>
+                            Updates from the npm team are now published on the
+                            <a href="https://github.blog/">GitHub Blog</a> and
+                            the <a href="https://github.blog/changelog/">GitHub
+                            Changelog</a>.
+                        </p>
+                    </div>
+                
+                
+                                    <h1>kik, left-pad, and npm</h1>
+                    <p>Earlier this week, many npm users suffered a disruption when a package
+that many projects depend on — directly or indirectly — was
+unpublished by its author, as part of a dispute over a package name.
+The event generated a lot of attention and raised many concerns,
+because of the scale of disruption, the circumstances that led to this
+dispute, and the actions npm, Inc. took in response.</p>
+
+<p>Here’s an explanation of what happened.</p>
+
+<h2>Timeline</h2>
+
+<p>In recent weeks, <a href="https://twitter.com/azerbike">Azer Koçulu</a> and
+<a href="http://www.kik.com/">Kik</a> exchanged
+<a href="https://medium.com/@mproberts/a-discussion-about-the-breaking-of-the-internet-3d4d2a83aa4d">correspondence</a>
+over the use of the module name <code>kik</code>.  They weren’t able to come to an
+agreement. Last week, a representative of Kik contacted us to ask for
+help resolving the disagreement.</p>
+
+<p>This hasn’t been the first time that members of the community have
+disagreed over a name. In a global namespace for unscoped modules,
+collisions are inevitable. npm has a <a href="https://www.npmjs.com/policies/disputes">package name dispute
+resolution policy</a> for this
+reason.  That policy encourages parties to attempt an amicable
+solution, and when one is impossible, articulates how we resolve the
+dispute.</p>
+
+<p>The policy’s overarching goal is this: <em>provide npm users with the
+package they expect</em>. This covers spam, typo-squatting, misleading
+package names, and also more complicated cases such as this one.
+Entirely on this basis, we concluded that the package name &ldquo;kik&rdquo;
+ought to be maintained by Kik, and informed both parties.</p>
+
+<p>So far, this followed a process that is routine, though rare.
+What happened next, though, was unprecedented.</p>
+
+<p>Under our dispute policy, an existing package with a disputed name
+typically remains on the npm registry; the new owner of the name
+publishes their package with a breaking version number. Anyone using
+Azer’s existing <code>kik</code> package would have continued to find it.</p>
+
+<p>In this case, though, without warning to developers of dependent
+projects, Azer unpublished his <code>kik</code> package and 272 other packages.
+One of those was <a href="https://www.npmjs.com/package/left-pad">left-pad</a>.
+This impacted many thousands of projects. Shortly after 2:30 PM
+(Pacific Time) on Tuesday, March 22, we began observing hundreds of
+failures per minute, as dependent projects — and their dependents, and
+<em>their</em> dependents… — all failed when requesting the now-unpublished
+package.</p>
+
+<p>Within ten minutes, <a href="https://www.npmjs.com/~westlac">Cameron Westland</a>
+stepped in and published a functionally identical version of
+<code>left-pad</code>. This was possible because <code>left-pad</code> is open source, and we
+allow anyone to use an abandoned package name as long as they don’t
+use the same version numbers.</p>
+
+<p>Cameron’s <code>left-pad</code> was published as version <code>1.0.0</code>, but we
+continued to observe many errors. This happened because a number of
+dependency chains, including <code>babel</code> and <code>atom</code>, were bringing it in
+via <code>line-numbers</code>, which explicitly requested <code>0.0.3</code>.</p>
+
+<p>We conferred with Cameron and took the unprecedented step of
+re-publishing the original <code>0.0.3</code>. This required relying on a backup,
+since re-publishing isn’t otherwise possible. We <a href="https://twitter.com/seldo/status/712414400808755200">announced this plan
+at 4:05 PM</a> and
+<a href="https://twitter.com/seldo/status/712427318870839296">completed the
+operation</a> by
+4:55 PM.</p>
+
+<p>The duration of the disruption was 2.5 hours.</p>
+
+<h2>What worked</h2>
+
+<p><strong>We stand by our package name dispute resolution policy, and the
+decision to which it led us.</strong></p>
+
+<p>Given two packages vying for the name <code>kik</code>, we believe that a
+substantial number of users who type <code>npm install kik</code> would be
+confused to receive code unrelated to the messaging app with over 200
+million users.</p>
+
+<p><strong>The dispute resolution policy minimizes disruption.</strong></p>
+
+<p>Transferring ownership of a package’s name doesn’t remove current
+versions of the package.  Dependents can still retrieve and install
+it.  Nothing breaks.</p>
+
+<p>Had Azer taken no action, Kik would have published a new version of
+<code>kik</code> and everyone depending upon Azer’s package could have continued
+to find it.</p>
+
+<p>It was abrupt unpublishing, not our resolution policy, that led
+to yesterday’s disruptions.</p>
+
+<p><strong>The community stepped in.</strong></p>
+
+<p>It’s pretty remarkable that Cameron stepped in to replace <code>left-pad</code>
+within ten minutes. The other 272 affected modules were adopted by
+others in the community in a similar time. They either re-published
+forks of the original modules or created “dummy” packages to prevent
+malicious publishing of modules under their names.</p>
+
+<p>We’re grateful to everyone who stepped in. With their explicit
+permission, we are working with them to transfer these to npm’s direct
+control.</p>
+
+<h2>What didn’t work</h2>
+
+<p><strong>Unrestricted un-publishing caused a lot of pain.</strong></p>
+
+<p>There are historical reasons for why it’s possible to un-publish
+a package from the npm registry. However, we’ve hit an inflection
+point in the size of the community and how critical npm has become to
+the Node and front-end development communities.</p>
+
+<p>Abruptly removing a package disrupted many thousands of developers and
+threatened everyone’s trust in the foundation of open source software:
+that developers can rely and build upon one another’s work.</p>
+
+<p>npm needs safeguards to keep anyone from causing so much disruption.
+If these had been in place yesterday, this post-mortem wouldn’t be
+necessary.</p>
+
+<p><strong>Poor communication made matters worse.</strong></p>
+
+<p>In the immediate wake of yesterday’s disruption, and continuing even
+now on blogs and Twitter, a lot of impassioned debate was based on
+falsehoods.</p>
+
+<ul><li><p>npm did not “steal” Azer’s code.</p>
+
+<p><code>left-pad</code> was open-source code, and explicitly allows
+republishing by any other author. That&rsquo;s what happened in this
+case.</p></li>
+<li><p>This incident did not arise because of intellectual property law.</p>
+
+<p>We’re aware that Kik and Azer discussed the legal issues
+surrounding the “Kik” trademark, but that wasn’t pertinent.  Our
+decision relied on our dispute resolution policy.  It was solely an
+editorial choice, made in the best interests of the vast majority
+of npm’s users.</p></li>
+<li><p>npm won’t suddenly take your package name.</p>
+
+<p>Our guiding principle is to prevent confusion among npm users. In
+the rare event that another member of the community requests our
+help resolving a conflict, we work out a resolution by
+communicating with both sides.  In the overwhelming majority of
+cases, these resolutions are amicable.</p></li>
+</ul><p>It took us too long to get you this update.  If this were a purely
+technical operations outage, our internal processes would have been
+much more up to the challenge.</p>
+
+<h2>What happens next</h2>
+
+<p>There are technical and social aspects to this problem. Any
+reasonable course of action must address both of these.</p>
+
+<ol><li><p>We will make it harder to un-publish a version of a package if
+doing so would break other packages.</p>
+
+<p>We are still fleshing out the technical details of how this will
+work. Like any registry change, we will of course take our time to
+consider and implement it with care.</p></li>
+<li><p>We will make it harder to maliciously adopt an abandoned package name.</p>
+
+<p>If a package with known dependents is completely unpublished,
+we’ll replace that package with a <a href="https://github.com/npm/security-holder">placeholder
+package</a> that prevents
+immediate adoption of that name. It will still be possible to get
+the name of an abandoned package by contacting npm support.</p></li>
+<li><p>We are updating our internal policies to help our team stay in sync
+and address community conflict more effectively.</p></li>
+</ol><h2>To Recap (tl;dr)</h2>
+
+<ul><li>We dropped the ball in not protecting you from a disruption caused
+by unrestricted unpublishing.  We&rsquo;re addressing this with technical
+and policy changes.</li>
+<li>npm&rsquo;s well-established and <a href="https://www.npmjs.com/policies/disputes">documented dispute resolution
+policy</a> was followed to the
+letter.  This is not a legal dispute.</li>
+<li>We&rsquo;ll continue to do everything we can to reduce friction in
+the lives of JavaScript developers.</li>
+</ul><p>In a community of millions of developers, some conflict is inevitable.
+We can’t head off every disagreement, but we can earn your trust that
+our policies and actions are biased to supporting as many developers
+as possible.</p>
+                
+                
+                
+                
+                
+                
+                                <div id="footer">
+                <span id="timestamp"> March 23rd, 2016 6:21pm </span>
+                <span id="author">@izs</span>
+                                </div>
+                </main>
+            </body>
+        </html>
+
+        

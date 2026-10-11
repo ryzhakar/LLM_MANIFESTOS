@@ -1,0 +1,1621 @@
+Human-Written vs. AI-Generated Code: A Large-Scale
+Study of Defects, Vulnerabilities, and Complexity
+Domenico Cotroneo, Cristina Improta, Pietro Liguori
+
+arXiv:2508.21634v1 [cs.SE] 29 Aug 2025
+
+University of Naples Federico II, Naples, Italy
+{cotroneo, cristina.improta, pietro.liguori}@unina.it
+
+class-based wrappers and utility code. These artifacts are then
+integrated into production systems, open-source repositories,
+and developer workflows, often without rigorous inspection.
+As a consequence, AI-generated code is reshaping the stylistic,
+structural, and quality norms that have traditionally characterized software engineering.
+Unfortunately, current research provides an incomplete picture of the impact of AI code generators on software quality.
+Most existing studies evaluate AI-generated code in isolation,
+emphasizing correctness or performance on synthetic benchmarks [7], [8], or considering some aspects of quality [9],
+[10] and security [11], [12]. Few works compare AI-generated
+code directly with human-authored programs, limiting our understanding of how AI code differs across diverse dimensions
+such as structural complexity, defect profiles, or vulnerability
+classes. Even fewer studies adopt a standardized framework
+for evaluating code quality, leading to fragmented and often
+incomparable findings due to the wide variety of programming
+languages, tools, and evaluation metrics considered.
+These limitations raise a fundamental concern: the frameworks and taxonomies traditionally used to assess software
+quality are human-centered, designed around assumptions
+about human cognition, error modes, and review processes.
+Yet, AI-generated code introduces new characteristics, including structural redundancy, model-specific vulnerability patterns, or even hallucinations (e.g., non-existing libraries or
+APIs) [13]. It is unclear whether existing defect classification
+frameworks can meaningfully characterize these patterns or
+whether they must be revised and extended to reflect the
+properties and limitations of AI-generated software.
+In this work, we present a large-scale, cross-language comparison of human-written and AI-generated code, focusing
+on multiple dimensions of software quality: (i) code defects,
+(ii) security vulnerabilities, and (iii) structural complexity. We
+focus on Python and Java, two of the most widely used
+programming languages in both industry and academia [14],
+and analyze a large-scale dataset (>500k code samples) from
+human developers (>17k GitHub projects) alongside outputs
+from three popular LLMs: ChatGPT, DeepSeek-Coder, and
+Qwen-Coder [15]. We rely on three state-of-the-art static
+analysis tools to detect issues in the code: Pylint [16] for
+finding defects in Python functions, PMD [17] for Java, and
+Semgrep [18] as a security-oriented solution for discovering
+vulnerabilities in both.
+To normalize the analysis across tools and languages, we
+
+Abstract—As AI code assistants become increasingly integrated
+into software development workflows, understanding how their
+code compares to human-written programs is critical for ensuring
+reliability, maintainability, and security. In this paper, we present
+a large-scale comparison of code authored by human developers
+and three state-of-the-art LLMs, i.e., ChatGPT, DeepSeek-Coder,
+and Qwen-Coder, on multiple dimensions of software quality:
+code defects, security vulnerabilities, and structural complexity.
+Our evaluation spans over 500k code samples in two widely
+used languages, Python and Java, classifying defects via Orthogonal Defect Classification and security vulnerabilities using
+the Common Weakness Enumeration. We find that AI-generated
+code is generally simpler and more repetitive, yet more prone
+to unused constructs and hardcoded debugging, while humanwritten code exhibits greater structural complexity and a higher
+concentration of maintainability issues. Notably, AI-generated
+code also contains more high-risk security vulnerabilities. These
+findings highlight the distinct defect profiles of AI- and humanauthored code and underscore the need for specialized quality
+assurance practices in AI-assisted programming.
+Index Terms—AI Code Generation, Orthogonal Defect Classification, Software Defects, Software Security, Code Complexity,
+Large Language Models
+
+I. I NTRODUCTION
+The emergence of AI-assisted programming has triggered
+a paradigm shift in software engineering, redefining not only
+how code is written but also who, or rather what, is writing
+it [1]. Large Language Models (LLMs) such as ChatGPT [2],
+GitHub Copilot [3], and DeepSeek-Coder [4] are no longer
+limited to generating code snippets or suggesting completions,
+they now produce entire functions, classes, or even modules
+with minimal human intervention, transitioning programming
+from a human-centric design activity into a model-driven
+process [5]. According to forecasts by leading AI research
+labs, by the end of 2025, AI may be responsible for producing
+up to 90% of all new code [6]. While this trend brings clear
+advantages in terms of development speed and accessibility, it
+also raises critical concerns regarding the quality, correctness,
+and reliability of automatically generated code.
+It is worth noting that this transformation is not merely an
+evolution of tools and solutions, but a structural redefinition
+of software development, with the role of developers evolving
+from designing and implementing code to supervising and
+adapting model outputs, repositioning them from authors to
+curators. As AI-generated code proliferates, new patterns
+emerge: code tends to be more concise, heavily pattern-based,
+and uniform, frequently reusing architectural motifs such as
+
+1
+
+adopt the Orthogonal Defect Classification (ODC) framework
+by Chillarege et al. [19], a well-established method for
+categorizing defects along independent dimensions such as
+assignment, algorithm, and interface. ODC allows us to map
+language-specific defects into a common taxonomy, enabling
+meaningful cross-language and cross-author (i.e., human vs.
+LLMs) comparisons.
+Our study yields the following key findings. First, we reveal
+systematic differences in defects between AI-generated and
+human-written code. LLMs tend to produce code that is less
+structurally complex but more repetitive and prone to specific defect categories, such as variable assignment errors. In
+contrast, human-authored code exhibits more intricate control
+flow, algorithmic flaws, and improper exception handling,
+symptoms often associated with the maintainability and design
+debt of real-world, mature codebases. Moreover, compared to
+software developers, AI models are better at generating Python
+code yet much worse with Java code (−4k and +22k defective
+samples, respectively). On the security side, we observed
+that AI-generated code more frequently triggers vulnerabilities
+associated with high-risk CWE categories, including command
+injection and hardcoded secrets. On average, compared to
+human code, AI models generate more vulnerable code both in
+Python (+5k samples) and Java (+18k samples), fewer lines
+of code (−6.75) and use significantly fewer tokens (−63.74),
+indicating reduced structural and logical complexity and lower
+lexical diversity.
+All code, datasets and results presented in our study are
+available for transparency and replication purposes on Zenodo [20] and GitHub [21].
+In the following, Section II discusses related work; Section III describes our research study; Section IV details the
+dataset construction process; Section V presents the experimental evaluation; Section VI discusses threats to validity;
+Section VII concludes the paper.
+
+static analysis tools like SonarQube, revealing wide variability
+in maintainability and correctness. Siddiq et al. [27] analyzed
+real-world developer interactions with ChatGPT, finding that
+generated code is often significantly modified prior to use due
+to issues like variable misuse and documentation gaps. Liu
+et al. [10] provide an empirical study on ChatGPT-generated
+Python and Java code, evaluating 4,000 samples for correctness and insights into error types and failure rates stratified
+by task difficulty. Improta et al. [28] assessed the quality
+of a large-scale Python dataset (>4M) mined from opensource GitHub repositories using Semgrep and showed that
+filtering out low-quality functions from training data improves
+generation. Esfahani et al. [29] provide a well-structured defect
+classification of Python code by using two small AI code
+generators, i.e., CodeT5+ and CodeGen, to generate code for
+the well-known open-source benchmark, HumanEval. Then,
+they explore different prompting techniques to automatically
+fix the problematic code.
+These studies suffer from restricted dataset sizes, singlelanguage or single-model focus, and limited generalizability. A key reason for this limitation is that, when dealing
+with AI-generated code, there is no established taxonomy
+for systematically classifying software defects. Unlike traditional software engineering, where code evolves within welldefined development lifecycles, AI-generated code is often
+produced as isolated, context-free snippets, making it difficult
+to apply process-aware classification frameworks directly. In
+conventional systems, one of the most widely adopted models
+for defect classification is the Orthogonal Defect Classification framework, introduced by Chillarege et al. [19]. ODC
+was explicitly designed to support in-process measurement
+by categorizing software defects based on their observable
+impact, independent of language, implementation details, or
+development stage.
+We apply the ODC framework in our study to assess
+whether it remains a suitable and informative abstraction in
+this new generation of code development. A recent study by
+Bogaerts et al. [30] attempted to apply ODC to real-world
+Python vulnerabilities drawn from CVEs. While their work
+showed that ODC can bring structure to vulnerability analysis,
+it also highlighted limitations in using it alone to capture the
+specificity of modern security issues.
+The most related to our work is the preliminary study
+by Patel et al. [31], which compares Copilot-generated and
+human-written Java code. However, the study is limited in
+several ways: it focuses exclusively on a single programming
+language and two specific software bugs, considers only one
+AI model, and evaluates a small and narrow dataset of just 90
+LeetCode solutions, which lack diversity in scope and style.
+Our study addresses these limitations through a comprehensive and controlled comparison between human-written and
+LLM-generated code. We analyze human-written code mined
+from over 17k real-world GitHub projects and code generated
+by three popular LLMs (i.e., ChatGPT, DeepSeek-Coder, and
+Qwen-Coder) into two widely used languages (i.e., Python
+and Java). Our evaluation spans more than 500k code samples
+
+II. R ELATED W ORK
+Recent studies on AI-generated code have primarily focused
+on correctness and security [11], [22], often evaluating just one
+or two popular models, typically ChatGPT or Copilot [23],
+on isolated tasks or benchmarks. For instance, Pearce et
+al. [24] evaluated Copilot’s security by testing it on 89 coding
+scenarios and found that around 40% of its outputs contained
+vulnerabilities. Fu et al. [12] evaluated code generated by three
+AI code assistants (i.e., GitHub Copilot, CodeWhisperer and
+Codeium) and performed extensive CWE-based security analysis, including attempts to repair insecure snippets. Kharma
+et al. [25] further highlighted that AI-generated code often
+fails to adopt modern security best practices, particularly in
+languages like Java and C++. While these studies provide
+crucial insights into the risks of AI-assisted programming,
+they are often language-specific, focused solely on security,
+and lack broader quality metrics.
+Beyond security, only a few studies addressed other aspects
+of code quality. Yetiştiren et al. [9] benchmarked Copilot,
+CodeWhisperer, and ChatGPT using HumanEval [26] and
+
+2
+
+and multiple dimensions of code quality, including defect detection, security vulnerabilities, and structural complexity. To
+enable consistent and interpretable comparisons across tools,
+code authors, and languages, we adopt the ODC framework
+and MITRE’s Common Weakness Enumeration (CWE) [32],
+allowing us to normalize and categorize software issues across
+languages.
+
+detect potential issues, we apply two widely-used static analysis tools: Pylint [16] for Python and PMD [17] for Java. These
+tools were selected due to their maturity, extensive adoption
+in industrial and academic software analysis workflows, and
+their ability to produce fine-grained, rule-specific outputs.
+Pylint is a deep static analysis tool for Python programs
+that performs code linting, style checking, bug detection, and
+design enforcement. It analyzes Python Abstract Syntax Trees
+(ASTs) to detect a wide range of issues, including syntax
+errors, type inconsistencies, uninitialized variables, and poor
+programming practices. Pylint’s output is rule-driven, with
+each rule assigned a unique symbolic name and severity level
+(e.g., convention, warning, error), for a total of 417 detection
+rules. In our setup, we exclude all style-related issues, such as
+formatting, naming conventions, and documentation warnings,
+as they do not affect functional correctness, resulting in a final
+set of 350 rules.
+PMD is an extensible static source code analyzer that parses
+Java code into an AST and applies a wide set of rulebased patterns to detect programming flaws. PMD checks
+for issues such as unnecessary object creation, performance
+bottlenecks (e.g., avoid instantiating objects inside loops),
+possible bugs (e.g., empty catch blocks, unused variables), and
+design problems (e.g., excessive method complexity). It supports multiple built-in rule sets categorized into best practices,
+code style, design, documentation, error-prone, multithreading,
+performance, and security, for a total of 290 rules.
+As before, we excluded from the analysis all rules concerning code style and documentation, as docstrings are stripped
+from code functions and used as generation prompts (as
+detailed in § IV). Additionally, we omitted the security ruleset
+due to its limited coverage (i.e., only two rules), opting
+instead to incorporate a more comprehensive, security-focused
+solution later on. In the end, our analysis encompasses 226
+detection rules.
+To systematically categorize and compare software defects
+across different code authors, i.e., human developers or AI
+code assistants, and across different programming languages,
+i.e., Python and Java, we rely on the Orthogonal Defect
+Classification [19]. ODC is a widely recognized method for
+classifying software defects based on their nature and origin,
+independent of the specific software development process or
+application domain. It is based on the definition of a set of
+attributes, which are non-overlapping dimensions that measure
+different aspects of defects, including their type, their impact,
+their trigger (i.e., how the defect was found), and their source.
+This orthogonality facilitates standardized analysis and defect
+pattern detection.
+In the paradigm of AI-assisted software development, where
+developers query LLMs with a short description of the required
+implementation, the generated code is usually composed of
+snippets, single functions or short classes, which are then
+integrated into a larger codebase. For this reason, not all ODC
+attributes are applicable to this fast-prototyping scenario.
+For this reason, we applied the Defect Type attribute from
+ODC to categorize software issues identified in the code. ODC
+
+III. R ESEARCH S TUDY
+We designed this research study with the aim of answering
+the following research questions (RQs):
+▷ RQ1 : Do defect types and frequencies differ between
+human-written and AI-generated code across programming
+languages?
+To answer this research question, we systematically compare
+the distribution of defect types in human-written and AIgenerated code across two programming languages. To this
+aim, we apply two state-of-the-art static analysis tools (i.e.,
+Pylint for Python, PMD for Java) and map the resulting defects
+to standardized Orthogonal Defect Classification categories.
+This approach allows for a structured comparison of defect
+types and frequencies among code authors, enabling us to
+quantify differences in code quality between human and AIgenerated functions across Python and Java datasets.
+▷ RQ2 : Do security vulnerabilities differ between humanwritten and AI-generated code across languages, in terms of
+type and severity?
+The goal of this RQ is to investigate and compare security vulnerabilities present in human-written and AI-generated code
+across Python and Java code. Using Semgrep for static security
+analysis, we map the identified vulnerabilities to the Common
+Weakness Enumeration taxonomy and categorize them by
+severity level. This analysis enables us to assess differences
+in the types and criticality of security issues introduced by
+human developers versus AI code assistants, providing insight
+into potential real-world risks and author-specific security
+behavior.
+▷ RQ3 : Do structural complexity metrics vary between
+human-written and AI-generated code across programming
+languages?
+The third RQ assesses the structural characteristics of humanwritten and AI-generated code by analyzing complexity metrics. We evaluate code samples based on quantitative measures
+such as the number of lines of code, cyclomatic complexity,
+and token counts, to examine whether AI-generated code
+shares similar surface-level and deeper structural traits with
+code written by human programmers.
+A. Code Defects Analysis
+In this study, we systematically investigate software defects
+introduced by human developers and AI models when writing
+code. A defect refers to any violation of correctness, logic,
+performance or design. These include issues like improper
+variable initialization, control flow anomalies, or faulty error
+handling, problems that may lead to program misbehavior but
+do not necessarily expose the system to external threats. To
+
+3
+
+TABLE I: Summary of the mapping between Orthogonal Defect Classification (ODC) defect types and code smells in Python
+and Java code. Normal text represents Python rules, while bold text represents Java rules.
+Defect Characteristics
+
+Python
+Rules
+
+Java
+Rules
+
+Assignment
+
+Errors in assignment, initialization, or
+variable binding
+
+46
+
+13
+
+used-before-assignment,
+UnusedAssignment
+
+Algorithm
+
+Logical flaws in computation or data manipulation
+
+118
+
+88
+
+too-many-nested-blocks,
+CyclomaticComplexity
+
+Interface
+
+Issues with interaction between modules,
+functions, or APIs
+
+113
+
+12
+
+no-value-for-parameter,
+UseProperClassLoader
+
+Checking
+
+Faulty validation or error handling mechanisms
+
+23
+
+26
+
+missing-timeout, EmptyCatchBlock
+
+Timing/Serialization
+
+Concurrency, event ordering, or multithreading defects
+
+1
+
+11
+
+useless-with-lock,
+AvoidSynchronizedStatement
+
+Function/Class/Object
+
+Structural or design errors in function,
+class, or object organization
+
+49
+
+76
+
+redefined-outer-name,
+MissingOverride
+
+ODC Defect Type
+
+Example Rules
+
+structured resolution of conflicts ensured conceptual alignment
+with ODC taxonomy. The complete rule-to-category mapping
+is made available in the replication package for transparency
+and future extensions [21].
+Using ODC allowed us to abstract away from tool-specific
+rule naming conventions and focus on the broader patterns
+of defects across datasets. It also enabled cross-comparison
+between human-written and AI-generated code, highlighting
+differences in error types rather than being limited to tool
+output frequencies.
+Table I provides an overview of the categorization. Each
+ODC Defect Type is described by its defect characteristics,
+indicating the nature of defects it is intended to capture. For
+each category, the table reports the number of mapped rules
+originating from Pylint for Python and PMD for Java. Example
+rules are provided to show typical violations of each defect
+type, with Python rules displayed in regular text and Java rules
+shown in bold.
+To make the mapping process more concrete, consider
+two representative examples. The Pylint rule used-beforeassignment, which detects the use of variables before initialization in Python, was mapped to the Assignment category. This is
+because such violations reflect fundamental issues in variable
+binding and initialization, which are key to the definition of
+assignment-related defects in the ODC framework. On the
+Java side, the PMD rule CyclomaticComplexity, which flags
+methods with excessive branching logic, was classified under
+the Algorithm category, as it reflects control-flow complexity
+and potential logical flaws in computation. These examples
+illustrate how each rule was assigned based on the functional
+semantics of the issue it detects, rather than tool-specific
+naming, ensuring consistency in our defect categorization
+across languages and tools.
+Finally, we excluded the Documentation and Build/Package/Merge defect types from our analysis. Documentationrelated issues are omitted because docstrings are intentionally
+removed from the code samples and repurposed as prompts for
+AI code generation in the dataset construction (e.g., missing-
+
+Defect Type describes the nature of the fault independently of
+specific code details or language constructs, covering eight distinct categories, including Assignment, Algorithm, Interface,
+Checking, and Timing, among others.
+We deliberately excluded other ODC attributes from our
+analysis, such as the Trigger attribute. This dimension captures
+how a defect is discovered, typically during code inspections,
+unit testing, integration testing, or system-level testing. However, in our setting, defect detection is performed entirely
+through static analysis tools applied uniformly across all code
+samples. This approach does not simulate dynamic software
+development workflows or staged testing processes in which
+trigger information would be meaningful. Moreover, LLMgenerated code is not compiled, tested, or executed in its
+original context, making it infeasible to reliably assign trigger labels without speculative or artificial assumptions. By
+focusing solely on the defect type, we preserve the rigor and
+comparability of our findings across languages and authors.
+For both Python and Java, we manually mapped all the
+provided detection rules to the most appropriate ODC category. This mapping process was necessary to provide a
+standardized view of the analysis by normalizing results across
+different languages and tools, given that static analysis rules
+are tool-specific and not directly generalizable. Each rule was
+individually reviewed and assigned an ODC category based
+on its functional nature and the type of defect it targeted,
+aiming to minimize ambiguity and maximize consistency
+across languages.
+Given that Pylint and PMD define extensive rule sets with
+heterogeneous scopes and naming conventions, we performed
+a detailed manual classification to interpret the intent behind
+each rule. To ensure the reliability of this process, we adopted
+a two-stage validation approach. First, two authors independently categorized all rules based on their diagnostic semantics. Disagreements were then resolved through discussion,
+resulting in a consensus-based mapping. This procedure served
+as a form of inter-rater agreement, mitigating subjectivity
+and reinforcing the reproducibility of the classification. This
+
+4
+
+docstring). Similarly, Build/Package/Merge defects pertain to
+broader integration concerns such as library dependencies,
+version control, and packaging errors (e.g., import-error,
+NoPackage), that are not applicable in our context, as we focus
+exclusively on isolated code snippets rather than complete
+software systems. As such, these categories fall outside the
+scope of our study.
+Additionally, to ensure compatibility with PMD, which
+requires valid Java class structures, all Java functions were
+wrapped in minimal dummy classes prior to analysis. This
+transformation preserved the original logic while satisfying
+PMD’s parsing requirements. However, it also introduced
+artificial class contexts that could inadvertently activate classlevel rules unrelated to the function under evaluation. To
+maintain fairness and analytical consistency, we filtered out
+all PMD rules targeting class design or object structure (e.g.,
+number of fields, method modifiers). This ensured that our
+evaluation remained focused strictly on function-level logic,
+the unit of generation for both humans and LLMs, and
+not on artifacts introduced solely for tool compatibility. To
+this end, we excluded 12 additional class-related rules (e.g.,
+UseUtilityClass, ClassWithOnlyPrivateConstructorsShouldBeFinal). Again, all code is provided in the replication package
+for reproducibility [21].
+
+we aggregate security rules addressing both general application
+vulnerabilities and language-specific threats. The complete
+configuration, including the list of security rules, is available
+in our replication package [21].
+For each identified security issue, Semgrep provides rich
+metadata, including: (i) the rule identifier that triggered the
+detection; (ii) the severity level of the issue (categorized as
+info, warning, error, or critical); (iii) the specific lines of code
+where the issue occurs; (iv) a human-readable explanation of
+the detected vulnerability; and (v) the corresponding mapping
+to a Common Weakness Enumeration entry. This detailed
+output enables a systematic and standardized analysis of
+vulnerabilities across both human-written and AI-generated
+code samples.
+C. Code Complexity Analysis
+To evaluate structural differences between human-written
+and AI-generated code, we measured several key code complexity metrics that are widely used in software engineering
+to assess maintainability, readability, and logical depth. Each
+metric captures a distinct dimension of code structure and
+computational intricacy, providing a multifaceted view of how
+code is organized and how difficult it may be to understand,
+test, or extend. By analyzing these metrics, we aim to identify
+both quantitative differences between human and AI code, and
+also stylistic or structural biases in how LLMs approach code
+generation.
+■ Number of Lines of Code (NLOC). It reflects the overall
+size of a block of code and can indicate code verbosity or
+density of implementation. It is computed by counting the total
+number of lines excluding comments.
+■ Cyclomatic Complexity Number (CCN). It measures the
+number of independent control paths through a function, thus
+quantifying logical complexity and the degree of branching or
+decision-making within the code. It is computed by counting
+the number of linearly independent paths through the code.
+■ Token Count (TC). It captures the number of lexical units
+(e.g., constants, identifiers, operators, keywords) contained in
+code, providing a finer-grained measure of syntactic richness.
+■ Function Name Length (FNL). It acts as a proxy for
+naming descriptiveness, with longer names often indicating
+higher semantic specificity. It is computed as the character
+count of the extracted function names.
+■ Unique Tokens (UT). It is a proxy metric for the vocabulary
+size. It aggregates the total number of distinct tokens used
+across the corpus (i.e., for a single code author), serving
+as an indicator of lexical diversity and potentially richer
+programming expression.
+We calculated all complexity metrics using a combination
+of lizard [37] and tiktoken [38] libraries. We used the former, a lightweight static analysis tool capable of extracting
+basic structural information from 23 different languages, to
+extract code snippets. Then, we tokenized the source code
+using tiktoken, an efficient tokenizer aligned with GPT-4’s
+encoding schema, to track the average token count and unique
+tokens per function. We used lizard to automatically calculate
+
+B. Code Security Analysis
+A security vulnerability is a specific type of defect that
+poses a risk of exploitation, potentially allowing unauthorized
+access, data leakage, or system compromise. These are classified using the CWE framework and include issues such as
+command injection, hardcoded secrets, or use of unsafe APIs.
+To detect security vulnerabilities in both Python and Java
+code, we employ Semgrep OSS [18], a modern, lightweight
+static analysis tool designed for finding security vulnerabilities,
+correctness bugs, and code quality issues across more than 30
+programming languages.
+Unlike traditional static analyzers that often require full
+code compilation (e.g., CodeQL [33], Bandit [34]), Semgrep operates based on syntactic pattern-matching directly on
+source code, making it particularly well-suited for scanning
+large-scale, heterogeneous datasets without requiring to build
+artifacts or full type inference. Semgrep provides an extensive
+registry of curated rulesets, each targeting specific families
+of issues, such as detection of vulnerabilities from MITRE’s
+CWE Top 25 [35], unencrypted communication patterns, secrets management flaws, or injection vulnerabilities.
+In this analysis, we focus exclusively on detecting security
+vulnerabilities using Semgrep rules specifically designed for
+security analysis. We include all security-focused rules available for Python and Java (as of April 2025). The selected
+rules cover a broad range of vulnerability categories, including
+injection attacks, insecure communication, improper authentication, and sensitive data exposure. These rules are sourced
+from a diverse set of curated Semgrep rulesets targeting
+well-established security standards such as the OWASP Top
+Ten [36] and the CWE Top 25. To ensure comprehensiveness,
+
+5
+
+TABLE II: Dataset composition.
+Lang.
+
+# Samples
+
+# Repos
+
+Avg.
+Docstring
+Len.
+
+Avg. Code
+Len.
+
+Python
+Java
+
+285,249
+221,795
+
+12,632
+4,296
+
+25.73
+24.86
+
+87.21
+79.30
+
+this process, 3,259 Python and 539 Java samples could not
+be matched and were discarded, yielding a total of 285,249
+Python and 221,796 Java instances.
+Then, to further enrich the dataset with more diverse AIgenerated implementations, we employed two additional stateof-the-art AI code assistants: DeepSeek-Coder-Instruct (DSC)
+and Qwen2.5-Coder-Instruct (Qwen). For each sample, we
+used the original docstring and corresponding function signature as prompts to generate alternative implementations with
+both models.
+■ DeepSeek-Coder-Instruct (33B) [4] is part of a series of
+code language models, each trained from scratch on 2T tokens,
+with a composition of 87% code and 13% natural language.
+The base model is pre-trained on project-level code corpus by
+employing a window size of 16K and an extra fill-in-the-blank
+task. We utilize a quantized, instruction-tuned model with 33
+billion parameters, which was further fine-tuned on 2B tokens
+of instruction data.
+■ Qwen2.5-Coder-Instruct (32B) [15] is the latest series
+of Qwen large language models specifically designed for
+code-related tasks. These models have been pre-trained on
+an extensive dataset exceeding 5.5 trillion tokens, achieving
+state-of-the-art performance in code generation, completion,
+reasoning, and repair tasks. We employ a quantized model
+with 32 billion parameters, which was further trained for
+instruction-tuning through a multi-stage fine-tuning process.
+We followed the default generation settings recommended
+by each model’s authors and used their preferred prompting
+formats. Example prompts for Python and Java code generation are shown in the following listing.
+
+NLOC and CCN, while function name lengths were directly
+measured as the character count of the extracted function
+names. The metrics were collected separately for each code
+author (human-written code, ChatGPT, DeepSeek-Coder, and
+Qwen-Coder) to preserve the granularity of the analysis per
+source. Full details of the computation pipeline, along with
+the scripts used, are available in the replication package [21].
+IV. DATASET
+To investigate whether there exist any differences in the
+defect distribution of human-written and LLM-generated code,
+we curated a large-scale dataset consisting of both Python
+and Java code. We selected these programming languages as
+the target for our study due to their widespread adoption,
+differing programming paradigms, and relevance in software
+development [14]. Python, a dynamically-typed, high-level
+scripting language, is heavily used in AI/ML development.
+Java, on the other hand, is a statically-typed, object-oriented
+language widely deployed in enterprise-grade applications,
+where software quality and security requirements are stringent.
+By analyzing both, our aim is to ensure that our findings
+regarding code quality, security vulnerabilities, and defect
+profiles generalize across different language ecosystems and
+programming practices.
+We began by adopting and extending the HMCorp
+dataset [39], which contains 288,508 ⟨human-code, ChatGPTcode⟩ pairs in Python and 222,335 in Java. HMCorp was constructed by filtering the Python and Java subsets of the CodeSearchNet (CSN) dataset [40] to extract functions authored by
+human developers. Then, for each function, the corresponding
+docstring was used to prompt ChatGPT (“gpt-3.5-turbo”, April
+2023) to generate a matching AI implementation. During this
+filtering process, noisy or malformed samples, such as those
+containing HTML tags, URLs, or empty function bodies, were
+systematically removed to ensure dataset quality. The original
+CodeSearchNet dataset is a widely-used benchmark comprising ⟨documentation, code⟩ pairs in six different languages
+mined from public, non-forked GitHub repositories sorted by
+popularity (stars and forks), and is often used to train and
+evaluate LLMs on code-related tasks [41], [42].
+However, the released HMCorp dataset excluded the original docstrings and GitHub provenance. To restore this information, we performed a pre-processing step to match each HMCorp sample back to its source in CSN using a combination of
+function signature and body similarity. This step allowed us
+to recover both the documentation and repository metadata,
+resulting in the creation of complete ⟨repository, docstring,
+human-code, ChatGPT-code⟩ tuples for each instance. During
+
+You are an AI programming assistant, utilizing the
+DeepSeek-Coder model, developed by DeepSeek Company,
+and you only answer questions related to computer science.
+### Instruction:
+Java
+“““{docstring}”””
+{signature}
+### Response:
+You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
+Python
+{signature}
+“““{docstring}”””
+
+Following generation, a comprehensive code cleanup phase
+was applied to ensure consistency and validity across all samples. The cleanup process included normalization of indentation, removal of leading or trailing whitespace inconsistencies,
+and lightweight syntactic parsing checks to detect incomplete
+or invalid code fragments. In addition, special care was taken
+to remove any non-code text artifacts often produced by AI
+models, such as explanations of the code, usage examples,
+comments unrelated to the function’s purpose, or generic
+model disclaimers. To ensure the preservation of valid code,
+
+6
+
+TABLE III: Defect statistics by language and code author. Blue
+are best scores, red are the worst.
+Language
+
+Author
+
+Defective
+Samples
+
+Incorrect
+Samples
+
+Total
+Defects
+
+Python
+(285,249)
+
+Human
+ChatGPT
+DeepSeek
+Qwen
+
+158,221
+110,528
+173,899
+178,225
+
+3,712
+2,549
+20,783
+7,190
+
+429,247
+185,110
+319,643
+574,916
+
+Java
+(221,795)
+
+Human
+ChatGPT
+DeepSeek
+Qwen
+
+76,049
+78,241
+155,077
+60,389
+
+245
+2,056
+34,382
+3,833
+
+202,129
+161,056
+242,437
+123,180
+
+A sample is considered defective if it contains at least one
+detected issue; a sample is classified as incorrect if it is either
+syntactically invalid or entirely missing (e.g., empty response
+due to incorrect interpretation of the input by the model). The
+total number of defects accounts for multiple issues within
+the same sample, reflecting the cumulative defect count rather
+than unique instances.
+In Python, Qwen-generated code exhibits the highest total
+number of defects, surpassing both other LLMs and humanwritten code. This is driven by its high number of defective
+samples (62.48%) and a considerable number of incorrect ones
+(2.52%). DSC shows a lower defects rate (60.96%) but suffers
+from the highest number of incorrect samples (7.29%) reflecting more frequent generation failures such as not parseable or
+incomplete outputs (19,612 empty predictions) and, therefore,
+potentially less surface for defects. In contrast, ChatGPT
+produces the lowest number of defects and defective samples
+(38.75%), reflecting a distinct generation style that tends to
+produce cleaner yet potentially oversimplified code. Also notable, it yields the least number of incorrect samples (0.89%).
+Human-written Python code results in 429,247 total defects,
+which is higher than both ChatGPT and DSC, but lower
+than Qwen. This is primarily due to the high number of
+defective samples (55.47%) and a relatively low number
+of incorrect samples (1.30%). However, as detailed later, a
+significant portion of these defects (∼47%) stems from a
+single code issue detected by Pylint, i.e., protected-access,
+which accounts for 202,259 violations. This issue refers to
+accessing class members prefixed with an underscore (e.g.,
+_internal_method()), which are considered protected
+by convention. In open-source repositories, especially those
+involving complex inheritance hierarchies or performancesensitive designs, such practices are common and often intentional, even if discouraged. If we exclude these violations, the
+total number of defects in human-written Python code drops
+to ∼227k, making it comparable to ChatGPT.
+In Java, DSC exhibits the worst performance across all
+dimensions. It produces the highest number of total defects
+(242,437), the most defective samples (69.92%), and the most
+incorrect outputs (15.50%, 19,071 of which are empty outputs)
+among all sources, reaching more than 85% of problematic
+samples. This suggests that DSC struggles significantly with
+Java’s stricter syntax and structural constraints, even though
+the most frequent issues refer to best practices and design
+defects and not critical errors. In contrast, human-written Java
+code results in 202,129 defects across 34.29% of defective
+samples, with only 245 incorrect cases, demonstrating higher
+syntactic and semantic consistency. ChatGPT ranks between
+these extremes, generating 35.28% of defective samples. Surprisingly, although being the worst with Python, Qwen shows
+great capabilities in the generation of Java code, achieving
+the most robust performance among all authors, with 123,180
+total defects, 27.23% defective samples, and 1.73% incorrect
+outputs (3,209 of which are empty).
+To better understand the nature of the issues detected by
+the static analysis tools, we categorize all reported violations
+
+the cleaning procedure was refined iteratively: several rounds
+of manual inspection were conducted on random subsets of
+the data to verify that correct code instances were not inadvertently discarded or damaged. Cleaning rules were adjusted as
+necessary to minimize the loss of properly generated samples.
+Our final dataset consists of 507,044 ⟨docstring, humancode, ChatGPT-code, DSC-code, Qwen-code⟩ instances,
+285,249 for Python and 221,795 for Java, respectively. The
+human-written functions span 16,928 unique open-source
+GitHub repositories, ensuring a representative mix of styles,
+domains, and development practices. Table II provides a full
+breakdown of the dataset.
+V. E XPERIMENTAL E VALUATION
+This section illustrates the results of our investigation. First,
+we dive into the defect categorization and distribution between
+human-written and AI-generated code across programming
+languages. We show which are the most occurring ODC
+defect types and the frequency with which each specific code
+issue appears in both Python and Java datasets. Then, we
+focus on the assessment of the security vulnerabilities that
+are introduced by human developers and AI code generators,
+respectively. We classify security issues according to MITRE’s
+CWE and analyze their distribution and severity. Finally, we
+examine whether there are any significant differences in the
+structure and complexity of Python and Java programs written
+by developers and generated by LLMs.
+A. Code Defects Assessment
+To investigate differences in the nature and frequency of
+code defects across human-written and AI-generated code
+(RQ1 ), we analyze Python and Java code generated by LLMs
+(i.e., ChatGPT, DeepSeek-Coder, and Qwen-Coder) and compare it to a baseline of human-authored functions. All code
+samples are analyzed using Pylint (for Python) and PMD (for
+Java), and the resulting violations are categorized using the
+Orthogonal Defect Classification framework to ensure consistency across languages and tools. Due to space constraints,
+in this section we provide an overview of our findings, but
+complete results can be found in the replication package [21].
+Table III summarizes the distribution of code issues in terms
+of defective samples, incorrect samples, and total defects.
+
+7
+
+300k
+
+Algorithm
+Assignment
+Checking
+Function/Class/Object
+Interface
+Timing
+
+250k
+
+Issues per type
+
+within local scopes.
+No timing-related problems are detected apart from 16
+useless-with-lock issues in ChatGPT code, which fails to
+establish real locking behavior, potentially leading to threadsafety problems. This is mostly due to Pylint not being wellsuited to detect synchronization defects.
+These differences in defects distributions indicate that AIgenerated code is often simpler and more repetitive, leading
+to a higher concentration of variable reuse, shallow argument
+propagation, and underdeveloped class structures. The recurrence of unused arguments across all AI models in extremely
+large numbers suggests that they frequently replicate parameter
+patterns from docstrings or function signatures without correctly using them in the generated body. Meanwhile, structural
+issues like too-few-public-methods and redefined-outer-name
+reflect difficulties in generating coherent and contextually
+integrated class hierarchies, issue not commonly found in
+human-written code.
+As for Java (1b), defect distributions reveal additional
+differences between human-written and AI-generated code,
+particularly in how structural and complexity-related issues
+manifest. Human code exhibits the highest number of algorithmic defects, totaling over 96k, and also shows significant presence in the assignment and checking categories.
+Indeed, the most occurring defects are CyclomaticComplexity
+(15,435), AvoidInstantiatingObjectsInLoops (14,351), CognitiveComplexity (13,065), and AvoidCatchingGenericException
+(9,749). These reflect code quality concerns that typically arise
+in real-world, mature codebases, such as overly complex control flow, algorithmic flaws, and improper exception handling.
+Such defects often relate to maintainability or design debt,
+rather than outright correctness, and are consistent with the
+broader, more semantically aware development practices of
+human programmers.
+In contrast, AI-generated Java code, particularly from DSC
+and Qwen, exhibits very different error profiles. DSC stands
+out sharply, with high counts for ImmutableField (41,669
+of function/class/object type) and SystemPrintln (37,986),
+followed by violations such as UnusedPrivateField, AvoidPrintStackTrace, and UnusedFormalParameter. This indicates
+that DSC-generated code frequently defines fields that could
+be marked final, overuses low-level debugging constructs like
+System.out.println() and printStackTrace(),
+and includes unused or unreferenced fields and parameters,
+suggesting syntactically plausible but structurally shallow code
+with limited architectural awareness.
+Qwen’s Java outputs exhibit a similar behavior with UnusedFormalParameter (24,660) and SystemPrintln (13,329) as
+its most frequent violations. These point again to common
+problems in low-complexity utility methods and boilerplate
+code, where unused inputs and basic performance inefficiencies occur frequently. ChatGPT exhibits a more even spread
+of defects. Its top violations, SystemPrintln (10,428) and UseVarargs (9,124), point to best-practice violations rather than
+complex architectural flaws. Compared to DSC, ChatGPT’s
+Java output is better structured but still presents common
+
+ODC Defect Type
+
+200k
+150k
+100k
+50k
+
+Human
+
+ChatGPT
+
+DeepSeek
+
+Qwen
+
+(a) Python
+
+300k
+
+ODC Defect Type
+
+Algorithm
+Assignment
+Checking
+Function/Class/Object
+Interface
+Timing
+
+Issues per type
+
+250k
+200k
+150k
+100k
+50k
+
+Human
+
+ChatGPT
+
+DeepSeek
+
+Qwen
+
+(b) Java
+
+Fig. 1: Distribution of ODC defect types by code author.
+
+according to the ODC. Figure 1 plots the distribution of
+ODC defect types across by code author for Python and Java,
+respectively. Several notable trends emerge.
+In Python (1a), human-written code is overwhelmingly
+dominated by interface-related issues, accounting for over
+250k violations, more than all other categories combined. This
+skew is almost entirely due to a protected member being
+accessed outside a class (protected-access). The second most
+frequent type is algorithm due to no-else-return (22,619) and
+raise-missing-from (10,108), suggesting unnecessary code and
+lack of exception traceability, which are typical of handwritten codebases.
+In contrast, the top defects in AI-generated code show
+substantially different patterns. All three models, ChatGPT,
+DSC, and Qwen, are dominated by assignment issues and
+the latter two by function/class/object issues, rather than
+interface and algorithm violations. For instance, ChatGPT’s
+most frequent violations are assignment-related (with 32,992
+unused-argument and 14,408 unused-variable), along with
+unspecified-encoding (14,312), indicating failure to declare
+encoding in file I/O, and protected-access (7,108), which is
+far less frequent than in human-written code. DSC displays
+a unique profile with extremely high counts for unusedargument (111,703) and too-few-public-methods (64,279), the
+latter reflecting structural problems in class design, such as
+the generation of classes with trivial or placeholder content.
+Qwen, similarly, is dominated by unused-argument (213,264),
+followed by protected-access (105,770), and redefined-outername (57,252), a warning related to overwriting global names
+
+8
+
+TABLE IV: Security vulnerabilities statistics by language and
+code author. Blue are best scores, red are the worst.
+
+CWE-78
+CWE-754
+
+Language
+
+Vulnerable
+Author
+Samples
+
+Unique
+CWEs
+
+Total
+CWEs
+
+Python
+(285,249)
+
+Human
+ChatGPT
+DeepSeek
+Qwen
+
+15,835
+22,864
+22,878
+16,316
+
+45
+45
+43
+45
+
+25,678
+40,035
+39,982
+34,250
+
+Java
+(221,795)
+
+Human
+ChatGPT
+DeepSeek
+Qwen
+
+6,660
+18,144
+43,386
+13,620
+
+42
+49
+51
+41
+
+11,677
+29,807
+76,678
+21,301
+
+CWE-400
+CWE-611
+CWE-330
+
+CWE-502
+CWE-327
+
+CWE-89
+CWE-95
+CWE-319
+
+coding anti-patterns.
+▶ Key Finding 1: Overall, the qualitative difference between
+human and AI-generated Java code is clear: human developers
+tend to write complex, expressive logic that introduces maintainability issues (e.g., cognitive and cyclomatic complexity),
+while AI code assistants reproduce syntactically valid but
+semantically shallow code that overuses hardcoded debugging
+and unused constructs. ChatGPT exhibits a somewhat more
+stable profile but still deviates from human practices, particularly in areas like method scoping and parameter usage.
+On average, compared to human code, AI models are better
+at generating Python code yet much worse with Java code
+(−4k and +22k defective samples). These findings further
+reinforce the need to evaluate AI-generated code not only for
+correctness but also for design-level quality.
+
+2,243
+13,157
+1,631
+0
+1,272
+1,349
+1,097
+1,152
+1,065
+0
+
+13,419
+1,539
+6,887
+4,587
+2,045
+1,638
+1,626
+1,294
+1,462
+0
+
+10,908
+0
+7,987
+6,372
+1,853
+1,692
+1,668
+1,305
+0
+1,928
+
+7,318
+8,214
+4,857
+3,521
+1,889
+1,762
+1,148
+1,179
+1,076
+0
+
+Human
+
+ChatGPT
+
+DeepSeek
+
+Qwen
+
+(a) Python
+
+CWE-532
+CWE-489
+
+CWE-798
+CWE-209
+
+CWE-89
+CWE-22
+CWE-611
+CWE-321
+CWE-470
+
+CWE-502
+
+3,736
+1,948
+784
+582
+1,208
+0
+297
+541
+741
+247
+
+6,915
+5,659
+1,737
+1,238
+1,874
+2,886
+1,480
+989
+1,228
+1,064
+
+30,031
+17,533
+5,199
+4,549
+2,731
+3,738
+1,960
+1,757
+0
+0
+
+9,271
+4,680
+901
+1,001
+903
+0
+659
+367
+914
+458
+
+Human
+
+ChatGPT
+
+DeepSeek
+
+Qwen
+
+(b) Java
+
+B. Code Security Assessment
+
+Fig. 2: Heatmap of top-10 CWEs distribution across code
+authors.
+
+Although AI code assistants can reliably generate syntactically correct and functionally valid code, recent evidence
+suggests that they may also propagate insecure coding patterns,
+often in subtle and systematic ways. Understanding whether
+the nature of these vulnerabilities diverges from defects traditionally introduced by human developers is essential to
+adapting software security tools and mitigation frameworks
+accordingly.
+To address RQ2 , we used Semgrep, configured with an
+extensive set of security detection rules mapped to the CWE,
+to extract issue counts, severity levels, CWE types, and vulnerability distributions for each code sample. This analysis
+enables a structured comparison of both the frequency and
+nature of security issues, with the aim of determining whether
+AI-generated vulnerabilities form a distinct risk profile. The
+complete results are available in the replication package [21].
+Table IV provides a summary of the frequency and density
+(i.e., nr. of issues per sample) of security vulnerabilities
+detected. We report the number of vulnerable samples (i.e.,
+unique samples containing at least one issue), of unique CWE
+identifiers triggered, and the total number of issues detected
+across all samples (i.e., a single function may contain several
+different vulnerabilities).
+In Python, AI-generated code exhibits a higher volume
+but equal coverage of vulnerabilities than human-written
+
+code. DSC produces the most insecure code, with 22,878
+vulnerable samples and 39,982 total CWE-triggered issues,
+followed closely by ChatGPT (22,864 vulnerable samples and
+40,035 issues), reaching ∼8% of the dataset. Both models
+substantially exceed the human baseline of 5.55% vulnerable
+samples and 25,678 total issues. Qwen shows a somewhat
+more conservative behavior (5.72% vulnerable samples and
+34,250 issues), though still higher. Interestingly, despite these
+large disparities in total issue count, the number of distinct
+CWEs triggered by each AI model in Python is nearly identical
+to human code (45 for humans, ChatGPT and Qwen, 43 for
+DSC), suggesting that AI-generated code exhibits not only
+more vulnerabilities but also repeated instantiations of the
+same types of flaws. Moreover, while human-written code
+contains 1.62 issues on average, this density reaches 1.75 for
+ChatGPT and DSC, and 2.10 for Qwen.
+In Java, the gap is even more pronounced. Code generated
+by DSC stands out with an extremely high number of vulnerable samples (19.56%) and total issues (76,678), triggering
+51 distinct CWE types, the highest among all authors and
+languages. This indicates both a broader vulnerability surface
+
+9
+
+and more frequent violations. ChatGPT and Qwen also exhibit
+numerous vulnerable samples (8.18% and 6.14%, respectively)
+compared to the human baseline of 3%, with a similar or
+higher CWE variety (49 and 41 vs. 42 for humans). Overall,
+DSC consistently demonstrates the worst security profile in
+both languages, while human-written code is consistently the
+most secure across all metrics, followed by Qwen being the
+least prone to generate insecure code.
+Figure 2 presents detailed heatmaps illustrating the distribution of the ten most frequent CWEs in Python and Java,
+respectively, across different code authors. CWEs belonging
+to MITRE’s Top 25 most dangerous software weaknesses [35]
+are shown in bold. In Python (2a), AI-generated code disproportionately triggers CWE-78 (OS Command Injection),
+with DSC and ChatGPT showing 10,908 and 13,419 instances
+respectively, compared to only 2,243 in human code. A similar trend is observed for CWE-400 (Uncontrolled Resource
+Consumption) and CWE-611 (Improper Restriction of XML
+External Entity Reference), which are almost absent in humanwritten code but occur in thousands of cases in DSC and
+ChatGPT outputs. Notably, these two models exhibit highly
+similar insecure behavior in Python, both in terms of volume
+and distribution, indicating that despite model differences, they
+may internalize and reproduce comparable insecure generation
+patterns. Human-authored Python code, by contrast, is heavily
+skewed toward CWE-754 (Improper Check for Unusual or
+Exceptional Conditions), with 13,157 instances, indicating a
+different defect profile and confirming the frequent lack of
+exception handling in projects written by human programmers.
+DSC further distinguishes itself by generating code vulnerable to CWE-319 (Cleartext Transmission of Sensitive
+Information), which does not appear in any other author’s
+code. These gaps emphasize that while AI models broadly
+follow similar trends, certain failure modes are model-specific
+and need to be addressed differently from traditional humanwritten insecure code.
+Java results (2b) reveal a similar divergence in defect
+distributions. DSC again produces the highest frequencies
+across several high-impact CWE types. For instance, its code
+accounts for 30,031 instances of CWE-532 (Information Exposure Through Log Files), compared to 3,736 for humans. It
+also dominates in CWE-489 (Active Debug Code), CWE-798
+(Use of Hardcoded Credentials), and CWE-209 (Information
+Exposure Through an Error Message), all of which are significantly underrepresented in human-written code. ChatGPT
+and Qwen show similar but less extreme trends, while humanauthored Java code displays a flatter distribution with fewer
+high-impact CWEs overall.
+The increased number of unique CWEs in AI-generated
+code reflects a broader attack surface and a tendency to
+reproduce known insecure patterns more frequently. Notably,
+many of the most prevalent vulnerabilities align with categories listed in MITRE’s Top 25, underscoring their severity.
+CWE-78 (OS Command Injection), CWE-400 (Uncontrolled
+Resource Consumption), and CWE-798 (Use of Hardcoded
+Credentials) are particularly frequent in code produced by
+
+ChatGPT and DSC, but rare in human-written code.
+▶ Key Finding 2: In summary, these findings confirm that
+AI-generated code differs from human-written code not only in
+the number of security vulnerabilities but also in their nature
+and distribution. AI models are particularly prone to recurring
+instances of high-severity issues such as injection flaws, insecure configurations, and information exposure. These trends
+hold across both Python and Java, although they are more
+extreme in the latter. On average, compared to human code,
+AI models generate more vulnerable code both in Python (+5k
+samples) and Java (+18k samples). The combination of higher
+defect volume, greater CWE diversity, and a skew toward highseverity categories underscores the importance of properly
+assessing the security risks of AI-generated code.
+C. Code Complexity Assessment
+TABLE V: Comparison of structural complexity metrics. Bold
+values indicate the highest score per metric.
+Avg.
+NLOC
+
+Avg.
+CCN
+
+Avg.
+TC
+
+Avg.
+FNL
+
+UT
+
+Python
+
+Human 12.72
+ChatGPT 6.89
+DeepSeek 5.16
+Qwen
+4.47
+
+3.97
+2.47
+2.00
+1.84
+
+142.45
+79.33
+68.37
+58.68
+
+14.16
+17.56
+12.51
+13.95
+
+70,542
+62,717
+60,199
+63,265
+
+Java
+
+Human 13.38
+ChatGPT 8.42
+DeepSeek 6.70
+Qwen
+6.14
+
+3.48
+2.35
+1.83
+1.90
+
+119.66
+76.51
+59.60
+61.43
+
+13.98
+18.92
+19.32
+13.85
+
+57,356
+52,540
+47,737
+50,698
+
+Language Author
+
+To answer RQ3 , we analyzed structural complexity metrics,
+including the number of code lines (NLOC), the cyclomatic
+complexity (CCN), average and unique token counts (TC and
+UT), and function name length (FNL), across human-written
+and AI-generated code samples. The goal is to both quantify
+differences in surface-level complexity and also to understand
+whether AI-generated code mirrors the structural richness
+and diversity observed in human-written software. Table V
+summarizes the results.
+In Python, the structural gap between human-written and
+AI-generated code is particularly pronounced. Human-written
+Python functions average 12.72 NLOC and exhibit a CCN of
+3.97 on average, reflecting deeper logical branching and control flow compared to AI-generated counterparts. In contrast,
+code snippets generated by ChatGPT, DSC, and Qwen are
+substantially shorter and simpler, with average NLOC values
+of 6.89, 5.16, and 4.47 respectively, and CCN values of 2.47,
+2.00, and 1.84. The average length of human Python code
+(142.45 tokens per function) is markedly higher than in AIgenerated functions, with the most concise code produced by
+Qwen (58.68 tokens). Finally, AI-generated Python functions
+tend to have comparable or slightly longer function names
+relative to human code, with ChatGPT being the most prolix.
+In Java, a similar but slightly less extreme trend emerged.
+Human-written Java functions demonstrate significantly higher
+scores across all metrics: the average NLOC for human
+
+10
+
+functions is 13.38, compared to 8.42 for ChatGPT, 6.70 for
+DSC, and 6.14 for Qwen. Cyclomatic complexity is also
+higher in human Java code (3.48) relative to AI-generated
+output, which ranged from 1.83 to 2.35. Token counts follow
+the same pattern, with human-written Java averaging 119.66
+tokens per function, while AI code ranges between 59.60
+and 76.51 tokens. Interestingly, AI-generated Java functions
+exhibit notably longer average function names, with DSC
+(19.32 characters) and ChatGPT (18.92) exceeding the average
+function name length chosen by human developers of 13.98,
+suggesting a pattern of more verbose or explicitly descriptive
+naming conventions in AI outputs.
+In addition to conventional structural metrics, we also
+analyzed the unique token count for each author, representing
+the number of distinct lexical units (e.g., keywords, identifiers,
+operators) used across the code samples. Vocabulary diversity
+serves as a proxy for syntactic richness and expressiveness: a
+higher number of unique tokens may indicate a broader use of
+language features, more varied code patterns, and potentially
+more nuanced or sophisticated program logic. Conversely, a
+low unique token count suggests more repetitive, templatelike code structures. In both Python and Java, human-written
+code exhibited significantly higher unique token counts than
+AI-generated code, with 70k unique tokens in human Python
+samples compared to 62k, 60k and 63k for ChatGPT, DSC
+and Qwen, and 57k unique tokens in human Java compared to
+52k, 47 and 50k for AI counterparts. These findings suggest
+that, especially when writing Python code, human developers
+employ a richer and more varied programming style, while
+AI models, despite generating syntactically valid code, tend
+to reuse a narrower subset of language constructs.
+▶ Key Finding 3: Overall, the results consistently demonstrate that human-written code tends to be structurally more
+complex, both in terms of size and logical structure, across
+both programming languages. In contrast, AI-generated code,
+particularly that produced by DSC and Qwen, favors brevity
+and reduced complexity. On average, it contains fewer lines of
+code (−6.75), exhibits lower cyclomatic complexity (−1.66),
+and uses significantly fewer tokens (−63.74), indicating reduced structural and logical complexity. Additionally, AIgenerated code tends to contain fewer unique tokens (−7,756),
+suggesting lower lexical diversity. These findings suggest that
+AI models prioritize generating compact code over producing
+highly structured or richly branched functions. While reduced
+complexity and lexical variety may offer benefits such as
+improved readability, it may also introduce risks of underspecification, limited error and edge cases handling, or shallow logic coverage.
+
+lacking executable context, making dynamic approaches such
+as runtime verification and testing impractical. Nevertheless,
+the use of mature and widely adopted static analysis tools like
+Pylint and PMD ensures consistent, meaningful defect detection, effectively addressing our research goal of comparative
+quality assessment between human and AI-generated code.
+Moreover, given the heterogeneous nature of rule definitions
+across static analyzers like Pylint and PMD, mapping them
+to ODC categories inevitably involves interpretive judgment.
+To mitigate potential subjectivity, we employed a structured
+two-stage validation protocol where two authors independently
+classified each rule, followed by a consensus resolution of
+any disagreements. While this process enhances reliability and
+reproducibility, some degree of ambiguity remains, particularly
+for rules that straddle multiple defect types. Future work could
+explore automated or learning-based classification approaches
+to further improve consistency.
+Internal Validity: Our dataset builds upon the publicly available and peer-reviewed HMCorp dataset [39], which includes
+over 500k human-written and ChatGPT-generated code samples in Python and Java. While this provides a strong baseline, potential biases could be introduced during our dataset
+expansion phase. Specifically, we generated additional AI
+code using two state-of-the-art models, i.e., DeepSeek-CoderInstruct and Qwen2.5-Coder-Instruct, based on the original
+docstrings and function signatures. Although the generation
+process was standardized to ensure consistency across models,
+discrepancies in model behavior and prompt interpretation
+could introduce subtle variability. Nonetheless, we mitigate
+this threat by (i) incorporating outputs from multiple LLMs to
+increase diversity, (ii) applying the same prompting templates
+across models to reduce bias, and (iii) anchoring our study on
+a high-quality and publicly available dataset that meets modern
+standards for scale, diversity, and cross-language support.
+External Validity: Our findings’ external validity may be constrained by the selection of programming languages (Python
+and Java), the specific LLMs used (ChatGPT, DeepSeekCoder, Qwen-Coder), and our prompt-based generation strategy relying primarily on docstrings. While these selections
+represent practical and widely used configurations in both
+academia and industry, results could differ when employing
+other programming languages, LLMs with varying model
+sizes, or alternative prompting approaches. To mitigate these
+limitations, we employed a robust experimental design with
+a large-scale dataset comprising over 500k code samples,
+including human-written code sourced from approximately
+17k real-world GitHub repositories, ensuring broad coverage
+and representativeness. Nonetheless, investigating additional
+configurations remains an important direction for future work
+to further validate and expand our conclusions.
+
+VI. T HREATS TO VALIDITY
+Construct Validity: Our study exclusively relies on static
+analysis tools for detecting code defects, which inherently limits our evaluation to syntactic and structural aspects, excluding
+runtime behaviors, context-specific errors, and deeper semantic
+correctness. This limitation arises because the code generated
+by LLMs often comprises standalone functions or snippets
+
+VII. C ONCLUSION
+This study offers a large-scale comparison of human-written
+and AI-generated code on multiple dimensions of software
+quality, including defects, vulnerabilities, and structural complexity. By applying standardized taxonomies, i.e., ODC and
+
+11
+
+CWE, we uncover fundamental differences in how code is
+produced by humans versus AI code assistants. Human-written
+code tends to be more structurally complex but prone to
+maintainability and design issues, whereas AI-generated code
+is simpler but more repetitive and semantically shallow, with
+frequent unused constructs and hardcoded debugging. Critically, AI-generated code also exhibits a higher prevalence of
+high-severity security vulnerabilities, underscoring the need
+for stricter safeguards in AI-assisted development workflows.
+By systematically exposing these differences and structuring
+them within a consistent evaluative framework, we believe that
+this study lays the groundwork for developing a standardized
+methodology that better reflects the quality and risk profiles
+of AI-generated code when compared to human-authored
+programs.
+
+[14] TIOBE, “TIOBE Index,” https://www.tiobe.com/tiobe-index/.
+[15] B. Hui, J. Yang, Z. Cui, J. Yang, D. Liu, L. Zhang, T. Liu, J. Zhang,
+B. Yu, K. Dang et al., “Qwen2.5-coder technical report,” arXiv preprint
+arXiv:2409.12186, 2024.
+[16] Logilab, “PyLint - Python linter,” https://www.pylint.org.
+[17] PMD, “Source Code Analyzer,” https://pmd.github.io.
+[18] Semgrep, “Static Code Analyzer,” https://github.com/semgrep/semgrep.
+[19] R. Chillarege, I. S. Bhandari, J. K. Chaar, M. J. Halliday, D. S.
+Moebus, B. K. Ray, and M.-Y. Wong, “Orthogonal defect classificationa concept for in-process measurements,” IEEE Transactions on software
+Engineering, vol. 18, no. 11, pp. 943–956, 1992.
+[20] D. Cotroneo, C. Improta, and P. Liguori, “Artifact,” https://doi.org/10.
+5281/zenodo.16853222.
+[21] ——, “Replication Package,” https://github.com/dessertlab/Human vs
+AI Code Quality.
+[22] D. Cotroneo, C. Improta, P. Liguori, and R. Natella, “Vulnerabilities
+in AI Code Generators: Exploring Targeted Data Poisoning Attacks,”
+in Proceedings of the 32nd IEEE/ACM International Conference on
+Program Comprehension, 2024, pp. 280–292.
+[23] A. Clark, D. Igbokwe, S. Ross, and M. F. Zibran, “A quantitative
+analysis of quality and consistency in ai-generated code,” in 2024
+7th International Conference on Software and System Engineering
+(ICoSSE). IEEE, 2024, pp. 37–41.
+[24] H. Pearce, B. Ahmad, B. Tan, B. Dolan-Gavitt, and R. Karri, “Asleep
+at the keyboard? assessing the security of github copilot’s code contributions,” Communications of the ACM, vol. 68, no. 2, 2025.
+[25] M. Kharma, S. Choi, M. AlKhanafseh, and D. Mohaisen, “Security and
+quality in llm-generated code: A multi-language, multi-model analysis,”
+arXiv preprint arXiv:2502.01853, 2025.
+[26] M. Chen, J. Tworek, H. Jun, Q. Yuan, H. P. D. O. Pinto, J. Kaplan,
+H. Edwards, Y. Burda, N. Joseph, G. Brockman et al., “Evaluating large
+language models trained on code,” arXiv preprint arXiv:2107.03374,
+2021.
+[27] M. L. Siddiq, L. Roney, J. Zhang, and J. C. D. S. Santos, “Quality
+assessment of chatgpt generated code and their use by developers,” in
+Proceedings of the 21st International Conference on Mining Software
+Repositories, 2024, pp. 152–156.
+[28] C. Improta, R. Tufano, P. Liguori, D. Cotroneo, and G. Bavota, “Quality
+in, quality out: Investigating training data’s role in ai code generation,”
+in 2025 IEEE/ACM 33rd International Conference on Program Comprehension (ICPC). IEEE Computer Society, 2025, pp. 454–465.
+[29] A. M. Esfahani, N. Kahani, and S. A. Ajila, “Understanding defects
+in generated codes by language models,” in 2024 34th International
+Conference on Collaborative Advances in Software and COmputiNg
+(CASCON). IEEE, 2024, pp. 1–10.
+[30] F. C. G. Bogaerts, N. Ivaki, and J. Fonseca, “A taxonomy for python
+vulnerabilities,” IEEE Open Journal of the Computer Society, 2024.
+[31] A. Patel, K. Z. Sultana, and B. K. Samanthula, “A comparative analysis
+between ai generated code and human written code: A preliminary
+study,” in 2024 IEEE International Conference on Big Data (BigData).
+IEEE, 2024, pp. 7521–7529.
+[32] The MITRE Corporation (MITRE), “Common Weakness Enumeration,”
+https://cwe.mitre.org/.
+[33] GitHub, “CodeQL,” https://github.com/github/codeql.
+[34] PyCQA, “Bandit,” https://github.com/PyCQA/bandit.
+[35] MITRE, “Top 25 Most Dangerous Software Weaknesses,” https://cwe.
+mitre.org/top25/.
+[36] OWASP, “2021 OWASP Top 10,” https://owasp.org/Top10/.
+[37] T. Yin, “Lizard,” https://github.com/terryyin/lizard.
+[38] Hauntsaninja, “Tiktoken, fast BPE tokenizer,” https://pypi.org/project/
+tiktoken/.
+[39] X. Xu, C. Ni, X. Guo, S. Liu, X. Wang, K. Liu, and X. Yang,
+“Distinguishing llm-generated from human-written code by contrastive
+learning,” ACM Transactions on Software Engineering and Methodology, vol. 34, no. 4, pp. 1–31, 2025.
+[40] H. Husain, H.-H. Wu, T. Gazit, M. Allamanis, and M. Brockschmidt,
+“CodeSearchNet challenge: Evaluating the state of semantic code
+search,” arXiv preprint arXiv:1909.09436, 2019.
+[41] Z. Zheng, K. Ning, Y. Wang, J. Zhang, D. Zheng, M. Ye, and J. Chen,
+“A survey of large language models for code: Evolution, benchmarking,
+and future trends,” arXiv preprint arXiv:2311.10372, 2023.
+[42] Y. Wang, W. Wang, S. Joty, and S. C. Hoi, “Codet5: Identifier-aware
+unified pre-trained encoder-decoder models for code understanding and
+generation,” arXiv preprint arXiv:2109.00859, 2021.
+
+ACKNOWLEDGMENT
+This work has been partially supported by the
+IDA—Information Disorder Awareness Project funded
+by the European Union-Next Generation EU within the
+SERICS Program through the MUR National Recovery and
+Resilience Plan under Grant PE00000014, and the SERENAIIoT project funded by MUR (Ministero dell’Università e
+della Ricerca) and European Union (Next Generation EU)
+under the PRIN 2022 program (project code 2022CN4EBH).
+R EFERENCES
+[1] N. A. Ernst and G. Bavota, “Ai-driven development is here: Should you
+worry?” IEEE Software, vol. 39, no. 2, pp. 106–110, 2022.
+[2] Open AI, “Open AI ChatGPT,” https://chatgpt.com.
+[3] GitHub, “GitHub Copilot,” https://copilot.github.com.
+[4] D. Guo, Q. Zhu, D. Yang, Z. Xie, K. Dong, W. Zhang, G. Chen,
+X. Bi, Y. Wu, Y. Li et al., “Deepseek-coder: When the large language
+model meets programming–the rise of code intelligence,” arXiv preprint
+arXiv:2401.14196, 2024.
+[5] M. R. Lyu, B. Ray, A. Roychoudhury, S. H. Tan, and P. Thongtanunam,
+“Automatic programming: Large language models and beyond,” ACM
+Transactions on Software Engineering and Methodology, 2024.
+[6] Anthropic CEO Dario Amodei, https://www.inc.com/joe-procopio/
+anthropics-ceo-said-all-code-will-be-ai-generated-in-a-year/91163367.
+[7] H. Yu, B. Shen, D. Ran, J. Zhang, Q. Zhang, Y. Ma, G. Liang, Y. Li,
+Q. Wang, and T. Xie, “Codereval: A benchmark of pragmatic code
+generation with generative pre-trained models,” in Proceedings of the
+46th IEEE/ACM International Conference on Software Engineering,
+2024, pp. 1–12.
+[8] N. S. Mathews and M. Nagappan, “Test-driven development and llmbased code generation,” in Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering, 2024.
+[9] B. Yetiştiren, I. Özsoy, M. Ayerdem, and E. Tüzün, “Evaluating the
+code quality of ai-assisted code generation tools: An empirical study
+on github copilot, amazon codewhisperer, and chatgpt,” arXiv preprint
+arXiv:2304.10778, 2023.
+[10] Y. Liu, T. Le-Cong, R. Widyasari, C. Tantithamthavorn, L. Li, X.B. D. Le, and D. Lo, “Refining chatgpt-generated code: Characterizing
+and mitigating code quality issues,” ACM Transactions on Software
+Engineering and Methodology, vol. 33, no. 5, pp. 1–26, 2024.
+[11] N. Tihanyi, T. Bisztray, M. A. Ferrag, R. Jain, and L. C. Cordeiro, “How
+secure is ai-generated code: a large-scale comparison of large language
+models,” Empirical Software Engineering, vol. 30, no. 2, pp. 1–42, 2025.
+[12] Y. Fu, P. Liang, A. Tahir, Z. Li, M. Shahin, J. Yu, and J. Chen, “Security weaknesses of copilot generated code in github,” arXiv preprint
+arXiv:2310.02059, 2023.
+[13] S. Kabir, D. N. Udo-Imeh, B. Kou, and T. Zhang, “Is stack overflow
+obsolete? an empirical study of the characteristics of chatgpt answers to
+stack overflow questions,” in Proceedings of the 2024 CHI Conference
+on Human Factors in Computing Systems, 2024, pp. 1–17.
+
+12
+
+

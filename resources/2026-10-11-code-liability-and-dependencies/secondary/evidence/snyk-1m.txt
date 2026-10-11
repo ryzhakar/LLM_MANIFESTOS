@@ -1,0 +1,414 @@
+npm passes the 1 millionth package milestone! What can we learn? | Snyk
+
+Skip to main content
+
+Platform
+
+Resources
+
+Company
+
+Pricing
+
+llms.txtSend this to your agentWritten for AI, not humans
+
+ENSelect your languageEnglishDeutschEspañolFrançais日本語Português
+
+Login
+
+Free and Team Plan Customers
+
+Snyk
+
+app.snyk.io
+
+Enterprise Plan Customers
+
+🇺🇸
+
+Snyk US - 1
+
+app.snyk.io
+
+🇺🇸
+
+Snyk US - 2
+
+app.us.snyk.io
+
+🇪🇺
+
+Snyk EU
+
+app.eu.snyk.io
+
+🇦🇺
+
+Snyk AU
+
+app.au.snyk.io
+
+The region where your data is hosted follows local agreements, and it may not align with your own location. Find out more.
+
+Snyk API & Web - All Customers
+
+Snyk API & Web (DAST)
+
+plus.probely.app
+
+Sign upBook a live demo
+
+ExploreIntegrationsDeepCode AIEvo Overview Security and governance for AI AgentsEvo Agentic Development Security Secure software in the age of AI agentsEvo AI-SPM Makes AI visible, governable and enforceableEvo Continuous Offensive Security Find what attackers find, before they find itSnyk Code Secure your code as it's writtenSnyk Open Source Avoid vulnerable dependenciesSnyk Container Keep your base images secureSnyk IaC Fix IaC misconfigurations in-codeSnyk API & Web (DAST) Find and test APIs and web appsSnyk Secrets Stop hardcoded secrets before commitSecure AI-Generated Code AI writes, Snyk securesApplication Security Build secure, stay secureSoftware Supply Chain Security Mitigate supply chain riskZero-Day Vulns Fix the first day with SnykRisk based prioritization Focus on what mattersResource Library Browse our extensive databaseCustomer Resources The one stop shop for customersSnyk in 30 Resource Hub Live and on-demand sessionsCode Checker Write better code for freeSecurity Intelligence Comprehensive vulnerability dataSnyk BlogSnyk's PodcastsSnyk’s YouTubeAI GlossarySnyk Labs Research on AI, vulnerabilities, and DevSecOpsSnyk Learn Security education from SnykSnyk User Docs Get started with SnykSnyk Support How can we help?Snyk Vuln Database Find new vulnerabilitiesSnyk Updates Stay in the loopSnyk Partner Solutions Directory Explore Snyk Partner IntegrationsAI Security Engineers Join the community to help build secure AIRead moreEvents & WebinarsAmbassadorsVulnVortexSubscribe to our newsletterOur Services Maximize your AppSec ROIOur Customers We help customers save time and moneyOur Partners Bringing business class security with partnersCase Studies Check out our customer stories and statsNewsroom See the latest press releasesContact Us Get in touch with any feedback or questionsCareers Join Snyk todayLeadership Meet our leadersRead more
+
+Snyk Blog
+
+In this article
+
+A brief history of npm, including security incidents
+
+npm’s top ten packages
+
+npm by numbers
+
+Summary
+
+npm passes the 1 millionth package milestone! What can we learn?
+
+Written by 
+
+Liran Tal
+
+Simon Maple
+
+June 4, 2019
+ 0 mins read
+
+June 4th is a historic date. Not only is it our very own Liran Tal’s birthday (Mazal Tov, Liran!) but it is also the date that the millionth package was indexed into the npm registry. npm is a package manager for JavaScript packages. The core component of npm is its public registry, hosting JavaScript packages that can be accessed by the npm client to build JavaScript applications.
+
+If you’re a user of npm and are interested in how you can use it more securely, be sure to read our npm security cheatsheet, listing ten top best practices on how to use npm safely.
+
+A brief history of npm, including security incidents
+
+January 2010: npm was created by Isaac Z. Schlueter, written in JavaScript.
+
+March 2016: popular JavaScript package, left-pad, was unpublished from the npm repository due to a naming dispute. After much disruption among the JavaScript world, tightened up its unpublishing policy.
+
+July 2018: a malicious version of the eslint-scope package was released which exposed npm credentials of users to the attacker.
+
+November 2018: the malicious package, flatmap-stream, was released to npm which was added as a dependency to the popular event-stream package. The package targeted Copay the bitcoin wallet.
+
+June 4th 2019: npm indexes its one-millionth package.
+
+npm’s top ten packages
+
+The npm website lists its top ten most popular packages. These are as listed below, with vulnerability information included. Interestingly, the request package has seen 17 typosquatting attempts.
+
+Package
+
+Vulnerabilities
+
+lodash
+
+3 vulnerabilities (1 high sev)
+
+request
+
+1 vulnerability (17 typosquatting attempts)
+
+chalk
+
+0 vulnerabilities (1 typosquatting attempt)
+
+react
+
+2 vulnerabilities (1 high sev)
+
+express
+
+1 vulnerability
+
+commander
+
+0 vulnerabilities
+
+moment
+
+3 vulnerabilities
+
+debug
+
+1 vulnerability
+
+async
+
+0 vulnerabilities
+
+prop-types
+
+0 vulnerabilities
+
+If we consider popularity as the number of total downloads we can see which libraries are used heavily both as direct and indirect dependencies:
+
+Package
+
+Downloads
+
+debug
+
+>40 million weekly downloads
+
+kind-of
+
+>34 million weekly downloads
+
+supports-color
+
+>34 million weekly downloads
+
+readable-stream
+
+>31 million weekly downloads
+
+source-map
+
+>30 million weekly downloads
+
+yargs
+
+>27 million weekly downloads
+
+camelcase
+
+>26 million weekly downloads
+
+minimist
+
+>25 million weekly downloads
+
+strip-ansi
+
+>25 million weekly downloads
+
+chalk
+
+>25 million weekly downloads
+
+Out of the above 10 packages, only debug was found to contain a security vulnerability.
+
+npm by numbers
+
+The sheer scale of the popularity and growth of npm is staggering as we can see from this graph, showing the number of indexed packages over just the last couple of years. In fact, we see a 250% growth of the platform in just over 2 years, since January 2017.
+
+Even month-by-month the growth of npm usage is visible, as we can see from the number of packages that are downloaded each month in 2019.
+
+Here are some more npm stats:
+
+1 million indexed packages (+ those that have been indexed since this post was written!)
+
+10.9 billion downloads last week
+
+46.9 billion downloads last month
+
+The top package is debug and accounts for more than 40 million weekly downloads
+
+The 1000th most downloaded package is merge-stream and accounts for about 3.5 million downloads a week
+
+250kpackages added to npm in 2018
+
+110kpackages added to npm in 2019, so far
+
+144k downloads of the Snyk CLI npm package each week!
+
+41 packages are owned by Snyk, yay!
+
+GitHub user, dominykas, and a friend from NearForm, provided some stats in a GitHub issue as part of some work being done in the Node.js Foundation’s Package Maintenance working group. Their data shows how general package maintenance varies significantly between authors.
+
+Percentile
+
+Last commit
+
+Last publish
+
+10%
+
+4 days old
+
+11 days old
+
+20%
+
+5 days old
+
+37 days old
+
+30%
+
+19 days old
+
+88 days old
+
+40%
+
+57 days old
+
+157 days old
+
+50%
+
+119 days old
+
+246 days old
+
+60%
+
+194 days old
+
+369 days old
+
+70%
+
+328 days old
+
+559 days old
+
+80%
+
+563 days old
+
+777 days old
+
+90%
+
+887 days old
+
+1098 days old
+
+95%
+
+1194 days old
+
+1372 days old
+
+100%
+
+2201 days old
+
+2792 days old
+
+Summary
+
+We’d like to send our congratulations to npm for running and maintaining the largest open source language repository, and to the great maintainers and developers in the community who power the ecosystem and assisted in reaching this great achievement. It’s extremely important to make sure that when you use open source packages, you use versions that do not contain known vulnerabilities. It’s straightforward to test your applications for free against the industry-leading Snyk vulnerability database. Try it now, and see the scan results instantly.
+
+Test your JavaScript app with a free Snyk account today.
+
+Get started in capture the flag
+
+Learn how to solve capture the flag challenges by watching our virtual 101 workshop on demand.
+
+Watch now
+
+Posted in:
+Application Security
+
+Read more
+
+Blog
+
+Frontier models found the vulnerabilities. Only the attacker found the chains.
+
+Static analysis found the flaws, but only live attack testing proved how they could be chained into breaches. A comparison of Evo COS, Claude Security, and Claude Code Security.
+
+Blog
+
+Autonomous Attacks Are Already Here. The Defense Has to Match Their Speed.
+
+Autonomous attackers are shrinking the window for defense. Learn how continuous discovery, remediation, validation, and prevention can help security teams keep pace.
+
+Blog
+
+Why AI Coding Agents Keep Writing Broken Access Control
+
+AI coding agents can produce authorization logic that compiles and passes review while exposing one tenant’s data to another. Learn why broken access control is difficult to detect and how to prevent it.
+
+Platform
+
+Snyk AI Security Platform
+
+Evo
+
+Integrations
+
+DeepCode AI
+
+Our Resources
+
+Resource Library
+
+Blog
+
+Snyk’s Podcasts
+
+AI Glossary
+
+llms.txt
+
+Knowledge & Docs
+
+Snyk Labs
+
+Snyk Learn
+
+Snyk User Docs
+
+Snyk Support
+
+Snyk Vuln Database
+
+Snyk Updates
+
+Snyk Trust Center
+
+Company & Community
+
+About Snyk
+
+Contact Us
+
+Book A Demo
+
+Careers
+
+Events & Webinars
+
+Ambassadors
+
+Why Snyk
+
+Snyk vs GitHub Advanced Security
+
+Snyk vs Veracode
+
+Snyk vs Checkmarx
+
+Snyk vs Black Duck
+
+Snyk vs Wiz
+
+Snyk vs Aikido
+
+Patched & Dispatched
+
+Your monthly roundup of Snyk content – the latest insights patched in, dispatched straight to your inbox. No fluff. Just the good stuff.
+
+Subscribe to our newsletter
+
+© 2026 Snyk Limited
+Registered in England and Wales
+
+Legal terms
+
+Privacy Notice
+
+Terms of use
+
+California residents: do not sell my information

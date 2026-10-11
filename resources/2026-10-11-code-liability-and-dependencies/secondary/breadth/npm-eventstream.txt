@@ -1,0 +1,107 @@
+
+
+                            The npm blog has been discontinued.
+
+                            Updates from the npm team are now published on the
+
+GitHub Blog
+ and
+                            the
+GitHub
+                            Changelog
+.
+
+Details about the event-stream incident
+
+This is an analysis of the
+event-stream incident
+ of which many of you became aware earlier this week. npm acts immediately to address operational concerns and issues that affect the safety of our community, but we typically perform more thorough analysis before discussing incidents—we know you’ve been waiting.
+
+On the morning of November 26th, npm’s security team was notified of a malicious package that had made its way into
+event-stream
+, a popular npm package. After triaging the malware, npm Security responded by removing
+flatmap-stream
+ and
+event-stream@3.3.6
+ from the Registry and taking ownership of the
+event-stream
+ package to prevent further abuse.
+
+The malicious package was version 0.1.1 of
+flatmap-stream
+. This package was added as a direct dependency of the
+event-stream
+ package by a new maintainer on September 9, 2018, in version 3.3.6. The
+event-stream
+ package is widely used, but the malicious code targeted developers at a company that had a very specific development environment setup: running the payload in any other environment has no effect. This specific targeting means that, ultimately, most developers would not be affected even if they had mistakenly installed the malicious module.
+
+The injected code targets the Copay application. When a developer at Copay runs one of their release build scripts, the resulting code is modified before being bundled into the application. The code was designed to harvest account details and private keys from accounts having a balance of more than 100 Bitcoin or 1000 Bitcoin Cash.
+
+Copay’s initial response was that that no builds containing this malicious code were released to the public, but we now have confirmation from Copay that “the malicious code was deployed on versions 5.0.2 through 5.1.0.”
+
+The attack
+
+This attack started out as a social engineering attack. The attacker, posing as a maintainer, took over maintainership of the
+event-stream
+ module.
+
+The technical details
+
+Here are some technical details that we know about, for those of you interested in this.
+
+The injected code:
+
+Read in AES encrypted data from a file disguised as a test fixture
+
+Grabbed the npm package description of the module that imported it, using an automatically set environment variable
+
+Used the package description as a key to decrypt a chunk of data pulled in from the disguised file
+
+The decrypted data was part of a module, which was then compiled in memory and executed.
+
+This module performed the following actions:
+
+Decrypted another chunk of data from the disguised file
+
+Concatenated a small, commented prefix from the first decrypted chunk to the end of the second decrypted chunk
+
+Performed minor decoding tasks to transform the concatenated block of code from invalid JS to valid JS (we believe this was done to evade detection by dynamic analysis tools)
+
+Wrote this processed block of JS out to a file stored in a dependency that would be packaged by the build scripts:
+
+The chunk of code that was written out was the actual malicious code, intended to be run on devices owned by the end users of Copay.
+
+This code would do the following:
+
+Detect the current environment: Mobile/Cordova/Electron
+
+Check the Bitcoin and Bitcoin Cash balances on the victim’s copay account
+
+If the current balance was greater than 100 Bitcoin, or 1000 Bitcoin Cash:
+
+Harvest the victim’s account data in full
+
+Harvest the victim’s copay private keys
+
+Send the victim’s account data/private keys off to a collection service running on 111.90.151.134.
+
+For users of the Copay app,
+bitpay recommends
+, “If you are using any version from 5.0.2 to 5.1.0, you should not run or open the Copay app.”
+
+For npm users, you can check if your project contains the vulnerable dependency by running
+npm audit
+. If you have installed the impacted version of this
+event-stream
+, we recommend that you update to a later version as soon as possible.
+
+ November 27th, 2018 2:42pm
+
+@adam-npm
+
+malware
+
+security
+
+Incident report
+

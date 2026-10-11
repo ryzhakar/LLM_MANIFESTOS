@@ -1,0 +1,276 @@
+
+
+Skrentablog
+
+« 'tie' considered harmful
+ |
+
+Main
+
+Code is our enemy
+
+                              Code is bad.  It rots.  It requires periodic maintenance.  It has bugs
+that need to be found.  New features mean old code has to be adapted.
+
+The more code you have, the more places there are for bugs to hide.
+The longer checkouts or compiles take.  The longer it takes a new
+employee to make sense of your system.  If you have to refactor
+there's more stuff to move around.
+
+Furthermore, more code often means less flexibility and functionality.
+This is counter-intuitive, but a lot of times a simple, elegant
+solution is faster and more general than the plodding mess of code
+produced by a programmer of lesser talent.
+
+Code is produced by engineers.  To make more code requires more
+engineers.  Engineers have n^2 communication costs, and all that
+code they add to the system, while expanding its capability, also
+increases a whole basket of costs.
+
+You should do whatever possible to increase the productivity of
+individual programmers
+in terms of the expressive power of the code
+they write
+.  Less code to do the same thing (and possibly better).
+Less programmers to hire.  Less organizational communication costs.
+
+The minimum description length
+principle
+
+(MDL) is often used in genetic programming to identify the most
+promising candidate programs from a population.  The shorter solutions
+are often better; not just shorter, but actually faster and/or more
+general.
+
+A few hours reading
+WTF
+
+should convince anyone that there are often vast differences in the
+amount of code different programmers will put into the same task.
+But it's not just
+wtf?
+ code.  Components like a page crawler
+can have very different solutions.  Maybe you can re-implement a 10k
+line solution into a 1k line solution, by taking a different approach.
+And it turns out that the shorter crawler is actually more general
+and works in a lot more cases.  I've seen this over and over again
+in code and I'm convinced that it's harder to write something short
+and robust than something big and brittle.
+
+I've been looking for ways to get code out of the code.  Is there
+something the code is doing that can be turned into an external
+dataset, and driven by a web UI, or some rule-list that I can contract
+out to someone on elance?  Maybe a little rule-based language has to
+be written.  I've seen this yield an unexpected productivity increase.
+It turns out that using the web tool to edit the rules in the little
+domain-specific language ends up being more productive than messing
+around in the raw code anyway.  The time spent formalizing the subdomain language is more than paid back.
+
+Code has three lifetime performance curves:
+
+Code that is consistent over time.  The MD5 function is just great and it
+always does what we want.  We act like all code is like this but most of the
+interesting parts of the system really aren't.
+
+Code that will get worse over time, or will inevitably cause a problem in the future.
+
+Humans will have to jump in at some point to deal.  You know this
+when you write the code, if you stop to think.  Appending lines
+to a logfile without bothering to implement rotation is like this.
+Having a database that you know will grow over time on a single disk
+that counts on someone to type 'df' every so often and eventually
+
+deal
+ is like that too.
+
+RAID is kind of like this.  It reduces disk reliability problems by some constant.  But when a disk fails, RAID has to email someone and say it's going to lose data unless someone steps in and
+deals
+.  In a growing service, RAID is going to generate m management events for n disks.  As n grows, m grows.  10X the disk cluster, 10X the management events.  Wonderful.  Better to architect something that decays organically over time, without requiring pager-level immediate support or else it will catastrophically fail.  e.g the datacenter in one of these shipping container
+prototypes
+.
+
+Code that gets better over time.
+
+This is the frontier.
+
+Google's spelling corrector is like this.  It works okay on a small
+crawl, but better on a big crawl.
+
+People in the system can be organized this way, working on a component
+(like a dataset or ruleset) that they steadily improve over time.
+They're external to the core programming team but they make the code
+better by improving it with data.
+
+I've been wondering if it's possible to generally insert learning
+components at certain points into the code to adaptively respond to
+failure cases, scenarios, etc.  Why am I manually tuning this perf
+variable or setting this backoff strategy?  Why are we manually doing
+A/B testing and putting the results back into CVS to run another
+test, when the whole loop could be wired up to the live site to run
+by itself and just adapt and/or improve over time?  I need to bake
+this some more but I think it's promising.
+
+Related:
+
+Kevin Burton
+
+be inflexibile
+
+                                                                  Posted on May 30, 2007  3:11 PM
+
+|
+
+Permalink
+
+TrackBack
+
+TrackBack URL for this entry:
+http://www.skrenta.com/mt/mt-tb.cgi/144.
+
+Comments (5)
+
+Jason Watkins
+:
+
+My point today is that, if we wish to count lines of code, we should not regard them as "lines produced" but as "lines spent": the current conventional wisdom is so foolish as to book that count on the wrong side of the ledger.
+
+--Dijkstra 1036-11
+
+I've been fond of this quote for a while. I'd never really thought about code that would appreciate over time however. That's a cool concept.
+
+                                          Posted by
+
+Jason Watkins
+  |
+
+May 30, 2007  4:41 PM
+
+                                          Posted on
+
+May 30, 2007 16:41
+
+Greg Linden
+:
+
+... the whole loop could be wired up to the live site to run by itself and just adapt and/or improve over time ...
+
+Yep, absolutely.  I and others had similar thoughts about this -- an extreme A/B test, a King of the Hill, constant optimization of the website content -- when I was at Amazon.
+
+It is tricky to implement in the most general case for many reasons (getting statistical significance on so many simultaneous tests, keeping the tests independent, picking measures that correctly optimize for the long-term goals of the business, etc.).
+
+We do see a lot of this for specific systems.  Many of Amazon's personalization and search features learned and optimized from click and sales data.  Search engine relevance ranks often optimize based on click data.  Advertising like Google AdWords optimizes based on revenue and performance.
+
+But, I too share the larger dream of a global system optimizing the entire website constantly, including trying new content and experimenting with different layouts and designs, all automatically.  It would be very cool and very useful.
+
+                                          Posted by
+
+Greg Linden
+  |
+
+May 30, 2007  6:30 PM
+
+                                          Posted on
+
+May 30, 2007 18:30
+
+                                          AN:
+
+Code is our enemy
+
+There is no teacher but the enemy. Only the enemy shows you where you are weak. Only the enemy tells you where he is strong. No one but the enemy will ever teach you how to conquer.
+
+--Orson Scott Card,
+Ender's Game
+
+                                          Posted by
+                                          AN  |
+
+May 31, 2007  6:39 PM
+
+                                          Posted on
+
+May 31, 2007 18:39
+
+Bill Hartzer
+:
+
+It sounds like you're talking about code that can essentially "write itself". What would be great is if the code could actually "learn" from mistakes or learn from past experiences and "correct itself" or perhaps optimize itself in a way that it could run faster.
+
+If the code was able to take past changes and adapt in a certain way then couldn't it anticipate certain actions based on certain variables and make some changes?
+
+I don't think we're near being able to get away from "hiring programmers" to program, code definitely has a long way to go. Although, a lot of code has been written in the past, and through the use of APIs and other means of using code that's already been written, I am seeing it perhaps get easier to code certain things.
+
+                                          Posted by
+
+Bill Hartzer
+  |
+
+June  1, 2007 10:51 AM
+
+                                          Posted on
+
+June  1, 2007 10:51
+
+Tanner Brockwell
+:
+
+well aged code???
+
+I really liked the avenue you took here. have you stumbled across the worse is better and less is more memes?
+
+thanks
+
+                                          Posted by
+
+Tanner Brockwell
+  |
+
+June  1, 2007  1:14 PM
+
+                                          Posted on
+
+June  1, 2007 13:14
+
+Post a comment
+
+                                    (If you haven't left a comment here before, you may need to be approved by the site owner before your comment will appear. Until then, it won't appear on the entry. Thanks for waiting.)
+
+Name:
+
+Email Address:
+
+URL:
+
+                                          Remember personal info?
+
+Comments: (you may use HTML tags for style)
+
+Search
+
+Search this blog:
+
+About
+
+This page contains a single entry from the blog posted on
+May 30, 2007  3:11 PM
+.
+
+The previous post in this blog was
+'tie' considered harmful
+.
+
+Many more can be found on the
+main index page
+ or by looking through
+the archives
+.
+
+Subscribe to this blog's feed
+
+                            [
+What is this?
+]
+
+                            Powered by
+Movable Type 3.33
+

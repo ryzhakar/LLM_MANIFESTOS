@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+    <title>UNIX Style, or cat -v Considered Harmful</title>
+
+    <link rel="stylesheet" href="/pub/style/style.css" type="text/css" media="screen, handheld" title="default">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon">
+    <link rel="stylesheet" href="/_werc/pub/style.css" type="text/css" media="screen" title="default">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+
+
+
+    
+
+</head>
+<body>
+
+<header>
+    <nav>
+    <div class="left">
+      <a href="http://quotes.cat-v.org">quotes</a> |
+      <a href="http://doc.cat-v.org">docs</a> |
+      <a href="http://repo.cat-v.org">repo</a> |
+      <a href="http://go-lang.cat-v.org">golang</a> |
+      <a href="http://sam.cat-v.org">sam</a> |
+      <a href="http://man.cat-v.org">man</a> |
+      <a href="http://acme.cat-v.org">acme</a> |
+      <a href="http://glenda.cat-v.org">Glenda</a> |
+      <a href="http://ninetimes.cat-v.org">9times</a> |
+      <a href="http://harmful.cat-v.org">harmful</a> |
+      <a href="http://9p.cat-v.org/">9P</a> |
+      <a href="http://cat-v.org">cat-v.org</a>
+    </div>
+
+    <div class="right">
+
+      <span class="doNotDisplay">Related sites:</span>
+      | <a href="http://cat-v.org/update_log">site updates</a>
+      | <a href="/sitemap">site map</a> |
+
+    </div>
+
+    </nav>
+    <h1><a href="/">cat -v <span id="headerSubTitle">harmful stuff</span></a></h1>
+</header>
+
+    <nav id="side-bar">
+        <div>
+<ul>
+<li><a href="/Blog/">&rsaquo; Blog/</a></li>
+<li><a href="/cat-v/" class="thisPage">&raquo;<i> cat v/</i></a></li>
+<li><ul>
+<li><a href="/cat-v/unix-program-design/">&rsaquo; unix program design/</a></li>
+</ul></li>
+<li><a href="/economics/">&rsaquo; economics/</a></li>
+<li><a href="/films/">&rsaquo; films/</a></li>
+<li><a href="/journalism/">&rsaquo; journalism/</a></li>
+<li><a href="/people/">&rsaquo; people/</a></li>
+<li><a href="/science/">&rsaquo; science/</a></li>
+<li><a href="/security-theater/">&rsaquo; security theater/</a></li>
+<li><a href="/society/">&rsaquo; society/</a></li>
+<li><a href="/software/">&rsaquo; software/</a></li>
+<li><a href="/standards/">&rsaquo; standards/</a></li>
+<li><a href="/words/">&rsaquo; words/</a></li>
+</ul>
+        </div>
+    </nav>
+
+<article>
+<h1>UNIX Style, or cat -v Considered Harmful</h1>
+
+<p>At the USENIX Summer Conference of 1983 <a href="http://genius.cat-v.org/rob-pike/">Rob Pike</a>
+made a presentation titled &lsquo;<em><a href="http://doc.cat-v.org/unix/">UNIX</a> Style, or cat -v Considered Harmful</em>&rsquo; and
+together with <a href="http://genius.cat-v.org/brian-kernighan/">Brian Kernighan</a> wrote the paper &lsquo;<em>Program Design in the UNIX
+Environment</em>&rsquo; (<a href="unix_prog_design.pdf">pdf version</a>, <a href="unix_prog_design.ps">ps
+version</a>), published as an article in <a href="http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=at%26t%20bell%20laboratories%20technical%20journal"><em>AT&amp;T Bell Laboratories Technical Journal</em></a>, October 1984, Vol. 63 No. 8 Part 2.</p>
+
+<p>This was a prelude for their famous book <a href="http://www.amazon.com/gp/product/013937681X?ie=UTF8&amp;tag=catv-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=013937681X"><em>The Unix Programming Environment</em></a> (Prentice-Hall Software Series) that today is considered <em>the
+bible of Unix</em>.</p>
+
+<p>Unfortunately their advice has been completely ignored, and today Unix has become
+overcome by exactly the kind of mistakes they warned against.</p>
+
+<pre><code>Bell Laboratories
+
+Murray Hill, NJ (dec!ucb)wav!research!rob
+
+It seems that UNIX has become the victim of cancerous growth at the hands of
+organizations such as UCB. 4.2BSD is an order of magnitude larger than Version
+5, but, Pike claims, not ten times better.
+
+The talk reviews reasons for UNIX's popularity and shows, using UCB cat as a
+primary example, how UNIX has grown fat. cat isn't for printing files with line
+numbers, it isn't for compressing multiple blank lines, it's not for looking at
+non-printing ASCII characters, it's for concatenating files.
+
+We are reminded that ls isn't the place for code to break a single column into
+multiple ones, and that mailnews shouldn't have its own more processing or joke
+encryption code.
+
+Rob carried the standard well for the "spirit of UNIX," and you can look
+forward to a deeper look at the philosophy of UNIX in his forthcoming book.
+</code></pre>
+</article>
+
+<footer>
+<br class="doNotDisplay doNotPrint" />
+
+<div style="margin-right: auto;"><a href="http://werc.cat-v.org">Powered by werc</a></div>
+
+<div><form action="/_search/" method="POST"><input type="text" id="searchtext" name="q"> <input type="submit" value="Search"></form></div>
+</footer>
+</body></html>

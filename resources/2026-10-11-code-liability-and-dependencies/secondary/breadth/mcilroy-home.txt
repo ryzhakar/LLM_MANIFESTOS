@@ -1,0 +1,200 @@
+M. Douglas McIlroy, Adjunct Professor
+
+Department of Computer Science
+
+6211 Sudikoff Hall
+
+Dartmouth College
+
+Hanover, NH 03755
+
+douglas.mcilroy@dartmouth.edu
+
++1 603 646 1077
+
+2003 marked my golden anniversary as a
+programmer
+. Hooked when Bob
+Walker introduced his numerical analysis class to Cornell's newly-arrived IBM
+CPC, I have ever since applied my training in engineering, physics, and math
+to this endlessly fascinating vocation. I had the good fortune to head a
+research department at Bell Labs in which
+Unix
+ was born, and to work
+with some of the most creative talents in computing. Some things I have worked
+on:
+
+Languages and compilers:
+macros
+, Lisp,
+PL/I
+, TMG (a compiler-compiler), regular
+    expressions; influenced Snobol, Altran, C++
+
+Stream processing: Unix
+pipes
+,
+
+classic coroutine sieve
+, power
+    series
+
+Computer
+security
+
+Unix programs
+: spell, diff, sort, join, graph, speak, tr, tsort, calendar, echo, tee, quiz, etc.
+
+Cartography
+: map projections
+
+Algorithms for
+graphics
+
+Storage allocation
+ theory and practice; first conservative
+    garbage collector
+
+Theorem-proving
+ in logic and geometry
+
+Documentation: making
+Unix manuals
+ short and accurate
+
+Upon retiring from Bell Labs, I moved to another happy
+situation, at Dartmouth as adjunct professor of
+
+Computer Science
+
+and affiliate of the
+
+Institute
+for Security Technology Studies
+.  Here I have taught
+
+Advanced operating systems, CS108
+
+Information systems, CS33
+
+Data structures, CS15
+
+Logic of programming, CS188
+
+Programming languages, CS118
+
+and have given guest lectures in several other
+courses.
+
+Gallery
+
+Map fun
+
+Rainbow
+icosahedron
+
+Best Webstern
+word squares
+
+W A S S A I L    R A C I S M    C H A P S    B L O C
+A N T E N N A    E V I N C E    H O U R I    R U D Y
+S T R I N G Y    P E R S O N    A R R A S    A X I S
+S E I Z U R E    A S C E N T    M A I N S    G E N T
+A N N U L A R    S T U C C O    P E C K Y
+I N G R A T E    T A S T E R
+L A Y E R E D
+
+Dual cryptograms
+
+      HILLARY MENTORS SILVERY VERVAIN; BINDERY  SUCCORS CORRIDA SLOGGER.
+      BARRENS HOLDING GARCONS CONCEAL  WALTONS' GYPPING PINNATE GRIFFON.
+
+Power serious: Haskell magic
+
+      revert (0:ft) = rs where rs = 0 : 1/(ft#rs)
+
+Pure macros as a programming language
+
+plus a
+test suite
+
+      define(if,`if_$1(`$2',`$3')')define(if_T,`$1')define(if_F,`$2')
+
+Tiniest C sort function?
+
+      s(a,n)int*a;{n-->1?s(a,n),s(a+1,n),n=*a,*a=a[1],a[n>*a]=n:0;}
+
+Basic CS reading list
+
+Cook's Travels and Other Salesmen's Tales
+ — Dick Karp
+
+Publications
+
+Bloggish and other info
+
+ChatGPT is a
+lousy mathematician
+
+An appreciation of the late
+Dennis Ritchie
+
+Dartmouth's
+Communication Files:
+
+Interprocess IO before pipes.
+
+Bell Labs computing history
+,
+talk transcribed by Russ Cox
+
+All ten editions of the Research Unix Manual:
+image
+
+Original description of
+Darwin
+, a 1961 game of
+  survival of the fittest among programs, progenitor of
+
+Core Wars
+
+Source code
+
+  for map projections, suffix arrays, quicksort and antiquicksort, word squares, etc.
+
+Honors: Usenix Association
+
+Flame
+ and
+
+Software Tools
+ awards; member
+
+National Academy of Engineering
+; fellow
+AAAS
+
+Biography
+
+    Computer History Museum interview 
+
+Part 1
+
+Part 2
+
+Encomia(?)
+ assembled by Sara Sinclair
+
+Extracurricular
+Hanover trails
+,
+mapped by a committee I chaired.
+
+Piseco Yacht Club
+
+Scenes from
+Ho, Ghana,
+ 2001.
+
+February 8, 2026
+
