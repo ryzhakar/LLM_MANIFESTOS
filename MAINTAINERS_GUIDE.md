@@ -20,8 +20,8 @@ The frontmatter field `kind` sets the species of each file in `manifestos/`.
 |---|---|---|
 | Content | Source material transformed under the writing standard | One text kept verbatim for extraction |
 | Form rules | The writing standard governs | Exempt, tagline length included |
-| Entry bar | The entry gate | Never counted against the entry bar |
-| Attribution line | `*After [authors]*` | `*by [author], [year]*` |
+| Entry bar | The entry gate | Never counted against the entry bar; not counted when checking held ground; needs no axiom |
+| Attribution line | `*After [authors]*` | `*by [author], [year]*`; the year is required |
 
 Attribution is mandatory for both species.
 
@@ -102,7 +102,7 @@ Run the stages in order. Start a stage only after the previous stage's artifact 
 | 3 | Gate test, then spec | `drafts/<slug>/SPEC.md` |
 | 4 | Draft by a writer bound to the writing standard and a register reference | `drafts/<slug>/v1.md` |
 | 5 | Review: five unbiased reviewers, a register reviewer, a maximalist self-pass | `drafts/<slug>/reviews/`, `drafts/<slug>/v2.md` |
-| 6 | Ship | `manifestos/<slug>.md` |
+| 6 | Ship | `manifestos/<slug>.md`, `orchestration_log/history/<date>/reviews/` |
 
 **Stage 2** holds four artifacts:
 1. Ground-truth audits of the collection.
@@ -111,20 +111,21 @@ Run the stages in order. Start a stage only after the previous stage's artifact 
 4. A candidates report.
 
 **Stage 3.** Write the spec only for a candidate that meets all three tests:
-1. One axiom the verification rated VERIFIED, stated by at least two authors.
+1. At least one axiom the verification rated VERIFIED, stated by at least two authors. Further axioms may be rated QUALIFIED; each carries its limit inside the manifesto.
 2. One precise enemy.
-3. Ground the collection does not hold, or can re-cut by named rows (see *Re-cutting an existing manifesto*).
+3. Ground the collection does not hold, or can re-cut by named rows (see *Re-cutting an existing manifesto*). Canon does not count when checking held ground.
 
-State the axiom with its authors, the enemy, and the ground in `SPEC.md`.
+`SPEC.md` holds: thesis, enemy line, distinctions, axioms with verdicts, bindable demands, declarable and forbidden evidence, boundary clauses, re-cut rows, skeleton, register targets, frontmatter, reviewer rubric.
 
 **Stage 5.** Save each revision at the next fresh path, `v<N>.md`. Store reviewer output in `reviews/`. The writing standard defines the reviewers' lenses and rules.
 
 **Stage 6.**
 1. Move the final version to `manifestos/<slug>.md`. A draft enters the collection only by moving there.
-2. Complete the frontmatter as the writing standard states.
-3. If the theme is new, add it first (see *Adding a New Theme*).
-4. Run `just readme`. Require exit 0 and no warning panel.
-5. Commit: `git add manifestos/ themes.yaml README.md`, then `git commit -m "feat: add <slug> manifesto"`.
+2. Archive `drafts/<slug>/reviews/` under `orchestration_log/history/<date>/reviews/`.
+3. Complete the frontmatter as the writing standard states.
+4. If the theme is new, add it first (see *Adding a New Theme*).
+5. Run `just readme`. Require exit 0 and no warning panel.
+6. Commit: `git add -A drafts/<slug>/ manifestos/ themes.yaml orchestration_log/ README.md`, then `git commit -m "feat: add <slug> manifesto"`. The ship commit deletes `drafts/<slug>/`.
 
 **Orchestrators:** Check that the artifact path exists before dispatching the next stage.
 
@@ -164,7 +165,7 @@ A **row** is one claim a manifesto holds, cited as `file:line`.
 
 1. Name every row that moves as `file:line`, with its destination.
 2. State the held ground of each affected manifesto after the move.
-3. Record both in the `SPEC.md` of the draft that causes the re-cut.
+3. Record both in the `SPEC.md` of the draft that causes the re-cut. A re-cut without a draft goes in `orchestration_log/history/<date>/recut-<file>.md`, which names the rows moved and the held ground after (`<file>`: the manifesto's file name without `.md`).
 4. Apply the version rule:
 
 | Re-cut | Version |
@@ -278,9 +279,9 @@ Two files with the same tagline (lowercase, punctuation ignored) trigger a warni
 
 ```
 manifestos/                    # scanned; <slug>.md, kebab-case, no spaces, no prefix
-drafts/<slug>/                 # not scanned: SPEC.md, v1.md, v2.md, reviews/
+drafts/<slug>/                 # not scanned: SPEC.md, v1.md, v2.md, reviews/; the ship commit deletes it
 resources/<date>-<slug>/       # substrate, verbatim; not scanned
-orchestration_log/             # history/<date>/, reference/
+orchestration_log/             # history/<date>/ (discovery-research/, reviews/, recut-<file>.md), reference/
 archive/                       # not scanned
 research/                      # gitignored working area
 tests/test_generate.py         # schema tests
