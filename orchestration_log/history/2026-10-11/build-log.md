@@ -128,3 +128,7 @@
 ## 2026-10-12 owner verdict and rewrite
 - Owner: shipped v7 reads as unintelligible gauge-bait. Diagnosis: per-section metric floors + 145-word caps + 16 demands crammed; reviewers graded rubric, never readability.
 - Orchestrator rewrote lines-spent.md by hand from the primary sources (Dijkstra EWD1036, Cox, Cunningham, Skrenta, Atwood, Lee, Ritchie/Thompson 1974 + 1977), spec §7 verified figures only, §8 forbidden claims excluded, boundaries inside attacks, demands as the narrator's questions. 1,370 words. No metrics loop.
+
+## 2026-10-12 owner revert: smallest diff
+- Reverted in LLM_MANIFESTOS: kind/register/reader fields, tagline-length rule, tests, README columns, maintainers-guide rewrite, frontmatter backfill, first-principles 1.0.1→1.0.0 decrement, invented attribution lines (intervention, self-documenting-code, postgres). Kept: kiss Delete Code re-cut, cargo-cult 1974, zen "by TIM PETERS, 2004", themes trim, /research/ ignore, lines-spent.
+- Reverted in claude-skills: manifesto-writing skill rewrite (branch manifesto-writing-standard deleted), hooks' register/reader injection. Kept: binding-channel hook fix (3.3.0), oath Tier 1 path line, ETHOS line.
