@@ -124,3 +124,7 @@
 - manifestos/lines-spent.md b348908 (v7 byte-identical); README b4dd804; kiss re-cut e3181dd (Delete Code block out, 321→311 lines, 2.0.0 kept); recut record e025d27; archive d28dbb1 (SPEC, rulings, 33 reviews → orchestration_log/history/2026-10-11/owned-lines/); reference 1e11d8f. Pushed. 13 manifestos. Session record next.
 - Final cleanup pushed: 563ab6d (gitignore /research/), 4eb183f (26 build artifacts preserved + INDEX), 61c160f (codebase_state attribution), 52188b6 (session items closed). One stale-line fix dispatched. Hooks register/reader injection pending.
 - Plugin D4 hook half pushed: 94c64d2 (tests), 7f240be (hooks inject "(voice: X, reader: Y)"), 247f0fd (SCHEMA). 100/100 hook tests; max hook output 4,347 chars. manifesto-binding-channel @ 247f0fd.
+
+## 2026-10-12 owner verdict and rewrite
+- Owner: shipped v7 reads as unintelligible gauge-bait. Diagnosis: per-section metric floors + 145-word caps + 16 demands crammed; reviewers graded rubric, never readability.
+- Orchestrator rewrote lines-spent.md by hand from the primary sources (Dijkstra EWD1036, Cox, Cunningham, Skrenta, Atwood, Lee, Ritchie/Thompson 1974 + 1977), spec §7 verified figures only, §8 forbidden claims excluded, boundaries inside attacks, demands as the narrator's questions. 1,370 words. No metrics loop.
