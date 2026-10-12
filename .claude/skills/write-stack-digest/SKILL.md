@@ -3,13 +3,46 @@ name: write-stack-digest
 description: "Write one stack's digest: the plain text a small model carries in place of several manifestos, composed from their digests alone. \"write the stack digest\", \"compose the stack\", \"digest the stack\", \"bind the stack for the small model\", or a project whose stack index names members with no stack digest or one older than a member's digest."
 ---
 
-- Take the member list from the stack index. Read each member's digest whole. Read nothing else, never the originals.
-- Bind to all members through `manifesto-oath`. Its interplay analysis is the work: deconstruct each digest to its demands, map where they converge, map where they pull apart, resolve each tension with one rule, settle a priority order.
-- Merge demands that converge into one sentence. Replace both sides of each tension with its resolution. Carry every other demand as its digest states it.
-- Order by the priority the binding settled.
-- Where members govern different things, say in the sentence what it applies to: the reply, the code, the schema.
-- Add one line that applies the rules to every reply, including drift. Write it as an order, never a forecast: tell the reader to check reply ten as it checked reply one; never tell it that it will drift. A predicted drift is a drift you ordered.
-- Write every sentence as `write-digest` writes one, Strunk applied.
-- Check against the member digests: every demand present, merged, resolved, or deliberately dropped. No tension carried on both sides. Nothing imported.
-- No header, no frontmatter, no title. Portable markdown. Under 850 words.
-- Save as `.claude/digests/<slugs sorted, joined by +>.md` in the project that declares the stack. Done.
+<take-the-members>
+Take the member list from the stack index, the list in `.manifestos.yaml` naming the manifestos a project binds; never take members from elsewhere.
+Read each member's digest, the plain text the `write-digest` skill writes, whole; never read the original manifesto.
+</take-the-members>
+
+<bind-to-the-members>
+Bind to all members through the `manifesto-oath` skill, whose interplay analysis deconstructs each digest to its demands, the things it tells its reader to do or refuse, maps where they converge, maps where they pull apart, resolves each tension with one rule, and settles a priority order; never compose unbound.
+</bind-to-the-members>
+
+<merge-and-resolve>
+Merge demands that converge into one sentence; never carry one concept as two sentences.
+Replace both sides of each tension with its resolution; never carry a tension on both sides.
+Carry every other demand as its digest states it; never reword one.
+</merge-and-resolve>
+
+<order-the-rules>
+Order by the priority the binding settled; never order by member.
+</order-the-rules>
+
+<name-the-object>
+Where members govern different things, say in the sentence what it applies to, the reply, the code, or the schema; never leave such a sentence unscoped.
+</name-the-object>
+
+<add-the-standing-line>
+Add one line that applies the rules to every reply, including drift; never leave the digest without it.
+Write it as an order telling the reader to check reply ten as it checked reply one; never write it as a forecast that the reader will drift.
+</add-the-standing-line>
+
+<write-the-sentences>
+Write every sentence as the `write-digest` skill writes one, with Strunk applied; never write one another way.
+</write-the-sentences>
+
+<check-against-the-members>
+Check against the member digests, every demand present, merged, resolved, or deliberately dropped, no tension carried on both sides, nothing imported; never check against memory of them.
+</check-against-the-members>
+
+<shape-the-file>
+Write the body alone, in portable markdown, markdown with no feature past paragraphs and lists, under 850 words; never add a header, a frontmatter, or a title.
+</shape-the-file>
+
+<save-the-file>
+Save it as `.claude/digests/<slugs sorted, joined by +>.md` in the project that declares the stack; never save it in the manifesto repo.
+</save-the-file>
