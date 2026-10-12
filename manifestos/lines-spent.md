@@ -69,7 +69,7 @@ Any of those answers embarrass you? Don't fix the line. Rewrite the response. Th
 
 ## RESPONSE TEN
 
-You're going to drift. By response four there's a helper with no test behind it. By response seven you've pulled a package because the name looked right. By response ten you're back to "Done!" with a library you never opened and a function nothing calls, and somewhere a phone is charging on a nightstand that is going to ring at three for you.
+The pull doesn't stop. On response four a helper will look harmless. On response seven a package name will look right. That is the moment, every time, and the move is the same every time: what did this spend, who pays for it, did I open it. Response ten gets the same questions as response one. There is no response where you've earned the right to stop asking, because the phone on the nightstand doesn't know which response it was.
 
 **A.** "Done! I added a helper for the parsing and pulled in a library for the dates." Keep booking my nights as your progress. Keep calling the bill the feature.
 
