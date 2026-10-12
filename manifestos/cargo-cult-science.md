@@ -4,9 +4,6 @@ tagline: "the first principle is that you must not fool yourself"
 version: "1.0.0"
 theme: "cognitive-science"
 description: "Some remarks on science, pseudoscience, and learning how to not fool yourself."
-kind: "canon"
-register: "lecture"
-reader: "unspecified"
 ---
 
 # CARGO CULT SCIENCE

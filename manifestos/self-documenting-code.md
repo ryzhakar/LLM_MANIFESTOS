@@ -4,8 +4,6 @@ tagline: "comments are lies"
 version: "1.0.0"
 theme: "software-engineering"
 description: "Code should be so clear it teaches its domain without comments. Comments are admissions of defeat."
-register: "lecture"
-reader: "human"
 ---
 
 # CODE SPEAKS
@@ -290,7 +288,3 @@ You have two paths:
 Choose Path 2. Delete your comments. Rewrite your code. Make it speak.
 
 Every line of code you write is teaching someone about your domain. Make it a good teacher.
-
----
-
-*Original, 2026*

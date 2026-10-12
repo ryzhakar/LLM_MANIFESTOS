@@ -4,8 +4,6 @@ tagline: "knowledge has one home"
 version: "1.0.0"
 theme: "software-engineering"
 description: "Knowledge duplication (not code duplication) is the enemy. Every piece of knowledge must have one authoritative representation."
-register: "declarative"
-reader: "human"
 ---
 
 # MANIFESTO: Knowledge Has One Home

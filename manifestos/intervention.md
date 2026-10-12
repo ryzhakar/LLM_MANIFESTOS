@@ -4,8 +4,6 @@ tagline: "roots, not canopy"
 version: "1.0.0"
 theme: "cognitive-science"
 description: "An intervener's protocol for diagnosing and restoring corrupted systems without being absorbed by them"
-register: "parable"
-reader: "unspecified"
 ---
 
 # When Nothing Can Be Trusted
@@ -93,7 +91,3 @@ Or take the soil core. Map the network. Find what remains clean. Begin the work 
 The canopy is green. The death is underground.
 
 Choose.
-
----
-
-*Original, 2026*

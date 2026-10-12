@@ -4,8 +4,6 @@ tagline: "build for today"
 version: "1.0.0"
 theme: "software-engineering"
 description: "Stop building for imagined futures. Presumptive development creates cascading costs that compound into bankruptcy."
-register: "declarative"
-reader: "human"
 ---
 
 # Build For Today

@@ -1,11 +1,9 @@
 ---
 title: "The First Principles"
 tagline: "atoms, not analogies"
-version: "1.0.0"
+version: "1.0.1"
 theme: "cognitive-science"
 description: "Stop copying. Stop iterating. Deconstruct reality to its axioms and build the future from scratch."
-register: "parable"
-reader: "unspecified"
 ---
 
 # THE FIRST PRINCIPLES
