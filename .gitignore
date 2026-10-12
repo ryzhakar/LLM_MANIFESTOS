@@ -2,3 +2,4 @@ orchestration_log/history/*/cost.md
 orchestration_log/recon/
 /research/
 *.DS_Store
+__pycache__/
