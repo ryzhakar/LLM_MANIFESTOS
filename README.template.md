@@ -4,10 +4,10 @@
 
 ## Quick Reference
 
-| Manifesto | Theme | Version | Register | Reader |
-|-----------|-------|---------|----------|--------|
+| Manifesto | Theme | Version |
+|-----------|-------|---------|
 {% for m in manifestos | sort(attribute='title') -%}
-| [{{ m.title }}]({{ m.path }}){% if m.kind == 'canon' %} `canon`{% endif %} | {{ themes[m.theme].name if m.theme in themes else m.theme }} | `{{ m.version }}` | {{ m.register or '' }} | {{ m.reader or '' }} |
+| [{{ m.title }}]({{ m.path }}) | {{ themes[m.theme].name if m.theme in themes else m.theme }} | `{{ m.version }}` |
 {% endfor %}
 ---
 {%- for theme_key in manifestos | map(attribute='theme') | unique | list | sort %}
@@ -19,7 +19,7 @@
 {% endif -%}
 {%- for m in manifestos | selectattr('theme', 'equalto', theme_key) | sort(attribute='title') %}
 
-### [{{ m.title }}]({{ m.path }}){% if m.kind == 'canon' %} `canon`{% endif %} `{{ m.version }}`{% if m.register %} · {{ m.register }}{% endif %}{% if m.reader %} · {{ m.reader }}{% endif %}
+### [{{ m.title }}]({{ m.path }}) `{{ m.version }}`
 *"{{ m.tagline }}"*
 
 {{ m.description }}
@@ -42,6 +42,9 @@ This README is generated from manifesto frontmatter. **For complete maintainer w
 2. Run `just readme`
 3. Commit changes
 
-**Adding a new manifesto:** pass the entry gate in [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) (Workflows, The Entry Gate).
+**Adding a new manifesto:**
+- Create `manifestos/<name>.md` with required frontmatter (title, tagline, version, theme, description)
+- If using a new theme, add it to `themes.yaml` first
+- See [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) for philosophy and detailed workflows
 
 **Schema validation:** Powered by Pydantic. Invalid frontmatter will be caught with detailed error messages.

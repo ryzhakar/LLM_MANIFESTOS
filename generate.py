@@ -3,28 +3,18 @@
 
 import re
 import sys
-import warnings
 from pathlib import Path
 from typing import Literal
 
 import frontmatter
 import yaml
 from jinja2 import Template
-from pydantic import BaseModel, field_validator, model_validator, ValidationError
+from pydantic import BaseModel, field_validator, ValidationError
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
 console = Console()
-
-MAX_TAGLINE_WORDS = 8
-REGISTER_SHADOW_WARNING = 'Field name "register" in "ManifestoMetadata" shadows'
-
-warnings.filterwarnings('ignore', message=REGISTER_SHADOW_WARNING, category=UserWarning)
-
-Kind = Literal['manifesto', 'canon']
-Register = Literal['contemptuous', 'declarative', 'parable', 'lecture', 'aphoristic']
-Reader = Literal['model', 'human', 'unspecified']
 
 
 class ManifestoMetadata(BaseModel):
@@ -35,18 +25,6 @@ class ManifestoMetadata(BaseModel):
     version: str
     theme: str
     description: str
-    kind: Kind = 'manifesto'
-    register: Register | None = None
-    reader: Reader | None = None
-
-    @model_validator(mode='after')
-    def validate_tagline_length(self) -> 'ManifestoMetadata':
-        word_count = len(self.tagline.split())
-        if self.kind != 'canon' and word_count > MAX_TAGLINE_WORDS:
-            raise ValueError(
-                f'Tagline must be at most {MAX_TAGLINE_WORDS} words, got {word_count}: {self.tagline}'
-            )
-        return self
 
     @field_validator('version')
     @classmethod
@@ -54,24 +32,6 @@ class ManifestoMetadata(BaseModel):
         if not re.match(r'^\d+\.\d+\.\d+$', v):
             raise ValueError(f'Version must be semver (e.g., 1.0.0), got: {v}')
         return v
-
-
-def normalize_tagline(tagline: str) -> str:
-    """Reduce a tagline to lowercase words without punctuation."""
-    return ' '.join(re.sub(r'[^\w\s]', '', tagline.lower()).split())
-
-
-def tagline_warnings(manifestos: list[dict]) -> list[str]:
-    """Return one warning per tagline that more than one file carries."""
-    paths_by_tagline: dict[str, list[str]] = {}
-    for manifesto in manifestos:
-        key = normalize_tagline(manifesto['tagline'])
-        paths_by_tagline.setdefault(key, []).append(manifesto['path'])
-    return [
-        f'"{tagline}" appears in: {", ".join(paths)}'
-        for tagline, paths in paths_by_tagline.items()
-        if len(paths) > 1
-    ]
 
 
 def main():
@@ -132,15 +92,6 @@ def main():
             + "\n".join(f"  • {t}" for t in sorted(missing_themes))
             + "\n\n[dim]Add these to themes.yaml or they'll render without icons/names[/dim]",
             title="⚠️  Theme Discrepancy",
-            border_style="yellow"
-        ))
-
-    duplicate_taglines = tagline_warnings(manifestos)
-    if duplicate_taglines:
-        console.print()
-        console.print(Panel(
-            "\n".join(f"  • {warning}" for warning in duplicate_taglines),
-            title="⚠️  Duplicate Tagline",
             border_style="yellow"
         ))
 
