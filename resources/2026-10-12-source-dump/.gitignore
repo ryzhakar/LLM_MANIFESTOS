@@ -1,0 +1,6 @@
+/*
+!/.gitignore
+!/README.md
+!/index/
+/index/*
+!/index/MANIFEST.sha256
