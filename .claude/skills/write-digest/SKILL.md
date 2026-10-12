@@ -1,6 +1,6 @@
 ---
 name: write-digest
-description: "Write one manifesto's digest: the plain text a small model carries in place of the full manifesto. \"write the digest\", \"digest this manifesto\", \"cut the digest\", \"re-cut the digest\", or a manifesto under manifestos/ with no digest or a digest older than its version."
+description: "Write the first cut of one manifesto's digest: the plain text a small model carries in place of the full manifesto. \"write the digest\", \"digest this manifesto\", \"cut the digest\", or a manifesto under manifestos/ with no digest or a digest older than its version."
 ---
 
 <read-and-bind>
@@ -13,6 +13,10 @@ List every distinct demand, one thing the manifesto tells its reader to do or re
 Collapse restatements into one demand; never carry a restatement as a new demand.
 Discard stories, figures, names, and the closing choice; never carry one into the digest, the plain text a small model carries in place of the manifesto.
 </list-the-demands>
+
+<save-the-demand-list>
+Save the demand list as the demands record through the `write-eval-record` skill; never hold it in the conversation alone.
+</save-the-demand-list>
 
 <write-the-sentences>
 Write each demand as one plain, complete sentence a reader can obey without the original; never write one that needs the original.

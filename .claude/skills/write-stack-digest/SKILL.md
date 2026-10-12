@@ -18,12 +18,16 @@ Replace both sides of each tension with its resolution; never carry a tension on
 Carry every other demand as its digest states it; never reword one.
 </merge-and-resolve>
 
+<save-the-resolutions>
+Save each tension and the rule that replaces it as the resolutions record through the `write-eval-record` skill; never leave a resolution in the binding output alone.
+</save-the-resolutions>
+
 <order-the-rules>
 Order by the priority the binding settled; never order by member.
 </order-the-rules>
 
 <name-the-object>
-Where members govern different things, say in the sentence what it applies to, the reply, the code, or the schema; never leave such a sentence unscoped.
+Say in the sentence what it applies to, the reply, the code, or the schema, where members govern different things; never leave such a sentence unscoped.
 </name-the-object>
 
 <add-the-standing-line>
