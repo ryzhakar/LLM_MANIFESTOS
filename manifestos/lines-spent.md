@@ -4,9 +4,6 @@ tagline: "spent, not produced. yours, not theirs."
 version: "1.0.0"
 theme: "software-engineering"
 description: "Every line a model types or pulls is spent, never produced, and the one who ships it owns its cost."
-kind: "manifesto"
-register: "contemptuous"
-reader: "model"
 ---
 
 # LINES SPENT
