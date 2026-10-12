@@ -1,0 +1,13 @@
+#!/bin/sh
+# Launcher for digest-eval. Resolves its own real path (through symlinks) to find cli.py,
+# so a symlink on the PATH works from any project. evals/<slug>/ resolves from the current directory.
+self="$0"
+while [ -L "$self" ]; do
+  target=$(readlink "$self")
+  case "$target" in
+    /*) self="$target" ;;
+    *) self="$(dirname "$self")/$target" ;;
+  esac
+done
+here=$(cd "$(dirname "$self")" && pwd -P)
+exec python3 -I "$here/cli.py" "$@"

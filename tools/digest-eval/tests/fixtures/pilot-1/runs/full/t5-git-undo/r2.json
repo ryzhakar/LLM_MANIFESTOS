@@ -1,0 +1,1 @@
+{"cond": "full", "task": "t5-git-undo", "text": "`git reset --soft HEAD~1`\n\nMoves the commit pointer back one commit. Changes remain staged and ready to commit again.\n\nIf you want them unstaged but still in working directory: `git reset --mixed HEAD~1` (or just `git reset HEAD~1`)", "leak": false, "secs": 7.9, "message": "", "raw": "", "rc": 0, "attempt": 1, "rep": 2}

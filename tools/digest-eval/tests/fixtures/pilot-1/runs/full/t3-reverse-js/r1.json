@@ -1,0 +1,1 @@
+{"cond": "full", "task": "t3-reverse-js", "text": "```javascript\nconst str = \"hello\";\nconst reversed = str.split(\"\").reverse().join(\"\");\nconsole.log(reversed); // \"olleh\"\n```", "leak": true, "secs": 4.6, "message": "", "raw": "", "rc": 0, "attempt": 1, "rep": 1}

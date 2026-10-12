@@ -1,0 +1,11 @@
+[
+  {"id": "6fhej", "violations": 0, "done": true, "notes": "Code only, no violations. Methods 1-2 correct; method 3 broken (str.reduce not a function on strings)."},
+  {"id": "srja9", "violations": 7, "done": true, "notes": "preamble 'Here are several ways'; restates request 'reverse a string in JavaScript'; article 'a' in intro; article 'a' in 'Using a For Loop'; article 'the' in 'the most common'; article 'a' in 'for a clean'; long form 'leverages' for 'uses'"},
+  {"id": "2eh5q", "violations": 0, "done": true, "notes": "Code only, correct."},
+  {"id": "arvah", "violations": 6, "done": true, "notes": "preamble 'Here are several ways'; restates request 'reverse a string in JavaScript'; article 'a' in intro; article 'a' in 'Using a for Loop'; article 'the' in 'the most concise'; 17-word sentence 'Choose Method 2 if...'"},
+  {"id": "323d4", "violations": 0, "done": true, "notes": "Code only, correct."},
+  {"id": "bfae9", "violations": 0, "done": true, "notes": "Code only, correct."},
+  {"id": "g353q", "violations": 0, "done": true, "notes": "Code plus terse fragment, no violations; all three methods correct."},
+  {"id": "7fsa8", "violations": 5, "done": true, "notes": "preamble 'Here are several ways'; restates request 'reverse a string in JavaScript'; article 'a' in intro; article 'a' in 'Using a for Loop'; article 'the' in 'the most concise'. Methods 3-4 lean on earlier 'original'; method 3 heading names unused Array.from."},
+  {"id": "gwuvk", "violations": 0, "done": true, "notes": "Code only, correct."}
+]

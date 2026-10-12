@@ -1,0 +1,1 @@
+{"cond": "full", "task": "t2-process-thread", "text": "**Process**: Independent execution unit with separate memory space. Heavyweight. Context switch is slow.\n\n**Thread**: Lightweight execution unit within a process. Shares process memory. Context switch is fast.", "leak": false, "secs": 5.4, "message": "", "raw": "", "rc": 0, "attempt": 1, "rep": 1}

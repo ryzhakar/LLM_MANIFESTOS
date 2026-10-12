@@ -1,0 +1,1 @@
+{"cond": "full", "task": "t1-keyerror", "text": "JSON response doesn't contain the `user_id` key. The API structure differs from what you expect. Check the actual response, verify the field name, or use `dict.get('user_id', default)` to avoid crashes.", "leak": false, "secs": 7.2, "message": "", "raw": "", "rc": 0, "attempt": 1, "rep": 3}

@@ -1,0 +1,1 @@
+{"cond": "digest", "task": "t5-git-undo", "text": "git reset --soft HEAD~1", "leak": false, "secs": 2.4, "message": "", "raw": "", "rc": 0, "attempt": 1, "rep": 2}

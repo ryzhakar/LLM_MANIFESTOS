@@ -1,0 +1,1 @@
+{"cond": "full", "task": "t4-requests", "text": "Run: `pip install --user requests`\n\nIf still failing, check Python is installed with `python3 --version` then reinstall with `pip3 install --user requests`.", "leak": false, "secs": 3.2, "message": "", "raw": "", "rc": 0, "attempt": 1, "rep": 2}

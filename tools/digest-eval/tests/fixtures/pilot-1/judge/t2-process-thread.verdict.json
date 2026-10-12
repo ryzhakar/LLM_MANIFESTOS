@@ -1,0 +1,11 @@
+[
+  {"id": "pmvte", "violations": 3, "done": true, "notes": "title 'Process vs Thread' before substance; article 'a' in 'Lightweight process within a process'; articles in 'Workers in the same house (share the same kitchen)'"},
+  {"id": "qrz7c", "violations": 1, "done": true, "notes": "article 'a' in 'within a process'"},
+  {"id": "k5tb7", "violations": 6, "done": true, "notes": "title 'Process vs Thread' before substance; article in 'within a process' cell; article in 'can crash the process' cell; articles in 'A process is a container'; articles in 'A thread is an execution flow'; 16-word closing sentence"},
+  {"id": "pt9jz", "violations": 9, "done": true, "notes": "title before substance; announcement 'Here's the key difference...'; article in announcement; article in 'within a process' cell; article in 'Shares the process's memory space'; article in 'Can crash the entire process'; article in 'within a process' scheduling cell; article in takeaway 'within a process'; articles in closing sentence 'The process owns the resources'"},
+  {"id": "chmg5", "violations": 4, "done": true, "notes": "articles in Thread line 'a process, shares the process's'; article in 'crash the process'; article in 'the process's address space'; trailing offer 'Next step: Ask if you need code examples...'"},
+  {"id": "4bdnq", "violations": 2, "done": true, "notes": "article 'a' in Thread line; Thread line is 16 words"},
+  {"id": "tbzsf", "violations": 0, "done": true, "notes": "no violations; context-switch line vague ('differs') but core difference (separate vs shared memory, creation cost) stated"},
+  {"id": "m67qf", "violations": 2, "done": true, "notes": "article 'a' in Thread line; article 'a' in 'within a single application'"},
+  {"id": "2ss5g", "violations": 1, "done": true, "notes": "article 'a' in Thread line"}
+]

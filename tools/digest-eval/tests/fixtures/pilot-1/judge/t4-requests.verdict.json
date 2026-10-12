@@ -1,0 +1,11 @@
+[
+  {"id": "79reu", "violations": 3, "done": true, "notes": "article 'a different Python/pip'; article 'the matching pip'; article 'the python explicitly'"},
+  {"id": "madg4", "violations": 9, "done": true, "notes": "preamble 'Let me help you troubleshoot this'; announcement 'First, I'll check...'; announcement 'let me check which...'; article 'a different Python'; hedge 'may need'; hedge 'might not have been'; article 'a virtual environment' (Or if); article 'a virtual environment?' (question); closing pleasantry 'Let me know... I'll help you resolve it!'"},
+  {"id": "avg4q", "violations": 1, "done": true, "notes": "article 'the right one'"},
+  {"id": "yu3r5", "violations": 8, "done": false, "notes": "only diagnoses and defers to a follow-up; never gives a fix such as 'python3 -m pip install requests'. Violations: preamble 'This is a common Python environment issue'; announcement 'Let's diagnose it'; filler 'actually'; article 'the module'; hedge 'might be using'; article 'a venv'; article 'the output'; closing pleasantry 'I can help you fix it!'"},
+  {"id": "fmv2q", "violations": 11, "done": true, "notes": "heading restating request; preamble 'This is a common issue that usually happens'; articles 'The package... a different environment'; announcement 'First, let's check'; article 'a virtual environment' heading; softener 'Make sure'; article 'the right environment'; hedge 'can matter'; article 'the error'; filler closer 'That will help me give you...'; article 'a more specific fix'"},
+  {"id": "7r7ry", "violations": 2, "done": true, "notes": "article 'a different Python'; article 'a venv'"},
+  {"id": "v6mp9", "violations": 0, "done": false, "notes": "ignores pip/python interpreter mismatch, the likely cause; reinstalling with same pip (--user) repeats the failure and breaks inside a venv"},
+  {"id": "bm6ey", "violations": 1, "done": true, "notes": "article 'a different Python environment'"},
+  {"id": "d7qf6", "violations": 0, "done": true, "notes": "none"}
+]

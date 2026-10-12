@@ -1,0 +1,11 @@
+[
+  {"id": "gdchw", "violations": 2, "done": true, "notes": "preamble 'Run:'; article 'the commit'"},
+  {"id": "af8cv", "violations": 0, "done": true, "notes": "none"},
+  {"id": "e5wrn", "violations": 2, "done": true, "notes": "article 'the commit pointer'; filler 'just'"},
+  {"id": "ws5bt", "violations": 6, "done": true, "notes": "preamble 'To undo... use:'; restates request; article 'the changes' (sentence 1); articles 'the changes/the index' (sentence 2); article 'the commit' (--hard bullet); article 'the changes' (last line)"},
+  {"id": "v7nxg", "violations": 10, "done": true, "notes": "announcement 'Use this command:'; announcement 'This will:'; article 'the commit'; article 'the staging area'; filler 'as needed'; softener 'don't use unless you want to!'; article 'the changes/the working tree'; sentence over 15 words ('The --soft option...'); article 'The --soft option'; hedge 'typically'"},
+  {"id": "vzanq", "violations": 1, "done": true, "notes": "filler 'just'"},
+  {"id": "uaj2t", "violations": 3, "done": true, "notes": "article 'the last commit' (sentence 1); article 'the last commit' (sentence 2); filler 'Choose based on whether...'"},
+  {"id": "rzbmu", "violations": 6, "done": true, "notes": "preamble 'To undo... use:'; restates request; article 'the changes'; announcement 'This will:'; article 'the commit'; article 'the default'. Done despite table error: row for 'git reset HEAD~1' wrongly marks changes staged"},
+  {"id": "f3mve", "violations": 0, "done": true, "notes": "none"}
+]

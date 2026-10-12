@@ -1,0 +1,1 @@
+{"cond": "full", "task": "t5-git-undo", "text": "`git reset --soft HEAD~1`\n\nMoves HEAD back one commit; changes stay staged in your working tree.\n\nTo unstage changes as well (still in working tree, unstaged):\n\n`git reset --mixed HEAD~1` (or just `git reset HEAD~1`)", "leak": false, "secs": 9.0, "message": "", "raw": "", "rc": 0, "attempt": 1, "rep": 3}

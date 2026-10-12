@@ -1,0 +1,11 @@
+[
+  {"id": "qg5hc", "violations": 0, "done": true, "notes": "none"},
+  {"id": "tw5w3", "violations": 5, "done": true, "notes": "opening restates request ('Using SELECT * in production queries is'); hedge 'generally'; announcement 'Here's why'; hedge 'May expose'; hedge 'Might Be Acceptable'"},
+  {"id": "kxmnd", "violations": 0, "done": true, "notes": "none (stray closing code fence, formatting only)"},
+  {"id": "25jjd", "violations": 1, "done": true, "notes": "hedge 'May expose'"},
+  {"id": "2fc3d", "violations": 3, "done": true, "notes": "article 'of the query'; hedge 'May leak'; filler 'actually'"},
+  {"id": "dryzu", "violations": 1, "done": true, "notes": "articles 'a column in the table'"},
+  {"id": "enuyq", "violations": 13, "done": true, "notes": "opening restates request; hedge 'generally'; first sentence over 15 words; connective 'though'; announcement 'Here's a breakdown'; article 'over the network'; hedge 'May expose'; hedge 'Might Be Acceptable'; article 'Keep a list'; hedge 'may be fetching'; closing offer pleasantry 'feel free to share'; closing sentence over 15 words; closing sentence articles"},
+  {"id": "vt2tj", "violations": 2, "done": true, "notes": "label 'What:' before first substance; filler: 'Next step' repeats 'Action'"},
+  {"id": "2tj4c", "violations": 10, "done": true, "notes": "hedge 'Generally'; announcement 'Here's why'; hedge 'Potentially'; hedge 'may charge'; hedge 'Might Be Acceptable'; article 'the query and output'; softener 'consider'; article 'a view'; article 'a dedicated maintenance database'; closing offer pleasantry 'Would you like me to help'"}
+]

@@ -1,0 +1,11 @@
+[
+  {"id": "9hpbf", "violations": 1, "done": true, "notes": "article 'the' in 'accesses the key'"},
+  {"id": "hu77u", "violations": 0, "done": true, "notes": "none"},
+  {"id": "hcwu7", "violations": 2, "done": true, "notes": "articles in S1 ('The KeyError... the JSON... the key'); article 'a missing key'"},
+  {"id": "xmqd2", "violations": 6, "done": true, "notes": "article 'a dict key'; article 'The API response'; hedge 'likely'; article 'the field'; hedge 'might'; last sentence 19 words"},
+  {"id": "uec7m", "violations": 3, "done": true, "notes": "article 'the key'; article 'The API structure'; articles in S3 ('the actual response, the field name')"},
+  {"id": "6jwvz", "violations": 12, "done": true, "notes": "articles S1; hedge 'typically'; announcement 'Here's what's likely happening'; hedge 'likely'; article 'a different structure'; article 'the response'; article 'the API'; article heading 'Check the actual'; article 'the field'; filler 'actually'; closing offer 'Would you like me to help'; article 'the specific code'"},
+  {"id": "xrwck", "violations": 8, "done": true, "notes": "articles S1; hedge 'typically'; S1 18 words; article 'The API response... the field'; article 'The key'; article 'The response structure'; article 'an API call'; closing offer 'If you'd like... I can help'"},
+  {"id": "z2dcp", "violations": 5, "done": true, "notes": "articles S1; article 'the user_id field'; article 'the actual API'; articles 'Reason' sentence; 'Reason' sentence 18 words. Minor flaw: .get('user_id', None) equals .get('user_id'); answer still usable"},
+  {"id": "5ru69", "violations": 17, "done": true, "notes": "articles S1; hedge 'typically'; S1 16 words; announcement 'Here are the most common causes'; article 'the most'; hedge heading 'Likely Causes'; article 'The JSON'; hedge 'may'; hedge 'might' (item 3); article 'the key... the wrong'; article 'The API response'; hedge 'might' (item 4); article 'Debug the full response'; closing offer 'Would you like me'; article 'a more specific fix'; offer 'I can help identify'; article 'the relevant... the exact'"}
+]
