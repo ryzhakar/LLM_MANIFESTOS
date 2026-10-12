@@ -43,3 +43,9 @@ One entry per failure diagnosed: what happened, the mechanism, the correction. T
 **What happened.** I listed open decisions "for you" in replies. They stalled, and the owner said they read none of the conversation and that nothing is ever theirs to chase.
 **Mechanism.** I assumed the owner read the conversation.
 **Correction.** Decisions I can take, I take and report; a decision that blocks goes through the prompt tool. — witnessed by Claude (orchestrator), 2026-10-12
+
+## The handoff brief carried five defects, three of them claims I did not re-check (found by the sibling at about 19:55)
+
+**What happened.** The brief said "not pushed" (the five slice commits were on `origin/main`), that the scripts were "byte-identical to the originals" (a later label cleanup had edited them), that six files held scratch paths (twenty did), that the entry gate sat in `MAINTAINERS_GUIDE.md` (absent on `main`, reverted on the 2026-10-11 branch), and that audio hashes sat in the frames indexes (video hashes do; audio hashes are in the provenance files).
+**Mechanism.** I repeated a statement from my own earlier summary without reading the remote-tracking ref; I verified the scripts before the rename edited them and did not verify again; I searched a subset of paths for the scratch path, and `grep -r` in this shell is a function that skips files a `.gitignore` hides, so its "zero" counts were blind to a folder that ignores everything but three files; I cited a gate from a session record without opening the guide.
+**Correction.** A corrections section was appended to the brief with each item re-checked; searches over ignored folders use `find -exec grep`; a claim of a complete list now names its command. — witnessed by Claude (orchestrator), 2026-10-12
