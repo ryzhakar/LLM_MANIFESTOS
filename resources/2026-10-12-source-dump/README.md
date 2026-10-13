@@ -10,7 +10,7 @@ Fetched, durable, verbatim source texts, transcripts and frames, ready for a lat
 
 Audio, video and YouTube caption files are NOT stored here. They live only in `/tmp/<scratch>/` (`audio/`, `video/`, `captions/`, `meta/`), which vanishes with the container.
 
-Every copied file was verified with sha256 against its origin. Frames are ffmpeg outputs with no origin copy; see `## Frames`. `index/MANIFEST.sha256` lists the sha256 of every file in this folder.
+Every copied file was verified with sha256 against its origin, except the scripts, which were edited after copying. In `scripts/build/`, 5 of the 12 scripts are byte-identical to their origin (`verify.py`, `extract_blog.py`, `extract_D-02.py`, `extract_D-03.py`, `trim_meta.py`) and 7 differ: `edit_manifest2.py` (dump-folder path fixed); `finalize.py` and `append_manifest.sh` (dump-folder path fixed and scratch root replaced by `SCRATCH`); `run_rest.sh`, `make_video_report_sc1guyo5Rso.py`, `write_report_W2tWOdzgXHA.py` and `verify_srt_sc1guyo5Rso.py` (scratch root replaced by `SCRATCH`). Details are in the Build scripts bullet above. The 3 scripts in `interleaved/scripts/` also differ from their origin; see `## interleaved/ (derived files)`. Frames are ffmpeg outputs with no origin copy; see `## Frames`. `index/MANIFEST.sha256` lists the sha256 of every file in this folder.
 
 Index files: `index/frames-<videoID>.md` (one per video, frame-by-frame), `index/sources.md` (source dump with metadata and chapters).
 
