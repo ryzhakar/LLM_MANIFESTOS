@@ -31,6 +31,7 @@ def run(run_dir, reader, tasks, conditions, reps, split=None, sessions=True):
                 save_json(path, rec)
                 log(run_dir, f"single {cond} {task['id']} r{rep} {out['secs']}s leak={out['leak']} words={rec['words']}")
     if not sessions:
+        log(run_dir, "DONE")
         return
     for cond in conds:
         for sess in tasks.sessions(split):

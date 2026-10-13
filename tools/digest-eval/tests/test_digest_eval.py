@@ -234,6 +234,8 @@ class Loop(unittest.TestCase):
         cli.ROOT = self.tmp
         conds = {"none": None, "digest": self.digest}
         runner.run(self.rd, FakeReader(), self.tasks, conds, reps=1, sessions=False)
+        with open(os.path.join(self.rd, "progress.log"), encoding="utf-8") as f:
+            self.assertTrue(f.read().rstrip().endswith("DONE"))  # a run without sessions ends with DONE too
         cli.main(["blind", "demo", "cut-1"])
         cli.main(["script-judge", "demo", "cut-1"])
         with self.assertRaises(SystemExit) as cm:
