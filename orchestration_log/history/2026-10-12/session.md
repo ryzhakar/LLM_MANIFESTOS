@@ -68,3 +68,7 @@ Tracked: `.claude/skills/{write-digest,write-stack-digest,test-digest,recut-dige
 Local-only: `evals/stop-yapping/pilot-1/`; `/Users/ryzhakar/petro/` (stack digest, eval series); `orchestration_log/recon/2026-10-12/` (Ollama and handoff-verification notes, gitignored); the source dump's content and archive; `/tmp/{dt-report,dt-judge-path,test-digest,srp-substrate}` (disposable).
 
 — witnessed by Claude (orchestrator), 2026-10-12; lossy by construction
+
+## Correction (appended 2026-10-13, 11:04 UTC, by `reference-updater` on the orchestrator's instruction)
+
+Line 50, the "Archives outside git" row, carries sha256 `eca7ee24123b3ae56219f759e2354f1d6219c0681f25e32c55874c3b37d4c93b`. That value (53,829,689 bytes, mtime 2026-10-12T17:33:26Z) describes the superseded archive kept beside the live one as `2026-10-12-source-dump.tar.gz.prev`. The live archive `/Users/ryzhakar/archives/2026-10-12-source-dump.tar.gz` is 53,829,839 bytes, mtime 2026-10-12T20:04:09Z, sha256 `98dbe94bfa2284410b7663ea9853e01a89b5810a2a2bfffda60d3d050f4c6386`, equal to its sidecar (measured about 10:51 UTC and re-measured at 11:03 UTC on 2026-10-13 with `shasum -a 256` and `stat`; the 10:51 UTC discovery trace in `events.md` records it). The rebuild followed the sibling's README claim fix (commit `50ef56d`). Line 50 stands as written.
