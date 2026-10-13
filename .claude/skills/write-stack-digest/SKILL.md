@@ -48,5 +48,7 @@ Write the body alone, in portable markdown, markdown with no feature past paragr
 </shape-the-file>
 
 <save-the-file>
-Save it as `.claude/digests/<slugs sorted, joined by +>.md` in the project that declares the stack; never save it in the manifesto repo.
+Save it as `.claude/digests/<slugs sorted, joined by +>.md` in the project that declares the stack; never save the working copy elsewhere.
+Save a tracked reference copy as `digests/stacks/<slugs sorted, joined by +>.md` in the manifesto repo when the owner rules it, as the owner ruled for the Petro stack on 2026-10-14; never save one without such a ruling.
+Keep the reference copy as the cut the ruling named; never edit it without a new cut recorded.
 </save-the-file>
