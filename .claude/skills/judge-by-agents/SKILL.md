@@ -5,6 +5,7 @@ description: "Judge a run's replies with agents bound to the manifesto, blind to
 
 <blind-the-replies>
 Run `digest-eval blind <slug> <run dir>` on the run dir, the directory holding one cut's replies, to write the packets, one file per task holding every reply to it under a random id, and the key, the map from id to condition, the text the reader ran with, at the run dir root; never build a packet by hand.
+Add `--borrow <run dir of the baselines>` for a run that re-ran the digest condition alone, so that every packet keeps the shape the judge was calibrated on and the baselines are judged afresh in the same pass; never judge a one-reply packet against five-reply verdicts.
 Leave the key unread until the scores are joined; never open it before.
 </blind-the-replies>
 
@@ -22,7 +23,8 @@ Keep the brief fixed for the series, the cuts run under one spec, that the `cali
 
 <launch-the-judges>
 Render each packet's brief with `digest-eval brief <slug> <run dir> <packet> --manifesto <path>`; never paste the brief from memory.
-Launch one agent of the series' judge model per packet, all in parallel, each given its rendered brief and nothing else; never tell an agent the condition, the cut, or the digest.
+Launch one unnamed agent of the series' judge model per packet, each given its rendered brief and nothing else; never tell an agent the condition, the cut, or the digest.
+Launch the agents in waves of at most twenty at a time, the next wave when one finishes; never launch a wave past the limit the agent tool allows.
 Keep the digest and the key out of every agent's reach; never let an agent read a file under the run dir past its packet.
 </launch-the-judges>
 
