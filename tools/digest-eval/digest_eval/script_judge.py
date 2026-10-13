@@ -2,7 +2,7 @@
 import os
 import re
 
-from .records import is_session, read_key, read_replies, save_json, verdict_record
+from .records import read_key, reply_for, save_json, verdict_record
 
 CODE = re.compile(r"```.*?```", re.S)
 SENTENCE = re.compile(r"(?<=[.!?:])\s+|\n+")
@@ -28,17 +28,13 @@ def done_by_key(task, text):
 def judge(spec, run_dir, tasks=None):
     scripted = [d for d in spec["demands"] if d["check"] == "script"]
     by_task = {t["id"]: t for t in tasks.singles()} if tasks else {}
-    key = read_key(run_dir)
-    origin = {}
-    for rid, k in key.items():
-        origin[(k["cond"], k["task"], k.get("rep"), k.get("turn"))] = rid
     out = []
-    for rec in read_replies(run_dir):
-        rid = origin.get((rec["cond"], rec["task"], rec.get("rep"), rec.get("turn")))
-        if rid is None:
+    for rid, k in read_key(run_dir).items():
+        rec = reply_for(run_dir, k)
+        if not rec:
             continue
         demands = {d["id"]: count(d, rec["text"]) for d in scripted}
-        done = None if is_session(rec) else done_by_key(by_task.get(rec["task"]), rec["text"])
+        done = None if k.get("turn") is not None else done_by_key(by_task.get(k["task"]), rec["text"])
         out.append(verdict_record(rid, sum(demands.values()), done, "script", demands))
     save_json(os.path.join(run_dir, "script.json"), out)
     return out

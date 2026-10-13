@@ -15,11 +15,14 @@ Take the cut number from the ledger's last entry plus one, or one for a fresh se
 </prepare-the-series>
 
 <build-the-conditions>
-Run `digest-eval conditions <slug> cut-<n> --digest <path> --manifesto <path>` to write every condition's text, the texts loaded beside the prompt of the reader, the model that loads the digest, or the members concatenated as the manifesto for a stack; never load a condition text the tool did not write.
+Run `digest-eval conditions <slug> cut-<n> --digest <path> --manifesto <paths>` to write every condition's text, the texts loaded beside the prompt of the reader, the model that loads the digest, with the members' manifestos as the paths for a stack; never load a condition text the tool did not write.
 </build-the-conditions>
 
 <run-the-reader>
 Run `digest-eval run <slug> cut-<n>` with stdin from `/dev/null`, serial, on the series' reader, for the `reps` the spec holds; never run two readers in one invocation.
+Run a cut after the first with `--only digest`; never re-run a baseline the series already holds.
+Judge such a cut with the first cut's baselines borrowed into its packets; never judge it against the first cut's verdicts.
+Start the run detached, and wait on a background shell loop that exits when `progress.log` gains `DONE`, a `Traceback`, or `Killed`, or when the reply count stands still for ten minutes; never wait on a watcher that reports progress alone.
 Run the transfer check, the same cut on a second reader into `cut-<n>-<model>`, as its own block after the first reader finishes; never interleave the two.
 Resume an interrupted run by the same command; never delete a finished reply to re-run it.
 </run-the-reader>
@@ -36,6 +39,7 @@ Record each run dir's ledger entry through the `write-eval-record` skill; never 
 <stop-or-continue>
 Stop when the gate passes; never cut past a pass.
 Stop when two cuts in a row show `changed_vs_previous` false, their difference inside the interval, the confidence interval of the paired difference; never cut a third.
+Stop at the fifth cut of a series; never cut a sixth under one spec.
 Write the next hypothesis through the `diagnose-eval-failures` skill; never change the digest for the numbers alone.
 Cut through the `recut-digest` skill; never cut without a saved hypothesis.
 Start this loop again at the conditions for the new cut; never skip a stage for the second cut.

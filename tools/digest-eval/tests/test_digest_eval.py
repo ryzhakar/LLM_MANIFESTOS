@@ -215,6 +215,21 @@ class Loop(unittest.TestCase):
         cli.ROOT = self.tmp
         cli.main(["reps", "demo", "cut-1"])
 
+        rd3 = os.path.join(self.d, "cut-3")
+        runner.run(rd3, FakeReader(), self.tasks, {"digest": self.digest}, reps=2)
+        packets3, key3 = blinder.build_packets(rd3, borrow="cut-1")
+        self.assertEqual(len(key3), n, "borrowed baselines fill the packets to cut-1's shape")
+        self.assertEqual(sum(1 for k in key3.values() if k.get("borrowed") == "cut-1"), n - 2 * 2 - 3)
+        self.assertFalse(any(k.get("borrowed") for k in key3.values() if k["cond"] == "digest"))
+        script_judge.judge(self.spec, rd3, self.tasks)
+        for p in packets3:
+            ids = [rid for rid, k in key3.items() if k["packet"] == p]
+            save_json(os.path.join(rd3, "judge", f"{p}.verdict.json"),
+                      [{"id": rid, "violations": 3 if key3[rid]["cond"] == "none" else 0, "done": True, "notes": ""} for rid in ids])
+        out3 = score.score(self.spec, rd3, previous_run_dir=self.rd)
+        self.assertEqual(out3["splits"]["test"]["by_condition"]["none"]["mean_violations"], 3.0)
+        self.assertEqual(out3["splits"]["test"]["by_condition"]["none"]["per_demand"]["opening"], 1.0)
+
     def test_cli_on_pilot_layout(self):
         cli.ROOT = self.tmp
         conds = {"none": None, "digest": self.digest}
@@ -261,6 +276,12 @@ class SystemOneStub(unittest.TestCase):
 
 
 class Reps(unittest.TestCase):
+    def test_canonical_demands(self):
+        from digest_eval.records import canonical_demands
+        ids = ["d07-exact", "d13-silent", "d35-names"]
+        self.assertEqual(canonical_demands({"d07": 2, "d13-silent": 1, "zz": 1}, ids), {"d07-exact": 2, "d13-silent": 1, "zz": 1})
+        self.assertEqual(canonical_demands({"d07": 1, "d07-exact": 1}, ids), {"d07-exact": 2})
+
     def test_reps_from_spread(self):
         # z=1.96, sd=2, min_cut=1: pairs needed = (2*1.96*2/1)^2 = 61.5 -> 62; over 6 tasks -> 11 reps
         self.assertEqual(score.reps_needed(2.0, 6, 1.0), 11)

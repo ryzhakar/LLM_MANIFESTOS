@@ -69,6 +69,13 @@ def read_replies(run_dir):
     return [load_json(p) for p in paths]
 
 
+def reply_for(run_dir, k):
+    """The reply record a key entry points at; a borrowed entry points into another run dir."""
+    base = os.path.join(os.path.dirname(run_dir), k["borrowed"]) if k.get("borrowed") else run_dir
+    path = reply_path(base, k["cond"], k["task"], rep=k.get("rep"), turn=k.get("turn"))
+    return load_json(path) if os.path.exists(path) else {}
+
+
 def is_session(rec):
     return rec.get("turn") is not None
 
@@ -80,7 +87,25 @@ def verdict_record(reply_id, violations, done, notes="", demands=None):
     return rec
 
 
-def validate_verdicts(verdicts, key):
+def canonical_demands(demands, demand_ids):
+    """Map a judge's demand keys onto the spec's ids: an exact id, or a key that is the part
+    before the first hyphen of exactly one id (judges shorten `d07-exact` to `d07`)."""
+    short = {}
+    for d in demand_ids:
+        short.setdefault(d.split("-")[0], []).append(d)
+    out = {}
+    for k, v in demands.items():
+        if k in demand_ids:
+            target = k
+        elif len(short.get(k, [])) == 1:
+            target = short[k][0]
+        else:
+            target = k
+        out[target] = out.get(target, 0) + int(v)
+    return out
+
+
+def validate_verdicts(verdicts, key, demand_ids=None):
     """Return a list of problems; empty means every verdict is well formed and keyed."""
     problems = []
     seen = set()
@@ -98,6 +123,10 @@ def validate_verdicts(verdicts, key):
             problems.append(f"verdict {v['id']} violations not a count")
         if v["done"] not in (True, False, None):
             problems.append(f"verdict {v['id']} done not a bool or null")
+        if demand_ids is not None and "demands" in v:
+            unknown = [k for k in canonical_demands(v["demands"], demand_ids) if k not in demand_ids]
+            if unknown:
+                problems.append(f"verdict {v['id']} names unknown demands {unknown}")
     return problems
 
 

@@ -54,8 +54,8 @@ def cmd_run(a):
 
 
 def cmd_blind(a):
-    packets, key = blinder.build_packets(run_dir(a.slug, a.run), a.seed)
-    emit({"packets": packets, "ids": len(key)})
+    packets, key = blinder.build_packets(run_dir(a.slug, a.run), a.seed, a.borrow)
+    emit({"packets": packets, "ids": len(key), "borrowed": sum(1 for k in key.values() if k.get("borrowed"))})
 
 
 def judge_for(d, spec, manifesto):
@@ -148,7 +148,7 @@ def main(argv=None):
     add("conditions", cmd_conditions, RUN, (("--digest",), {"required": True}), (("--manifesto",), {"nargs": "+", "required": True}))
     add("run", cmd_run, RUN, (("--reps",), {"type": int, "default": None}), (("--split",), {"default": None}),
         (("--reader-model",), {}), (("--only",), {"nargs": "*"}), (("--no-sessions",), {"action": "store_true"}))
-    add("blind", cmd_blind, RUN, (("--seed",), {"type": int, "default": 20261012}))
+    add("blind", cmd_blind, RUN, (("--seed",), {"type": int, "default": 20261012}), (("--borrow",), {}))
     add("brief", cmd_brief, RUN, (("packet",), {}), (("--manifesto",), {"required": True}))
     add("collect", cmd_collect, RUN)
     add("script-judge", cmd_script_judge, RUN)

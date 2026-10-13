@@ -5,7 +5,7 @@ import os
 import random
 from statistics import NormalDist, pstdev
 
-from .records import is_session, load_json, read_key, read_replies, read_script_verdicts, read_verdicts, save_json
+from .records import canonical_demands, is_session, load_json, read_key, read_script_verdicts, read_verdicts, reply_for, save_json
 
 BOOT = 2000
 SEED = 20261012
@@ -62,14 +62,11 @@ def join(run_dir, judged_ids=()):
     key = read_key(run_dir)
     judged = read_verdicts(run_dir)
     scripted = read_script_verdicts(run_dir)
-    replies = {}
-    for r in read_replies(run_dir):
-        replies[(r["cond"], r["task"], r.get("rep"), r.get("turn"))] = r
     rows = []
     for rid, k in key.items():
         v = judged.get(rid)
         s = scripted.get(rid)
-        r = replies.get((k["cond"], k["task"], k.get("rep"), k.get("turn")), {})
+        r = reply_for(run_dir, k)
         if v is None and s is None:
             continue
         row = dict(k, id=rid)
@@ -77,7 +74,8 @@ def join(run_dir, judged_ids=()):
         row["done"] = v["done"] if v else None
         row["notes"] = v.get("notes", "") if v else ""
         zeros = {d: 0 for d in judged_ids} if v else {}
-        row["demands"] = dict(zeros, **(v or {}).get("demands", {}), **(s or {}).get("demands", {}))
+        judged_demands = canonical_demands((v or {}).get("demands", {}), judged_ids)
+        row["demands"] = dict(zeros, **judged_demands, **(s or {}).get("demands", {}))
         row["script_violations"] = s["violations"] if s else None
         row["done_script"] = s["done"] if s else None
         row["words"] = r.get("words", len(r.get("text", "").split()))

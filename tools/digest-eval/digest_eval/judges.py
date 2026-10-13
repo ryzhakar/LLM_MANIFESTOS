@@ -51,7 +51,7 @@ class AgentJudge(Judge):
                 report[packet] = ["no verdict file"]
                 continue
             verdicts = load_json(vpath)
-            problems = validate_verdicts(verdicts, key)
+            problems = validate_verdicts(verdicts, key, [d["id"] for d in self.demands])
             expected = {rid for rid, k in key.items() if k["packet"] == packet}
             missing = expected - {v["id"] for v in verdicts}
             if missing:

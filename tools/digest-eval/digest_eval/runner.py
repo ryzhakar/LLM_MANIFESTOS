@@ -6,6 +6,7 @@ from .records import reply_path, reply_record, save_json
 
 
 def log(run_dir, msg):
+    os.makedirs(run_dir, exist_ok=True)
     with open(os.path.join(run_dir, "progress.log"), "a", encoding="utf-8") as f:
         f.write(time.strftime("%Y-%m-%d %H:%M:%S ") + msg + "\n")
 
