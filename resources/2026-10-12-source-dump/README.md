@@ -1,7 +1,8 @@
 ## Preservation
 - Archive: /Users/ryzhakar/archives/2026-10-12-source-dump.tar.gz . Its sha256 is in the sidecar file /Users/ryzhakar/archives/2026-10-12-source-dump.tar.gz.sha256 (the hash is not written here because this README is inside the archive).
 - Restore, from the repo root: `tar -xzf /Users/ryzhakar/archives/2026-10-12-source-dump.tar.gz -C resources/` . Then check from the restored folder: `shasum -a 256 -c index/MANIFEST.sha256` (expect 0 failures).
-- Git: only README.md and index/MANIFEST.sha256 are tracked (plus the folder's .gitignore); everything else in this folder is local-only and lives in the archive. The folder holds third-party transcripts, frames and texts, so it is not published through git.
+- Git: only README.md, index/MANIFEST.sha256, .gitignore and the files under scripts/build/ are tracked; everything else in this folder is local-only and lives in the archive. The folder holds third-party transcripts, frames and texts, so it is not published through git.
+- Build scripts: `scripts/build/` holds 12 scripts that pulled and assembled this dump (`finalize.py`, `run_rest.sh`, `append_manifest.sh`, `edit_manifest2.py`, `verify.py`, `extract_blog.py`, `extract_D-02.py`, `extract_D-03.py`, `trim_meta.py`, `make_video_report_sc1guyo5Rso.py`, `write_report_W2tWOdzgXHA.py`, `verify_srt_sc1guyo5Rso.py`). They were copied from `/tmp/<scratch>/work/` and `/tmp/<scratch>/scripts/`. Two changes were made: the dump-folder path hard-coded in `finalize.py`, `append_manifest.sh` and `edit_manifest2.py` was fixed to the current folder path; and the scratch root hard-coded in `finalize.py`, `run_rest.sh`, `append_manifest.sh`, `make_video_report_sc1guyo5Rso.py`, `write_report_W2tWOdzgXHA.py` and `verify_srt_sc1guyo5Rso.py` was replaced by a `SCRATCH` constant, read from the environment variable `SOURCE_PULL_SCRATCH` (default `/tmp/source-pull`).
 
 # Fetched texts: source dump (2026-10-12)
 

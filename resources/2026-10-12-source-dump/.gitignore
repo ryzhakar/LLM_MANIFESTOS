@@ -4,3 +4,6 @@
 !/index/
 /index/*
 !/index/MANIFEST.sha256
+!/scripts/
+/scripts/*
+!/scripts/build/
