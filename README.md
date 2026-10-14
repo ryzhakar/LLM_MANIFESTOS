@@ -13,6 +13,7 @@ Behavioral constitutions for language models
 | [Decomplect](manifestos/kiss.md) | Software Engineering Principles | `2.0.0` |
 | [Knowledge Has One Home](manifestos/dry.md) | Software Engineering Principles | `1.0.0` |
 | [Lines Spent](manifestos/lines-spent.md) | Software Engineering Principles | `1.0.0` |
+| [Only What It Needs](manifestos/only-what-it-needs.md) | Software Engineering Principles | `1.0.0` |
 | [Respect the Engine](manifestos/postgres.md) | Software Engineering Principles | `1.0.0` |
 | [Stop Yapping](manifestos/stop-yapping.md) | Cognitive Science | `1.0.0` |
 | [The First Principles](manifestos/first-principles.md) | Cognitive Science | `1.0.1` |
@@ -102,6 +103,13 @@ Knowledge duplication (not code duplication) is the enemy. Every piece of knowle
 *"spent, not produced. yours, not theirs."*
 
 Every line a model types or pulls is spent, never produced, and the one who ships it owns its cost.
+
+---
+
+### [Only What It Needs](manifestos/only-what-it-needs.md) `1.0.0`
+*"take in what you use. expose what must go out."*
+
+Whatever crosses a boundary is coupling: take in only the inputs you use, and hide each decision that is difficult or likely to change.
 
 ---
 
