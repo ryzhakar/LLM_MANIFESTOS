@@ -25,3 +25,7 @@ Derived 2026-04-29; accepted risk. Add a pre-commit hook or CI check running `ju
 ## Archive extraction candidates
 
 Derived 2026-04-29; not yet scoped. Assess whether `archive/design/`, `archive/dieter_rams/`, `archive/research/`, and `archive/software_building_principles/` hold material for formal manifesto extraction.
+
+## Digest eval under the instruction-eval plugin — run, adopt, adapt local extensions
+
+Deferred 2026-10-16. Owner: "defer the digest run under new plugin and your adoption and adapting local extensions of it." Held: running a series of digests/only-what-it-needs.md through instruction-eval@my-claude-skills (0.1.0, main 91d2def), adopting the plugin here, and adapting the local .claude/skills and tools/digest-eval extensions to it. Needs the owner's /plugin install and reader /login. Derived: cut 1 of the old tool failed its gate; its cut 2 hypothesis is unapplied at evals/only-what-it-needs/cut-2/hypothesis.md.
