@@ -1,0 +1,20 @@
+{
+  "name": "llm-manifestos",
+  "owner": {
+    "name": "ryzhakar"
+  },
+  "plugins": [
+    {
+      "name": "manifesto",
+      "source": "./plugin",
+      "description": "Create concentrated manifesto declarations and bind Claude behavior to user-provided manifestos through identity-assumption protocols.",
+      "version": "3.2.0",
+      "author": {
+        "name": "ryzhakar"
+      },
+      "repository": "https://github.com/ryzhakar/LLM_MANIFESTOS",
+      "license": "MIT"
+    }
+  ],
+  "description": "The LLM_MANIFESTOS repository's own marketplace: the plugin that binds Claude to the manifestos kept beside it."
+}
