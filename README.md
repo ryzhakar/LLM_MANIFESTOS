@@ -131,6 +131,15 @@ Tim Peters' aphorisms for Python design philosophy. Explicit over implicit, simp
 
 This README is generated from manifesto frontmatter. **For complete maintainer workflows, see [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md).**
 
+**Install the plugin:**
+
+```
+/plugin marketplace add ryzhakar/llm-manifestos
+/plugin install manifesto@llm-manifestos
+```
+
+The plugin carries `manifestos/` and `digests/` in its own folder; nothing is cloned at session start.
+
 **Quick workflow:**
 
 1. Edit manifesto files in `plugin/manifestos/`

@@ -42,3 +42,17 @@ assistant: "I'll launch the maximalist-reviewer agent with the Strunk source and
 
 ---
 
+## Install
+
+```
+/plugin marketplace add ryzhakar/llm-manifestos
+/plugin install manifesto@llm-manifestos
+```
+
+## Tests
+
+Run from the repository root:
+
+```
+python3 -I plugin/tests/test_hooks.py
+```
