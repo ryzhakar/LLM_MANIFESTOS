@@ -48,5 +48,5 @@ Write the body alone, in portable markdown, markdown with no feature past paragr
 </shape-the-file>
 
 <save-the-file>
-Save the digest as `digests/<slug>.md`, where `slug` is the manifesto's file name without its extension; never save it elsewhere.
+Save the digest as `plugin/digests/<slug>.md`, where `slug` is the manifesto's file name without its extension; never save it elsewhere.
 </save-the-file>

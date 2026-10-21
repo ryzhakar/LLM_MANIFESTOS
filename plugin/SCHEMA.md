@@ -17,7 +17,7 @@ Root is a YAML list. All elements bind to the orchestrator. No subagent bindings
 Root is a YAML mapping with `you:` and/or `subagents:` keys. Supports optional top-level fields.
 
 ```yaml
-manifesto_dir: /path/to/your/LLM_MANIFESTOS
+manifesto_dir: /path/to/a/folder/holding/manifestos
 you:
   - only-fluff-die
   - name: first-principles
@@ -31,7 +31,7 @@ subagents:
     - name: first-principles
     - name: strunk-spr-v3
       purpose: writing compression standard
-      source: https://raw.githubusercontent.com/ryzhakar/LLM_MANIFESTOS/refs/heads/main/instructions/strunk_spr_v3_complete.xml
+      source: https://raw.githubusercontent.com/ryzhakar/llm-manifestos/refs/heads/main/instructions/strunk_spr_v3_complete.xml
   other:
     - first-principles
 ```
@@ -53,7 +53,7 @@ Each element in any list is one of:
 ```yaml
 - name: first-principles
   purpose: reasoning methodology
-  source: .claude/manifesto-repo/LLM_MANIFESTOS/manifestos/first-principles.md
+  source: ${CLAUDE_PLUGIN_ROOT}/manifestos/first-principles.md
 ```
 
 ---
@@ -64,7 +64,7 @@ Each element in any list is one of:
 
 | Field | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| `manifesto_dir` | string (path) | no | `<project_dir>/.claude/manifesto-repo/LLM_MANIFESTOS` | Override the default manifesto repository directory. All hooks use this path for Tier 1 resolution. Valid only in dict-form; ignored in flat list form. |
+| `manifesto_dir` | string (path) | no | `${CLAUDE_PLUGIN_ROOT}` | Override the directory whose `manifestos/` subfolder holds the manifestos; the default is the plugin's own bundled folder. All hooks use this path for Tier 1 resolution. Valid only in dict-form; ignored in flat list form. |
 
 ### Element fields
 
@@ -132,9 +132,9 @@ Footers are inlined in the shell scripts, not extracted to files.
 
 ---
 
-## Repository management
+## Bundled manifestos
 
-SessionStart and PostCompact call `ensure_repo()` from `hooks/ensure-repo.sh`, cloning the manifesto repo to `manifesto_dir` on first use and pulling on later sessions. SubagentStart and UserPromptSubmit read whatever `ensure_repo()` last left in place and never clone or pull themselves, keeping their tighter timeouts network-free. `ensure_repo()` drops a self-ignoring `.gitignore` (`*`) next to the clone so the project's own git history never picks it up.
+The plugin carries `manifestos/` and `digests/` in its own folder. Every hook reads `${CLAUDE_PLUGIN_ROOT}/manifestos` (or the `manifesto_dir` override) directly; no hook clones, pulls, or touches the network.
 
 ---
 

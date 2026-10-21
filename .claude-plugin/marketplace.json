@@ -12,9 +12,9 @@
       "author": {
         "name": "ryzhakar"
       },
-      "repository": "https://github.com/ryzhakar/LLM_MANIFESTOS",
+      "repository": "https://github.com/ryzhakar/llm-manifestos",
       "license": "MIT"
     }
   ],
-  "description": "The LLM_MANIFESTOS repository's own marketplace: the plugin that binds Claude to the manifestos kept beside it."
+  "description": "The llm-manifestos repository's own marketplace: the plugin that binds Claude to the manifestos kept beside it."
 }

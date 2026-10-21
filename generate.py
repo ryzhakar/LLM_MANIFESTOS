@@ -39,13 +39,13 @@ def main():
     config = yaml.safe_load(Path('config.yaml').read_text())
     themes = yaml.safe_load(Path('themes.yaml').read_text())
 
-    # Scan manifestos (manifestos/ directory only)
+    # Scan manifestos (plugin/manifestos/ directory only)
     manifestos = []
     errors = []
 
-    manifesto_dir = Path('manifestos')
+    manifesto_dir = Path('plugin/manifestos')
     if not manifesto_dir.exists():
-        console.print("[red]Error: manifestos/ directory not found[/red]")
+        console.print(f"[red]Error: {manifesto_dir}/ directory not found[/red]")
         sys.exit(1)
 
     for md_file in sorted(manifesto_dir.glob('*.md')):

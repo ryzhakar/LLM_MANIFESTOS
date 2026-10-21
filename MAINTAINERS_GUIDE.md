@@ -37,7 +37,7 @@ Adding a manifesto is a significant event. Manifestos are rare and precious.
 ### The Single Source of Truth
 
 ```
-manifestos/*.md
+plugin/manifestos/*.md
     ↓
 frontmatter (authoritative metadata)
     ↓
@@ -123,7 +123,7 @@ README.md (derived navigation artifact)
 
 1. **Create the file:**
    ```bash
-   touch "manifestos/Manifesto, <principle> - \"<tagline>\".md"
+   touch "plugin/manifestos/Manifesto, <principle> - \"<tagline>\".md"
    ```
 
 2. **Add frontmatter:**
@@ -158,7 +158,7 @@ README.md (derived navigation artifact)
 
 6. **Commit:**
    ```bash
-   git add manifestos/ themes.yaml README.md
+   git add plugin/manifestos/ themes.yaml README.md
    git commit -m "feat: add <principle> manifesto"
    ```
 
@@ -188,7 +188,7 @@ README.md (derived navigation artifact)
 
 4. **Commit:**
    ```bash
-   git add manifestos/ README.md
+   git add plugin/manifestos/ README.md
    git commit -m "docs: improve clarity in <manifesto>"
    ```
 
@@ -221,16 +221,16 @@ README.md (derived navigation artifact)
 3. **Optionally preserve old version:**
    ```bash
    # Move v1 to archive with version in name
-   git mv "manifestos/Manifesto, X.md" "archive/Manifesto, X - v1.0.0.md"
+   git mv "plugin/manifestos/Manifesto, X.md" "archive/Manifesto, X - v1.0.0.md"
 
-   # Create v2 in manifestos/
+   # Create v2 in plugin/manifestos/
    # (new file with version: "2.0.0")
    ```
 
 4. **Regenerate and commit:**
    ```bash
    just readme
-   git add manifestos/ archive/ README.md
+   git add plugin/manifestos/ archive/ README.md
    git commit -m "feat: version <manifesto> to 2.0.0"
    ```
 
@@ -269,7 +269,7 @@ README.md (derived navigation artifact)
 
 4. **Commit:**
    ```bash
-   git add themes.yaml manifestos/ README.md
+   git add themes.yaml plugin/manifestos/ README.md
    git commit -m "feat: add quantum-mechanics theme"
    ```
 
@@ -289,7 +289,7 @@ README.md (derived navigation artifact)
 
 1. **Move to archive:**
    ```bash
-   git mv "manifestos/Manifesto, X.md" "archive/deprecated/Manifesto, X - deprecated.md"
+   git mv "plugin/manifestos/Manifesto, X.md" "archive/deprecated/Manifesto, X - deprecated.md"
    ```
 
 2. **Regenerate README** (manifesto automatically disappears):
@@ -299,11 +299,11 @@ README.md (derived navigation artifact)
 
 3. **Commit:**
    ```bash
-   git add manifestos/ archive/ README.md
+   git add plugin/manifestos/ archive/ README.md
    git commit -m "chore: archive deprecated <manifesto>"
    ```
 
-**Note:** Archive is NOT scanned by `generate.py`. Only `manifestos/*.md` appears in README.
+**Note:** Archive is NOT scanned by `generate.py`. Only `plugin/manifestos/*.md` appears in README.
 
 ---
 
@@ -365,10 +365,10 @@ Or change frontmatter to use existing theme.
 
 **No manifestos found:**
 ```
-Error: manifestos/ directory not found
+Error: plugin/manifestos/ directory not found
 ```
 
-**Fix:** Ensure manifestos are in `manifestos/` directory, not root.
+**Fix:** Ensure manifestos are in `plugin/manifestos/` directory, not root.
 
 ---
 
@@ -416,7 +416,7 @@ description: string    # One sentence, no period needed
 ### File Structure
 
 ```
-manifestos/                    # Active manifestos (scanned)
+plugin/manifestos/             # Active manifestos (scanned)
 ├── Manifesto, X.md
 └── Manifesto, Y.md
 
@@ -436,7 +436,7 @@ archive/                       # Historical (NOT scanned)
 
 ### Generation Pipeline
 
-1. **Scan:** `manifestos/*.md` files
+1. **Scan:** `plugin/manifestos/*.md` files
 2. **Parse:** Extract frontmatter with `python-frontmatter`
 3. **Validate:** Pydantic schema check
 4. **Warn:** Theme discrepancies (informational)

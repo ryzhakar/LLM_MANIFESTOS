@@ -38,12 +38,12 @@ This README is generated from manifesto frontmatter. **For complete maintainer w
 
 **Quick workflow:**
 
-1. Edit manifesto files in `manifestos/`
+1. Edit manifesto files in `plugin/manifestos/`
 2. Run `just readme`
 3. Commit changes
 
 **Adding a new manifesto:**
-- Create `manifestos/<name>.md` with required frontmatter (title, tagline, version, theme, description)
+- Create `plugin/manifestos/<name>.md` with required frontmatter (title, tagline, version, theme, description)
 - If using a new theme, add it to `themes.yaml` first
 - See [MAINTAINERS_GUIDE.md](MAINTAINERS_GUIDE.md) for philosophy and detailed workflows
 
