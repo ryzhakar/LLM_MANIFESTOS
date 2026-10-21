@@ -19,3 +19,6 @@ Owner order (2026-10-21): this repo is the home, name kept, everything ships tog
 5. **Claiming the stewardship:** card `stewards` edit plus `[notice]` with the owner's order as `[quote]`, after the new install is verified. Alternative: claim now.
 6. **Decoupling with `instruction-eval`:** their change list confirmed (messages 2026-10-21T12:48+0300); skill name `manifesto:manifesto-oath` stays; I owe them the final marketplace id before the move. Alternative: keep the hard dependency and the `@my-claude-skills` suffix.
 7. **Old marketplace entry stays** in `claude-skills` until verification. Alternative: remove it with the copy.
+- Unsolved, the owner's: claude-skills CLAUDE.md names the old local clone path `.claude/manifesto-repo/LLM_MANIFESTOS/manifestos/`; its header forbids edits by anyone but the owner. Waits for the owner.
+- Unsolved, the owner's (replaces the CLAUDE.md item above): claude-skills CLAUDE.md was edited by the instruction-eval session in 9f879a0 (lines 15-16 repointed) against its own no-edit header; confirm the owner authorized it, else revert 9f879a0. I did not ask them; the owner was not shown the diff.
+- Withdrawn (2026-10-21, owner: "claude-skills is not your concern, at all."): the claude-skills CLAUDE.md, PITCH.md and instruction-writer.md items; nothing of mine remains open there.
