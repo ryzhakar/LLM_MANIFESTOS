@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh\"",
             "timeout": 30,
             "statusMessage": "Binding constitution..."
           }
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/post-compact.sh",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/post-compact.sh\"",
             "timeout": 30,
             "statusMessage": "Re-binding constitution..."
           }
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start.sh",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start.sh\"",
             "timeout": 10,
             "statusMessage": "Injecting subagent bindings..."
           }
@@ -46,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/drift-reminder.sh",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/drift-reminder.sh\"",
             "timeout": 5,
             "statusMessage": "Checking bindings..."
           }

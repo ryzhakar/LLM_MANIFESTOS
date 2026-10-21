@@ -12,5 +12,6 @@ Transitive closure depth limit: follow references to a maximum depth of three le
 
 Silent binding is worthless. Your first output is the binding report — loaded elements, interplay (if multiple), constraint commitments. Task work begins after, not before.
 
-Manifesto repo: ${MANIFESTO_DIR}/
+Manifestos: ${MANIFESTO_DIR}/manifestos/
+Digests: ${MANIFESTO_DIR}/digests/
 Plugin cache: ${PLUGINS_CACHE_DIR}/

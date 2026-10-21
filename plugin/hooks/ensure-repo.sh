@@ -1,23 +1,9 @@
 #!/bin/bash
-# Shared helper: ensure manifesto repo is cloned + parse .manifestos.yaml
-# Source this file from hook scripts. No side effects on source except the
-# DEFAULT_MANIFESTO_DIR assignment below.
+# Shared helper: parse .manifestos.yaml, locate the bundled manifestos.
+# Source this file from hook scripts after setting SCRIPT_DIR. No side effects
+# on source except the DEFAULT_MANIFESTO_DIR assignment below.
 
-MANIFESTO_REPO="https://github.com/ryzhakar/LLM_MANIFESTOS.git"
-DEFAULT_MANIFESTO_DIR="${CLAUDE_PROJECT_DIR:-.}/.claude/manifesto-repo/LLM_MANIFESTOS"
-
-ensure_repo() {
-    local target="${1:-$DEFAULT_MANIFESTO_DIR}"
-    local parent
-    parent="$(dirname "$target")"
-    if [ ! -d "$target/manifestos" ]; then
-        mkdir -p "$parent"
-        echo '*' > "$parent/.gitignore"
-        git clone --depth 1 --quiet "$MANIFESTO_REPO" "$target" 2>/dev/null || true
-    else
-        git -C "$target" pull --quiet 2>/dev/null || true
-    fi
-}
+DEFAULT_MANIFESTO_DIR="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 
 # Substitute ${VARNAME} placeholders in a template with the named
 # environment variables, leaving any other ${...} untouched. A dependency-

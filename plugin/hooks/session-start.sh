@@ -17,8 +17,6 @@ if $YOU_EMPTY; then
     exit 0
 fi
 
-ensure_repo "$MANIFESTO_DIR"
-
 # Render orchestrator elements as natural language prose
 ELEMENT_DESCRIPTION=$(python3 << 'PYEOF'
 import json, os

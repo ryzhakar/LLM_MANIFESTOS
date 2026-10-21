@@ -17,8 +17,6 @@ if $YOU_EMPTY; then
     exit 0
 fi
 
-ensure_repo "$MANIFESTO_DIR"
-
 # PostCompact requires hookSpecificOutput JSON — plain text goes to debug log only.
 emit_json() {
     python3 -c '
