@@ -19,6 +19,15 @@ Trigger when users request manifestos or manifesto tone. Name the enemy, strip h
 
 ---
 
+## Rulebooks
+
+### [tone-of-voice](rulebooks/tone-of-voice.md)
+
+Sets the stance a text takes toward the reader, from the demand and the stakes to praise, blame, and the enemy. The `manifesto-writing` skill reads the rulebook before drafting.
+
+
+---
+
 ## Agents
 
 ### [maximalist-reviewer](agents/maximalist-reviewer.md)

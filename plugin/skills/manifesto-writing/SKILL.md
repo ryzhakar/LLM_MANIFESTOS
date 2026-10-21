@@ -11,15 +11,19 @@ description: >
 
 Transform source material into manifestos: concentrated declarations of principle that command rather than explain.
 
+## Tone of Voice
+
+Set the manifesto's tone by the tone-of-voice rulebook at `${CLAUDE_PLUGIN_ROOT}/rulebooks/tone-of-voice.md`. The rulebook governs the stance a manifesto takes toward the reader: how the manifesto states the demand, the stakes, and belief in the reader; how the manifesto treats failure, praise, and blame; and how the manifesto sets force and register and frames the enemy. This skill governs what the manifesto keeps, cuts, and builds. Read the rulebook in full before you draft, and run the rulebook's checks when you tighten.
+
 ## Transformation
 
-It declares. It commands. It names enemies. It assumes the reader is ready to be changed.
+A manifesto declares, commands, and names enemies.
 
 **Source material** (talks, essays, documentation) explains, hedges, builds, accommodates objections.
 
-**Manifestos** state positions as facts, strip hedging, build urgency, demand action.
+**Manifestos** state positions, strip hedging, demand action.
 
-The transformation: cut words, state positions as facts.
+The transformation: cut words, state positions.
 
 ## What to Preserve
 
@@ -42,9 +46,7 @@ The transformation: cut words, state positions as facts.
 
 | Source Pattern | Manifesto Pattern |
 |----------------|-------------------|
-| "I believe that X" | "X." |
 | "You might consider Y" | "Y." (imperative) |
-| "It's possible that Z" | "Z." or cut entirely |
 | "Let me explain why..." | State the conclusion directly |
 | Extended analogy | One sharp image, then move on |
 | Gradual buildup | Lead with the blade |
@@ -53,11 +55,11 @@ The transformation: cut words, state positions as facts.
 
 ### Name the Enemy Early
 
-Every manifesto opposes something. Name it in the first section. Make the stakes clear.
+Every manifesto opposes an enemy. Name the enemy in the first section; the rulebook sets how the manifesto frames the enemy and the stakes.
 
 ### Declarations, Not Arguments
 
-State positions. Do not justify them at length. The manifesto assumes the reader is ready to hear. If they need convincing, choose another form.
+State positions without justifying them at length. A reader who needs convincing needs an argued essay, not a manifesto.
 
 ### Commands, Not Suggestions
 
@@ -81,23 +83,20 @@ Manifestos call readers to decide. The closing should make the choice stark.
 2. **Identify the core** — what are the 3-5 ideas that everything else supports?
 3. **Extract vocabulary** — what terms does the author define or use precisely?
 4. **Find the enemy** — what does this oppose?
-5. **Draft sections** — one per core idea, plus opening (enemy + stakes) and closing (the choice)
-6. **Strip hedging** — remove "I think," "perhaps," etc. in a separate pass
+5. **Draft sections** in the tone the rulebook sets — one per core idea, plus opening (enemy + stakes) and closing (the choice)
+6. **Strip hedging** — remove hedges such as "I think" and "perhaps" in a separate pass, stating any real limit as the rulebook directs
 7. **Convert to commands** — change suggestions to imperatives
-8. **Tighten** — cut words, cut sentences, cut sections until it hurts
+8. **Tighten** — cut words, cut sentences, cut sections until cutting hurts; then run the rulebook's checks
 9. **Add attribution** — credit the source author
 
-## Tone Markers
+## Wording Markers
 
 **Include:**
-- Moral urgency
-- Direct address ("you")
 - Present tense
 - Active voice
 - Concrete nouns
 
 **Exclude:**
-- Academic hedging
 - Passive constructions (unless for emphasis)
 - Future tense promises
 - Abstract nouns where concrete ones work
@@ -141,6 +140,6 @@ A manifesto should be readable in one sitting. For transformation of a 45-minute
 
 ## Prerequisites
 
-Manifestos require conviction. Manifestos flatten nuance. Manifestos assume sympathetic readers. Manifestos sacrifice precision for force.
+Manifestos require conviction and flatten nuance: the first example above cuts "I think that collectively we are" to "We are".
 
 A manifesto is a tool for crystallization and transmission, not for discovery or persuasion.
