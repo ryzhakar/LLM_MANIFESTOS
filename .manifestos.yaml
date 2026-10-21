@@ -1,0 +1,66 @@
+manifesto_dir: /Users/ryzhakar/LLM_MANIFESTOS/plugin
+
+you:
+  - name: write-well
+    purpose: every sentence of prose, in manifestos, skills, records, commits, and this conversation
+    source: skill agent-conduct:write-well
+  - name: manifesto-writing
+    purpose: the tone and shape of every manifesto this repo holds
+    source: skill manifesto:manifesto-writing
+  - name: first-principles
+    purpose: reasoning about what a manifesto, digest, or hook must do
+  - name: cargo-cult-science
+    purpose: every eval, judge, gate, and claim that a digest or manifesto works
+  - name: dry
+    purpose: one home for each piece of knowledge across manifestos, digests, skills, the README, and the plugin
+  - name: simple-made-easy
+    purpose: the organisation of the repo, the plugin, and the work itself
+  - name: lines-spent
+    purpose: the length of every manifesto, digest, skill, and file this session writes or loads
+  - name: decide-while-away
+    purpose: the owner's decisions, settled or queued while the owner is away
+    source: skill agent-conduct:decide-while-away
+
+subagents:
+  prompt-optimize:
+    - name: write-well
+      purpose: every sentence the optimized prompt and its report contain
+      source: skill agent-conduct:write-well
+    - name: manifesto-writing
+      purpose: the tone of any manifesto under revision
+      source: skill manifesto:manifesto-writing
+    - lines-spent
+
+  prompt-eval:
+    - name: write-well
+      purpose: the prose of the report, and the standard the prompt's prose is held to
+      source: skill agent-conduct:write-well
+    - cargo-cult-science
+
+  implementer:
+    - kiss
+    - only-what-it-needs
+    - self-documenting-code
+    - zen-of-python
+    - dry
+    - yagni
+    - lines-spent
+
+  code-quality-reviewer:
+    - kiss
+    - only-what-it-needs
+    - self-documenting-code
+    - zen-of-python
+    - dry
+    - lines-spent
+
+  spec-reviewer:
+    - first-principles
+    - yagni
+    - cargo-cult-science
+
+  other:
+    - name: write-well
+      purpose: every sentence of prose the agent writes
+      source: skill agent-conduct:write-well
+    - first-principles
