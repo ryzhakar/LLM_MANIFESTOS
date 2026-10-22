@@ -13,7 +13,7 @@ Transform source material into manifestos: concentrated declarations of principl
 
 ## Tone of Voice
 
-Set the manifesto's tone by the tone-of-voice rulebook at `${CLAUDE_PLUGIN_ROOT}/rulebooks/tone-of-voice.md`. The rulebook governs the stance a manifesto takes toward the reader: how the manifesto states the demand, the stakes, and belief in the reader; how the manifesto treats failure, praise, and blame; and how the manifesto sets force and register and frames the enemy. This skill governs what the manifesto keeps, cuts, and builds. Read the rulebook in full before you draft, and run the rulebook's checks when you tighten.
+Set the manifesto's tone by the manifesto Raise the Bar at `${CLAUDE_PLUGIN_ROOT}/manifestos/raise-the-bar.md`. Raise the Bar governs the stance a manifesto takes toward the reader: how the manifesto states the demand, the stakes, and belief in the reader; how the manifesto treats failure, praise, and blame; and how the manifesto sets force and register and frames the enemy. This skill governs what the manifesto keeps, cuts, and builds. Read Raise the Bar in full before you draft, and run the checks of Raise the Bar when you tighten.
 
 ## Transformation
 
@@ -55,7 +55,7 @@ The transformation: cut words, state positions.
 
 ### Name the Enemy Early
 
-Every manifesto opposes an enemy. Name the enemy in the first section; the rulebook sets how the manifesto frames the enemy and the stakes.
+Every manifesto opposes an enemy. Name the enemy in the first section; Raise the Bar sets how the manifesto frames the enemy and the stakes.
 
 ### Declarations, Not Arguments
 
@@ -83,10 +83,10 @@ Manifestos call readers to decide. The closing should make the choice stark.
 2. **Identify the core** — what are the 3-5 ideas that everything else supports?
 3. **Extract vocabulary** — what terms does the author define or use precisely?
 4. **Find the enemy** — what does this oppose?
-5. **Draft sections** in the tone the rulebook sets — one per core idea, plus opening (enemy + stakes) and closing (the choice)
-6. **Strip hedging** — remove hedges such as "I think" and "perhaps" in a separate pass, stating any real limit as the rulebook directs
+5. **Draft sections** in the tone Raise the Bar sets — one per core idea, plus opening (enemy + stakes) and closing (the choice)
+6. **Strip hedging** — remove hedges such as "I think" and "perhaps" in a separate pass, stating any real limit as Raise the Bar directs
 7. **Convert to commands** — change suggestions to imperatives
-8. **Tighten** — cut words, cut sentences, cut sections until cutting hurts; then run the rulebook's checks
+8. **Tighten** — cut words, cut sentences, cut sections until cutting hurts; then run the checks of Raise the Bar
 9. **Add attribution** — credit the source author
 
 ## Wording Markers

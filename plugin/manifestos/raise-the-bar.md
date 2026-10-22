@@ -92,12 +92,12 @@ Give the reader at least one target to act on with the text alone, and set its t
 
 ## Readers who are models
 
-No rule here is tested on models in its stated form; the four rules below rest on vendor guidance and on single studies. Apply the other rules to model-read text for one voice across texts, not for a tested gain.
+No rule here is tested on models as stated; the four rules below rest on vendor guidance and single studies. Apply the rest to model-read text for one voice, not a tested gain.
 
 - Give a model the target, the success criteria, and the reason behind each instruction.
-- Prefer a positive target. Where a prohibition is the clearest form of a constraint, state it plainly, once, with its reason; in tests on models, naming a forbidden word cut its use and left only a small trace of its meaning.
-- Reserve emphasis for rules that never bend, keep it calm, and write judgment calls as decision rules; in one study, emphasis raised compliance with the line it marked, and a vendor warns that aggressive wording can make its models overtrigger.
-- When people and models read one text, let this section's rules govern the action steps and the rest of the page govern the framing around those steps.
+- Prefer a positive target. Where a prohibition is the clearest form of a constraint, state it plainly, once, with its reason; in model tests, naming a forbidden word cut its use and left only a small trace of its meaning.
+- Reserve emphasis for rules that never bend, keep it calm, and write judgment calls as decision rules; in one study, emphasis raised compliance with the marked line, and a vendor warns that aggressive wording can make its models overtrigger.
+- When people and models read one text, these four rules govern the action steps, and the rest of the page governs the framing.
 
 ## Order of work
 
