@@ -28,7 +28,7 @@ Established 2026-04-29 (`only-fluff-die.md`), verified by execution. Scope: any 
 5. **Oath-bound writing** — the writer agent MUST be bound to `/manifesto-writing` via `/manifesto-oath` before receiving source material; writes under constitutional constraint; runs the self-referential checklist.
 6. **Validation** — `just readme`, then commit.
 
-The writing standard is the `manifesto:manifesto-writing` skill (`manifesto/skills/manifesto-writing/SKILL.md` in the claude-skills marketplace). The entry gate for a new manifesto has no home today: `MAINTAINERS_GUIDE.md` holds none on `main` or at the tip of `origin/claude/manifesto-design-discussion-liuuvf`. It was committed in `b0645cb` and `4c4f786` and carried by `79b4954` (all 2026-10-11, on the branch; `79b4954` is the last guide version before the revert) and reverted by `8d4ef6f` (2026-10-12); `orchestration_log/history/2026-10-11/session.md` (D12) summarises its stages. Restoring or rewriting it is an owner call (`codebase_state.md`, Next Actions). This section restates neither the standard nor the gate.
+The writing standard is the `manifesto:manifesto-writing` skill (`plugin/skills/manifesto-writing/SKILL.md` in this repo), which sets tone by the tone-of-voice rulebook (`plugin/rulebooks/tone-of-voice.md`). The entry gate for a new manifesto has no home today: `MAINTAINERS_GUIDE.md` holds none on `main` or at the tip of `origin/claude/manifesto-design-discussion-liuuvf`. It was committed in `b0645cb` and `4c4f786` and carried by `79b4954` (all 2026-10-11, on the branch; `79b4954` is the last guide version before the revert) and reverted by `8d4ef6f` (2026-10-12); `orchestration_log/history/2026-10-11/session.md` (D12) summarises its stages. Restoring or rewriting it is an owner call (`codebase_state.md`, Next Actions). This section restates neither the standard nor the gate.
 
 Dispatch lessons the standard does not carry:
 
@@ -43,6 +43,8 @@ Dispatch lessons the standard does not carry:
 ## Lessons from 2026-10-11
 
 Source: the `lines-spent` build, rulings 6–9 and 15–19 in `orchestration_log/history/2026-10-11/owned-lines/reviews/r1-rulings.md`.
+
+Scope: the `lines-spent` v2 build, as ruling 6 states ("in force for v2"). The tone of every other manifesto follows the tone-of-voice rulebook (`plugin/rulebooks/tone-of-voice.md`).
 
 ### Register by measurement
 
