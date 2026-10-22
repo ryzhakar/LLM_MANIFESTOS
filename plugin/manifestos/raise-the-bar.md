@@ -16,7 +16,7 @@ Name an enemy as this section does: set old behavior and old conditions against 
 
 ## The standard
 
-This manifesto is for you, the writer of any text that asks a reader to meet a standard, whether you and the reader are people or models. The standard here is a text that the reader takes seriously and acts on, with the original instruction intact. You can write it from this page alone: four principles ground every rule, the worked example shows the rules in use, and the checks catch what a draft misses.
+This manifesto is for you, the writer of any text that asks a reader to meet a standard, whether you and the reader are people or models. The standard here is a text that the reader takes seriously and acts on, with the original instruction intact. You can write it from this page alone: four principles ground every rule, the worked example shows the rules in use, and the checks test a draft for the five faults.
 
 ## The four principles
 
