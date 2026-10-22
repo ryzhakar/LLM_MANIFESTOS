@@ -122,3 +122,10 @@ def test_the_cached_prompt_is_utf_8_whatever_the_locale(tmp_path):
     assert run.returncode == 0, run.stderr
     [cached] = (tmp_path / "unharness").iterdir()
     assert cached.read_bytes() == "Café\n".encode()
+
+
+def test_the_shipped_preamble_stays_within_25_lines_and_names_no_tool():
+    preamble = files("unharness").joinpath("preamble.md").read_text(encoding="utf-8")
+
+    assert len(preamble.splitlines()) <= 25
+    assert "unharness" not in preamble.lower() and "compil" not in preamble.lower()
