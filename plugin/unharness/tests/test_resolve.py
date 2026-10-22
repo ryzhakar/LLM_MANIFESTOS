@@ -1,7 +1,8 @@
 from hashlib import sha256
 
+import pytest
 from helpers import write
-from unharness.config import Element
+from unharness.config import Element, UnharnessError
 from unharness.resolve import Document, resolve_stack
 
 
@@ -43,3 +44,29 @@ def test_the_manifesto_dir_of_the_config_replaces_the_cached_registry_and_names_
     elements = [Element("dry", None, None), Element("again", None, "manifesto dry")]
 
     assert texts(elements, tmp_path, login, manifesto_dir="plugin") == [f"Local dry at {tmp_path / 'plugin'}"] * 2
+
+
+def failure_of(element, directory, login, manifesto_dir=""):
+    with pytest.raises(UnharnessError) as failure:
+        resolve_stack([element], directory, manifesto_dir, login)
+    return str(failure.value)
+
+
+def test_an_element_that_does_not_resolve_names_itself_and_the_path_it_tried(login, tmp_path):
+    version_folder = login / "plugins" / "cache" / "marketplace" / "manifesto" / "3.4.0"
+
+    assert failure_of(Element("nope", None, None), tmp_path, login) == (
+        f"element nope did not resolve; tried {version_folder / 'manifestos' / 'nope.md'}"
+    )
+    assert failure_of(Element("gone", None, "file missing/gone.md"), tmp_path, login) == (
+        f"element gone did not resolve; tried {tmp_path / 'missing' / 'gone.md'}"
+    )
+    assert failure_of(Element("none", None, "skill absent:skill"), tmp_path, login) == (
+        f"element none did not resolve; tried {login / 'plugins' / 'cache' / '*' / 'absent' / '*' / 'skills' / 'skill' / 'SKILL.md'}"
+    )
+
+
+def test_an_unknown_source_type_is_refused_with_the_types_that_exist(login, tmp_path):
+    assert failure_of(Element("site", None, "https://example.com/x.md"), tmp_path, login) == (
+        "element site has source type 'https://example.com/x.md' that is none of manifesto, skill, or file"
+    )
