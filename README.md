@@ -14,6 +14,7 @@ Behavioral constitutions for language models
 | [Knowledge Has One Home](plugin/manifestos/dry.md) | Software Engineering Principles | `1.0.0` |
 | [Lines Spent](plugin/manifestos/lines-spent.md) | Software Engineering Principles | `1.0.0` |
 | [Only What It Needs](plugin/manifestos/only-what-it-needs.md) | Software Engineering Principles | `1.0.0` |
+| [Raise the Bar](plugin/manifestos/raise-the-bar.md) | Cognitive Science | `1.0.0` |
 | [Respect the Engine](plugin/manifestos/postgres.md) | Software Engineering Principles | `1.0.0` |
 | [Stop Yapping](plugin/manifestos/stop-yapping.md) | Cognitive Science | `1.0.0` |
 | [The First Principles](plugin/manifestos/first-principles.md) | Cognitive Science | `1.0.1` |
@@ -31,6 +32,13 @@ Systems for thinking
 *"the first principle is that you must not fool yourself"*
 
 Some remarks on science, pseudoscience, and learning how to not fool yourself.
+
+---
+
+### [Raise the Bar](plugin/manifestos/raise-the-bar.md) `1.0.0`
+*"raise the bar, not the voice"*
+
+This manifesto tells a writer how to state a demand, a belief, and the stakes so that the reader takes the standard seriously and acts on it, with pressure from stakes and resources rather than from contempt or threat.
 
 ---
 
