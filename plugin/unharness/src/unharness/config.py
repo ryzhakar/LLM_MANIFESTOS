@@ -29,10 +29,13 @@ class Config:
 def load(path: Path) -> Config:
     """Read the config file at path into a Config."""
     root = _parse_yaml(path.read_text())
+    if isinstance(root, list):
+        root = {"you": root}
+    root = root or {}
     return Config(
-        you=_elements(root["you"]),
-        subagents={},
-        manifesto_dir="",
+        you=_elements(root.get("you") or []),
+        subagents={role: _elements(items or []) for role, items in (root.get("subagents") or {}).items()},
+        manifesto_dir=root.get("manifesto_dir") or "",
         directory=path.parent,
     )
 
@@ -48,6 +51,8 @@ def _element(item: str | dict) -> Element:
 
 def _parse_yaml(text: str):
     lines = [line.rstrip() for line in text.split("\n") if line.strip() and not line.lstrip().startswith("#")]
+    if not lines:
+        return None
     value, _ = _parse_block(lines, 0, _indent(lines[0]))
     return value
 
