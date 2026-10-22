@@ -6,7 +6,7 @@ description: >
 ---
 
 <read-the-stack>
-Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness stack --config <path>` into a temporary file, where `<path>` is the config, the working folder's `.manifestos.yaml`, which lists the stack, the ordered elements the session binds to; never run it into the conversation.
+Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness stack --config <path>` into a temporary file, where `<path>` is the config, the working folder's `.manifestos.yaml`, which lists the stack, the ordered elements, each a manifesto, a skill, or a file, that the session binds to; never send the command's output into the conversation.
 
 Read the temporary file whole, the `<stack>` block and then the full text of every element; never read a part of it.
 
@@ -30,7 +30,7 @@ Where no rule resolves a tension, set a priority order among the elements in con
 <write-the-interplay-file>
 Write `.manifestos.interplay.md` beside the config; never write it elsewhere.
 
-Open the file with the `<stack>` block copied verbatim from the temporary file; never retype or reorder a line of it.
+Open the file with the `<stack>` block copied verbatim from the temporary file; never alter, drop, or reorder a line of it.
 
 After the block, write `<interplay>` ... `</interplay>` holding the axioms, the convergences, the tensions, the rules, and the priority order, in the session's own voice, the first person; never in a voice that reports on the session from outside.
 
@@ -38,7 +38,9 @@ Keep every seam, a sentence that names the config, the file, the tool, or the wa
 </write-the-interplay-file>
 
 <write-the-commitments-file>
-Write `.manifestos.commitments.md` beside the config, opened with the same `<stack>` block copied verbatim; never write it elsewhere or open it with anything else.
+Write `.manifestos.commitments.md` beside the config; never write it elsewhere.
+
+Open the file with the same `<stack>` block copied verbatim; never open it with anything else.
 
 After the block, write `<commitments>` ... `</commitments>` holding, for each element in the stack's order, one `I must ..., and I will ...` line and one `I must not ..., and I will not ...` line; never skip an element or change the order.
 
@@ -58,5 +60,9 @@ After writing each file, report its path; never print its content to the convers
 </report-the-files>
 
 <confirm-the-compile>
-Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness prompt --config <path> > /dev/null` and report its exit code; never report the files as done without that run.
+Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness prompt --config <path> > /dev/null`; never report the files as done without that run.
+
+Report the exit code of that run; never report a pass on a code other than 0.
+
+On a code other than 0, correct the file that the printed message names and run the command again; never stop at a failing run.
 </confirm-the-compile>
