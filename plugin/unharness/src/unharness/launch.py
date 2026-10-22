@@ -23,6 +23,7 @@ STRIP_ENVIRONMENT = {
     "CLAUDE_CODE_SILENT_TURN_REMINDER": "0",
     "UNHARNESS": "1",
 }
+CLAUDE_MD_VARIABLE = "CLAUDE_CODE_DISABLE_CLAUDE_MDS"
 STRIP_SETTINGS = {
     "includeGitInstructions": False,
     "attribution": {"commit": "", "pr": ""},
@@ -51,11 +52,21 @@ def launch(
     if not prompt.strip():
         raise UnharnessError("the prompt is empty")
     prompt_file = _write_prompt(prompt, cache_home)
-    assignments = [f"{name}={value}" for name, value in STRIP_ENVIRONMENT.items()]
-    arguments = ["--system-prompt-file", str(prompt_file), "--disallowedTools", "WebSearch",
-                 "--settings", json.dumps(STRIP_SETTINGS, separators=(",", ":"))]
+    assignments = [f"{name}={value}" for name, value in _strip_environment(options).items()]
+    arguments = _strip_arguments(prompt_file, options)
     print(shlex.join(["env", *assignments, DEFAULT_LAUNCHER, *arguments]), TERMINAL_REDIRECT)
     return 0
+
+
+def _strip_environment(options: Options) -> dict[str, str]:
+    kept = [CLAUDE_MD_VARIABLE] if options.keep_claude_md else []
+    return {name: value for name, value in STRIP_ENVIRONMENT.items() if name not in kept}
+
+
+def _strip_arguments(prompt_file: Path, options: Options) -> list[str]:
+    settings = {**STRIP_SETTINGS, **({"disableAllHooks": True} if options.no_hooks else {})}
+    web_search = [] if options.keep_web_search else ["--disallowedTools", "WebSearch"]
+    return ["--system-prompt-file", str(prompt_file), *web_search, "--settings", json.dumps(settings, separators=(",", ":"))]
 
 
 def _write_prompt(prompt: str, cache_home: Path) -> Path:

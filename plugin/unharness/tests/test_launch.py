@@ -70,3 +70,35 @@ def test_an_empty_prompt_stops_before_anything_is_written(tmp_path):
         launch(" \n", Options(False, False, False, []), {}, tmp_path, never, never)
 
     assert list(tmp_path.iterdir()) == []
+
+
+def settings_of(command: list[str]) -> dict:
+    return json.loads(command[command.index("--settings") + 1])
+
+
+def test_keep_claude_md_omits_only_the_claude_md_variable(tmp_path, capsys):
+    command = printed_command(Options(True, False, False, []), tmp_path, capsys)
+
+    assert command[1:command.index("claude")] == [name for name in DEFAULT_ENVIRONMENT if "CLAUDE_MDS" not in name]
+
+
+def test_keep_web_search_drops_the_disallow(tmp_path, capsys):
+    command = printed_command(Options(False, True, False, []), tmp_path, capsys)
+
+    assert "--disallowedTools" not in command and "WebSearch" not in command
+
+
+def test_no_hooks_adds_disable_all_hooks_to_the_settings(tmp_path, capsys):
+    command = printed_command(Options(False, False, True, []), tmp_path, capsys)
+
+    assert settings_of(command) == {**DEFAULT_SETTINGS, "disableAllHooks": True}
+
+
+def test_all_three_flags_combine(tmp_path, capsys):
+    command = printed_command(Options(True, True, True, []), tmp_path, capsys)
+
+    assert command == [
+        "env", *[name for name in DEFAULT_ENVIRONMENT if "CLAUDE_MDS" not in name],
+        "claude", "--system-prompt-file", str(cached_prompt(tmp_path)),
+        "--settings", json.dumps({**DEFAULT_SETTINGS, "disableAllHooks": True}, separators=(",", ":")),
+    ]
