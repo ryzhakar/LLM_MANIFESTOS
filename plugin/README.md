@@ -51,22 +51,23 @@ assistant: "I'll launch the maximalist-reviewer agent with the Strunk source and
 
 ## Unharness
 
-The system prompt carries the stack, its interplay, and its commitments, so the binding survives compaction and the harness's own instructions are switched off. `unharness` compiles that prompt and launches Claude Code with it.
+The system prompt carries the stack, its interplay, and its commitments; since the prompt is not part of the conversation, compaction cannot erase the binding, and one captured compaction left the prompt unchanged. Launch switches off the instructions Claude Code adds around it, and `unharness` compiles the prompt and launches Claude Code with it.
 
 Beside `.manifestos.yaml`, whose schema is in [SCHEMA.md](SCHEMA.md), a project keeps three files:
 
 - `.manifestos.interplay.md` and `.manifestos.commitments.md`, written by `/compile-commitments`, each opening with a `<stack>` block that lists every element with its sha256.
-- `.manifestos.preamble.md`, optional, which replaces the shipped preamble.
+- `.manifestos.preamble.md`, optional, which replaces the preamble that tells the model what each text the application adds is, and how to weigh it.
 
 ```
+/compile-commitments
 uvx unharness prompt | uvx unharness launch -- claude
 ```
 
-Any launcher goes after `--`. A name that is not a program on PATH, such as the zsh function `claude@meta`, runs through `$SHELL -ic`.
+The launcher's input is reopened on the terminal, so the session reads the keyboard after the pipe. Any launcher goes after `--`; a name that is not a program on PATH, such as the zsh function `claude@meta`, runs through `$SHELL -ic`. With nothing after `--`, `launch` prints the command it would run and runs nothing.
 
-- `unharness prompt [--config PATH]` prints the compiled prompt; it stops when a session file is missing or stale.
+- `unharness prompt [--config PATH]` prints the compiled prompt; it stops when the interplay or commitments file is missing or its `<stack>` block differs from the current stack.
 - `unharness stack [--config PATH]` prints the `<stack>` block and the constitution, exactly what a session binds to.
-- `unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [PROMPT] [-- LAUNCHER [ARGS...]]` caches the prompt in `~/.cache/unharness/<sha256>.md` and runs the launcher with the switches below. With no launcher it prints the command and runs nothing.
+- `unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [PROMPT] [-- LAUNCHER [ARGS...]]` caches the prompt in `$XDG_CACHE_HOME/unharness/<sha256>.md`, or `~/.cache/unharness/` when unset, and runs the launcher with the switches below. The printed command ends in the terminal's own device, and in `/dev/tty` only when neither output is a terminal.
 
 `/compile-commitments` reads `unharness stack`, reduces each element to its axioms, and writes the interplay and commitments files.
 Run it once after each change to the stack; `unharness prompt` stops until the files match.
@@ -77,33 +78,32 @@ Run it once after each change to the stack; `unharness prompt` stops until the f
 | Billing header block | env `CLAUDE_CODE_ATTRIBUTION_HEADER=0` | stripped |
 | Every CLAUDE.md | env `CLAUDE_CODE_DISABLE_CLAUDE_MDS=1` | stripped; `--keep-claude-md` keeps |
 | Git status snapshot; commit and PR text in the Bash tool description | env `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1`, setting `includeGitInstructions: false` | stripped |
-| Co-Authored-By trailer and PR footer | setting `attribution: {commit: "", pr: ""}` | stripped |
-| Auto memory section | env `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`, setting `autoMemoryEnabled: false` | stripped |
-| Output style text | setting `outputStyle: "default"` | stripped |
-| "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0` | stripped |
+| Co-Authored-By trailer and PR footer | setting `attribution: {commit: "", pr: ""}` | set |
+| Auto memory section | env `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`, setting `autoMemoryEnabled: false` | set |
+| Output style text | setting `outputStyle: "default"` | set |
+| "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0` | set |
 | WebSearch paragraph | `--disallowedTools WebSearch` | stripped; `--keep-web-search` keeps it |
 | Hook output | setting `disableAllHooks: true` under `--no-hooks` | kept |
 
-Launch also sets `UNHARNESS=1`, so this plugin's session-start and post-compact hooks stand down; the compiled prompt already carries their binding.
+The four rows marked "set" are implemented per the Claude Code docs and the binary; no capture shows their text present or removed. Launch also sets `UNHARNESS=1`, so this plugin's session-start and post-compact hooks stand down because the compiled prompt already carries their binding; their tests cover this, and no capture shows it.
 
-**What stays**, because no switch removes it without dropping the tool, skill, and agent lists. Captures are under `orchestration_log/recon/2026-10-23/captures/`.
+**What stays.** The harness adds each item below, and either no switch removes it or the only switch drops something kept on purpose. The evidence is in `orchestration_log/history/2026-10-23/verification-unharness.md`, with the captures d1-p-haiku and d1-p-opus (print mode), d1-tmux-haiku (interactive sessions), d1-flag-keepmd, d1-flag-nohooks, d1-flag-websearch, b2-full-haiku, and a3-c5.
 
-- The identity line, `You are Claude Code, Anthropic's official CLI for Claude.` in `a3-c5` and `You are a Claude agent, built on Anthropic's Claude Agent SDK.` in `b2-full-haiku`.
-- The context wrapper around the email and date lines: `b2-full-haiku`, `a3-c5`.
-- Hook output, kept by choice: `b2-full-haiku`; `b2-full-haiku-nohooks` shows it gone.
-- Task-list nudges and file-changed notes: their one switch, `CLAUDE_CODE_DISABLE_ATTACHMENTS`, also drops the skill list (`b2-a-attachments`).
-- The Agent tool's worktree sentence and the other tool descriptions: `b2-full-haiku`.
-- MCP server instructions when MCP servers are configured: `a3-c5`.
-- The tool, skill, and agent lists and the environment block, kept by choice: `b2-full-haiku`.
+- The identity line: `You are Claude Code, Anthropic's official CLI for Claude.` in interactive sessions, `You are a Claude agent, built on Anthropic's Claude Agent SDK.` in print mode.
+- The context wrapper around the email line, in a user message; the date line sits outside it.
+- Task-list nudges and file-changed notes: their one switch, `CLAUDE_CODE_DISABLE_ATTACHMENTS`, also drops the skill list.
+- The Agent tool's worktree sentence and the other tool descriptions.
+- MCP server instructions when MCP servers are configured.
+- The tool, skill, and agent lists and the environment block, kept on purpose.
 
-Install, from the published package once it exists, or from git:
+Run it from git until the package is published, then from the package:
 
 ```
-uvx unharness
 uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.5.0#subdirectory=plugin/unharness" unharness
+uvx unharness
 ```
 
-Inside a session, `bin/unharness` runs the copy that matches the plugin's version.
+Inside a session, `bin/unharness` runs the copy bundled with the plugin; `UNHARNESS_FROM`, a path or a git URL, runs another source.
 
 ## Install
 
