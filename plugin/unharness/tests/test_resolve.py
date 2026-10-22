@@ -16,8 +16,8 @@ def test_a_legacy_name_resolves_to_the_registry_of_the_highest_cached_manifesto_
     assert documents == [Document("dry", "one home", body, sha256("# Dry 3.4.0\n\nRoot is ${CLAUDE_PLUGIN_ROOT}.".encode()).hexdigest())]
 
 
-def texts(elements, directory, login, manifesto_dir=""):
-    return [document.text for document in resolve_stack(elements, directory, manifesto_dir, login)]
+def texts(elements, directory, login, registry=None):
+    return [document.text for document in resolve_stack(elements, directory, registry, login)]
 
 
 def test_a_plugin_skill_resolves_at_the_highest_version_by_number_not_by_text(login, tmp_path):
@@ -44,12 +44,12 @@ def test_the_manifesto_dir_of_the_config_replaces_the_cached_registry_and_names_
     write(tmp_path / "plugin" / "manifestos" / "dry.md", "Local dry at ${CLAUDE_PLUGIN_ROOT}\n")
     elements = [Element("dry", None, None, None), Element("again", None, "manifesto", "dry")]
 
-    assert texts(elements, tmp_path, login, manifesto_dir="plugin") == [f"Local dry at {tmp_path / 'plugin'}"] * 2
+    assert texts(elements, tmp_path, login, registry=tmp_path / "plugin") == [f"Local dry at {tmp_path / 'plugin'}"] * 2
 
 
-def failure_of(element, directory, login, manifesto_dir=""):
+def failure_of(element, directory, login, registry=None):
     with pytest.raises(UnharnessError) as failure:
-        resolve_stack([element], directory, manifesto_dir, login)
+        resolve_stack([element], directory, registry, login)
     return str(failure.value)
 
 

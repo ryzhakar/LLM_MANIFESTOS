@@ -28,7 +28,7 @@ def unharness(login: Path, *arguments: str, cwd: Path) -> subprocess.CompletedPr
 
 def documents_of(project: Path, login: Path):
     config = load(project / ".manifestos.yaml")
-    return resolve_stack(config.you, config.directory, config.manifesto_dir, login)
+    return resolve_stack(config.you, config.directory, config.registry, login)
 
 
 def test_the_stack_verb_prints_the_stack_block_and_the_constitution_of_the_config(login, project, tmp_path):

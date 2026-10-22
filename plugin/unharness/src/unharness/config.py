@@ -44,8 +44,8 @@ class Element:
 class Config:
     you: list[Element]
     subagents: dict[str, list[Element]]
-    manifesto_dir: str
     directory: Path
+    registry: Path | None
 
 
 def fail(error: UnharnessError, status: int = 1) -> int:
@@ -68,8 +68,8 @@ def main(argv: list[str]) -> int:
     print(json.dumps({
         "you": [asdict(element) for element in config.you],
         "subagents": {role: [asdict(element) for element in elements] for role, elements in config.subagents.items()},
-        "manifesto_dir": config.manifesto_dir,
         "directory": str(config.directory),
+        "registry": str(config.registry) if config.registry else "",
     }))
     return 0
 
@@ -86,8 +86,8 @@ def load(path: Path) -> Config:
     return Config(
         you=_elements(root.get("you") or [], "you"),
         subagents={role: _elements(items or [], f"subagents.{role}") for role, items in roles.items()},
-        manifesto_dir=root.get("manifesto_dir") or "",
         directory=path.parent,
+        registry=(path.parent / root["manifesto_dir"]).resolve() if root.get("manifesto_dir") else None,
     )
 
 

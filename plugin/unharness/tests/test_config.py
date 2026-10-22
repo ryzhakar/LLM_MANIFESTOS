@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from unharness.config import Config, Element, UnharnessError, load
+from unharness.resolve import resolve_stack
 
 CONFIG_SCRIPT = Path(__file__).parent.parent / "src" / "unharness" / "config.py"
 
@@ -22,8 +23,8 @@ def test_a_bare_string_names_a_registry_manifesto(tmp_path):
     assert config == Config(
         you=[Element("dry", None, None, None), Element("kiss", "the code", None, None)],
         subagents={},
-        manifesto_dir="",
         directory=tmp_path,
+        registry=None,
     )
 
 
@@ -34,7 +35,7 @@ def test_subagent_roles_and_manifesto_dir_load_beside_the_you_stack(tmp_path):
         "subagents:\n  implementer:\n    - kiss\n    - name: yagni\n  other:\n    - dry\n"
     )))
 
-    assert config.manifesto_dir == "/plugins/manifesto"
+    assert config.registry == Path("/plugins/manifesto")
     assert config.subagents == {
         "implementer": [Element("kiss", None, None, None), Element("yagni", None, None, None)],
         "other": [Element("dry", None, None, None)],
@@ -46,7 +47,7 @@ def test_a_root_list_is_the_you_stack(tmp_path):
 
     assert [element.name for element in config.you] == ["dry", "kiss"]
     assert config.subagents == {}
-    assert config.manifesto_dir == ""
+    assert config.registry is None
 
 
 def test_each_source_type_is_kept_as_written_and_a_file_is_named_by_its_stem(tmp_path):
@@ -68,7 +69,7 @@ def test_each_source_type_is_kept_as_written_and_a_file_is_named_by_its_stem(tmp
 
 def test_null_items_are_dropped_and_an_empty_file_is_an_empty_stack(tmp_path):
     assert load(write_config(tmp_path, "you:\n  - ~\n  - dry\n  -\n")).you == [Element("dry", None, None, None)]
-    assert load(write_config(tmp_path, "# nothing here\n")) == Config([], {}, "", tmp_path)
+    assert load(write_config(tmp_path, "# nothing here\n")) == Config([], {}, tmp_path, None)
 
 
 def test_an_element_with_no_name_and_no_file_source_stops_the_load(tmp_path):
@@ -84,7 +85,7 @@ def test_trailing_comments_are_not_part_of_a_value(tmp_path):
         "you:  # the stack\n  - name: \"dry\" # knowledge\n    purpose: 'one home' # why\n    source: skill a:b # where\n"
     )))
 
-    assert config.manifesto_dir == "/plugins/manifesto"
+    assert config.registry == Path("/plugins/manifesto")
     assert config.you == [Element("dry", "one home", "skill", "a:b")]
 
 
@@ -133,8 +134,8 @@ def test_a_shell_hook_reads_the_stack_as_json_by_running_the_module_by_path(tmp_
     assert json.loads(run.stdout) == {
         "you": [{"name": "dry", "purpose": None, "source_type": None, "reference": None}],
         "subagents": {"other": [{"name": "kiss", "purpose": "p", "source_type": None, "reference": None}]},
-        "manifesto_dir": "/m",
         "directory": str(tmp_path),
+        "registry": "/m",
     }
 
 
@@ -179,3 +180,18 @@ def test_a_source_that_is_not_manifesto_skill_or_file_with_a_reference_stops_the
 
     with pytest.raises(UnharnessError, match=r"element 1 of you has source '.*' that is none of manifesto <name>, skill <plugin>:<skill>, skill <skill>, or file <path>; write a path as file <path>"):
         load(path)
+
+
+def test_a_relative_manifesto_dir_resolves_once_against_the_config_folder(login, tmp_path):
+    project = tmp_path / "project"
+    project.mkdir()
+    path = write_config(project, "manifesto_dir: ../registry\nyou:\n  - nope\n")
+    registry = (tmp_path / "registry").resolve()
+
+    run = run_config_script(str(path), "--json")
+    with pytest.raises(UnharnessError) as failure:
+        config = load(path)
+        resolve_stack(config.you, config.directory, config.registry, login)
+
+    assert json.loads(run.stdout)["registry"] == str(registry)
+    assert str(failure.value) == f"element nope did not resolve; tried {registry / 'manifestos' / 'nope.md'}"

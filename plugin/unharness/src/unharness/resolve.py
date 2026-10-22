@@ -28,13 +28,13 @@ def login_dir(environ: Mapping[str, str], home: Path) -> Path:
     return Path(environ[LOGIN_VARIABLE]) if LOGIN_VARIABLE in environ else home / ".claude"
 
 
-def resolve_stack(elements: list[Element], directory: Path, manifesto_dir: str, login: Path) -> list[Document]:
+def resolve_stack(elements: list[Element], directory: Path, registry: Path | None, login: Path) -> list[Document]:
     """Resolve each element, in order, to its Document; stop at the first that does not resolve."""
-    return [_resolve_element(element, directory, manifesto_dir, login) for element in elements]
+    return [_resolve_element(element, directory, registry, login) for element in elements]
 
 
-def _resolve_element(element: Element, directory: Path, manifesto_dir: str, login: Path) -> Document:
-    path, plugin_root = _locate(element, directory, manifesto_dir, login)
+def _resolve_element(element: Element, directory: Path, registry: Path | None, login: Path) -> Document:
+    path, plugin_root = _locate(element, directory, registry, login)
     if not path.is_file():
         raise UnharnessError(f"element {element.name} did not resolve; tried {path}")
     body = FRONTMATTER.sub("", path.read_text()).strip()
@@ -46,12 +46,12 @@ def _resolve_element(element: Element, directory: Path, manifesto_dir: str, logi
     )
 
 
-def _locate(element: Element, directory: Path, manifesto_dir: str, login: Path) -> tuple[Path, Path | None]:
+def _locate(element: Element, directory: Path, registry: Path | None, login: Path) -> tuple[Path, Path | None]:
     """Return the file the element names, and the plugin folder that ${CLAUDE_PLUGIN_ROOT} stands for, if any."""
     kind = element.source_type or MANIFESTO_SOURCE
     reference = element.reference or element.name
     if kind == MANIFESTO_SOURCE:
-        plugin_root = directory / manifesto_dir if manifesto_dir else _highest_version_dir(login, MANIFESTO_PLUGIN)
+        plugin_root = registry or _highest_version_dir(login, MANIFESTO_PLUGIN)
         return plugin_root / "manifestos" / f"{reference}.md", plugin_root
     if kind == SKILL_SOURCE and PLUGIN_SKILL_SEPARATOR in reference:
         plugin, _, skill = reference.partition(PLUGIN_SKILL_SEPARATOR)
