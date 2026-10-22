@@ -31,12 +31,14 @@ unharness_stands_down() {
 
 detect_manifestos() {
     local project_dir="${CLAUDE_PROJECT_DIR:-.}"
-    local config out status=0
-    config=$(python3 "$CONFIG_MODULE" "$project_dir/.manifestos.yaml" --json 2>&1) || status=$?
+    local config errors out status=0
+    errors=$(mktemp)
+    config=$(python3 "$CONFIG_MODULE" "$project_dir/.manifestos.yaml" --json 2>"$errors") || status=$?
+    if [ "$status" -ne 0 ] && [ "$status" -ne "$MISSING_CONFIG_STATUS" ]; then
+        cat "$errors" >&2
+    fi
+    rm -f "$errors"
     if [ "$status" -ne 0 ]; then
-        if [ "$status" -ne "$MISSING_CONFIG_STATUS" ]; then
-            printf '%s\n' "$config" >&2
-        fi
         return
     fi
     out=$(printf '%s' "$config" | python3 -c '

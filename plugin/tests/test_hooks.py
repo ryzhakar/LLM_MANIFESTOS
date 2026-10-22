@@ -102,6 +102,12 @@ class ConfigProblems(unittest.TestCase):
                 self.assertEqual(len(r.stderr.splitlines()), 1, script)
                 self.assertIn("write a path as file <path>", r.stderr, script)
 
+    def test_python_chatter_on_stderr_does_not_corrupt_a_valid_config(self):
+        for script in ("session-start.sh", "post-compact.sh", "drift-reminder.sh"):
+            r = run_hook(script, HAPPY, PYTHONVERBOSE="1")
+            self.assertEqual(r.returncode, 0, script)
+            self.assertIn("first-principles", r.stdout, script)
+
     def test_a_missing_config_stays_silent_in_every_hook(self):
         for script in ALL_HOOKS:
             r = run_hook(script, None, stdin=json.dumps({"agent_type": "worker"}))
