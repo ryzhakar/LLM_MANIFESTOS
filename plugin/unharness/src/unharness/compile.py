@@ -8,6 +8,8 @@ from unharness.resolve import Document
 STACK_BLOCK = re.compile(r"\A<stack>\n(.*?)\n</stack>\n*", re.S)
 INTERPLAY_FILE = ".manifestos.interplay.md"
 COMMITMENTS_FILE = ".manifestos.commitments.md"
+DOUBLE_QUOTE = '"'
+SINGLE_QUOTE = "'"
 WRITING_SKILL = "/compile-commitments"
 
 
@@ -40,7 +42,7 @@ def _stack_lines(documents: list[Document]) -> list[str]:
 
 
 def _tagged(document: Document) -> str:
-    governs = f' governs="{document.purpose}"' if document.purpose else ""
+    governs = f' governs="{document.purpose.replace(DOUBLE_QUOTE, SINGLE_QUOTE)}"' if document.purpose else ""
     return f"<{document.name}{governs}>\n{document.text}\n</{document.name}>"
 
 

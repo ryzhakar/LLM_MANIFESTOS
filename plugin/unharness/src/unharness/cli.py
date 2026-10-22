@@ -32,6 +32,8 @@ def main(argv: list[str] | None = None) -> int:
 
 def _output(verb: str, config_path: Path, login: Path) -> str:
     config = load(config_path)
+    if not config.you:
+        raise UnharnessError("the stack is empty")
     documents = resolve_stack(config.you, config.directory, config.manifesto_dir, login)
     if verb == STACK_VERB:
         return stack_view(documents)

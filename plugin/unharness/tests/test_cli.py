@@ -74,3 +74,12 @@ def test_a_failure_prints_one_line_on_stderr_and_exits_1_with_nothing_on_stdout(
 
     assert (run.returncode, run.stdout) == (1, "")
     assert run.stderr == "unharness: .manifestos.interplay.md is missing; run /compile-commitments\n"
+
+
+@pytest.mark.parametrize("verb", ["prompt", "stack"])
+def test_an_empty_stack_stops_every_verb(login, tmp_path, verb):
+    write(tmp_path / ".manifestos.yaml", "you:\n")
+
+    run = unharness(login, verb, cwd=tmp_path)
+
+    assert (run.returncode, run.stdout, run.stderr) == (1, "", "unharness: the stack is empty\n")

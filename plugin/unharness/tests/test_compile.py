@@ -66,3 +66,9 @@ def test_a_session_file_without_a_stack_block_is_stale():
     assert stopped_by("<interplay>\nx\n</interplay>\n", COMMITMENTS) == (
         ".manifestos.interplay.md has no <stack> block; run /compile-commitments"
     )
+
+
+def test_a_double_quote_in_a_purpose_becomes_a_single_quote_in_governs():
+    quoted = Document("dry", 'the "one home" rule', "DRY TEXT", "a" * 64)
+
+    assert "<dry governs=\"the 'one home' rule\">" in constitution_block([quoted])
