@@ -1,14 +1,15 @@
 """Read a project's .manifestos.yaml into a Config, with the YAML subset reader the file needs."""
 
 import argparse
-import dataclasses
 import json
 import re
 import sys
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 
 LIST_MARKER = "- "
+MANIFESTO_SOURCE = "manifesto"
+SKILL_SOURCE = "skill"
 FILE_SOURCE = "file"
 CLAUDE_MD = "CLAUDE.md"
 ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)", re.M | re.S)
@@ -52,8 +53,8 @@ def main(argv: list[str]) -> int:
     except UnharnessError as error:
         return fail(error)
     print(json.dumps({
-        "you": [dataclasses.asdict(element) for element in config.you],
-        "subagents": {role: [dataclasses.asdict(e) for e in elements] for role, elements in config.subagents.items()},
+        "you": [asdict(element) for element in config.you],
+        "subagents": {role: [asdict(element) for element in elements] for role, elements in config.subagents.items()},
         "manifesto_dir": config.manifesto_dir,
     }))
     return 0

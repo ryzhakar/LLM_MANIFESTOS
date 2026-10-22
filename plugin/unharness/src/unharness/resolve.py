@@ -6,14 +6,12 @@ from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 
-from unharness.config import FILE_SOURCE, Element, UnharnessError
+from unharness.config import FILE_SOURCE, MANIFESTO_SOURCE, SKILL_SOURCE, Element, UnharnessError
 
 PLUGIN_ROOT_PLACEHOLDER = "${CLAUDE_PLUGIN_ROOT}"
 FRONTMATTER = re.compile(r"\A---\n.*?\n---\n", re.S)
 LOGIN_VARIABLE = "CLAUDE_CONFIG_DIR"
 MANIFESTO_PLUGIN = "manifesto"
-MANIFESTO_SOURCE = "manifesto"
-SKILL_SOURCE = "skill"
 PLUGIN_SKILL_SEPARATOR = ":"
 
 
