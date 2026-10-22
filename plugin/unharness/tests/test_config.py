@@ -20,7 +20,7 @@ def test_a_bare_string_names_a_registry_manifesto(tmp_path):
     config = load(write_config(tmp_path, "you:\n  - dry\n  - name: kiss\n    purpose: the code\n"))
 
     assert config == Config(
-        you=[Element("dry", None, None), Element("kiss", "the code", None)],
+        you=[Element("dry", None, None, None), Element("kiss", "the code", None, None)],
         subagents={},
         manifesto_dir="",
         directory=tmp_path,
@@ -36,8 +36,8 @@ def test_subagent_roles_and_manifesto_dir_load_beside_the_you_stack(tmp_path):
 
     assert config.manifesto_dir == "/plugins/manifesto"
     assert config.subagents == {
-        "implementer": [Element("kiss", None, None), Element("yagni", None, None)],
-        "other": [Element("dry", None, None)],
+        "implementer": [Element("kiss", None, None, None), Element("yagni", None, None, None)],
+        "other": [Element("dry", None, None, None)],
     }
 
 
@@ -59,15 +59,15 @@ def test_each_source_type_is_kept_as_written_and_a_file_is_named_by_its_stem(tmp
     )))
 
     assert config.you == [
-        Element("write-well", None, "skill agent-conduct:write-well"),
-        Element("mine", None, "skill my-skill"),
-        Element("kiss", "the code", "manifesto kiss"),
-        Element("house-rules", None, "file notes/house-rules.md"),
+        Element("write-well", None, "skill", "agent-conduct:write-well"),
+        Element("mine", None, "skill", "my-skill"),
+        Element("kiss", "the code", "manifesto", "kiss"),
+        Element("house-rules", None, "file", "notes/house-rules.md"),
     ]
 
 
 def test_null_items_are_dropped_and_an_empty_file_is_an_empty_stack(tmp_path):
-    assert load(write_config(tmp_path, "you:\n  - ~\n  - dry\n  -\n")).you == [Element("dry", None, None)]
+    assert load(write_config(tmp_path, "you:\n  - ~\n  - dry\n  -\n")).you == [Element("dry", None, None, None)]
     assert load(write_config(tmp_path, "# nothing here\n")) == Config([], {}, "", tmp_path)
 
 
@@ -85,7 +85,7 @@ def test_trailing_comments_are_not_part_of_a_value(tmp_path):
     )))
 
     assert config.manifesto_dir == "/plugins/manifesto"
-    assert config.you == [Element("dry", "one home", "skill a:b")]
+    assert config.you == [Element("dry", "one home", "skill", "a:b")]
 
 
 def test_a_config_that_is_not_a_list_of_elements_stops_the_load(tmp_path):
@@ -100,7 +100,7 @@ def test_a_config_that_is_not_a_list_of_elements_stops_the_load(tmp_path):
 def test_a_colon_without_a_space_after_it_is_part_of_a_bare_name(tmp_path):
     config = load(write_config(tmp_path, "you:\n  - agent-conduct:write-well\n  - name: a\n    source: skill b:c\n"))
 
-    assert config.you == [Element("agent-conduct:write-well", None, None), Element("a", None, "skill b:c")]
+    assert config.you == [Element("agent-conduct:write-well", None, None, None), Element("a", None, "skill", "b:c")]
 
 
 def test_without_a_config_file_the_active_manifestos_section_of_claude_md_is_the_config(tmp_path):
@@ -131,8 +131,8 @@ def test_a_shell_hook_reads_the_stack_as_json_by_running_the_module_by_path(tmp_
 
     assert run.returncode == 0
     assert json.loads(run.stdout) == {
-        "you": [{"name": "dry", "purpose": None, "source": None}],
-        "subagents": {"other": [{"name": "kiss", "purpose": "p", "source": None}]},
+        "you": [{"name": "dry", "purpose": None, "source_type": None, "reference": None}],
+        "subagents": {"other": [{"name": "kiss", "purpose": "p", "source_type": None, "reference": None}]},
         "manifesto_dir": "/m",
         "directory": str(tmp_path),
     }
@@ -171,3 +171,11 @@ def test_a_tab_in_the_indent_stops_the_load(tmp_path):
 def test_a_repeated_key_stops_the_load(tmp_path):
     with pytest.raises(UnharnessError, match="key 'you' appears twice"):
         load(write_config(tmp_path, "you:\n  - dry\nyou:\n  - kiss\n"))
+
+
+@pytest.mark.parametrize("source", ["https://x", "./a.md", "some hint", "file", "skill "])
+def test_a_source_that_is_not_manifesto_skill_or_file_with_a_reference_stops_the_load(tmp_path, source):
+    path = write_config(tmp_path, f"you:\n  - name: x\n    source: {source}\n")
+
+    with pytest.raises(UnharnessError, match=r"element 1 of you has source '.*' that is none of manifesto <name>, skill <plugin>:<skill>, skill <skill>, or file <path>; write a path as file <path>"):
+        load(path)

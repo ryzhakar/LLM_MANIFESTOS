@@ -15,6 +15,7 @@ SKILL_SOURCE = "skill"
 FILE_SOURCE = "file"
 CLAUDE_MD = "CLAUDE.md"
 ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)", re.M | re.S)
+SOURCE = re.compile(rf"^({MANIFESTO_SOURCE}|{SKILL_SOURCE}|{FILE_SOURCE}) (\S.*)$")
 MISSING_CONFIG_STATUS = 2
 MAPPING_ENTRY = re.compile(r":(?:\s|$)")
 TAB_INDENT = re.compile(r" *\t")
@@ -35,7 +36,8 @@ class MissingConfigError(UnharnessError):
 class Element:
     name: str
     purpose: str | None
-    source: str | None
+    source_type: str | None
+    reference: str | None
 
 
 @dataclass(frozen=True)
@@ -108,16 +110,25 @@ def _elements(items: list, list_label: str) -> list[Element]:
 
 def _element(item: str | dict, label: str) -> Element:
     fields = item if isinstance(item, dict) else {"name": item}
-    source = fields.get("source")
-    name = fields.get("name") or _file_stem(source)
+    source_type, reference = _source(fields.get("source"), label)
+    name = fields.get("name") or (Path(reference).stem if source_type == FILE_SOURCE else None)
     if not name:
         raise UnharnessError(f"{label} has no name; add name: or a file source")
-    return Element(name, fields.get("purpose"), source)
+    return Element(name, fields.get("purpose"), source_type, reference)
 
 
-def _file_stem(source: str | None) -> str | None:
-    kind, _, reference = (source or "").partition(" ")
-    return Path(reference).stem if kind == FILE_SOURCE else None
+def _source(source: str | None, label: str) -> tuple[str | None, str | None]:
+    """Split a source into its type and reference; a missing source is a registry manifesto, named by the element."""
+    if source is None:
+        return None, None
+    parsed = SOURCE.match(source)
+    if not parsed:
+        raise UnharnessError(
+            f"{label} has source {source!r} that is none of {MANIFESTO_SOURCE} <name>, "
+            f"{SKILL_SOURCE} <plugin>:<skill>, {SKILL_SOURCE} <skill>, or {FILE_SOURCE} <path>; "
+            f"write a path as {FILE_SOURCE} <path>"
+        )
+    return parsed.group(1), parsed.group(2)
 
 
 def parse_yaml(text: str):

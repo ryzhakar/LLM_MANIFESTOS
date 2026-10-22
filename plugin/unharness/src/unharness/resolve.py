@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 
-from unharness.config import FILE_SOURCE, MANIFESTO_SOURCE, SKILL_SOURCE, Element, UnharnessError
+from unharness.config import MANIFESTO_SOURCE, SKILL_SOURCE, Element, UnharnessError
 
 PLUGIN_ROOT_PLACEHOLDER = "${CLAUDE_PLUGIN_ROOT}"
 FRONTMATTER = re.compile(r"\A---\n.*?\n---\n", re.S)
@@ -48,7 +48,8 @@ def _resolve_element(element: Element, directory: Path, manifesto_dir: str, logi
 
 def _locate(element: Element, directory: Path, manifesto_dir: str, login: Path) -> tuple[Path, Path | None]:
     """Return the file the element names, and the plugin folder that ${CLAUDE_PLUGIN_ROOT} stands for, if any."""
-    kind, _, reference = (element.source or f"manifesto {element.name}").partition(" ")
+    kind = element.source_type or MANIFESTO_SOURCE
+    reference = element.reference or element.name
     if kind == MANIFESTO_SOURCE:
         plugin_root = directory / manifesto_dir if manifesto_dir else _highest_version_dir(login, MANIFESTO_PLUGIN)
         return plugin_root / "manifestos" / f"{reference}.md", plugin_root
@@ -58,11 +59,7 @@ def _locate(element: Element, directory: Path, manifesto_dir: str, login: Path) 
         return plugin_root / "skills" / skill / "SKILL.md", plugin_root
     if kind == SKILL_SOURCE:
         return login / "skills" / reference / "SKILL.md", None
-    if kind == FILE_SOURCE:
-        return directory / reference, None
-    raise UnharnessError(
-        f"element {element.name} has source type '{kind}' that is none of {MANIFESTO_SOURCE}, {SKILL_SOURCE}, or {FILE_SOURCE}"
-    )
+    return directory / reference, None
 
 
 def _highest_version_dir(login: Path, plugin: str) -> Path:
