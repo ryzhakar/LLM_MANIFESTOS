@@ -1,14 +1,9 @@
 from pathlib import Path
 
 import pytest
+from helpers import write
 
 CACHE = Path("plugins") / "cache" / "marketplace"
-
-
-def write(path: Path, text: str) -> Path:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(text)
-    return path
 
 
 @pytest.fixture
