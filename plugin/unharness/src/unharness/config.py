@@ -17,6 +17,7 @@ CLAUDE_MD = "CLAUDE.md"
 ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)", re.M | re.S)
 MISSING_CONFIG_STATUS = 2
 MAPPING_ENTRY = re.compile(r":(?:\s|$)")
+TAB_INDENT = re.compile(r" *\t")
 YAML_NULLS = ("", "~", "null")
 QUOTED_SCALAR = re.compile(r"""^(["'])(.*?)\1(?:\s+#.*)?$""")
 TRAILING_COMMENT = re.compile(r"(?:^|\s+)#.*$")
@@ -124,8 +125,17 @@ def parse_yaml(text: str):
     lines = [line.rstrip() for line in text.split("\n") if line.strip() and not line.lstrip().startswith("#")]
     if not lines:
         return None
-    value, _ = _parse_block(lines, 0, _indent(lines[0]))
+    for line in lines:
+        if TAB_INDENT.match(line):
+            raise UnharnessError(f"the line {line.strip()!r} is indented with a tab; indent with spaces")
+    value, consumed = _parse_block(lines, 0, _indent(lines[0]))
+    _require_consumed(lines, consumed)
     return value
+
+
+def _require_consumed(lines: list[str], consumed: int) -> None:
+    if consumed < len(lines):
+        raise UnharnessError(f"cannot place the line {lines[consumed].strip()!r}; check its indent")
 
 
 def _indent(line: str) -> int:
@@ -146,8 +156,13 @@ def _split_entry(text: str) -> tuple[str, str]:
     return (text[:entry.start()], text[entry.end():]) if entry else (text, "")
 
 
+def _is_item(line: str) -> bool:
+    stripped = line.lstrip()
+    return stripped == LIST_MARKER.strip() or stripped.startswith(LIST_MARKER)
+
+
 def _parse_block(lines: list[str], i: int, indent: int):
-    if lines[i].lstrip().startswith(LIST_MARKER):
+    if _is_item(lines[i]):
         return _parse_list(lines, i, indent)
     return _parse_mapping(lines, i, indent)
 
@@ -155,7 +170,7 @@ def _parse_block(lines: list[str], i: int, indent: int):
 def _parse_list(lines: list[str], i: int, indent: int):
     result = []
     item_indent = indent + len(LIST_MARKER)
-    while i < len(lines) and _indent(lines[i]) == indent and lines[i].lstrip().startswith(LIST_MARKER):
+    while i < len(lines) and _indent(lines[i]) == indent and _is_item(lines[i]):
         content = lines[i].lstrip()[len(LIST_MARKER):]
         if not MAPPING_ENTRY.search(content):
             result.append(_scalar(content))
@@ -166,15 +181,19 @@ def _parse_list(lines: list[str], i: int, indent: int):
         while i < len(lines) and _indent(lines[i]) >= item_indent:
             block.append(lines[i])
             i += 1
-        result.append(_parse_block(block, 0, item_indent)[0])
+        value, consumed = _parse_block(block, 0, item_indent)
+        _require_consumed(block, consumed)
+        result.append(value)
     return result, i
 
 
 def _parse_mapping(lines: list[str], i: int, indent: int):
     result = {}
-    while i < len(lines) and _indent(lines[i]) == indent and not lines[i].lstrip().startswith(LIST_MARKER):
+    while i < len(lines) and _indent(lines[i]) == indent and not _is_item(lines[i]):
         key, rest = _split_entry(lines[i].lstrip())
         key = _scalar(key)
+        if key in result:
+            raise UnharnessError(f"key {key!r} appears twice")
         value = _scalar(rest)
         if value is not None:
             result[key] = value

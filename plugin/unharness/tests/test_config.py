@@ -151,3 +151,23 @@ def test_a_script_run_with_no_config_prints_one_line_and_exits_2_so_a_hook_can_t
     assert (run.returncode, run.stdout) == (2, "")
     assert run.stderr.startswith("unharness: no config: tried ")
     assert len(run.stderr.splitlines()) == 1
+
+
+@pytest.mark.parametrize("text, line", [
+    ("you:\n  - dry\n   - kiss\n", "- kiss"),
+    ("you:\n  - name: a\n     purpose: p\n", "purpose: p"),
+    ("you:\n- dry\n", "- dry"),
+])
+def test_a_line_the_reader_cannot_place_stops_the_load_and_is_named(tmp_path, text, line):
+    with pytest.raises(UnharnessError, match=f"cannot place the line '{line}'"):
+        load(write_config(tmp_path, text))
+
+
+def test_a_tab_in_the_indent_stops_the_load(tmp_path):
+    with pytest.raises(UnharnessError, match="indented with a tab"):
+        load(write_config(tmp_path, "you:\n\t- dry\n"))
+
+
+def test_a_repeated_key_stops_the_load(tmp_path):
+    with pytest.raises(UnharnessError, match="key 'you' appears twice"):
+        load(write_config(tmp_path, "you:\n  - dry\nyou:\n  - kiss\n"))
