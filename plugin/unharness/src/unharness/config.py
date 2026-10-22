@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 LIST_MARKER = "- "
+FILE_SOURCE = "file"
 YAML_NULLS = ("", "~", "null")
 
 
@@ -33,20 +34,32 @@ def load(path: Path) -> Config:
         root = {"you": root}
     root = root or {}
     return Config(
-        you=_elements(root.get("you") or []),
-        subagents={role: _elements(items or []) for role, items in (root.get("subagents") or {}).items()},
+        you=_elements(root.get("you") or [], "you"),
+        subagents={
+            role: _elements(items or [], f"subagents.{role}") for role, items in (root.get("subagents") or {}).items()
+        },
         manifesto_dir=root.get("manifesto_dir") or "",
         directory=path.parent,
     )
 
 
-def _elements(items: list) -> list[Element]:
-    return [_element(item) for item in items if item is not None]
+def _elements(items: list, list_label: str) -> list[Element]:
+    present = [item for item in items if item is not None]
+    return [_element(item, f"element {number} of {list_label}") for number, item in enumerate(present, 1)]
 
 
-def _element(item: str | dict) -> Element:
+def _element(item: str | dict, label: str) -> Element:
     fields = item if isinstance(item, dict) else {"name": item}
-    return Element(fields["name"], fields.get("purpose"), fields.get("source"))
+    source = fields.get("source")
+    name = fields.get("name") or _file_stem(source)
+    if not name:
+        raise UnharnessError(f"{label} has no name; add name: or a file source")
+    return Element(name, fields.get("purpose"), source)
+
+
+def _file_stem(source: str | None) -> str | None:
+    kind, _, reference = (source or "").partition(" ")
+    return Path(reference).stem if kind == FILE_SOURCE else None
 
 
 def _parse_yaml(text: str):

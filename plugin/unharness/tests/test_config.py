@@ -1,6 +1,8 @@
 from pathlib import Path
 
-from unharness.config import Config, Element, load
+import pytest
+
+from unharness.config import Config, Element, UnharnessError, load
 
 
 def write_config(folder: Path, text: str) -> Path:
@@ -40,3 +42,32 @@ def test_a_root_list_is_the_you_stack(tmp_path):
     assert [element.name for element in config.you] == ["dry", "kiss"]
     assert config.subagents == {}
     assert config.manifesto_dir == ""
+
+
+def test_each_source_type_is_kept_as_written_and_a_file_is_named_by_its_stem(tmp_path):
+    config = load(write_config(tmp_path, (
+        "you:\n"
+        "  - name: write-well\n    source: skill agent-conduct:write-well\n"
+        "  - name: mine\n    source: skill my-skill\n"
+        "  - name: kiss\n    purpose: the code\n    source: manifesto kiss\n"
+        "  - source: file notes/house-rules.md\n"
+    )))
+
+    assert config.you == [
+        Element("write-well", None, "skill agent-conduct:write-well"),
+        Element("mine", None, "skill my-skill"),
+        Element("kiss", "the code", "manifesto kiss"),
+        Element("house-rules", None, "file notes/house-rules.md"),
+    ]
+
+
+def test_null_items_are_dropped_and_an_empty_file_is_an_empty_stack(tmp_path):
+    assert load(write_config(tmp_path, "you:\n  - ~\n  - dry\n  -\n")).you == [Element("dry", None, None)]
+    assert load(write_config(tmp_path, "# nothing here\n")) == Config([], {}, "", tmp_path)
+
+
+def test_an_element_with_no_name_and_no_file_source_stops_the_load(tmp_path):
+    path = write_config(tmp_path, "you:\n  - purpose: orphan\n    source: skill a:b\n")
+
+    with pytest.raises(UnharnessError, match=r"element 1 of you has no name"):
+        load(path)
