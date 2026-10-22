@@ -45,6 +45,8 @@ This README is generated from manifesto frontmatter. **For complete maintainer w
 
 The plugin carries `manifestos/` and `digests/` in its own folder; nothing is cloned at session start.
 
+It also carries `unharness`, which compiles the stack into a session's system prompt; see the Unharness section of [plugin/README.md](plugin/README.md).
+
 **Quick workflow:**
 
 1. Edit manifesto files in `plugin/manifestos/`
