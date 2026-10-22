@@ -102,3 +102,22 @@ def test_all_three_flags_combine(tmp_path, capsys):
         "claude", "--system-prompt-file", str(cached_prompt(tmp_path)),
         "--settings", json.dumps({**DEFAULT_SETTINGS, "disableAllHooks": True}, separators=(",", ":")),
     ]
+
+
+def test_with_a_launcher_it_reopens_stdin_then_executes_the_launcher_with_the_stripped_environment(tmp_path, capsys):
+    calls = []
+    status = launch(
+        PROMPT, Options(False, False, False, ["fake", "extra"]), {"KEPT": "yes"}, tmp_path,
+        lambda: calls.append("reopen"),
+        lambda argv, env: calls.append((argv, env)) or 7,
+    )
+
+    assert status == 7
+    assert capsys.readouterr().out == ""
+    assert calls[0] == "reopen"
+    argv, env = calls[1]
+    assert argv == [
+        "fake", "extra", "--system-prompt-file", str(cached_prompt(tmp_path)),
+        "--disallowedTools", "WebSearch", "--settings", json.dumps(DEFAULT_SETTINGS, separators=(",", ":")),
+    ]
+    assert env == {"KEPT": "yes", **dict(pair.split("=") for pair in DEFAULT_ENVIRONMENT)}

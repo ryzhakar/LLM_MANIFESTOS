@@ -54,8 +54,11 @@ def launch(
     prompt_file = _write_prompt(prompt, cache_home)
     assignments = [f"{name}={value}" for name, value in _strip_environment(options).items()]
     arguments = _strip_arguments(prompt_file, options)
-    print(shlex.join(["env", *assignments, DEFAULT_LAUNCHER, *arguments]), TERMINAL_REDIRECT)
-    return 0
+    if not options.launcher:
+        print(shlex.join(["env", *assignments, DEFAULT_LAUNCHER, *arguments]), TERMINAL_REDIRECT)
+        return 0
+    reopen_stdin()
+    return execute([*options.launcher, *arguments], {**environ, **_strip_environment(options)})
 
 
 def _strip_environment(options: Options) -> dict[str, str]:
