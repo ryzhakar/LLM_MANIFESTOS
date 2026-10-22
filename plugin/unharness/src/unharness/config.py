@@ -19,6 +19,7 @@ ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)
 SOURCE = re.compile(rf"^({MANIFESTO_SOURCE}|{SKILL_SOURCE}|{FILE_SOURCE}) (\S.*)$")
 MISSING_CONFIG_STATUS = 2
 MAPPING_ENTRY = re.compile(r":(?:\s|$)")
+WHITESPACE = re.compile(r"\s")
 TAB_INDENT = re.compile(r" *\t")
 YAML_NULLS = ("", "~", "null")
 QUOTED_SCALAR = re.compile(r"""^(["'])(.*?)\1(?:\s+#.*)?$""")
@@ -115,6 +116,8 @@ def _element(item: str | dict, label: str) -> Element:
     name = fields.get("name") or (Path(reference).stem if source_type == FILE_SOURCE else None)
     if not name:
         raise UnharnessError(f"{label} has no name; add name: or a file source")
+    if WHITESPACE.search(name):
+        raise UnharnessError(f"{label} name {name!r} must hold no whitespace; add name:")
     return Element(name, fields.get("purpose"), source_type, reference)
 
 

@@ -195,3 +195,10 @@ def test_a_relative_manifesto_dir_resolves_once_against_the_config_folder(login,
 
     assert json.loads(run.stdout)["registry"] == str(registry)
     assert str(failure.value) == f"element nope did not resolve; tried {registry / 'manifestos' / 'nope.md'}"
+
+
+def test_a_name_with_whitespace_stops_the_load(tmp_path):
+    path = write_config(tmp_path, "you:\n  - source: file my notes.md\n")
+
+    with pytest.raises(UnharnessError, match=r"element 1 of you name 'my notes' must hold no whitespace; add name:"):
+        load(path)
