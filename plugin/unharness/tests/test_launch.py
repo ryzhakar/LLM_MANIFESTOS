@@ -1,4 +1,5 @@
 import json
+import os
 import shlex
 import stat
 from hashlib import sha256
@@ -49,3 +50,23 @@ def test_without_a_launcher_it_prints_the_command_for_claude_and_runs_nothing(tm
         "claude", "--system-prompt-file", str(cached_prompt(tmp_path)),
         "--disallowedTools", "WebSearch", "--settings", settings,
     ]
+
+
+def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tmp_path, capsys):
+    previous_umask = os.umask(0)
+    try:
+        launch(PROMPT, Options(False, False, False, []), {}, tmp_path, never, never)
+    finally:
+        os.umask(previous_umask)
+
+    file = cached_prompt(tmp_path)
+    assert file.read_text() == PROMPT
+    assert stat.S_IMODE(file.stat().st_mode) == 0o600
+    assert stat.S_IMODE(file.parent.stat().st_mode) == 0o700
+
+
+def test_an_empty_prompt_stops_before_anything_is_written(tmp_path):
+    with pytest.raises(UnharnessError, match="^the prompt is empty$"):
+        launch(" \n", Options(False, False, False, []), {}, tmp_path, never, never)
+
+    assert list(tmp_path.iterdir()) == []

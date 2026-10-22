@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 
+from unharness.config import UnharnessError
+
 CACHE_FOLDER = "unharness"
 FOLDER_MODE = 0o700
 FILE_MODE = 0o600
@@ -46,6 +48,8 @@ def launch(
     execute: Callable[[list[str], dict[str, str]], int],
 ) -> int:
     """Cache the prompt, then print the launch command, or run the launcher and return its status."""
+    if not prompt.strip():
+        raise UnharnessError("the prompt is empty")
     prompt_file = _write_prompt(prompt, cache_home)
     assignments = [f"{name}={value}" for name, value in STRIP_ENVIRONMENT.items()]
     arguments = ["--system-prompt-file", str(prompt_file), "--disallowedTools", "WebSearch",
