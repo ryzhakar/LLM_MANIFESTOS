@@ -1,9 +1,10 @@
 from hashlib import sha256
+from pathlib import Path
 
 import pytest
 from helpers import write
 from unharness.config import Element, UnharnessError
-from unharness.resolve import Document, resolve_stack
+from unharness.resolve import Document, login_dir, resolve_stack
 
 
 def test_a_legacy_name_resolves_to_the_registry_of_the_highest_cached_manifesto_plugin(login, tmp_path):
@@ -70,3 +71,8 @@ def test_an_unknown_source_type_is_refused_with_the_types_that_exist(login, tmp_
     assert failure_of(Element("site", None, "https://example.com/x.md"), tmp_path, login) == (
         "element site has source type 'https://example.com/x.md' that is none of manifesto, skill, or file"
     )
+
+
+def test_the_login_is_claude_config_dir_else_dot_claude_in_home(tmp_path):
+    assert login_dir({"CLAUDE_CONFIG_DIR": "/somewhere"}, tmp_path) == Path("/somewhere")
+    assert login_dir({}, tmp_path) == tmp_path / ".claude"

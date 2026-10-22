@@ -1,6 +1,7 @@
 """Resolve each config element to the text it contributes, by its explicit source type."""
 
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
@@ -9,6 +10,7 @@ from unharness.config import FILE_SOURCE, Element, UnharnessError
 
 PLUGIN_ROOT_PLACEHOLDER = "${CLAUDE_PLUGIN_ROOT}"
 FRONTMATTER = re.compile(r"\A---\n.*?\n---\n", re.S)
+LOGIN_VARIABLE = "CLAUDE_CONFIG_DIR"
 MANIFESTO_PLUGIN = "manifesto"
 MANIFESTO_SOURCE = "manifesto"
 SKILL_SOURCE = "skill"
@@ -21,6 +23,11 @@ class Document:
     purpose: str | None
     text: str
     sha256: str
+
+
+def login_dir(environ: Mapping[str, str], home: Path) -> Path:
+    """Return the login folder: CLAUDE_CONFIG_DIR, else .claude in the home folder."""
+    return Path(environ[LOGIN_VARIABLE]) if LOGIN_VARIABLE in environ else home / ".claude"
 
 
 def resolve_stack(elements: list[Element], directory: Path, manifesto_dir: str, login: Path) -> list[Document]:
