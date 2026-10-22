@@ -16,7 +16,7 @@ Name an enemy as this section does: set old behavior and old conditions against 
 
 ## The standard
 
-This manifesto is for you, the writer of any text that asks a reader to meet a standard, whether you and the reader are people or models. The standard here is a text that the reader takes seriously and acts on, with the original instruction intact. You can write it from this page alone: four principles ground every rule, the worked example shows the rules in use, and the checks test a draft for the five faults.
+This manifesto is for you, the writer of any text that asks a reader to meet a standard, whether you and the reader are people or models. The standard here is a text that the reader takes seriously and acts on, with the original instruction intact. You can write such a text from this page alone: four principles ground every rule, the worked example shows the rules in use, and the checks test a draft for the five faults.
 
 ## The four principles
 
@@ -39,7 +39,7 @@ Give the reader at least one target to act on with the text alone, and set its t
 ## The reason and the stakes
 
 - Name a concrete beneficiary of the work, a person or a group the reader can picture.
-- Keep the values few, four at most, and write the vision in words a reader can picture.
+- Keep the values few, four at most, and write the vision in words the reader can picture.
 - State the reason once, as purpose and stakes, and spare the reader a tutorial on execution; a reason raises the value the reader puts on the task and lowers, by a little, the reader's sense of competence.
 - Carry the stakes, and the urgency they bring, through the beneficiary and the standard rather than through consequences for the reader.
 
@@ -62,7 +62,7 @@ Give the reader at least one target to act on with the text alone, and set its t
 
 ## Pressure and force
 
-- Attach specific resources to every demand, such as named tools, named people, or set time, in place of any general offer of support; a general offer changes nothing.
+- Attach to every demand specific resources, such as named tools, named people, or set time, in place of any general offer of support; a general offer changes nothing.
 - Keep threats, ultimatums, rudeness, flattery, and alarm typography, such as capitals and stacked exclamation marks, out of the text. In a person, controlling language raises anger and resistance; in a model, threats and rudeness give no reliable gain and cost accuracy, and flattery raises compliance with objectionable requests.
 
 ## Register and certainty
@@ -93,9 +93,9 @@ Give the reader at least one target to act on with the text alone, and set its t
 
 ## Readers who are models
 
-No rule here is tested on a model in its stated form. Apply the rules to model-read text for one voice across texts, not for a tested gain, and add these three:
+No study tests a rule here on a model in its stated form. Apply the rules to model-read text for one voice across texts, not for a tested gain, and add these three:
 
-- Give a model the target and the success criteria, and the reason behind each instruction.
+- Give a model the target, the success criteria, and the reason behind each instruction.
 - Reserve emphasis for true invariants, keep it calm, and write judgment calls as decision rules; emphasis raises compliance with the line it marks.
 - When people and models read one text, let the rules for models govern the action steps and the rules for people govern the framing around those steps.
 
@@ -134,6 +134,6 @@ Two checks close every draft: Is every statement of belief and every stake true?
 
 ## The choice
 
-Two texts can carry one instruction. One raises the voice and leaves the reader to find the grounds, the belief, and the means alone. The other raises the bar and hands the reader all three. Write the second. Raise the bar, not the voice.
+Two texts can carry one instruction. One raises the voice and leaves the reader to supply the grounds, the belief, and the means. The other raises the bar and hands the reader all three. Write the second. Raise the bar, not the voice.
 
 *After Yeager, Cohen, Kluger and DeNisi, Locke and Latham, and Bandura*
