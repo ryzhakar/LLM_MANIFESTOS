@@ -38,7 +38,7 @@ Some remarks on science, pseudoscience, and learning how to not fool yourself.
 ### [Raise the Bar](plugin/manifestos/raise-the-bar.md) `1.0.0`
 *"raise the bar, not the voice"*
 
-This manifesto tells a writer how to state a demand, a belief, and the stakes so that the reader takes the standard seriously and acts on it, with pressure from stakes and resources rather than from contempt or threat.
+This manifesto tells a writer how to state a demand, a belief, and the stakes, with pressure from stakes and resources rather than from contempt or threat.
 
 ---
 
