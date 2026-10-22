@@ -83,3 +83,42 @@ def test_an_empty_stack_stops_every_verb(login, tmp_path, verb):
     run = unharness(login, verb, cwd=tmp_path)
 
     assert (run.returncode, run.stdout, run.stderr) == (1, "", "unharness: the stack is empty\n")
+
+
+C_LOCALE = {"LC_ALL": "C", "PYTHONUTF8": "0", "PYTHONCOERCECLOCALE": "0", "PYTHONIOENCODING": "utf-8"}
+
+
+def test_every_read_decodes_utf_8_whatever_the_locale(login, tmp_path):
+    write(tmp_path / "rules.md", "Café rules\n")
+    config = write(tmp_path / ".manifestos.yaml", "you:\n  - name: rules\n    purpose: café\n    source: file rules.md\n")
+
+    stack = subprocess.run(
+        [sys.executable, "-m", "unharness.cli", "stack", "--config", str(config)],
+        capture_output=True, env={"CLAUDE_CONFIG_DIR": str(login), **C_LOCALE},
+    )
+    stack_block = stack.stdout.decode().split("</stack>")[0]
+    write(tmp_path / ".manifestos.interplay.md", stack_block + "</stack>\n\n<interplay>\nCafé\n</interplay>\n")
+    write(tmp_path / ".manifestos.commitments.md", stack_block + "</stack>\n\n<commitments>\nok\n</commitments>\n")
+    prompt = subprocess.run(
+        [sys.executable, "-m", "unharness.cli", "prompt", "--config", str(config)],
+        capture_output=True, env={"CLAUDE_CONFIG_DIR": str(login), **C_LOCALE},
+    )
+
+    assert stack.returncode == 0, stack.stderr
+    assert "Café rules" in stack.stdout.decode()
+    assert prompt.returncode == 0, prompt.stderr
+    assert "<interplay>\nCafé\n</interplay>" in prompt.stdout.decode()
+
+
+def test_the_cached_prompt_is_utf_8_whatever_the_locale(tmp_path):
+    script = (
+        "from pathlib import Path\n"
+        "from unharness.launch import Options, launch\n"
+        f"launch('Caf\\u00e9\\n', Options(False, False, False, []), {{}}, Path({str(tmp_path)!r}), '/dev/tty', None, None)\n"
+    )
+
+    run = subprocess.run([sys.executable, "-c", script], capture_output=True, env=C_LOCALE)
+
+    assert run.returncode == 0, run.stderr
+    [cached] = (tmp_path / "unharness").iterdir()
+    assert cached.read_bytes() == "Café\n".encode()

@@ -7,7 +7,7 @@ from importlib.resources import files
 from pathlib import Path
 
 from unharness.compile import COMMITMENTS_FILE, INTERPLAY_FILE, compile_prompt, stack_view
-from unharness.config import UnharnessError, fail, load
+from unharness.config import TEXT_ENCODING, UnharnessError, fail, load
 from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, terminal_device
 from unharness.resolve import login_dir, resolve_stack
 
@@ -72,11 +72,11 @@ def _output(verb: str, config_path: Path, login: Path) -> str:
 
 def _preamble(directory: Path) -> str:
     override = _read_if_present(directory / PREAMBLE_OVERRIDE_FILE)
-    return override if override is not None else files("unharness").joinpath("preamble.md").read_text()
+    return override if override is not None else files("unharness").joinpath("preamble.md").read_text(encoding=TEXT_ENCODING)
 
 
 def _read_if_present(path: Path) -> str | None:
-    return path.read_text() if path.is_file() else None
+    return path.read_text(encoding=TEXT_ENCODING) if path.is_file() else None
 
 
 if __name__ == "__main__":

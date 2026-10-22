@@ -11,7 +11,7 @@ from hashlib import sha256
 from pathlib import Path
 from typing import IO
 
-from unharness.config import UnharnessError
+from unharness.config import TEXT_ENCODING, UnharnessError
 
 CACHE_FOLDER = "unharness"
 CACHE_VARIABLE = "XDG_CACHE_HOME"
@@ -122,6 +122,6 @@ def _write_prompt(prompt: str, cache_home: Path) -> Path:
     folder = cache_home / CACHE_FOLDER
     folder.mkdir(mode=FOLDER_MODE, parents=True, exist_ok=True)
     path = folder / f"{sha256(prompt.encode()).hexdigest()}.md"
-    with os.fdopen(os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, FILE_MODE), "w") as file:
+    with os.fdopen(os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, FILE_MODE), "w", encoding=TEXT_ENCODING) as file:
         file.write(prompt)
     return path

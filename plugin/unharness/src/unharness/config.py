@@ -9,6 +9,7 @@ import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+TEXT_ENCODING = "utf-8"
 LIST_MARKER = "- "
 MANIFESTO_SOURCE = "manifesto"
 SKILL_SOURCE = "skill"
@@ -93,9 +94,9 @@ def load(path: Path) -> Config:
 
 def _config_text(path: Path) -> str:
     if path.is_file():
-        return path.read_text()
+        return path.read_text(encoding=TEXT_ENCODING)
     claude_md = path.parent / CLAUDE_MD
-    section = ACTIVE_MANIFESTOS_SECTION.search(claude_md.read_text()) if claude_md.is_file() else None
+    section = ACTIVE_MANIFESTOS_SECTION.search(claude_md.read_text(encoding=TEXT_ENCODING)) if claude_md.is_file() else None
     if not section:
         raise MissingConfigError(f"no config: tried {path} and the Active Manifestos section of {claude_md}")
     return section.group(1)

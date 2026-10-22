@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 
-from unharness.config import MANIFESTO_SOURCE, SKILL_SOURCE, Element, UnharnessError
+from unharness.config import MANIFESTO_SOURCE, SKILL_SOURCE, TEXT_ENCODING, Element, UnharnessError
 
 PLUGIN_ROOT_PLACEHOLDER = "${CLAUDE_PLUGIN_ROOT}"
 FRONTMATTER = re.compile(r"\A---\n(?=[A-Za-z_][\w-]*:).*?\n---\n", re.S)
@@ -37,7 +37,7 @@ def _resolve_element(element: Element, directory: Path, registry: Path | None, l
     path, plugin_root = _locate(element, directory, registry, login)
     if not path.is_file():
         raise UnharnessError(f"element {element.name} did not resolve; tried {path}")
-    body = FRONTMATTER.sub("", path.read_text()).strip()
+    body = FRONTMATTER.sub("", path.read_text(encoding=TEXT_ENCODING)).strip()
     return Document(
         element.name,
         element.purpose,
