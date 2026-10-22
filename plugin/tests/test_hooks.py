@@ -20,10 +20,11 @@ def tagline_of(path):
 
 
 def run_hook(script, config, stdin="", plugin_root=PLUGIN_ROOT, **extra_env):
-    """Run one hook in a fresh project folder; the folder's path rides on the result as `project`."""
+    """Run one hook in a fresh project folder, with no config file when config is None; the folder's path rides on the result as `project`."""
     with tempfile.TemporaryDirectory() as project:
-        with open(os.path.join(project, ".manifestos.yaml"), "w") as f:
-            f.write(config)
+        if config is not None:
+            with open(os.path.join(project, ".manifestos.yaml"), "w") as f:
+                f.write(config)
         env = {k: v for k, v in os.environ.items() if k != "UNHARNESS"}
         env.update(CLAUDE_PLUGIN_ROOT=plugin_root, CLAUDE_PROJECT_DIR=project, **extra_env)
         result = subprocess.run(
@@ -36,6 +37,7 @@ def run_hook(script, config, stdin="", plugin_root=PLUGIN_ROOT, **extra_env):
 
 HAPPY = "you:\n  - first-principles\n"
 MISSING = "you:\n  - no-such-manifesto\n"
+ALL_HOOKS = ("session-start.sh", "post-compact.sh", "subagent-start.sh", "drift-reminder.sh")
 SUBAGENTS = "subagents:\n  other:\n    - {name}\n"
 
 
@@ -74,6 +76,27 @@ class SessionStartSources(unittest.TestCase):
             r = run_hook(script, "you:\n  - agent-conduct:write-well\n")
             self.assertEqual(r.returncode, 0, script + r.stderr)
             self.assertIn("agent-conduct:write-well", r.stdout, script)
+
+
+class SessionStartRegistry(unittest.TestCase):
+    def test_a_relative_manifesto_dir_resolves_against_the_config_folder(self):
+        r = run_hook("session-start.sh", "manifesto_dir: reg\nyou:\n  - name: again\n    source: manifesto first-principles\n")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("read it from " + r.project + "/reg/manifestos/first-principles.md.", r.stdout)
+        self.assertIn("Manifestos: " + r.project + "/reg/manifestos/", r.stdout)
+
+
+class ConfigProblems(unittest.TestCase):
+    def test_a_broken_config_prints_one_line_on_stderr_and_nothing_on_stdout_in_every_hook(self):
+        for script in ALL_HOOKS:
+            r = run_hook(script, "you: [first-principles]\n", stdin=json.dumps({"agent_type": "worker"}))
+            self.assertEqual((r.returncode, r.stdout), (0, ""), script)
+            self.assertEqual(r.stderr, "unharness: you must be a list of elements\n", script)
+
+    def test_a_missing_config_stays_silent_in_every_hook(self):
+        for script in ALL_HOOKS:
+            r = run_hook(script, None, stdin=json.dumps({"agent_type": "worker"}))
+            self.assertEqual((r.returncode, r.stdout, r.stderr), (0, "", ""), script)
 
 
 class StandDownUnderUnharness(unittest.TestCase):

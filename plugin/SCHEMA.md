@@ -80,7 +80,7 @@ A colon not followed by a space belongs to the name: `- agent-conduct:write-well
 |-------|------|----------|---------|-------------|
 | `you` | list of elements | no | empty | The orchestrator's constitution. |
 | `subagents` | mapping of role to list of elements | no | empty | Constitutions by agent type. A role with no value is an empty list. |
-| `manifesto_dir` | string (path) | no | hooks: `${CLAUDE_PLUGIN_ROOT}`; `unharness`: the manifesto plugin at its highest version in the plugin cache | The folder whose `manifestos/` subfolder is the registry. Ignored in the flat list form. `unharness` resolves a relative path against the config's folder; the hooks use it as written, so write an absolute path. |
+| `manifesto_dir` | string (path) | no | hooks: `${CLAUDE_PLUGIN_ROOT}`; `unharness`: the manifesto plugin at its highest version in the plugin cache | The folder whose `manifestos/` subfolder is the registry. Ignored in the flat list form. A relative path resolves against the config's folder, in the hooks and in `unharness` alike. |
 
 Any other top-level key is ignored.
 
@@ -108,7 +108,7 @@ The login folder is `$CLAUDE_CONFIG_DIR`, else `~/.claude`. Versions compare by 
 
 ## Errors
 
-Every error is one line. The hooks swallow them and stay silent; `unharness` prints `unharness: <line>` on stderr and exits 1.
+Every error is one line. `unharness` prints `unharness: <line>` on stderr and exits 1. A hook prints the same line on stderr, prints nothing on stdout, and exits 0. A missing config is the exception: the hooks stay silent, and `config.py` exits 2 instead of 1 so they can tell it apart.
 
 | Line | Cause |
 |------|-------|

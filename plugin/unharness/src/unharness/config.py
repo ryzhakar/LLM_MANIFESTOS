@@ -15,6 +15,7 @@ SKILL_SOURCE = "skill"
 FILE_SOURCE = "file"
 CLAUDE_MD = "CLAUDE.md"
 ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)", re.M | re.S)
+MISSING_CONFIG_STATUS = 2
 MAPPING_ENTRY = re.compile(r":(?:\s|$)")
 YAML_NULLS = ("", "~", "null")
 QUOTED_SCALAR = re.compile(r"""^(["'])(.*?)\1(?:\s+#.*)?$""")
@@ -23,6 +24,10 @@ TRAILING_COMMENT = re.compile(r"(?:^|\s+)#.*$")
 
 class UnharnessError(Exception):
     """A failure whose one-line message tells the owner what to fix."""
+
+
+class MissingConfigError(UnharnessError):
+    """No config file and no CLAUDE.md section: a project that does not use manifestos."""
 
 
 @dataclass(frozen=True)
@@ -40,19 +45,21 @@ class Config:
     directory: Path
 
 
-def fail(error: UnharnessError) -> int:
-    """Print the failure as one line on stderr and return the exit status 1."""
+def fail(error: UnharnessError, status: int = 1) -> int:
+    """Print the failure as one line on stderr and return the exit status."""
     print(f"unharness: {error}", file=sys.stderr)
-    return 1
+    return status
 
 
 def main(argv: list[str]) -> int:
-    """Print the config at argv's path as JSON for a shell hook, or fail in one line."""
+    """Print the config at argv's path as JSON for a shell hook; fail in one line, with status 2 when no config exists."""
     parser = argparse.ArgumentParser(description="Print a .manifestos.yaml as JSON.")
     parser.add_argument("path", type=Path)
     parser.add_argument("--json", action="store_true", required=True)
     try:
         config = load(parser.parse_args(argv).path)
+    except MissingConfigError as error:
+        return fail(error, MISSING_CONFIG_STATUS)
     except UnharnessError as error:
         return fail(error)
     print(json.dumps({
@@ -87,7 +94,7 @@ def _config_text(path: Path) -> str:
     claude_md = path.parent / CLAUDE_MD
     section = ACTIVE_MANIFESTOS_SECTION.search(claude_md.read_text()) if claude_md.is_file() else None
     if not section:
-        raise UnharnessError(f"no config: tried {path} and the Active Manifestos section of {claude_md}")
+        raise MissingConfigError(f"no config: tried {path} and the Active Manifestos section of {claude_md}")
     return section.group(1)
 
 

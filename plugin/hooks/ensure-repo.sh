@@ -22,6 +22,7 @@ sys.stdout.write(re.sub(r"\$\{(\w+)\}", repl, text))
 }
 
 CONFIG_MODULE="$SCRIPT_DIR/../unharness/src/unharness/config.py"
+MISSING_CONFIG_STATUS=2
 
 # True under unharness, whose compiled prompt already carries the binding.
 unharness_stands_down() {
@@ -30,16 +31,20 @@ unharness_stands_down() {
 
 detect_manifestos() {
     local project_dir="${CLAUDE_PROJECT_DIR:-.}"
-    local config out
-    if ! config=$(python3 "$CONFIG_MODULE" "$project_dir/.manifestos.yaml" --json 2>/dev/null); then
+    local config out status=0
+    config=$(python3 "$CONFIG_MODULE" "$project_dir/.manifestos.yaml" --json 2>&1) || status=$?
+    if [ "$status" -ne 0 ]; then
+        if [ "$status" -ne "$MISSING_CONFIG_STATUS" ]; then
+            printf '%s\n' "$config" >&2
+        fi
         return
     fi
     out=$(printf '%s' "$config" | python3 -c '
-import json, sys
+import json, os, sys
 config = json.load(sys.stdin)
 print(json.dumps(config["you"]))
 print(json.dumps(config["subagents"]))
-print(config["manifesto_dir"])
+print(os.path.abspath(os.path.join(config["directory"], config["manifesto_dir"])) if config["manifesto_dir"] else "")
 print(config["directory"])
 ')
 

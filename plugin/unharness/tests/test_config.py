@@ -138,10 +138,16 @@ def test_a_shell_hook_reads_the_stack_as_json_by_running_the_module_by_path(tmp_
     }
 
 
-def test_a_script_run_that_fails_prints_one_line_and_exits_1(tmp_path):
+def test_a_script_run_on_a_broken_config_prints_one_line_and_exits_1(tmp_path):
+    run = run_config_script(str(write_config(tmp_path, "you: [dry]\n")), "--json")
+
+    assert (run.returncode, run.stdout) == (1, "")
+    assert run.stderr == "unharness: you must be a list of elements\n"
+
+
+def test_a_script_run_with_no_config_prints_one_line_and_exits_2_so_a_hook_can_tell_it_apart(tmp_path):
     run = run_config_script(str(tmp_path / ".manifestos.yaml"), "--json")
 
-    assert run.returncode == 1
-    assert run.stdout == ""
+    assert (run.returncode, run.stdout) == (2, "")
     assert run.stderr.startswith("unharness: no config: tried ")
     assert len(run.stderr.splitlines()) == 1
