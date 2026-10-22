@@ -1,13 +1,11 @@
 #!/bin/bash
-# Run unharness at the release matching this plugin's version, so skill text and tool never differ.
-# UNHARNESS_FROM overrides the source (a path or a git URL), for testing a working tree.
+# Run the unharness copy bundled with this plugin, so skill text and tool never differ.
+# UNHARNESS_FROM overrides the source (a path or a git URL), for testing a working tree or a release.
 set -euo pipefail
 command -v uv >/dev/null 2>&1 || { echo "unharness launcher: uv is not installed" >&2; exit 1; }
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-VERSION="$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' "$ROOT/.claude-plugin/plugin.json" | head -1)"
-[ -n "$VERSION" ] || { echo "unharness launcher: no version in $ROOT/.claude-plugin/plugin.json" >&2; exit 1; }
-FROM="${UNHARNESS_FROM:-git+https://github.com/ryzhakar/llm-manifestos@v${VERSION}#subdirectory=plugin/unharness}"
+FROM="${UNHARNESS_FROM:-$ROOT/unharness}"
 if [ -d "$FROM" ]; then
-  exec uvx --from "$FROM" --with-editable "$FROM" unharness "$@"
+  exec uvx --no-cache --from "$FROM" --with-editable "$FROM" unharness "$@"
 fi
 exec uvx --from "$FROM" unharness "$@"
