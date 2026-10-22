@@ -1,5 +1,7 @@
 """Read a project's .manifestos.yaml into a Config, with the YAML subset reader the file needs."""
 
+from __future__ import annotations
+
 import argparse
 import json
 import re
