@@ -9,7 +9,7 @@ from pathlib import Path
 from unharness.config import MANIFESTO_SOURCE, SKILL_SOURCE, Element, UnharnessError
 
 PLUGIN_ROOT_PLACEHOLDER = "${CLAUDE_PLUGIN_ROOT}"
-FRONTMATTER = re.compile(r"\A---\n.*?\n---\n", re.S)
+FRONTMATTER = re.compile(r"\A---\n(?=[A-Za-z_][\w-]*:).*?\n---\n", re.S)
 LOGIN_VARIABLE = "CLAUDE_CONFIG_DIR"
 MANIFESTO_PLUGIN = "manifesto"
 PLUGIN_SKILL_SEPARATOR = ":"

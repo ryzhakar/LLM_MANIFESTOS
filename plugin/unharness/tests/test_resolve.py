@@ -70,3 +70,11 @@ def test_an_element_that_does_not_resolve_names_itself_and_the_path_it_tried(log
 def test_the_login_is_claude_config_dir_else_dot_claude_in_home(tmp_path):
     assert login_dir({"CLAUDE_CONFIG_DIR": "/somewhere"}, tmp_path) == Path("/somewhere")
     assert login_dir({}, tmp_path) == tmp_path / ".claude"
+
+
+def test_a_block_between_two_rules_is_prose_unless_it_opens_with_a_key(login, tmp_path):
+    write(tmp_path / "prose.md", "---\n\nprose between rules\n---\nrest\n")
+    write(tmp_path / "keyed.md", "---\ntitle: x\n---\nrest\n")
+    elements = [Element("prose", None, "file", "prose.md"), Element("keyed", None, "file", "keyed.md")]
+
+    assert texts(elements, tmp_path, login) == ["---\n\nprose between rules\n---\nrest", "rest"]
