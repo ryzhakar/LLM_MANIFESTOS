@@ -128,7 +128,7 @@ def test_stdin_is_redirected_onto_the_terminal(tmp_path):
     terminal = tmp_path / "terminal"
     terminal.write_text("")
 
-    reopen_terminal(lambda: terminal.open(), lambda source, target: redirects.append((type(source), target)))
+    reopen_terminal(lambda: False, lambda: terminal.open(), lambda source, target: redirects.append((type(source), target)))
 
     assert redirects == [(int, 0)]
 
@@ -137,4 +137,11 @@ def test_without_a_terminal_stdin_stays_as_it_is():
     def no_terminal():
         raise OSError("no controlling terminal")
 
-    reopen_terminal(no_terminal, lambda *_: pytest.fail("stdin must not move"))
+    reopen_terminal(lambda: False, no_terminal, lambda *_: pytest.fail("stdin must not move"))
+
+
+def test_stdin_that_is_already_a_terminal_is_left_alone():
+    def must_not_open():
+        raise AssertionError("the terminal must not be opened")
+
+    reopen_terminal(lambda: True, must_not_open, lambda *_: pytest.fail("stdin must not move"))

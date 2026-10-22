@@ -81,10 +81,13 @@ def execute_launcher(argv: list[str], env: dict[str, str]) -> int:
 
 
 def reopen_terminal(
+    stdin_is_terminal: Callable[[], bool] = lambda: os.isatty(STDIN_DESCRIPTOR),
     open_terminal: Callable[[], IO] = lambda: open(TERMINAL_DEVICE),
     redirect: Callable[[int, int], None] = os.dup2,
 ) -> None:
-    """Point stdin at the terminal, so an interactive session survives a piped prompt; keep stdin if no terminal exists."""
+    """Point stdin at the terminal, so an interactive session survives a piped prompt; keep stdin if it is one or none exists."""
+    if stdin_is_terminal():
+        return
     try:
         with open_terminal() as terminal:
             redirect(terminal.fileno(), STDIN_DESCRIPTOR)
