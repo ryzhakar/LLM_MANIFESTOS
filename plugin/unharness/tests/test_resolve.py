@@ -11,3 +11,20 @@ def test_a_legacy_name_resolves_to_the_registry_of_the_highest_cached_manifesto_
 
     body = f"# Dry 3.4.0\n\nRoot is {plugin_root}."
     assert documents == [Document("dry", "one home", body, sha256("# Dry 3.4.0\n\nRoot is ${CLAUDE_PLUGIN_ROOT}.".encode()).hexdigest())]
+
+
+def texts(elements, directory, login, manifesto_dir=""):
+    return [document.text for document in resolve_stack(elements, directory, manifesto_dir, login)]
+
+
+def test_a_plugin_skill_resolves_at_the_highest_version_by_number_not_by_text(login, tmp_path):
+    elements = [Element("write-well", None, "skill agent-conduct:write-well")]
+
+    assert texts(elements, tmp_path, login) == ["Well 1.10.0"]
+
+
+def test_a_plugin_skill_gets_its_version_folder_for_the_plugin_root(login, tmp_path):
+    version_folder = login / "plugins" / "cache" / "marketplace" / "manifesto" / "3.4.0"
+    elements = [Element("manifesto-writing", None, "skill manifesto:manifesto-writing")]
+
+    assert texts(elements, tmp_path, login) == [f"Writing 3.4.0 at {version_folder}/manifestos/raise-the-bar.md"]

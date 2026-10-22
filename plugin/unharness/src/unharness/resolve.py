@@ -26,9 +26,14 @@ def resolve_stack(elements: list[Element], directory: Path, manifesto_dir: str, 
 
 
 def _resolve_element(element: Element, directory: Path, manifesto_dir: str, login: Path) -> Document:
-    _, _, reference = (element.source or f"manifesto {element.name}").partition(" ")
-    plugin_root = _highest_version_dir(login, MANIFESTO_PLUGIN)
-    path = plugin_root / "manifestos" / f"{reference}.md"
+    kind, _, reference = (element.source or f"manifesto {element.name}").partition(" ")
+    if kind == "skill":
+        plugin, _, skill = reference.partition(":")
+        plugin_root = _highest_version_dir(login, plugin)
+        path = plugin_root / "skills" / skill / "SKILL.md"
+    else:
+        plugin_root = _highest_version_dir(login, MANIFESTO_PLUGIN)
+        path = plugin_root / "manifestos" / f"{reference}.md"
     body = FRONTMATTER.sub("", path.read_text()).strip()
     return Document(
         element.name,
