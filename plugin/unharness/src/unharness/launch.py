@@ -3,6 +3,8 @@
 import json
 import os
 import shlex
+import shutil
+import subprocess
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from hashlib import sha256
@@ -12,6 +14,8 @@ from typing import IO
 from unharness.config import UnharnessError
 
 CACHE_FOLDER = "unharness"
+CACHE_VARIABLE = "XDG_CACHE_HOME"
+DEFAULT_SHELL = "/bin/sh"
 FOLDER_MODE = 0o700
 FILE_MODE = 0o600
 DEFAULT_LAUNCHER = "claude"
@@ -62,6 +66,18 @@ def launch(
         return 0
     reopen_stdin()
     return execute([*options.launcher, *arguments], {**environ, **_strip_environment(options)})
+
+
+def cache_home(environ: Mapping[str, str], home: Path) -> Path:
+    """Return XDG_CACHE_HOME, else .cache in the home folder."""
+    return Path(environ[CACHE_VARIABLE]) if environ.get(CACHE_VARIABLE) else home / ".cache"
+
+
+def execute_launcher(argv: list[str], env: dict[str, str]) -> int:
+    """Replace this process with the launcher when it is on PATH; else run it through the interactive shell."""
+    if shutil.which(argv[0], path=env.get("PATH")):
+        os.execvpe(argv[0], argv, env)
+    return subprocess.run([env.get("SHELL", DEFAULT_SHELL), "-ic", shlex.join(argv)], env=env).returncode
 
 
 def reopen_terminal(
