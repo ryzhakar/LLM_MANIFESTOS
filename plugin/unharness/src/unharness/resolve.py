@@ -25,7 +25,7 @@ class Document:
 
 def login_dir(environ: Mapping[str, str], home: Path) -> Path:
     """Return the login folder: CLAUDE_CONFIG_DIR, else .claude in the home folder."""
-    return Path(environ[LOGIN_VARIABLE]) if LOGIN_VARIABLE in environ else home / ".claude"
+    return Path(environ[LOGIN_VARIABLE]) if environ.get(LOGIN_VARIABLE) else home / ".claude"
 
 
 def resolve_stack(elements: list[Element], directory: Path, registry: Path | None, login: Path) -> list[Document]:

@@ -70,6 +70,7 @@ def test_an_element_that_does_not_resolve_names_itself_and_the_path_it_tried(log
 def test_the_login_is_claude_config_dir_else_dot_claude_in_home(tmp_path):
     assert login_dir({"CLAUDE_CONFIG_DIR": "/somewhere"}, tmp_path) == Path("/somewhere")
     assert login_dir({}, tmp_path) == tmp_path / ".claude"
+    assert login_dir({"CLAUDE_CONFIG_DIR": ""}, tmp_path) == tmp_path / ".claude"
 
 
 def test_a_block_between_two_rules_is_prose_unless_it_opens_with_a_key(login, tmp_path):
