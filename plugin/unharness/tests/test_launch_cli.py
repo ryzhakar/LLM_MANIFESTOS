@@ -1,7 +1,6 @@
 import json
 import os
 import pty
-import os
 import shlex
 import subprocess
 import sys

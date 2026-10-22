@@ -22,15 +22,15 @@ DEFAULT_LAUNCHER = "claude"
 CONTROLLING_TERMINAL = "/dev/tty"
 STDIN_DESCRIPTOR = 0
 OUTPUT_DESCRIPTORS = (1, 2)
+CLAUDE_MD_VARIABLE = "CLAUDE_CODE_DISABLE_CLAUDE_MDS"
 STRIP_ENVIRONMENT = {
     "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
-    "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
+    CLAUDE_MD_VARIABLE: "1",
     "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
     "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "CLAUDE_CODE_SILENT_TURN_REMINDER": "0",
-    "UNHARNESS": "1",
 }
-CLAUDE_MD_VARIABLE = "CLAUDE_CODE_DISABLE_CLAUDE_MDS"
+STAND_DOWN_MARKER = {"UNHARNESS": "1"}
 STRIP_SETTINGS = {
     "includeGitInstructions": False,
     "attribution": {"commit": "", "pr": ""},
@@ -109,7 +109,7 @@ def reopen_terminal(
 
 def _strip_environment(options: Options) -> dict[str, str]:
     kept = [CLAUDE_MD_VARIABLE] if options.keep_claude_md else []
-    return {name: value for name, value in STRIP_ENVIRONMENT.items() if name not in kept}
+    return {**{name: value for name, value in STRIP_ENVIRONMENT.items() if name not in kept}, **STAND_DOWN_MARKER}
 
 
 def _strip_arguments(prompt_file: Path, options: Options) -> list[str]:

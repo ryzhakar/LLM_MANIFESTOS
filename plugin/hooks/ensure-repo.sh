@@ -1,7 +1,7 @@
 #!/bin/bash
 # Shared helper: read .manifestos.yaml through the unharness config module, locate the bundled manifestos.
-# Source this file from hook scripts after setting SCRIPT_DIR. No side effects
-# on source except the DEFAULT_MANIFESTO_DIR assignment below.
+# Source this file from hook scripts after setting SCRIPT_DIR. Sourcing assigns
+# only the three variables below: DEFAULT_MANIFESTO_DIR, CONFIG_MODULE, MISSING_CONFIG_STATUS.
 
 DEFAULT_MANIFESTO_DIR="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 

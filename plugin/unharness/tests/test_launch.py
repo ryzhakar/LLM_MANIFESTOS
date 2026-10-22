@@ -54,7 +54,7 @@ def test_without_a_launcher_it_prints_the_command_for_claude_and_runs_nothing(tm
     ]
 
 
-def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tmp_path, capsys):
+def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tmp_path):
     previous_umask = os.umask(0)
     try:
         launch(PROMPT, Options(False, False, False, []), {}, tmp_path, TERMINAL, never, never)
