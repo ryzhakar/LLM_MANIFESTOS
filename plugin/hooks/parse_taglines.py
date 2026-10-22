@@ -6,8 +6,8 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from mini_yaml import safe_load
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "unharness", "src", "unharness"))
+from config import parse_yaml
 
 
 def load_frontmatter(path):
@@ -18,7 +18,7 @@ def load_frontmatter(path):
         if not content.startswith("---"):
             return None
         end = content.index("---", 3)
-        fm = safe_load(content[3:end])
+        fm = parse_yaml(content[3:end])
         return fm if isinstance(fm, dict) else None
     except Exception:
         return None

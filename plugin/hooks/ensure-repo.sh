@@ -1,5 +1,5 @@
 #!/bin/bash
-# Shared helper: parse .manifestos.yaml, locate the bundled manifestos.
+# Shared helper: read .manifestos.yaml through the unharness config module, locate the bundled manifestos.
 # Source this file from hook scripts after setting SCRIPT_DIR. No side effects
 # on source except the DEFAULT_MANIFESTO_DIR assignment below.
 
@@ -21,18 +21,34 @@ sys.stdout.write(re.sub(r"\$\{(\w+)\}", repl, text))
 ' "$file" "$@"
 }
 
+CONFIG_MODULE="$SCRIPT_DIR/../unharness/src/unharness/config.py"
+
+# True under unharness, whose compiled prompt already carries the binding.
+unharness_stands_down() {
+    [ -n "${UNHARNESS:-}" ] && [ "$UNHARNESS" != "0" ]
+}
+
 detect_manifestos() {
     local project_dir="${CLAUDE_PROJECT_DIR:-.}"
-    local out
-    if ! out=$(python3 "$SCRIPT_DIR/parse_config.py" "$project_dir" 2>/dev/null); then
+    local config out
+    if ! config=$(python3 "$CONFIG_MODULE" "$project_dir/.manifestos.yaml" --json 2>/dev/null); then
         return
     fi
+    out=$(printf '%s' "$config" | python3 -c '
+import json, sys
+config = json.load(sys.stdin)
+print(json.dumps(config["you"]))
+print(json.dumps(config["subagents"]))
+print(config["manifesto_dir"])
+print(config["directory"])
+')
 
     YOU_STACK=$(printf '%s\n' "$out" | sed -n '1p')
     SUBAGENT_SECTION=$(printf '%s\n' "$out" | sed -n '2p')
     local dir_override
     dir_override=$(printf '%s\n' "$out" | sed -n '3p')
     MANIFESTO_DIR="${dir_override:-$DEFAULT_MANIFESTO_DIR}"
+    CONFIG_DIR=$(printf '%s\n' "$out" | sed -n '4p')
 
-    export YOU_STACK SUBAGENT_SECTION MANIFESTO_DIR
+    export YOU_STACK SUBAGENT_SECTION MANIFESTO_DIR CONFIG_DIR
 }

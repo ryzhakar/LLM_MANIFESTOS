@@ -121,33 +121,7 @@ if [ -z "$MATCHED_ELEMENTS" ]; then
 fi
 
 # Render matched elements as natural language
-export MATCHED_ELEMENTS
-ELEMENT_DESCRIPTION=$(python3 << 'PYEOF'
-import json, os
-
-elements = json.loads(os.environ["MATCHED_ELEMENTS"])
-n = len(elements)
-count_word = {1:"one",2:"two",3:"three",4:"four",5:"five",6:"six",7:"seven",8:"eight"}.get(n, str(n))
-sentences = [f"Your constitution has {count_word} element{'s' if n != 1 else ''}."]
-
-for el in elements:
-    name = el["name"]
-    purpose = el.get("purpose")
-    source = el.get("source")
-    if purpose and source:
-        verb = "fetch it from" if source.startswith("http") else "read it from"
-        sentences.append(f'"{name}" governs your {purpose} — {verb} {source}.')
-    elif purpose:
-        sentences.append(f'"{name}" governs your {purpose} — resolve its location via the tiered protocol before binding.')
-    elif source:
-        verb = "fetch it from" if source.startswith("http") else "read it from"
-        sentences.append(f'"{name}" is part of your constitution — {verb} {source}.')
-    else:
-        sentences.append(f'"{name}" is part of your constitution — resolve its location via the tiered protocol before binding.')
-
-print(" ".join(sentences))
-PYEOF
-)
+ELEMENT_DESCRIPTION=$(printf '%s' "$MATCHED_ELEMENTS" | python3 "$SCRIPT_DIR/describe_elements.py" "$CONFIG_DIR" "$MANIFESTO_DIR")
 
 REBIND_NOTE=""
 

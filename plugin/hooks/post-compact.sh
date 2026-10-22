@@ -8,6 +8,10 @@ fi
 export PLUGINS_CACHE_DIR
 source "$SCRIPT_DIR/ensure-repo.sh"
 
+if unharness_stands_down; then
+    exit 0
+fi
+
 detect_manifestos
 
 # Gate: no config → silent exit
@@ -27,30 +31,7 @@ print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostCompact", "additi
 }
 
 # Render orchestrator elements as natural language prose
-ELEMENT_DESCRIPTION=$(python3 << 'PYEOF'
-import json, os
-
-stack = json.loads(os.environ["YOU_STACK"])
-n = len(stack)
-count_word = {1:"one",2:"two",3:"three",4:"four",5:"five",6:"six",7:"seven",8:"eight"}.get(n, str(n))
-sentences = [f"Your constitution has {count_word} element{'s' if n != 1 else ''}."]
-
-for el in stack:
-    name = el["name"]
-    purpose = el.get("purpose")
-    source = el.get("source")
-    if purpose and source:
-        sentences.append(f'"{name}" governs your {purpose} — fetch it from {source}.' if source.startswith("http") else f'"{name}" governs your {purpose} — read it from {source}.')
-    elif purpose:
-        sentences.append(f'"{name}" governs your {purpose} — resolve its location via the tiered protocol before binding.')
-    elif source:
-        sentences.append(f'"{name}" is part of your constitution — fetch it from {source}.' if source.startswith("http") else f'"{name}" is part of your constitution — read it from {source}.')
-    else:
-        sentences.append(f'"{name}" is part of your constitution — resolve its location via the tiered protocol before binding.')
-
-print(" ".join(sentences))
-PYEOF
-)
+ELEMENT_DESCRIPTION=$(printf '%s' "$YOU_STACK" | python3 "$SCRIPT_DIR/describe_elements.py" "$CONFIG_DIR" "$MANIFESTO_DIR")
 
 REBIND_NOTE="Previous bindings, oath state, and interplay analyses were lost in compaction. Re-read and rebind everything from source."
 
