@@ -1,6 +1,6 @@
 # Plan: long-run (unharness)
 
-Status: RUNNING since the owner's go (2026-10-23, "go. in silence. godspeed!"). Phase A launched. Wake: CronCreate job 690c6948, 17 and 47 past each hour, prompt in wake-long-run.md.
+Status: DONE 2026-10-23; shipped as plugin 3.5.0 (origin/main 002db33, tag v3.5.0). Wake cancelled. See summary-long-run.md.
 
 ## Resume from nothing
 
@@ -41,10 +41,10 @@ Research reports go to `/Users/ryzhakar/LLM_MANIFESTOS/orchestration_log/recon/2
 | D1 | capture verification of the built tool, -p and tmux, haiku and opus | sonnet | recon d1-verification.md | C2 | done; pipe form crashes (fix in D4) |
 | D2 | reviews in parallel: code against the implementer manifestos, prose against write-well and Raise the Bar, spec compliance | sonnet | reviews/*.md | C1-C5 | done |
 | D3 | end to end in this repo: /compile-commitments, prompt, launch in tmux, probe before and after /compact | sonnet | recon d3-e2e.md | C1-C5 | done; prompt survives /compact; pipe form crashed (fix in D4) |
-| D4 | triage reviews and verification; fix units; verify again | me, then sonnet or fable | reviews/triage.md | D1-D3 | in flight: code fixes (c1-core), prose fixes (d4-prose); then docs, then re-verify |
-| E1 | ship: rebase, 3.5.0 in both manifests, validate, tag, push; owner's PyPI commands into the records | me (git) | main, tag v3.5.0 | D4 | pending |
-| F1 | span closure by memento:span-closure; card and wake ended | me | summary, baseline | E1 | pending |
+| D4 | triage reviews and verification; fix units; verify again | me, then sonnet or fable | reviews/triage.md | D1-D3 | done |
+| E1 | ship: rebase, 3.5.0 in both manifests, validate, tag, push; owner's PyPI commands into the records | me (git) | main, tag v3.5.0 | D4 | done |
+| F1 | span closure by memento:span-closure; card and wake ended | me | summary, baseline | E1 | done |
 
 ## In flight
 
-- d1-verify (D5 re-verify) → history/2026-10-23/verification-unharness.md
+None.

@@ -1,6 +1,6 @@
 # Unharness verification
 
-Date: 2026-10-23. Claude Code 2.1.309, login `~/.claudes/meta`, models `claude-haiku-5-5` and `claude-opus-5-5`. Each result comes from a captured request body, the first request of one run. The capture files stay ignored, so this report quotes what a reader needs.
+Date: 2026-10-23, re-verified 02:45 EEST on the fixed build at commit f821dd8. Claude Code 2.1.309, login `~/.claudes/meta`, models `claude-haiku-5-5` and `claude-opus-5-5`. Each result comes from a captured request body, the first request of one run. The capture files stay ignored, so this report quotes what a reader needs.
 
 ## What each capture ran
 
@@ -17,6 +17,8 @@ env CLAUDE_CODE_ATTRIBUTION_HEADER=0 CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 CLAUDE_COD
 | `d1-p-haiku`, `d1-p-opus` | `unharness launch "$PROMPT" -- claude -p "Reply OK." --model <m> --max-turns 1 </dev/null` |
 | `d1-flag-keepmd`, `d1-flag-nohooks`, `d1-flag-websearch` | as `d1-p-haiku`, plus `--keep-claude-md`, `--no-hooks`, or `--keep-web-search` before the prompt |
 | `d1-tmux-haiku` | the same launch in tmux, `-- claude --model haiku`, prompt as argument, one message `Reply OK.`, then `/exit` |
+| `d5-tmux-haiku` | the documented pipe in tmux, run from the worktree: `unharness prompt \| unharness launch -- claude --model haiku --plugin-dir <plugin>`, both stages through the launcher `plugin/bin/unharness` with `UNHARNESS_FROM` set to the tool folder, then `Reply OK.` and `/exit` |
+| `d5-p-haiku` | `unharness launch "$(unharness prompt)" -- claude -p "Reply OK." --model haiku --max-turns 1 </dev/null`, from the worktree, no `--plugin-dir` |
 | `d1-ctl-p-haiku` | control: plain `claude -p "Reply OK." --model haiku --max-turns 1`, no tool, no strip |
 | `b2-full-haiku`, `b2-full-opus` | `claude -p` with the strip by hand and `CUSTOM-PROMPT-MARKER` as the prompt file |
 | `a3-c5` | interactive haiku with the strip by hand, `--system-prompt-file` of the marker, no `--disallowedTools` |
@@ -36,7 +38,7 @@ Results: absent, present, or set but unshown, which means the switch ran and no 
 | Output style text | `outputStyle: "default"` | set but unshown | the login sets no style |
 | WebSearch paragraph | `--disallowedTools WebSearch` | absent; `--keep-web-search` restores it | `b2-full-haiku`, `d1-flag-websearch` |
 | Silent-turn note | `CLAUDE_CODE_SILENT_TURN_REMINDER=0` | set but unshown | one request per run |
-| Hook output | none; `--no-hooks` sets `disableAllHooks` | present; absent under `--no-hooks` | `d1-p-haiku`, `d1-flag-nohooks` |
+| Hook output | none; `--no-hooks` sets `disableAllHooks`; the worktree's session-start hook stands down under `UNHARNESS=1` | present; absent under `--no-hooks`; the worktree's binding paragraph absent | `d1-p-haiku`, `d1-flag-nohooks`, `d5-tmux-haiku` |
 | Tool list | none | present, 13 tools, 15 interactive | `d1-p-haiku`, `d1-tmux-haiku` |
 | Skill list | none | present, 101 entries | `d1-p-haiku`, `d1-tmux-haiku` |
 | Agent list | none | present, 14 entries, 15 interactive | `d1-p-haiku`, `d1-tmux-haiku` |
@@ -82,12 +84,23 @@ Each run changed one flag from `d1-p-haiku`.
 - **`--keep-web-search`** restores the paragraph. `system[1]` becomes the prompt plus a blank line and a paragraph that opens `WebSearch takes a \`mode\`. Use "standard" by default: it is the normal search, quick and cheap.` The deferred list regains `WebSearch`, and a `safeguards` rule for `WebSearch` disappears.
 - **The prompt block** equals the compiled prompt by sha256 in every capture except the `--keep-web-search` one. The identity line comes first.
 
+## Re-verification
+
+The first build crashed the interactive client when the prompt arrived by pipe. It reopened the terminal as `/dev/tty`, and Claude Code 2.1.309 fails with `EINVAL: invalid argument, kqueue` on that path. The fixed `launch` reopens the device of stdout or stderr. Results on the fixed build:
+
+- **The documented pipe starts and answers.** In `d5-tmux-haiku` the session started, with no crash, and `Reply OK.` drew a reply that opens `OK.` The model then said it had loaded the `peers:join` skill because the peer hook told it to. The capture holds two requests, both from the main thread.
+- **The prompt lands verbatim.** In both requests `system[1]` equals the output of `unharness prompt` byte for byte, trailing newline included, after the identity line `You are Claude Code, Anthropic's official CLI for Claude.` In `d5-p-haiku` it equals the same output with the newline stripped, as `$(...)` strips it.
+- **The worktree's hook stands down.** `d5-tmux-haiku` has no `MANDATORY CONSTITUTION INITIALIZATION` paragraph. Run by hand under `UNHARNESS=1`, the released 3.4.0 session-start hook prints 11863 bytes of it and the worktree's prints none. `d5-p-haiku`, run without `--plugin-dir`, carries the released hook's paragraph, so the released hook stays active when the worktree plugin is not loaded.
+- **The memento hook is absent for another reason.** Its script exits when the project folder holds no CLAUDE.md, and the worktree holds none. The peer hook and the per-prompt hook remain in `d5-tmux-haiku`, as the spec expects.
+- **The strip holds.** Neither capture has CLAUDE.md text, git status, the billing header, or the WebSearch paragraph, and in the interactive capture `WebSearch` is out of the tool and deferred lists. The tool, skill, agent, and environment lists remain, and so do the MCP instructions in the interactive capture.
+- **The printed redirect follows the terminal.** `unharness launch "x"` under `script -q /dev/null` ends `</dev/ttys002`. With stdout and stderr piped it ends `</dev/tty`. With only stderr on a terminal it ends `</dev/ttys002`.
+- **The launcher builds fresh.** `plugin/bin/unharness` passes `--no-cache` and `--with-editable` for a folder source, so a local build is never stale. Both captures ran through it.
+
 ## Not verified
 
-- **The piped launch form fails.** `unharness prompt | unharness launch -- claude` crashes this build with `EINVAL: invalid argument, kqueue`. The tool reopens the terminal as `/dev/tty`; `claude </dev/tty` crashes alone, and `</dev/ttys002` runs. The cause is inferred and tested only in tmux. The interactive capture passed the prompt as an argument.
-- **The hook stand-down.** The README says `UNHARNESS=1` stops the session-start and post-compact hooks. The login loads the released manifesto plugin 3.4.0, which has no such check, so the captures show those hooks acting. The unreleased hooks were not loaded.
 - **Auto memory, attribution, output style.** The login already turns the first two off and sets no style, so the control lacks the text too. These three switches have no shown effect.
 - **Silent-turn note and task-list nudges.** Each capture holds one request, and no capture holds a nudge or a file-changed note.
 - **Which git switch does what.** The environment variable and the setting ran together here. A3's captures separated them.
 - **Sample size.** Each capture ran once, and only haiku ran interactively.
-- **A stale build.** A plain `uvx --from <path>` served a cached build without the `launch` verb, and the runs used `--no-cache`. The cause is inferred.
+- **The terminal reopen outside tmux.** The piped form ran in tmux only, not in the owner's usual terminal.
+- **Opus on the fixed build.** Opus ran only on the first build.
