@@ -1,6 +1,10 @@
 """Read a project's .manifestos.yaml into a Config, with the YAML subset reader the file needs."""
 
+import argparse
+import dataclasses
+import json
 import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -30,6 +34,29 @@ class Config:
     subagents: dict[str, list[Element]]
     manifesto_dir: str
     directory: Path
+
+
+def fail(error: UnharnessError) -> int:
+    """Print the failure as one line on stderr and return the exit status 1."""
+    print(f"unharness: {error}", file=sys.stderr)
+    return 1
+
+
+def main(argv: list[str]) -> int:
+    """Print the config at argv's path as JSON for a shell hook, or fail in one line."""
+    parser = argparse.ArgumentParser(description="Print a .manifestos.yaml as JSON.")
+    parser.add_argument("path", type=Path)
+    parser.add_argument("--json", action="store_true", required=True)
+    try:
+        config = load(parser.parse_args(argv).path)
+    except UnharnessError as error:
+        return fail(error)
+    print(json.dumps({
+        "you": [dataclasses.asdict(element) for element in config.you],
+        "subagents": {role: [dataclasses.asdict(e) for e in elements] for role, elements in config.subagents.items()},
+        "manifesto_dir": config.manifesto_dir,
+    }))
+    return 0
 
 
 def load(path: Path) -> Config:
@@ -140,3 +167,7 @@ def _parse_mapping(lines: list[str], i: int, indent: int):
             result[key] = None
             i += 1
     return result, i
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

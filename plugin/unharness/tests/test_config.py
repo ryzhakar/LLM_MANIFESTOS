@@ -1,8 +1,13 @@
+import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
 
 from unharness.config import Config, Element, UnharnessError, load
+
+CONFIG_SCRIPT = Path(__file__).parent.parent / "src" / "unharness" / "config.py"
 
 
 def write_config(folder: Path, text: str) -> Path:
@@ -110,3 +115,31 @@ def test_a_missing_config_names_every_place_it_looked(tmp_path):
     assert str(failure.value) == (
         f"no config: tried {tmp_path / '.manifestos.yaml'} and the Active Manifestos section of {tmp_path / 'CLAUDE.md'}"
     )
+
+
+def run_config_script(*arguments: str) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [sys.executable, "-I", str(CONFIG_SCRIPT), *arguments], capture_output=True, text=True
+    )
+
+
+def test_a_shell_hook_reads_the_stack_as_json_by_running_the_module_by_path(tmp_path):
+    path = write_config(tmp_path, "manifesto_dir: /m\nyou:\n  - dry\nsubagents:\n  other:\n    - name: kiss\n      purpose: p\n")
+
+    run = run_config_script(str(path), "--json")
+
+    assert run.returncode == 0
+    assert json.loads(run.stdout) == {
+        "you": [{"name": "dry", "purpose": None, "source": None}],
+        "subagents": {"other": [{"name": "kiss", "purpose": "p", "source": None}]},
+        "manifesto_dir": "/m",
+    }
+
+
+def test_a_script_run_that_fails_prints_one_line_and_exits_1(tmp_path):
+    run = run_config_script(str(tmp_path / ".manifestos.yaml"), "--json")
+
+    assert run.returncode == 1
+    assert run.stdout == ""
+    assert run.stderr.startswith("unharness: no config: tried ")
+    assert len(run.stderr.splitlines()) == 1
