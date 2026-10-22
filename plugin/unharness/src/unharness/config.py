@@ -13,6 +13,7 @@ SKILL_SOURCE = "skill"
 FILE_SOURCE = "file"
 CLAUDE_MD = "CLAUDE.md"
 ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)", re.M | re.S)
+MAPPING_ENTRY = re.compile(r":(?:\s|$)")
 YAML_NULLS = ("", "~", "null")
 QUOTED_SCALAR = re.compile(r"""^(["'])(.*?)\1(?:\s+#.*)?$""")
 TRAILING_COMMENT = re.compile(r"(?:^|\s+)#.*$")
@@ -56,13 +57,14 @@ def main(argv: list[str]) -> int:
         "you": [asdict(element) for element in config.you],
         "subagents": {role: [asdict(element) for element in elements] for role, elements in config.subagents.items()},
         "manifesto_dir": config.manifesto_dir,
+        "directory": str(config.directory),
     }))
     return 0
 
 
 def load(path: Path) -> Config:
     """Read the config file at path into a Config."""
-    root = _parse_yaml(_config_text(path))
+    root = parse_yaml(_config_text(path))
     if isinstance(root, list):
         root = {"you": root}
     root = root or {}
@@ -108,7 +110,8 @@ def _file_stem(source: str | None) -> str | None:
     return Path(reference).stem if kind == FILE_SOURCE else None
 
 
-def _parse_yaml(text: str):
+def parse_yaml(text: str):
+    """Return the structure of block-style YAML text: mappings, lists, and string scalars; None if empty."""
     lines = [line.rstrip() for line in text.split("\n") if line.strip() and not line.lstrip().startswith("#")]
     if not lines:
         return None
@@ -129,6 +132,11 @@ def _scalar(text: str) -> str | None:
     return None if text in YAML_NULLS else text
 
 
+def _split_entry(text: str) -> tuple[str, str]:
+    entry = MAPPING_ENTRY.search(text)
+    return (text[:entry.start()], text[entry.end():]) if entry else (text, "")
+
+
 def _parse_block(lines: list[str], i: int, indent: int):
     if lines[i].lstrip().startswith(LIST_MARKER):
         return _parse_list(lines, i, indent)
@@ -140,7 +148,7 @@ def _parse_list(lines: list[str], i: int, indent: int):
     item_indent = indent + len(LIST_MARKER)
     while i < len(lines) and _indent(lines[i]) == indent and lines[i].lstrip().startswith(LIST_MARKER):
         content = lines[i].lstrip()[len(LIST_MARKER):]
-        if ":" not in content:
+        if not MAPPING_ENTRY.search(content):
             result.append(_scalar(content))
             i += 1
             continue
@@ -156,7 +164,7 @@ def _parse_list(lines: list[str], i: int, indent: int):
 def _parse_mapping(lines: list[str], i: int, indent: int):
     result = {}
     while i < len(lines) and _indent(lines[i]) == indent and not lines[i].lstrip().startswith(LIST_MARKER):
-        key, _, rest = lines[i].lstrip().partition(":")
+        key, rest = _split_entry(lines[i].lstrip())
         key = _scalar(key)
         value = _scalar(rest)
         if value is not None:

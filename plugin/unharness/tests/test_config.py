@@ -97,9 +97,10 @@ def test_a_config_that_is_not_a_list_of_elements_stops_the_load(tmp_path):
         load(write_config(tmp_path, "subagents: dry\n"))
 
 
-def test_a_colon_in_a_bare_item_stops_the_load_instead_of_dropping_the_element(tmp_path):
-    with pytest.raises(UnharnessError, match=r"element 1 of you has no name"):
-        load(write_config(tmp_path, "you:\n  - agent-conduct:write-well\n"))
+def test_a_colon_without_a_space_after_it_is_part_of_a_bare_name(tmp_path):
+    config = load(write_config(tmp_path, "you:\n  - agent-conduct:write-well\n  - name: a\n    source: skill b:c\n"))
+
+    assert config.you == [Element("agent-conduct:write-well", None, None), Element("a", None, "skill b:c")]
 
 
 def test_without_a_config_file_the_active_manifestos_section_of_claude_md_is_the_config(tmp_path):
@@ -133,6 +134,7 @@ def test_a_shell_hook_reads_the_stack_as_json_by_running_the_module_by_path(tmp_
         "you": [{"name": "dry", "purpose": None, "source": None}],
         "subagents": {"other": [{"name": "kiss", "purpose": "p", "source": None}]},
         "manifesto_dir": "/m",
+        "directory": str(tmp_path),
     }
 
 
