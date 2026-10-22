@@ -50,6 +50,8 @@ def _split_launcher(argv: list[str]) -> tuple[list[str], list[str]]:
 
 
 def _launch(arguments: argparse.Namespace, launcher: list[str]) -> int:
+    if arguments.prompt is None and sys.stdin.isatty():
+        raise UnharnessError("no prompt: pass PROMPT or pipe unharness prompt")
     prompt = arguments.prompt if arguments.prompt is not None else sys.stdin.read()
     options = Options(arguments.keep_claude_md, arguments.keep_web_search, arguments.no_hooks, launcher)
     return launch(prompt, options, os.environ, cache_home(os.environ, Path.home()), terminal_device(), reopen_terminal, execute_launcher)

@@ -1,5 +1,7 @@
 import json
 import os
+import pty
+import os
 import shlex
 import subprocess
 import sys
@@ -94,3 +96,19 @@ def test_a_shell_function_defined_in_the_interactive_rc_file_is_the_launcher(tmp
 
     assert run.returncode == 9
     assert (tmp_path / "function-argv").read_text().splitlines()[:3] == ["--model", "opus", "--system-prompt-file"]
+
+
+def test_without_a_prompt_and_with_a_terminal_on_stdin_it_stops_with_a_message(tmp_path):
+    master, slave = pty.openpty()
+    try:
+        run = subprocess.run(
+            [sys.executable, "-m", "unharness.cli", "launch", "--", "fakeclaude"],
+            stdin=slave, capture_output=True, text=True, timeout=20,
+            env={"PATH": "/usr/bin:/bin", "XDG_CACHE_HOME": str(tmp_path / "cache")},
+        )
+    finally:
+        os.close(master)
+        os.close(slave)
+
+    assert (run.returncode, run.stdout) == (1, "")
+    assert run.stderr == "unharness: no prompt: pass PROMPT or pipe unharness prompt\n"
