@@ -17,6 +17,17 @@ def compile_prompt(documents: list[Document], preamble: str, interplay: str, com
     ])
 
 
+def stack_view(documents: list[Document]) -> str:
+    """Return the stack block, then the constitution: what a session binds to."""
+    return f"{stack_block(documents)}\n\n{constitution_block(documents)}"
+
+
+def stack_block(documents: list[Document]) -> str:
+    """Return one line per document, in order: name, sha256 of its text, purpose."""
+    lines = (f"{document.name} {document.sha256} {document.purpose or ''}".rstrip() for document in documents)
+    return "<stack>\n" + "\n".join(lines) + "\n</stack>"
+
+
 def constitution_block(documents: list[Document]) -> str:
     """Return the constitution block: one tagged text per document, in order."""
     return "<constitution>\n" + "\n".join(_tagged(document) for document in documents) + "\n</constitution>"

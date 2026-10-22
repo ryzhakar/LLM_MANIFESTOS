@@ -1,4 +1,4 @@
-from unharness.compile import compile_prompt
+from unharness.compile import compile_prompt, constitution_block, stack_view
 from unharness.resolve import Document
 
 DRY = Document("dry", "one home", "DRY TEXT", "a" * 64)
@@ -20,3 +20,9 @@ def test_the_prompt_is_the_preamble_the_constitution_and_the_two_session_files_w
         "<interplay>\nThe elements agree.\n</interplay>\n\n"
         "<commitments>\nI must, and I will.\n</commitments>"
     )
+
+
+def test_the_stack_view_is_the_stack_block_with_one_sha256_line_per_element_then_the_constitution():
+    view = stack_view([DRY, KISS])
+
+    assert view == STACK + "\n\n" + constitution_block([DRY, KISS])
