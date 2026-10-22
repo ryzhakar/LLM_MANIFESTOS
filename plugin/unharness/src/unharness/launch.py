@@ -19,9 +19,9 @@ DEFAULT_SHELL = "/bin/sh"
 FOLDER_MODE = 0o700
 FILE_MODE = 0o600
 DEFAULT_LAUNCHER = "claude"
-TERMINAL_DEVICE = "/dev/tty"
-TERMINAL_REDIRECT = f"<{TERMINAL_DEVICE}"
+CONTROLLING_TERMINAL = "/dev/tty"
 STDIN_DESCRIPTOR = 0
+OUTPUT_DESCRIPTORS = (1, 2)
 STRIP_ENVIRONMENT = {
     "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
     "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
@@ -52,7 +52,8 @@ def launch(
     options: Options,
     environ: Mapping[str, str],
     cache_home: Path,
-    reopen_stdin: Callable[[], None],
+    terminal: str,
+    reopen_stdin: Callable[[str], None],
     execute: Callable[[list[str], dict[str, str]], int],
 ) -> int:
     """Cache the prompt, then print the launch command, or run the launcher and return its status."""
@@ -62,9 +63,9 @@ def launch(
     assignments = [f"{name}={value}" for name, value in _strip_environment(options).items()]
     arguments = _strip_arguments(prompt_file, options)
     if not options.launcher:
-        print(shlex.join(["env", *assignments, DEFAULT_LAUNCHER, *arguments]), TERMINAL_REDIRECT)
+        print(shlex.join(["env", *assignments, DEFAULT_LAUNCHER, *arguments]), f"<{terminal}")
         return 0
-    reopen_stdin()
+    reopen_stdin(terminal)
     return execute([*options.launcher, *arguments], {**environ, **_strip_environment(options)})
 
 
@@ -80,16 +81,27 @@ def execute_launcher(argv: list[str], env: dict[str, str]) -> int:
     return subprocess.run([env.get("SHELL", DEFAULT_SHELL), "-ic", shlex.join(argv)], env=env).returncode
 
 
+def terminal_device(descriptors: tuple[int, ...] = OUTPUT_DESCRIPTORS) -> str:
+    """Return the device of the first descriptor that is a terminal, else the controlling terminal, /dev/tty."""
+    for descriptor in descriptors:
+        try:
+            return os.ttyname(descriptor)
+        except OSError:
+            continue
+    return CONTROLLING_TERMINAL
+
+
 def reopen_terminal(
+    device: str,
     stdin_is_terminal: Callable[[], bool] = lambda: os.isatty(STDIN_DESCRIPTOR),
-    open_terminal: Callable[[], IO] = lambda: open(TERMINAL_DEVICE),
+    open_terminal: Callable[[str], IO] = open,
     redirect: Callable[[int, int], None] = os.dup2,
 ) -> None:
-    """Point stdin at the terminal, so an interactive session survives a piped prompt; keep stdin if it is one or none exists."""
+    """Point stdin at the device, so an interactive session survives a piped prompt; keep stdin if it is a terminal or the device will not open."""
     if stdin_is_terminal():
         return
     try:
-        with open_terminal() as terminal:
+        with open_terminal(device) as terminal:
             redirect(terminal.fileno(), STDIN_DESCRIPTOR)
     except OSError:
         pass

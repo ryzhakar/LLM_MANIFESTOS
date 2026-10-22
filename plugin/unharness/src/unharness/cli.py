@@ -8,7 +8,7 @@ from pathlib import Path
 
 from unharness.compile import COMMITMENTS_FILE, INTERPLAY_FILE, compile_prompt, stack_view
 from unharness.config import UnharnessError, fail, load
-from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal
+from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, terminal_device
 from unharness.resolve import login_dir, resolve_stack
 
 DEFAULT_CONFIG = Path(".manifestos.yaml")
@@ -52,7 +52,7 @@ def _split_launcher(argv: list[str]) -> tuple[list[str], list[str]]:
 def _launch(arguments: argparse.Namespace, launcher: list[str]) -> int:
     prompt = arguments.prompt if arguments.prompt is not None else sys.stdin.read()
     options = Options(arguments.keep_claude_md, arguments.keep_web_search, arguments.no_hooks, launcher)
-    return launch(prompt, options, os.environ, cache_home(os.environ, Path.home()), reopen_terminal, execute_launcher)
+    return launch(prompt, options, os.environ, cache_home(os.environ, Path.home()), terminal_device(), reopen_terminal, execute_launcher)
 
 
 def _output(verb: str, config_path: Path, login: Path) -> str:

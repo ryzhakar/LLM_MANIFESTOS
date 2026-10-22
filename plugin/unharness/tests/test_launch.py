@@ -1,5 +1,6 @@
 import json
 import os
+import pty
 import shlex
 import stat
 from hashlib import sha256
@@ -7,7 +8,7 @@ from pathlib import Path
 
 import pytest
 from unharness.config import UnharnessError
-from unharness.launch import Options, launch, reopen_terminal
+from unharness.launch import Options, launch, reopen_terminal, terminal_device
 
 DEFAULT_ENVIRONMENT = [
     "CLAUDE_CODE_ATTRIBUTION_HEADER=0",
@@ -24,6 +25,7 @@ DEFAULT_SETTINGS = {
     "outputStyle": "default",
 }
 PROMPT = "You are bound.\n"
+TERMINAL = "/dev/ttys042"
 
 
 def never(*_):
@@ -35,10 +37,10 @@ def cached_prompt(cache_home: Path, prompt: str = PROMPT) -> Path:
 
 
 def printed_command(options: Options, cache_home: Path, capsys) -> list[str]:
-    assert launch(PROMPT, options, {}, cache_home, never, never) == 0
+    assert launch(PROMPT, options, {}, cache_home, TERMINAL, never, never) == 0
     line = capsys.readouterr().out
-    assert line.endswith(" </dev/tty\n") and line.count("\n") == 1
-    return shlex.split(line.removesuffix(" </dev/tty\n"))
+    assert line.endswith(f" <{TERMINAL}\n") and line.count("\n") == 1
+    return shlex.split(line.removesuffix(f" <{TERMINAL}\n"))
 
 
 def test_without_a_launcher_it_prints_the_command_for_claude_and_runs_nothing(tmp_path, capsys):
@@ -55,7 +57,7 @@ def test_without_a_launcher_it_prints_the_command_for_claude_and_runs_nothing(tm
 def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tmp_path, capsys):
     previous_umask = os.umask(0)
     try:
-        launch(PROMPT, Options(False, False, False, []), {}, tmp_path, never, never)
+        launch(PROMPT, Options(False, False, False, []), {}, tmp_path, TERMINAL, never, never)
     finally:
         os.umask(previous_umask)
 
@@ -67,7 +69,7 @@ def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tm
 
 def test_an_empty_prompt_stops_before_anything_is_written(tmp_path):
     with pytest.raises(UnharnessError, match="^the prompt is empty$"):
-        launch(" \n", Options(False, False, False, []), {}, tmp_path, never, never)
+        launch(" \n", Options(False, False, False, []), {}, tmp_path, TERMINAL, never, never)
 
     assert list(tmp_path.iterdir()) == []
 
@@ -107,14 +109,14 @@ def test_all_three_flags_combine(tmp_path, capsys):
 def test_with_a_launcher_it_reopens_stdin_then_executes_the_launcher_with_the_stripped_environment(tmp_path, capsys):
     calls = []
     status = launch(
-        PROMPT, Options(False, False, False, ["fake", "extra"]), {"KEPT": "yes"}, tmp_path,
-        lambda: calls.append("reopen"),
+        PROMPT, Options(False, False, False, ["fake", "extra"]), {"KEPT": "yes"}, tmp_path, TERMINAL,
+        lambda device: calls.append(("reopen", device)),
         lambda argv, env: calls.append((argv, env)) or 7,
     )
 
     assert status == 7
     assert capsys.readouterr().out == ""
-    assert calls[0] == "reopen"
+    assert calls[0] == ("reopen", TERMINAL)
     argv, env = calls[1]
     assert argv == [
         "fake", "extra", "--system-prompt-file", str(cached_prompt(tmp_path)),
@@ -123,25 +125,56 @@ def test_with_a_launcher_it_reopens_stdin_then_executes_the_launcher_with_the_st
     assert env == {"KEPT": "yes", **dict(pair.split("=") for pair in DEFAULT_ENVIRONMENT)}
 
 
-def test_stdin_is_redirected_onto_the_terminal(tmp_path):
-    redirects = []
+def test_stdin_is_redirected_onto_the_device_it_is_given(tmp_path):
+    opened, redirects = [], []
     terminal = tmp_path / "terminal"
     terminal.write_text("")
 
-    reopen_terminal(lambda: False, lambda: terminal.open(), lambda source, target: redirects.append((type(source), target)))
+    def open_device(device):
+        opened.append(device)
+        return terminal.open()
 
-    assert redirects == [(int, 0)]
+    reopen_terminal(TERMINAL, lambda: False, open_device, lambda source, target: redirects.append((type(source), target)))
+
+    assert (opened, redirects) == ([TERMINAL], [(int, 0)])
 
 
 def test_without_a_terminal_stdin_stays_as_it_is():
-    def no_terminal():
+    def no_terminal(device):
         raise OSError("no controlling terminal")
 
-    reopen_terminal(lambda: False, no_terminal, lambda *_: pytest.fail("stdin must not move"))
+    reopen_terminal(TERMINAL, lambda: False, no_terminal, lambda *_: pytest.fail("stdin must not move"))
 
 
 def test_stdin_that_is_already_a_terminal_is_left_alone():
-    def must_not_open():
+    def must_not_open(device):
         raise AssertionError("the terminal must not be opened")
 
-    reopen_terminal(lambda: True, must_not_open, lambda *_: pytest.fail("stdin must not move"))
+    reopen_terminal(TERMINAL, lambda: True, must_not_open, lambda *_: pytest.fail("stdin must not move"))
+
+
+@pytest.fixture
+def pseudo_terminal():
+    master, slave = pty.openpty()
+    read_end, write_end = os.pipe()
+    yield slave, write_end
+    for descriptor in (master, slave, read_end, write_end):
+        os.close(descriptor)
+
+
+def test_the_device_is_the_one_stdout_is_on(pseudo_terminal):
+    terminal, pipe = pseudo_terminal
+
+    assert terminal_device((terminal, pipe)) == os.ttyname(terminal)
+
+
+def test_the_device_is_the_one_stderr_is_on_when_stdout_is_not_a_terminal(pseudo_terminal):
+    terminal, pipe = pseudo_terminal
+
+    assert terminal_device((pipe, terminal)) == os.ttyname(terminal)
+
+
+def test_the_device_is_dev_tty_when_neither_output_is_a_terminal(pseudo_terminal):
+    _, pipe = pseudo_terminal
+
+    assert terminal_device((pipe, pipe)) == "/dev/tty"
