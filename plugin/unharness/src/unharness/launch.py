@@ -7,6 +7,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
+from typing import IO
 
 from unharness.config import UnharnessError
 
@@ -14,7 +15,9 @@ CACHE_FOLDER = "unharness"
 FOLDER_MODE = 0o700
 FILE_MODE = 0o600
 DEFAULT_LAUNCHER = "claude"
-TERMINAL_REDIRECT = "</dev/tty"
+TERMINAL_DEVICE = "/dev/tty"
+TERMINAL_REDIRECT = f"<{TERMINAL_DEVICE}"
+STDIN_DESCRIPTOR = 0
 STRIP_ENVIRONMENT = {
     "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
     "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
@@ -59,6 +62,18 @@ def launch(
         return 0
     reopen_stdin()
     return execute([*options.launcher, *arguments], {**environ, **_strip_environment(options)})
+
+
+def reopen_terminal(
+    open_terminal: Callable[[], IO] = lambda: open(TERMINAL_DEVICE),
+    redirect: Callable[[int, int], None] = os.dup2,
+) -> None:
+    """Point stdin at the terminal, so an interactive session survives a piped prompt; keep stdin if no terminal exists."""
+    try:
+        with open_terminal() as terminal:
+            redirect(terminal.fileno(), STDIN_DESCRIPTOR)
+    except OSError:
+        pass
 
 
 def _strip_environment(options: Options) -> dict[str, str]:

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 from unharness.config import UnharnessError
-from unharness.launch import Options, launch
+from unharness.launch import Options, launch, reopen_terminal
 
 DEFAULT_ENVIRONMENT = [
     "CLAUDE_CODE_ATTRIBUTION_HEADER=0",
@@ -121,3 +121,20 @@ def test_with_a_launcher_it_reopens_stdin_then_executes_the_launcher_with_the_st
         "--disallowedTools", "WebSearch", "--settings", json.dumps(DEFAULT_SETTINGS, separators=(",", ":")),
     ]
     assert env == {"KEPT": "yes", **dict(pair.split("=") for pair in DEFAULT_ENVIRONMENT)}
+
+
+def test_stdin_is_redirected_onto_the_terminal(tmp_path):
+    redirects = []
+    terminal = tmp_path / "terminal"
+    terminal.write_text("")
+
+    reopen_terminal(lambda: terminal.open(), lambda source, target: redirects.append((type(source), target)))
+
+    assert redirects == [(int, 0)]
+
+
+def test_without_a_terminal_stdin_stays_as_it_is():
+    def no_terminal():
+        raise OSError("no controlling terminal")
+
+    reopen_terminal(no_terminal, lambda *_: pytest.fail("stdin must not move"))
