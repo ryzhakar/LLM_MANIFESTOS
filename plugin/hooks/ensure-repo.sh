@@ -40,11 +40,11 @@ detect_manifestos() {
         return
     fi
     out=$(printf '%s' "$config" | python3 -c '
-import json, os, sys
+import json, sys
 config = json.load(sys.stdin)
 print(json.dumps(config["you"]))
 print(json.dumps(config["subagents"]))
-print(os.path.abspath(os.path.join(config["directory"], config["manifesto_dir"])) if config["manifesto_dir"] else "")
+print(config["registry"])
 print(config["directory"])
 ')
 

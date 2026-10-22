@@ -82,8 +82,9 @@ class SessionStartRegistry(unittest.TestCase):
     def test_a_relative_manifesto_dir_resolves_against_the_config_folder(self):
         r = run_hook("session-start.sh", "manifesto_dir: reg\nyou:\n  - name: again\n    source: manifesto first-principles\n")
         self.assertEqual(r.returncode, 0, r.stderr)
-        self.assertIn("read it from " + r.project + "/reg/manifestos/first-principles.md.", r.stdout)
-        self.assertIn("Manifestos: " + r.project + "/reg/manifestos/", r.stdout)
+        registry = os.path.join(os.path.realpath(r.project), "reg")
+        self.assertIn("read it from " + registry + "/manifestos/first-principles.md.", r.stdout)
+        self.assertIn("Manifestos: " + registry + "/manifestos/", r.stdout)
 
 
 class ConfigProblems(unittest.TestCase):
