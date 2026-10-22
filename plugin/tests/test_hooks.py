@@ -160,6 +160,18 @@ class SubagentStart(unittest.TestCase):
 
 
 class DriftReminder(unittest.TestCase):
+    def test_a_name_is_matched_to_its_manifesto_file_exactly_and_never_by_title(self):
+        r = run_hook("drift-reminder.sh", "you:\n  - decomplect\n")
+        self.assertEqual(r.stdout.strip(), "Active bindings: decomplect")
+
+    def test_a_manifesto_source_names_the_file_whatever_the_element_is_called(self):
+        r = run_hook("drift-reminder.sh", "you:\n  - name: fp\n    source: manifesto first-principles\n")
+        self.assertEqual(r.stdout.strip(), 'Active bindings: fp: "' + tagline_of(FIRST_PRINCIPLES) + '"')
+
+    def test_a_skill_or_a_file_element_prints_its_bare_name(self):
+        r = run_hook("drift-reminder.sh", "you:\n  - name: first-principles\n    source: skill a:b\n")
+        self.assertEqual(r.stdout.strip(), "Active bindings: first-principles")
+
     def test_happy_path_prints_tagline_from_bundled_file(self):
         r = run_hook("drift-reminder.sh", HAPPY)
         self.assertEqual(r.returncode, 0, r.stderr)

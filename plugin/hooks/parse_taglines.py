@@ -1,86 +1,49 @@
 #!/usr/bin/env python3
-"""Resolve taglines for YOU_STACK elements from the MANIFESTO_DIR manifesto files."""
+"""Print the active bindings: each YOU_STACK element, with the tagline of its registry manifesto when it has one."""
 
-import glob
 import json
 import os
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "unharness", "src", "unharness"))
-from config import parse_yaml
+from config import MANIFESTO_SOURCE, TEXT_ENCODING, UnharnessError, parse_yaml
+
+FRONTMATTER_FENCE = "---"
 
 
-def load_frontmatter(path):
-    """Return the YAML frontmatter dict from a markdown file, or None."""
+def tagline_of(path):
+    """Return the tagline in the frontmatter of the manifesto at path; empty when the file or the tagline is absent."""
     try:
-        with open(path) as f:
-            content = f.read()
-        if not content.startswith("---"):
-            return None
-        end = content.index("---", 3)
-        fm = parse_yaml(content[3:end])
-        return fm if isinstance(fm, dict) else None
-    except Exception:
-        return None
+        with open(path, encoding=TEXT_ENCODING) as manifesto:
+            content = manifesto.read()
+    except FileNotFoundError:
+        return ""
+    if not content.startswith(FRONTMATTER_FENCE + "\n"):
+        return ""
+    end = content.find("\n" + FRONTMATTER_FENCE, len(FRONTMATTER_FENCE))
+    frontmatter = parse_yaml(content[len(FRONTMATTER_FENCE) + 1:end]) if end != -1 else None
+    return frontmatter.get("tagline", "") if isinstance(frontmatter, dict) else ""
 
 
-def build_manifesto_lookup(manifesto_dir):
-    """Read all *.md files once; return list of (slug, title_lower, tagline)."""
-    manifestos_path = os.path.join(manifesto_dir, "manifestos")
-    if not os.path.isdir(manifestos_path):
-        return []
-
-    entries = []
-    for path in glob.glob(os.path.join(manifestos_path, "*.md")):
-        fm = load_frontmatter(path)
-        if fm is None:
-            continue
-        slug = os.path.splitext(os.path.basename(path))[0].lower().replace("-", " ")
-        title = fm.get("title", "").lower()
-        tagline = fm.get("tagline", "")
-        entries.append((slug, title, tagline))
-    return entries
-
-
-def find_tagline(name, entries):
-    """Return tagline string if found, empty string if found but no tagline, None if no match."""
-    name_lower = name.lower().replace("-", " ").replace("_", " ")
-    for slug, title, tagline in entries:
-        if name_lower in slug or slug in name_lower or name_lower in title:
-            return tagline  # may be empty string
-    return None
+def binding(element, manifesto_dir):
+    """Return the element's name, with its manifesto's tagline when the element is a registry manifesto that has one."""
+    name = element["name"]
+    if element["source_type"] not in (None, MANIFESTO_SOURCE):
+        return name
+    path = os.path.join(manifesto_dir, "manifestos", (element["reference"] or name) + ".md")
+    try:
+        tagline = tagline_of(path)
+    except UnharnessError as error:
+        print(f"unharness: {path}: {error}", file=sys.stderr)
+        return name
+    return f'{name}: "{tagline}"' if tagline else name
 
 
 def main():
-    stack_raw = os.environ.get("YOU_STACK", "")
-    if not stack_raw:
-        sys.exit(0)
-
-    try:
-        stack = json.loads(stack_raw)
-    except Exception:
-        sys.exit(0)
-
-    if not stack:
-        sys.exit(0)
-
-    manifesto_dir = os.environ.get("MANIFESTO_DIR", "")
-    entries = build_manifesto_lookup(manifesto_dir) if manifesto_dir else []
-
-    parts = []
-    for el in stack:
-        name = el.get("name", "")
-        if not name:
-            continue
-
-        result = find_tagline(name, entries)
-        if result:
-            parts.append(f'{name}: "{result}"')
-        else:
-            parts.append(name)
-
-    if parts:
-        print("Active bindings: " + " · ".join(parts))
+    stack = json.loads(os.environ.get("YOU_STACK") or "[]")
+    manifesto_dir = os.environ["MANIFESTO_DIR"]
+    if stack:
+        print("Active bindings: " + " · ".join(binding(element, manifesto_dir) for element in stack))
 
 
 if __name__ == "__main__":
