@@ -1,11 +1,14 @@
 """Read a project's .manifestos.yaml into a Config, with the YAML subset reader the file needs."""
 
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
 LIST_MARKER = "- "
 FILE_SOURCE = "file"
 YAML_NULLS = ("", "~", "null")
+QUOTED_SCALAR = re.compile(r"""^(["'])(.*?)\1(?:\s+#.*)?$""")
+TRAILING_COMMENT = re.compile(r"(?:^|\s+)#.*$")
 
 
 class UnharnessError(Exception):
@@ -76,11 +79,11 @@ def _indent(line: str) -> int:
 
 def _scalar(text: str) -> str | None:
     text = text.strip()
-    if text in YAML_NULLS:
-        return None
-    if len(text) >= 2 and text[0] == text[-1] and text[0] in "\"'":
-        return text[1:-1]
-    return text
+    quoted = QUOTED_SCALAR.match(text)
+    if quoted:
+        return quoted.group(2)
+    text = TRAILING_COMMENT.sub("", text)
+    return None if text in YAML_NULLS else text
 
 
 def _parse_block(lines: list[str], i: int, indent: int):
@@ -112,8 +115,9 @@ def _parse_mapping(lines: list[str], i: int, indent: int):
     while i < len(lines) and _indent(lines[i]) == indent and not lines[i].lstrip().startswith(LIST_MARKER):
         key, _, rest = lines[i].lstrip().partition(":")
         key = _scalar(key)
-        if rest.strip():
-            result[key] = _scalar(rest)
+        value = _scalar(rest)
+        if value is not None:
+            result[key] = value
             i += 1
         elif i + 1 < len(lines) and _indent(lines[i + 1]) > indent:
             result[key], i = _parse_block(lines, i + 1, _indent(lines[i + 1]))

@@ -71,3 +71,13 @@ def test_an_element_with_no_name_and_no_file_source_stops_the_load(tmp_path):
 
     with pytest.raises(UnharnessError, match=r"element 1 of you has no name"):
         load(path)
+
+
+def test_trailing_comments_are_not_part_of_a_value(tmp_path):
+    config = load(write_config(tmp_path, (
+        "manifesto_dir: /plugins/manifesto  # the registry\n"
+        "you:  # the stack\n  - name: \"dry\" # knowledge\n    purpose: 'one home' # why\n    source: skill a:b # where\n"
+    )))
+
+    assert config.manifesto_dir == "/plugins/manifesto"
+    assert config.you == [Element("dry", "one home", "skill a:b")]
