@@ -6,6 +6,7 @@ import sys
 from hashlib import sha256
 from pathlib import Path
 
+import pytest
 from helpers import write
 
 PROMPT = "You are bound.\n"
@@ -83,3 +84,13 @@ def test_a_launcher_not_on_the_path_runs_through_the_shell_with_the_quoted_comma
     assert flag == "-ic"
     assert shlex.split(command)[:3] == ["claude@meta", "--model", "opus"]
     assert shlex.split(command)[3:5] == ["--system-prompt-file", str(cached(tmp_path))]
+
+
+@pytest.mark.skipif(not Path("/bin/bash").exists(), reason="needs /bin/bash")
+def test_a_shell_function_defined_in_the_interactive_rc_file_is_the_launcher(tmp_path):
+    write(tmp_path / "home" / ".bashrc", f'claude@meta() {{ printf "%s\\n" "$@" > {tmp_path}/function-argv; return 9; }}\n')
+
+    run = run_launch(tmp_path, PROMPT, "--", "claude@meta", "--model", "opus", SHELL="/bin/bash", HOME=str(tmp_path / "home"))
+
+    assert run.returncode == 9
+    assert (tmp_path / "function-argv").read_text().splitlines()[:3] == ["--model", "opus", "--system-prompt-file"]
