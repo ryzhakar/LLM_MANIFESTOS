@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 from unharness.config import UnharnessError
-from unharness.launch import Options, launch, reopen_terminal, terminal_device
+from unharness.launch import Options, cache_home, launch, reopen_terminal, terminal_device
 
 DEFAULT_ENVIRONMENT = [
     "CLAUDE_CODE_ATTRIBUTION_HEADER=0",
@@ -178,3 +178,9 @@ def test_the_device_is_dev_tty_when_neither_output_is_a_terminal(pseudo_terminal
     _, pipe = pseudo_terminal
 
     assert terminal_device((pipe, pipe)) == "/dev/tty"
+
+
+def test_the_cache_is_dot_cache_in_home_unless_xdg_cache_home_is_set_and_not_empty(tmp_path):
+    assert cache_home({}, tmp_path) == tmp_path / ".cache"
+    assert cache_home({"XDG_CACHE_HOME": ""}, tmp_path) == tmp_path / ".cache"
+    assert cache_home({"XDG_CACHE_HOME": "/elsewhere"}, tmp_path) == Path("/elsewhere")
