@@ -6,6 +6,8 @@ from pathlib import Path
 
 LIST_MARKER = "- "
 FILE_SOURCE = "file"
+CLAUDE_MD = "CLAUDE.md"
+ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)", re.M | re.S)
 YAML_NULLS = ("", "~", "null")
 QUOTED_SCALAR = re.compile(r"""^(["'])(.*?)\1(?:\s+#.*)?$""")
 TRAILING_COMMENT = re.compile(r"(?:^|\s+)#.*$")
@@ -32,21 +34,34 @@ class Config:
 
 def load(path: Path) -> Config:
     """Read the config file at path into a Config."""
-    root = _parse_yaml(path.read_text())
+    root = _parse_yaml(_config_text(path))
     if isinstance(root, list):
         root = {"you": root}
     root = root or {}
+    roles = root.get("subagents") or {}
+    if not isinstance(roles, dict):
+        raise UnharnessError("subagents must be a mapping of role to list of elements")
     return Config(
         you=_elements(root.get("you") or [], "you"),
-        subagents={
-            role: _elements(items or [], f"subagents.{role}") for role, items in (root.get("subagents") or {}).items()
-        },
+        subagents={role: _elements(items or [], f"subagents.{role}") for role, items in roles.items()},
         manifesto_dir=root.get("manifesto_dir") or "",
         directory=path.parent,
     )
 
 
+def _config_text(path: Path) -> str:
+    if path.is_file():
+        return path.read_text()
+    claude_md = path.parent / CLAUDE_MD
+    section = ACTIVE_MANIFESTOS_SECTION.search(claude_md.read_text()) if claude_md.is_file() else None
+    if not section:
+        raise UnharnessError(f"no config: tried {path} and the Active Manifestos section of {claude_md}")
+    return section.group(1)
+
+
 def _elements(items: list, list_label: str) -> list[Element]:
+    if not isinstance(items, list):
+        raise UnharnessError(f"{list_label} must be a list of elements")
     present = [item for item in items if item is not None]
     return [_element(item, f"element {number} of {list_label}") for number, item in enumerate(present, 1)]
 

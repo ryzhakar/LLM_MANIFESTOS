@@ -81,3 +81,32 @@ def test_trailing_comments_are_not_part_of_a_value(tmp_path):
 
     assert config.manifesto_dir == "/plugins/manifesto"
     assert config.you == [Element("dry", "one home", "skill a:b")]
+
+
+def test_a_config_that_is_not_a_list_of_elements_stops_the_load(tmp_path):
+    with pytest.raises(UnharnessError, match=r"you must be a list"):
+        load(write_config(tmp_path, "you: [dry, kiss]\n"))
+    with pytest.raises(UnharnessError, match=r"subagents.other must be a list"):
+        load(write_config(tmp_path, "subagents:\n  other: dry\n"))
+    with pytest.raises(UnharnessError, match=r"subagents must be a mapping of role to list"):
+        load(write_config(tmp_path, "subagents: dry\n"))
+
+
+def test_a_colon_in_a_bare_item_stops_the_load_instead_of_dropping_the_element(tmp_path):
+    with pytest.raises(UnharnessError, match=r"element 1 of you has no name"):
+        load(write_config(tmp_path, "you:\n  - agent-conduct:write-well\n"))
+
+
+def test_without_a_config_file_the_active_manifestos_section_of_claude_md_is_the_config(tmp_path):
+    (tmp_path / "CLAUDE.md").write_text("# Notes\n\n## Active Manifestos\n- dry\n- kiss\n\n## Other\n- yagni\n")
+
+    assert [element.name for element in load(tmp_path / ".manifestos.yaml").you] == ["dry", "kiss"]
+
+
+def test_a_missing_config_names_every_place_it_looked(tmp_path):
+    with pytest.raises(UnharnessError) as failure:
+        load(tmp_path / ".manifestos.yaml")
+
+    assert str(failure.value) == (
+        f"no config: tried {tmp_path / '.manifestos.yaml'} and the Active Manifestos section of {tmp_path / 'CLAUDE.md'}"
+    )
