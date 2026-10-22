@@ -93,6 +93,14 @@ class ConfigProblems(unittest.TestCase):
             self.assertEqual((r.returncode, r.stdout), (0, ""), script)
             self.assertEqual(r.stderr, "unharness: you must be a list of elements\n", script)
 
+    def test_a_legacy_source_is_refused_in_one_line_in_every_hook(self):
+        for source in ("https://example.com/x.md", "./a.md", "some hint"):
+            for script in ALL_HOOKS:
+                r = run_hook(script, "you:\n  - name: x\n    source: " + source + "\n", stdin=json.dumps({"agent_type": "worker"}))
+                self.assertEqual((r.returncode, r.stdout), (0, ""), script)
+                self.assertEqual(len(r.stderr.splitlines()), 1, script)
+                self.assertIn("write a path as file <path>", r.stderr, script)
+
     def test_a_missing_config_stays_silent_in_every_hook(self):
         for script in ALL_HOOKS:
             r = run_hook(script, None, stdin=json.dumps({"agent_type": "worker"}))
