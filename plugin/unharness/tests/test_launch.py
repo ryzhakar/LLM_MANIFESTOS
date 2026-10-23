@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 from unharness.config import UnharnessError
-from unharness.launch import Options, cache_home, launch, reopen_terminal, terminal_device
+from unharness.launch import Options, cache_home, launch, reopen_terminal, terminal_device, version_output
 from unharness.switches import parse_switches, shipped_switches
 
 DEFAULT_ENVIRONMENT = [
@@ -39,8 +39,15 @@ COMMAND_OF_3_6_1 = (
 )
 
 
+TESTED_VERSION = "2.1.309"
+
+
 def never(*_):
     raise AssertionError("nothing may run")
+
+
+def at_tested(*_) -> str:
+    return f"{TESTED_VERSION} (Claude Code)\n"
 
 
 def cached_prompt(cache_home: Path, prompt: str = PROMPT) -> Path:
@@ -48,7 +55,7 @@ def cached_prompt(cache_home: Path, prompt: str = PROMPT) -> Path:
 
 
 def printed_command(options: Options, cache_home: Path, capsys) -> list[str]:
-    assert launch(PROMPT, options, shipped_switches(), {}, cache_home, TERMINAL, never, never) == 0
+    assert launch(PROMPT, options, shipped_switches(), {}, cache_home, TERMINAL, never, never, at_tested) == 0
     line = capsys.readouterr().out
     assert line.endswith(f" <{TERMINAL}\n") and line.count("\n") == 1
     return shlex.split(line.removesuffix(f" <{TERMINAL}\n"))
@@ -68,7 +75,7 @@ def test_without_a_launcher_it_prints_the_command_for_claude_and_runs_nothing(tm
 def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tmp_path):
     previous_umask = os.umask(0)
     try:
-        launch(PROMPT, Options(False, False, False, []), shipped_switches(), {}, tmp_path, TERMINAL, never, never)
+        launch(PROMPT, Options(False, False, False, []), shipped_switches(), {}, tmp_path, TERMINAL, never, never, at_tested)
     finally:
         os.umask(previous_umask)
 
@@ -80,7 +87,7 @@ def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tm
 
 def test_an_empty_prompt_stops_before_anything_is_written(tmp_path):
     with pytest.raises(UnharnessError, match="^the prompt is empty$"):
-        launch(" \n", Options(False, False, False, []), shipped_switches(), {}, tmp_path, TERMINAL, never, never)
+        launch(" \n", Options(False, False, False, []), shipped_switches(), {}, tmp_path, TERMINAL, never, never, at_tested)
 
     assert list(tmp_path.iterdir()) == []
 
@@ -123,6 +130,7 @@ def test_with_a_launcher_it_reopens_stdin_then_executes_the_launcher_with_the_st
         PROMPT, Options(False, False, False, ["fake", "extra"]), shipped_switches(), {"KEPT": "yes"}, tmp_path, TERMINAL,
         lambda device: calls.append(("reopen", device)),
         lambda argv, env: calls.append((argv, env)) or 7,
+        at_tested,
     )
 
     assert status == 7
@@ -202,7 +210,7 @@ def test_the_cache_is_dot_cache_in_home_unless_xdg_cache_home_is_set_and_not_emp
     (Options(False, False, True, []), ',"disableAllHooks":true'),
 ])
 def test_the_printed_command_equals_the_one_3_6_1_printed(options, hooks, tmp_path, capsys):
-    assert launch(PROMPT, options, shipped_switches(), {}, tmp_path, TERMINAL, never, never) == 0
+    assert launch(PROMPT, options, shipped_switches(), {}, tmp_path, TERMINAL, never, never, at_tested) == 0
 
     expected = COMMAND_OF_3_6_1.format(prompt_file=cached_prompt(tmp_path), hooks=hooks, terminal=TERMINAL)
     assert capsys.readouterr().out == expected
@@ -217,7 +225,7 @@ def entry(**overrides) -> dict:
 
 
 def printed_command_of(entries: list[dict], options: Options, tmp_path, capsys) -> list[str]:
-    launch(PROMPT, options, parse_switches(json.dumps(entries)), {}, tmp_path, TERMINAL, never, never)
+    launch(PROMPT, options, parse_switches(json.dumps(entries)), {}, tmp_path, TERMINAL, never, never, at_tested)
     return shlex.split(capsys.readouterr().out.removesuffix(f" <{TERMINAL}\n"))
 
 
@@ -265,3 +273,132 @@ def test_launch_passes_only_the_entries_verified_at_the_newest_registry_version(
     ], Options(False, False, False, []), tmp_path, capsys)
 
     assert command[1:-3] == ["CURRENT=1", "UNHARNESS=1"]
+
+
+REGISTRY_ENTRIES = [
+    entry(name="OLDEST", verified=["2.1.300"]),
+    entry(name="MIDDLE", removes="Two", verified=["2.1.300", "2.1.309"]),
+    entry(name="NEWEST", removes="Three", verified=["2.1.309", "2.1.320"]),
+]
+NO_VERSION_NOTE = "unharness: {launcher} --version printed no version; using switches verified at {newest}\n"
+UNKNOWN_VERSION_NOTE = "unharness: claude {detected} is not in the switch registry; using switches verified at {chosen}\n"
+
+
+def reported(output: str):
+    return lambda argv, environ: output
+
+
+def passed_and_noted(version_of, tmp_path, capsys, options=Options(False, False, False, ["fakeclaude"])) -> tuple[list[str], str]:
+    """Return the variables launch passes from REGISTRY_ENTRIES, and what it wrote on stderr."""
+    environments = []
+    launch(PROMPT, options, parse_switches(json.dumps(REGISTRY_ENTRIES)), {}, tmp_path, TERMINAL, lambda device: None,
+           lambda argv, env: environments.append(env) or 0, version_of)
+    passed = [f"{name}={value}" for name, value in environments[0].items() if name != "UNHARNESS"]
+    return passed, capsys.readouterr().err
+
+
+def test_the_version_is_asked_of_the_launcher_launch_runs(tmp_path):
+    asked = []
+
+    launch(PROMPT, Options(False, False, False, ["claude@meta", "--model", "opus"]), shipped_switches(), {"KEPT": "yes"},
+           tmp_path, TERMINAL, lambda device: None, lambda argv, env: 0,
+           lambda argv, environ: asked.append((argv, environ)) or at_tested())
+
+    assert asked == [(["claude@meta", "--model", "opus", "--version"], {"KEPT": "yes"})]
+
+
+def test_without_a_launcher_the_version_is_asked_of_claude(tmp_path):
+    asked = []
+
+    launch(PROMPT, Options(False, False, False, []), shipped_switches(), {}, tmp_path, TERMINAL, never, never,
+           lambda argv, environ: asked.append(argv) or at_tested())
+
+    assert asked == [["claude", "--version"]]
+
+
+def test_a_version_on_a_later_line_is_the_one_taken(tmp_path, capsys):
+    passed, noted = passed_and_noted(reported("shell banner\n2.1.309 (Claude Code)\n3.0.0\n"), tmp_path, capsys)
+
+    assert (passed, noted) == (["MIDDLE=1", "NEWEST=1"], "")
+
+
+@pytest.mark.parametrize("output", ["", "no digits here\n", "v2.1.309\n"])
+def test_a_launcher_that_prints_no_version_gets_the_newest_registry_version_and_a_note(tmp_path, capsys, output):
+    passed, noted = passed_and_noted(reported(output), tmp_path, capsys, Options(False, False, False, ["fakeclaude", "--flag"]))
+
+    assert passed == ["NEWEST=1"]
+    assert noted == NO_VERSION_NOTE.format(launcher="fakeclaude --flag", newest="2.1.320")
+
+
+def test_without_a_launcher_the_note_names_claude(tmp_path, capsys):
+    launch(PROMPT, Options(False, False, False, []), parse_switches(json.dumps(REGISTRY_ENTRIES)), {}, tmp_path, TERMINAL,
+           never, never, reported(""))
+    noted = capsys.readouterr().err
+
+    assert noted == NO_VERSION_NOTE.format(launcher="claude", newest="2.1.320")
+
+
+def test_claude_version_replaces_the_run_and_the_note(tmp_path, capsys):
+    passed, noted = passed_and_noted(never, tmp_path, capsys, Options(False, False, False, ["claude@meta"], "2.1.300"))
+
+    assert (passed, noted) == (["OLDEST=1", "MIDDLE=1"], "")
+
+
+@pytest.mark.parametrize("value", ["2.1", "v2.1.309", "2.1.309 ", "2.1.309-beta", ""])
+def test_a_claude_version_that_is_not_x_y_z_stops_launch_before_anything_is_written(tmp_path, value):
+    with pytest.raises(UnharnessError, match=f"^--claude-version takes X.Y.Z, got {value}$"):
+        launch(PROMPT, Options(False, False, False, [], value), shipped_switches(), {}, tmp_path, TERMINAL, never, never, never)
+
+    assert list(tmp_path.iterdir()) == []
+
+
+@pytest.mark.parametrize(("detected", "passed", "chosen"), [
+    ("2.1.300", ["OLDEST=1", "MIDDLE=1"], None),
+    ("2.1.309", ["MIDDLE=1", "NEWEST=1"], None),
+    ("2.1.320", ["NEWEST=1"], None),
+    ("2.1.312", ["MIDDLE=1", "NEWEST=1"], "2.1.309"),
+    ("2.1.400", ["NEWEST=1"], "2.1.320"),
+    ("2.1.299", ["OLDEST=1", "MIDDLE=1"], "2.1.300"),
+    ("1.0.0", ["OLDEST=1", "MIDDLE=1"], "2.1.300"),
+    ("2.1.1000", ["NEWEST=1"], "2.1.320"),
+    ("2.1.99", ["OLDEST=1", "MIDDLE=1"], "2.1.300"),
+])
+def test_launch_chooses_the_exact_version_else_the_nearest_lower_else_the_oldest_and_says_so(tmp_path, capsys, detected, passed, chosen):
+    passed_by_launch, noted = passed_and_noted(reported(f"{detected} (Claude Code)\n"), tmp_path, capsys)
+
+    assert passed_by_launch == passed
+    assert noted == ("" if chosen is None else UNKNOWN_VERSION_NOTE.format(detected=detected, chosen=chosen))
+
+
+def test_a_program_on_the_path_is_run_directly_and_its_stdout_comes_back(tmp_path):
+    program = stub_program(tmp_path, "stub", 'echo "$@"')
+
+    assert version_output([program.name, "--version"], {"PATH": str(tmp_path)}) == "--version\n"
+
+
+def test_a_program_off_the_path_is_run_through_the_shell_named_by_shell(tmp_path):
+    shell = stub_program(tmp_path, "shell", 'echo "$1 | $2"')
+
+    assert version_output(["claude@meta", "--version"], {"PATH": "", "SHELL": str(shell)}) == "-ic | claude@meta --version\n"
+
+
+def test_a_program_that_cannot_start_gives_empty_output(tmp_path):
+    broken = tmp_path / "broken"
+    broken.write_text("#!/nonexistent/interpreter\n")
+    broken.chmod(0o755)
+
+    assert version_output([broken.name, "--version"], {"PATH": str(tmp_path)}) == ""
+
+
+def test_a_program_that_outlasts_the_timeout_gives_empty_output(tmp_path, monkeypatch):
+    stub_program(tmp_path, "slow", "exec sleep 5")
+    monkeypatch.setattr("unharness.launch.VERSION_TIMEOUT_SECONDS", 0.2)
+
+    assert version_output(["slow"], {"PATH": str(tmp_path)}) == ""
+
+
+def stub_program(folder: Path, name: str, body: str) -> Path:
+    path = folder / name
+    path.write_text(f"#!/bin/sh\n{body}\n")
+    path.chmod(0o755)
+    return path

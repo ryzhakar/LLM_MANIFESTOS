@@ -5,6 +5,7 @@ import os
 import shlex
 import shutil
 import subprocess
+import sys
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from hashlib import sha256
@@ -12,7 +13,7 @@ from pathlib import Path
 from typing import IO
 
 from unharness.config import TEXT_ENCODING, UnharnessError
-from unharness.switches import Switch, version_key
+from unharness.switches import Switch, choose_version, newest_version, parse_version, require_version
 
 CACHE_FOLDER = "unharness"
 CACHE_VARIABLE = "XDG_CACHE_HOME"
@@ -26,6 +27,9 @@ OUTPUT_DESCRIPTORS = (1, 2)
 STAND_DOWN_MARKER = {"UNHARNESS": "1"}
 SYSTEM_PROMPT_FLAG = "--system-prompt-file"
 SETTINGS_FLAG = "--settings"
+VERSION_FLAG = "--version"
+VERSION_TIMEOUT_SECONDS = 10
+INTERACTIVE_COMMAND_FLAG = "-ic"
 OPTION_ATTRIBUTES = {"--keep-claude-md": "keep_claude_md", "--keep-web-search": "keep_web_search", "--no-hooks": "no_hooks"}
 
 
@@ -35,6 +39,7 @@ class Options:
     keep_web_search: bool
     no_hooks: bool
     launcher: list[str]
+    claude_version: str | None = None
 
 
 def launch(
@@ -46,12 +51,14 @@ def launch(
     terminal: str,
     reopen_stdin: Callable[[str], None],
     execute: Callable[[list[str], dict[str, str]], int],
+    version_of: Callable[[list[str], Mapping[str, str]], str],
 ) -> int:
     """Cache the prompt, then print the launch command, or run the launcher and return its status."""
     if not prompt.strip():
         raise UnharnessError("the prompt is empty")
+    chosen = _chosen_version(switches, options, environ, version_of)
     prompt_file = _write_prompt(prompt, cache_home)
-    passed = _passed_switches(switches, options)
+    passed = _passed_switches(switches, options, chosen)
     variables = _strip_environment(passed)
     arguments = _strip_arguments(prompt_file, passed)
     assignments = [f"{name}={value}" for name, value in variables.items()]
@@ -69,9 +76,22 @@ def cache_home(environ: Mapping[str, str], home: Path) -> Path:
 
 def execute_launcher(argv: list[str], env: dict[str, str]) -> int:
     """Replace this process with the launcher when it is on PATH; else run it through the interactive shell."""
-    if shutil.which(argv[0], path=env.get("PATH")):
+    if _on_path(argv[0], env):
         os.execvpe(argv[0], argv, env)
-    return subprocess.run([env.get("SHELL", DEFAULT_SHELL), "-ic", shlex.join(argv)], env=env).returncode
+    return subprocess.run(_through_shell(argv, env), env=env).returncode
+
+
+def version_output(argv: list[str], environ: Mapping[str, str]) -> str:
+    """Run argv as launch runs a launcher and return its stdout, empty when it cannot run or outlasts ten seconds."""
+    command = argv if _on_path(argv[0], environ) else _through_shell(argv, environ)
+    try:
+        run = subprocess.run(
+            command, env=dict(environ), stdin=subprocess.DEVNULL, capture_output=True, text=True, errors="replace",
+            timeout=VERSION_TIMEOUT_SECONDS,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    return run.stdout
 
 
 def terminal_device(descriptors: tuple[int, ...] = OUTPUT_DESCRIPTORS) -> str:
@@ -100,10 +120,36 @@ def reopen_terminal(
         pass
 
 
-def _passed_switches(switches: Sequence[Switch], options: Options) -> list[Switch]:
-    """Return the switches verified at the newest registry version whose default, inverted by its given option, is true."""
-    newest = max((version for switch in switches for version in switch.verified), key=version_key, default=None)
-    return [switch for switch in switches if newest in switch.verified and switch.default != _option_given(switch, options)]
+def _on_path(program: str, environ: Mapping[str, str]) -> bool:
+    return bool(shutil.which(program, path=environ.get("PATH")))
+
+
+def _through_shell(argv: list[str], environ: Mapping[str, str]) -> list[str]:
+    return [environ.get("SHELL", DEFAULT_SHELL), INTERACTIVE_COMMAND_FLAG, shlex.join(argv)]
+
+
+def _chosen_version(
+    switches: Sequence[Switch], options: Options, environ: Mapping[str, str], version_of: Callable[[list[str], Mapping[str, str]], str],
+) -> str:
+    """Return the registry version whose switches launch passes, writing a note on stderr when it is not the version in use."""
+    newest = newest_version(switches)
+    launcher = options.launcher or [DEFAULT_LAUNCHER]
+    if options.claude_version is not None:
+        detected = require_version(options.claude_version)
+    else:
+        detected = parse_version(version_of([*launcher, VERSION_FLAG], environ))
+    if detected is None:
+        print(f"unharness: {shlex.join(launcher)} {VERSION_FLAG} printed no version; using switches verified at {newest}", file=sys.stderr)
+        return newest
+    chosen = choose_version(switches, detected)
+    if chosen != detected:
+        print(f"unharness: claude {detected} is not in the switch registry; using switches verified at {chosen}", file=sys.stderr)
+    return chosen
+
+
+def _passed_switches(switches: Sequence[Switch], options: Options, chosen: str) -> list[Switch]:
+    """Return the switches verified at the chosen version whose default, inverted by its given option, is true."""
+    return [switch for switch in switches if chosen in switch.verified and switch.default != _option_given(switch, options)]
 
 
 def _option_given(switch: Switch, options: Options) -> bool:

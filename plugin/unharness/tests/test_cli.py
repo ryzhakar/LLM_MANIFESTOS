@@ -116,7 +116,7 @@ def test_the_cached_prompt_is_utf_8_whatever_the_locale(tmp_path):
         "from pathlib import Path\n"
         "from unharness.launch import Options, launch\n"
         "from unharness.switches import shipped_switches\n"
-        f"launch('Caf\\u00e9\\n', Options(False, False, False, []), shipped_switches(), {{}}, Path({str(tmp_path)!r}), '/dev/tty', None, None)\n"
+        f"launch('Caf\\u00e9\\n', Options(False, False, False, []), shipped_switches(), {{}}, Path({str(tmp_path)!r}), '/dev/tty', None, None, lambda *_: '2.1.309')\n"
     )
 
     run = subprocess.run([sys.executable, "-c", script], capture_output=True, env=C_LOCALE)
@@ -182,7 +182,7 @@ def test_the_full_mode_ignores_the_minified_files_even_when_they_are_stale_or_ab
     assert "Old." not in run.stdout and "Agree.\n" in run.stdout
 
 
-@pytest.mark.parametrize("arguments", [("stack",), ("prompt",), ("launch", "Be bound."), ("doctor",)])
+@pytest.mark.parametrize("arguments", [("stack",), ("prompt",), ("launch", "Be bound.", "--claude-version", "2.1.309"), ("doctor",)])
 def test_every_verb_exits_quietly_with_status_0_when_its_reader_closes_stdout(login, project, tmp_path, arguments):
     write_session_files(project, login)
     reader, writer = os.pipe()

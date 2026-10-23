@@ -16,6 +16,7 @@ KEYS = ("name", "kind", "value", "removes", "documented", "control", "verified",
 BOOLEAN_KEYS = ("documented", "control", "default")
 SHARED_ROW_KEYS = ("control", "default", "option")
 VERSION_PATTERN = re.compile(r"\d+\.\d+\.\d+")
+LINE_VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+", re.MULTILINE)
 TABLE_HEADER = "| Injected text | Switch | Default |"
 TABLE_RULE = "|---|---|---|"
 VERSIONS_PROBLEM = "must be a non-empty array of distinct X.Y.Z strings in ascending order"
@@ -65,6 +66,39 @@ def strip_table(switches: Sequence[Switch]) -> str:
 def version_key(version: str) -> tuple[int, ...]:
     """Return the version's numbers, so versions compare as numbers and not as text."""
     return tuple(int(part) for part in version.split("."))
+
+
+def registry_versions(switches: Sequence[Switch]) -> list[str]:
+    """Return every version some entry is verified at, oldest first, refusing a registry with no entry."""
+    versions = sorted({version for switch in switches for version in switch.verified}, key=version_key)
+    if not versions:
+        raise UnharnessError(f"{REGISTRY_FILE} holds no entry")
+    return versions
+
+
+def newest_version(switches: Sequence[Switch]) -> str:
+    """Return the newest version some entry is verified at."""
+    return registry_versions(switches)[-1]
+
+
+def choose_version(switches: Sequence[Switch], detected: str) -> str:
+    """Return the detected version when the registry holds it, else the newest below it, else the oldest."""
+    versions = registry_versions(switches)
+    below = [version for version in versions if version_key(version) <= version_key(detected)]
+    return below[-1] if below else versions[0]
+
+
+def parse_version(output: str) -> str | None:
+    """Return the first X.Y.Z that opens a line of the output, None when no line opens with one."""
+    found = LINE_VERSION_PATTERN.search(output)
+    return found.group() if found else None
+
+
+def require_version(value: str) -> str:
+    """Return the value when it is exactly X.Y.Z, else refuse as --claude-version does."""
+    if not VERSION_PATTERN.fullmatch(value):
+        raise UnharnessError(f"--claude-version takes X.Y.Z, got {value}")
+    return value
 
 
 def _switch(index: int, entry: Any) -> Switch:

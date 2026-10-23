@@ -9,7 +9,7 @@ from unharness.compile import FULL_FILES, MINIFIED_FILES, compile_prompt, stack_
 from unharness.config import EMPTY_STACK_MESSAGE, UnharnessError, fail, load
 from unharness.digests import DIGESTS_FLAG, OVERLAP_FLAG, STACK_DIGESTS_FLAG, constitution_blocks, digest_mode, stamp_digest
 from unharness.doctor import Modes, claude_version, doctor, has_failed
-from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, terminal_device
+from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, version_output, terminal_device
 from unharness.resolve import login_dir, manifesto_elements, manifesto_plugin_dir, resolve_stack
 from unharness.session import load_preamble, read_if_present
 from unharness.switches import shipped_switches, strip_table
@@ -21,6 +21,7 @@ STAMP_VERB = "stamp"
 LAUNCH_VERB = "launch"
 DOCTOR_VERB = "doctor"
 SWITCHES_VERB = "switches"
+CLAUDE_VERSION_FLAG = "--claude-version"
 MINIFIED_FLAG = "--minified"
 MODE_FLAGS = (DIGESTS_FLAG, STACK_DIGESTS_FLAG, OVERLAP_FLAG, MINIFIED_FLAG)
 LAUNCHER_SEPARATOR = "--"
@@ -61,6 +62,7 @@ def _run(argv: list[str]) -> int:
     launch_parser.add_argument("prompt", nargs="?")
     for flag in ("--keep-claude-md", "--keep-web-search", "--no-hooks"):
         launch_parser.add_argument(flag, action="store_true")
+    launch_parser.add_argument(CLAUDE_VERSION_FLAG)
     verbs.add_parser(SWITCHES_VERB)
     doctor_parser = verbs.add_parser(DOCTOR_VERB)
     doctor_parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -94,8 +96,8 @@ def _launch(arguments: argparse.Namespace, launcher: list[str]) -> int:
     if arguments.prompt is None and sys.stdin.isatty():
         raise UnharnessError("no prompt: pass PROMPT or pipe unharness prompt")
     prompt = arguments.prompt if arguments.prompt is not None else sys.stdin.read()
-    options = Options(arguments.keep_claude_md, arguments.keep_web_search, arguments.no_hooks, launcher)
-    return launch(prompt, options, shipped_switches(), os.environ, cache_home(os.environ, Path.home()), terminal_device(), reopen_terminal, execute_launcher)
+    options = Options(arguments.keep_claude_md, arguments.keep_web_search, arguments.no_hooks, launcher, arguments.claude_version)
+    return launch(prompt, options, shipped_switches(), os.environ, cache_home(os.environ, Path.home()), terminal_device(), reopen_terminal, execute_launcher, version_output)
 
 
 def _stamp(arguments: argparse.Namespace, login: Path) -> str:
