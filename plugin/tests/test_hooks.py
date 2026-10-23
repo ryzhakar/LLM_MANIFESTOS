@@ -115,22 +115,18 @@ class ConfigProblems(unittest.TestCase):
 
 
 class StandDownUnderUnharness(unittest.TestCase):
-    def test_session_start_and_post_compact_print_nothing_when_unharness_is_set(self):
-        for script in ("session-start.sh", "post-compact.sh"):
-            r = run_hook(script, HAPPY, UNHARNESS="1")
+    def test_every_hook_prints_nothing_when_unharness_is_set(self):
+        subagents = HAPPY + SUBAGENTS.format(name="first-principles")
+        for script in ALL_HOOKS:
+            r = run_hook(script, subagents, stdin=json.dumps({"agent_type": "worker"}), UNHARNESS="1")
             self.assertEqual((r.returncode, r.stdout, r.stderr), (0, "", ""), script)
 
-    def test_unharness_zero_leaves_them_running(self):
-        for script in ("session-start.sh", "post-compact.sh"):
-            r = run_hook(script, HAPPY, UNHARNESS="0")
+    def test_unharness_zero_leaves_every_hook_running(self):
+        subagents = HAPPY + SUBAGENTS.format(name="first-principles")
+        for script in ALL_HOOKS:
+            r = run_hook(script, subagents, stdin=json.dumps({"agent_type": "worker"}), UNHARNESS="0")
             self.assertIn("first-principles", r.stdout, script)
 
-    def test_drift_reminder_and_subagent_start_keep_running_when_unharness_is_set(self):
-        drift = run_hook("drift-reminder.sh", HAPPY, UNHARNESS="1")
-        self.assertIn("Active bindings: first-principles", drift.stdout)
-        subagent = run_hook("subagent-start.sh", SUBAGENTS.format(name="first-principles"),
-                            stdin=json.dumps({"agent_type": "worker"}), UNHARNESS="1")
-        self.assertIn("first-principles", json.loads(subagent.stdout)["hookSpecificOutput"]["additionalContext"])
 
 
 class PostCompact(unittest.TestCase):

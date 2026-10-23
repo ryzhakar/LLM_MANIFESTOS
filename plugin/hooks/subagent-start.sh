@@ -8,6 +8,10 @@ fi
 export PLUGINS_CACHE_DIR
 source "$SCRIPT_DIR/ensure-repo.sh"
 
+if unharness_stands_down; then
+    exit 0
+fi
+
 detect_manifestos
 
 # Gate: exit only when BOTH you: and subagents: are empty (AND logic)

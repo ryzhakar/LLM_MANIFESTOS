@@ -3,6 +3,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/ensure-repo.sh"
 
+if unharness_stands_down; then
+    exit 0
+fi
+
 detect_manifestos
 
 # Gate: no config → silent exit

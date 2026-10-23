@@ -131,7 +131,7 @@ OK prompt size: full 3541 words; shortest 818 words
 | WebSearch paragraph | `--disallowedTools WebSearch` | stripped; `--keep-web-search` keeps it |
 | Hook output | setting `disableAllHooks: true` under `--no-hooks` | kept |
 
-The four rows marked "set" are implemented per the Claude Code docs and the binary; no capture shows their text present or removed. Launch also sets `UNHARNESS=1`, so this plugin's session-start and post-compact hooks stand down because the compiled prompt already carries their binding; their tests cover this, and no capture shows it.
+The four rows marked "set" are implemented per the Claude Code docs and the binary; no capture shows their text present or removed. Launch also sets `UNHARNESS=1`, so every hook of this plugin, session-start, post-compact, subagent-start, and the per-prompt drift reminder, stands down; the compiled prompt already carries the binding. Their tests cover this, and no capture shows it.
 
 **What stays.** The harness adds each item below, and either no switch removes it or the only switch drops something kept on purpose. The evidence is in `orchestration_log/history/2026-10-23/verification-unharness.md`, with the captures d1-p-haiku and d1-p-opus (print mode), d1-tmux-haiku (interactive sessions), d1-flag-keepmd, d1-flag-nohooks, d1-flag-websearch, b2-full-haiku, and a3-c5.
 
