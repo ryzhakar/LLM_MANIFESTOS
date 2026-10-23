@@ -99,3 +99,4 @@
 - C5 has edited all five docs, commit pending. Reviews and e2e still running. Needed next, all in flight: C5 commit → D1 prose; D1 code, D1 spec, D3 → D2 fix pass → D4 release → ship.
 - Needs: C5 commit, D1 code report, D1 spec report, D3 record. All four already requested and running; no new request possible until one lands.
 - C5 committed (8378fd2). D1 prose review launched. Running: D1 code, D1 spec, D1 prose, D3 e2e.
+- D3 committed the local raise-the-bar digest on verify/digests (f7e7b20); its captures continue. Wait b07vgifwb watches for the three reports and the verification record.
