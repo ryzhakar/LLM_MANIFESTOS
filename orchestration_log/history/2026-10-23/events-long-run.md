@@ -82,3 +82,4 @@
 - Briefs written for D3 (e2e captures in digest modes) and D4 (release 3.6.0). C1 and C3 still uncommitted in their worktrees; both edit resolve.py and cli.py — integration will be C1 first, then C3 rebased.
 - C1 and C3 are mid-cycle (red tests present in both worktrees). Waiting.
 - C1 committed: 8281fab, 121 tests. C4 (b) resumed. C2 rebasing onto feat/digests (conflicts in cli.py/compile.py handed back to the C2 agent). C3 still in cycle; it rebases itself per its brief.
+- Three background waits set: C3 commit (feat/doctor), C4 index commit (feat/compile-digest), C2 rebase end (feat/minified). Next: fast-forward feat/digests with C2, rebase C3 and C4 onto it, fast-forward, launch C5 docs, then D1 reviews ×3, D3 e2e, fix pass, D4 release, ship.
