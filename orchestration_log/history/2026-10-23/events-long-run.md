@@ -96,3 +96,4 @@
 - Still waiting on C5, D1 ×2, D3. No launchable work: D1 prose waits on C5; D2 waits on all reviews and D3; D4 on D2.
 - C5 editing plugin/README.md; D3 at work in the verify worktree. Waiting.
 - Nothing new; turn ends empty until a notification.
+- C5 has edited all five docs, commit pending. Reviews and e2e still running. Needed next, all in flight: C5 commit → D1 prose; D1 code, D1 spec, D3 → D2 fix pass → D4 release → ship.
