@@ -154,3 +154,4 @@
 - R6 report in (recon/r6-report.md): README strip table now follows registry order and drops the "Default system prompt" row (that switch stays in launch.py by spec decision 1).
 - 3.7.1 shipped: main 550dba1, tags v3.7.1 + pypi-3.7.1, publish green; 289 tests; launch output at 2.1.309 identical to 3.6.1; fallback note verified by hand (`--claude-version 2.0.0`). R8 (sweep skill, repo-local) launched.
 - Sweep skill shipped as a repo commit (aec2b65, ff3426e; main ff3426e). Baseline 2.1.309: 858 undocumented env names; the 2.1.309 npm package is a wrapper, so the script byte-scans the platform binary. Candidates for capture recorded (queue 56); a registry flag error (queue 57).
+- 3.7.2 shipped: main 335fae6, tags v3.7.2 + pypi-3.7.2, publish green, 290 tests. Peer card departed, notice to proudhon sent. Span 3 closed; session closes at the owner's order.

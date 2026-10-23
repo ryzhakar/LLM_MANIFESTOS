@@ -1,6 +1,7 @@
 # Plan: unharness 3.6.0 — digests, minified session files, signatures, doctor
 
 Status: DONE 2026-10-23. Shipped as 3.6.0 (fb7e3ae, tag v3.6.0).
+Span 3 (3.6.1–3.7.2, PyPI, sweep skill): DONE 2026-10-23, main 335fae6; see summary-span3.md.
 Branch: session/long-run (product work on feat/digests worktree, rebased onto session/long-run, then main on completion; tag v3.6.0).
 
 Units (sonnet unless noted; records in history/2026-10-23/, reports in recon/2026-10-23/):

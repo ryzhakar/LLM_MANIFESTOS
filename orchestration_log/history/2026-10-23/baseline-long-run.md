@@ -10,3 +10,6 @@ Replaces baseline-manifesto-tone.md of 2026-10-22.
 
 ## After span 2 (digests), 2026-10-23
 main fb7e3ae + records 16ccf1d; tag v3.6.0; plugin 3.6.0; 190 tests; no worktrees, no feature branches, no wake. Open for the owner: queue 44 (digest word-cap drop rule), plugin update to 3.6.0 in the logins, PyPI publish. Summary: summary-digests.md.
+
+## After span 3, 2026-10-23
+main 335fae6 (+ this records commit); tags through v3.7.2 / pypi-3.7.2; PyPI 3.7.2; 290 tests; no worktrees, no branches but session/long-run, no wake, no agents; peer card departed. Open: queue 45, 48, 56.
