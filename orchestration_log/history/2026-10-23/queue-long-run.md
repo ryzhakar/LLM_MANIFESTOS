@@ -79,3 +79,8 @@ Solved (owner heard, no objection):
 45. Solved: under UNHARNESS=1 every hook stands down, subagent-start included, so subagents get no binding from the plugin; the owner rolls subagent binding through agentic-delegation (round 1 answer on subagents). Alternative: revert the subagent-start hunk of 9d36026 so subagents keep the hook binding. Supersedes 16.
 46. Owner (2026-10-23, present): the printed `launch` command keeps `claude` stamped in; own launchers go after `--`. Closed.
 47. Owner (2026-10-23, present): license MIT for the repo and the package. PyPI publish by the owner's token from the owner's shell.
+
+## Round 3 (2026-10-23, owner present) — next releases
+48. Answered: next unharness work = merge user `--settings`; stale-signature diff (`stack --diff`); small defects (BrokenPipe on `stack | head`, Block/Document merge) + a doctor WARN on an untested `claude` version. Each as its own patch/minor release. Subagent prompt form: not chosen.
+49. Word cap (was 44): the owner points at the compression rules that exist — the repo's write-digest skill (list every distinct demand, collapse restatements, one sentence per demand, boundaries folded in, Strunk, "every demand present or deliberately dropped"). Solved: port that method into the plugin's compile-digest skill (a plugin skill cannot reference a repo-local one); a drop stays the writer's deliberate act, named in the stamp commit. Alternative: a fixed drop order.
+50. Solved: release order 3.6.1 (defects + claude floor, patch), 3.7.0 (`--settings` merge), 3.8.0 (`stack --diff`); the compile-digest method port rides with 3.6.1 as a plugin change. Alternative: one 3.7.0.
