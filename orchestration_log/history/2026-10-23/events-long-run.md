@@ -87,3 +87,4 @@
 - C4 integrated: feat/digests at a954a64 (skill + index of 15 digests; 126 tests). Smoke in this repo: digest modes refuse because the config's manifesto_dir points at the main checkout (no index there) — D3 brief amended to use a config copy pointing at the worktree plugin and to compile a local raise-the-bar digest through the new skill. `stack` takes slugs, no mode flags (spec decision 5).
 - C3 still in cycle on feat/doctor (wip commit, uncommitted edits); background wait bkmnvrm6m watches for the squashed commit. Nothing else is launchable before it: C5 docs, D1 reviews, and D3 e2e all read the doctor verb.
 - C3 at 160 passed, 2 failing; close to done.
+- C3 suite green (162) in its worktree; awaiting its rebase and squash into one commit.
