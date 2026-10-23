@@ -7,19 +7,19 @@ Compile a project's manifesto stack into a Claude Code session's system prompt, 
 uvx unharness prompt | uvx unharness launch -- claude
 ```
 
-To run the source at the v3.6.1 tag instead, use `uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.6.1#subdirectory=plugin/unharness" unharness` in place of `uvx unharness`. The launcher's input is reopened on the terminal.
+To run the source at the v3.7.0 tag instead, use `uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.7.0#subdirectory=plugin/unharness" unharness` in place of `uvx unharness`. The launcher's input is reopened on the terminal.
 
-The strip table in the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.1/plugin/README.md) lists every switch launch passes, and `unharness switches` prints it.
+The strip table in the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.7.0/plugin/README.md) lists every switch launch passes, and `unharness switches` prints it.
 
 A `pypi-<version>` tag on a commit whose `pyproject.toml` carries that version publishes it to PyPI; `v<version>` tags release the plugin and do not publish.
 
-- `unharness prompt [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints the compiled prompt. `--digests` and `--stack-digests` swap manifesto texts for digests, `--overlap` lets stack digests share a manifesto, and `--minified` loads the min pair, the two `.min.md` session files; the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.1/plugin/README.md) states the cover rule.
+- `unharness prompt [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints the compiled prompt. `--digests` and `--stack-digests` swap manifesto texts for digests, `--overlap` lets stack digests share a manifesto, and `--minified` loads the min pair, the two `.min.md` session files; the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.7.0/plugin/README.md) states the cover rule.
 - `unharness stack [--config PATH] [SLUG ...]` prints the `<stack>` block and the constitution; given slugs, it prints those manifestos alone.
 - `unharness stamp DIGEST [--config PATH]` writes the digest's entry into its `index.json`, as in `unharness stamp .claude/digests/dry.md`.
 - `unharness doctor [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints one `OK`, `WARN`, or `FAIL` line per check and exits 1 on any FAIL.
 - `unharness switches` prints the strip table from the switch registry.
 - `unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [PROMPT] [-- LAUNCHER [ARGS...]]` caches the prompt and runs the launcher, or prints the command when none follows `--`.
 
-The config schema is in [`plugin/SCHEMA.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.1/plugin/SCHEMA.md). The strip table and the text that stays are in the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.1/plugin/README.md).
+The config schema is in [`plugin/SCHEMA.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.7.0/plugin/SCHEMA.md). The strip table and the text that stays are in the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.7.0/plugin/README.md).
 
 Test with `uv run --project plugin/unharness pytest -q` from the repository root.
