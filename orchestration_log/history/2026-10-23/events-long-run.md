@@ -94,3 +94,4 @@
 - Wave running: C5 docs, D1 code/spec reviews, D3 e2e. Nothing landed yet. Waiting on notifications; wake cron stands.
 - C5 has not yet edited docs; D3 has written its config copy. Waiting.
 - Still waiting on C5, D1 ×2, D3. No launchable work: D1 prose waits on C5; D2 waits on all reviews and D3; D4 on D2.
+- C5 editing plugin/README.md; D3 at work in the verify worktree. Waiting.
