@@ -8,6 +8,7 @@ from importlib.resources import files
 from typing import Any
 
 from unharness.config import TEXT_ENCODING, UnharnessError
+from unharness.resolve import version_key
 
 REGISTRY_FILE = "switches.json"
 KINDS = ("env", "flag", "settings")
@@ -61,11 +62,6 @@ def strip_table(switches: Sequence[Switch]) -> str:
     lines = [TABLE_HEADER, TABLE_RULE]
     lines += [f"| {removes} | {_switch_cell(row)} | {_default_cell(row[0])} |" for removes, row in rows.items()]
     return "\n".join(lines)
-
-
-def version_key(version: str) -> tuple[int, ...]:
-    """Return the version's numbers, so versions compare as numbers and not as text."""
-    return tuple(int(part) for part in version.split("."))
 
 
 def registry_versions(switches: Sequence[Switch]) -> list[str]:

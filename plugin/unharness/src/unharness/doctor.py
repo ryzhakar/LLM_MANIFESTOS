@@ -1,10 +1,9 @@
 """Check that a project's unharness setup will work, one Finding per check, without the network."""
 
 import json
-import re
 import shutil
 import subprocess
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
@@ -44,12 +43,10 @@ from unharness.resolve import (
     version_key,
 )
 from unharness.session import load_preamble, read_if_present
+from unharness.switches import Switch, choose_version, newest_version, parse_version, require_version
 
-TESTED_CLAUDE_RANGE = ("2.1.309", "2.1.309")
-RANGE_DASH = "\u2013"
 MINIMUM_MANIFESTO_VERSION = "3.6.0"
 INSTALLED_PLUGINS_FILE = Path("plugins") / "installed_plugins.json"
-VERSION_NUMBER = re.compile(r"\d+\.\d+\.\d+")
 VERSION_FLAG = "--version"
 VERSION_TIMEOUT_SECONDS = 10
 CLAUDE_BINARY = "claude"
@@ -86,10 +83,19 @@ class Modes:
 
 
 def doctor(
-    config_path: Path, modes: Modes, login: Path, environ: Mapping[str, str], version_of: Callable[[Path], str]
+    config_path: Path, modes: Modes, login: Path, environ: Mapping[str, str], version_of: Callable[[Path], str],
+    switches: Sequence[Switch], claude_version_override: str | None,
 ) -> list[Finding]:
-    """Return one Finding per check, in the order the spec lists them."""
-    host = [_claude_finding(environ, version_of), _uv_finding(environ), _manifesto_plugin_finding(login)]
+    """Return one Finding per check, in the order the spec lists them; the override replaces the detected claude version in the switch lines."""
+    override = None if claude_version_override is None else require_version(claude_version_override)
+    binary = _on_path(CLAUDE_BINARY, environ)
+    detected = None if binary is None else parse_version(version_of(binary))
+    host = [
+        _claude_finding(binary, detected, switches),
+        *_switch_findings(switches, override or detected),
+        _uv_finding(environ),
+        _manifesto_plugin_finding(login),
+    ]
     try:
         config = load(config_path)
     except UnharnessError as error:
@@ -216,19 +222,35 @@ def claude_version(binary: Path) -> str:
     return run.stdout
 
 
-def _claude_finding(environ: Mapping[str, str], version_of: Callable[[Path], str]) -> Finding:
-    """Find claude on PATH and compare its version with the tested range."""
-    binary = _on_path(CLAUDE_BINARY, environ)
+def _claude_finding(binary: Path | None, detected: str | None, switches: Sequence[Switch]) -> Finding:
+    """Report the claude on PATH and whether the switch registry holds its version."""
     if binary is None:
         return Finding(Status.WARN, CLAUDE_BINARY, "not on PATH; a shell function can still launch it")
-    lowest, highest = TESTED_CLAUDE_RANGE
-    tested = f"{lowest}{RANGE_DASH}{highest}"
-    found = VERSION_NUMBER.search(version_of(binary))
-    if found is None:
-        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} printed no version, tested range {tested}")
-    if not version_key(lowest) <= version_key(found.group()) <= version_key(highest):
-        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} {found.group()}, outside the tested range {tested}")
-    return Finding(Status.OK, CLAUDE_BINARY, f"{binary} {found.group()}")
+    if detected is None:
+        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} printed no version")
+    chosen = choose_version(switches, detected)
+    if chosen != detected:
+        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} {detected}, not in the switch registry; launch uses switches verified at {chosen}")
+    return Finding(Status.OK, CLAUDE_BINARY, f"{binary} {detected}")
+
+
+def _switch_findings(switches: Sequence[Switch], version: str | None) -> list[Finding]:
+    """Report the registry, then each switch against the version launch would choose for the version in use, None when unknown."""
+    newest = newest_version(switches)
+    chosen = newest if version is None else choose_version(switches, version)
+    registry = Finding(Status.OK, "switch registry", f"newest {newest}; {len(switches)} switches")
+    return [registry, *(_switch_finding(switch, chosen, version) for switch in switches)]
+
+
+def _switch_finding(switch: Switch, chosen: str, version: str | None) -> Finding:
+    name = f"switch {switch.kind} {switch.name}"
+    if chosen not in switch.verified:
+        return Finding(Status.WARN, name, f"left out; last verified at {switch.verified[-1]}")
+    if version is None:
+        return Finding(Status.WARN, name, f"verified at {chosen}, claude version unknown")
+    if chosen != version:
+        return Finding(Status.WARN, name, f"verified at {chosen}, not at {version}")
+    return Finding(Status.OK, name, f"verified at {chosen}")
 
 
 def _uv_finding(environ: Mapping[str, str]) -> Finding:

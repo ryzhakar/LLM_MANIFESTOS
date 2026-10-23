@@ -66,6 +66,7 @@ def _run(argv: list[str]) -> int:
     verbs.add_parser(SWITCHES_VERB)
     doctor_parser = verbs.add_parser(DOCTOR_VERB)
     doctor_parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    doctor_parser.add_argument(CLAUDE_VERSION_FLAG)
     for flag in MODE_FLAGS:
         doctor_parser.add_argument(flag, action="store_true")
     arguments = parser.parse_args(argv)
@@ -107,7 +108,7 @@ def _stamp(arguments: argparse.Namespace, login: Path) -> str:
 
 def _doctor(arguments: argparse.Namespace) -> int:
     modes = Modes(arguments.digests, arguments.stack_digests, arguments.overlap, arguments.minified)
-    findings = doctor(arguments.config, modes, login_dir(os.environ, Path.home()), os.environ, claude_version)
+    findings = doctor(arguments.config, modes, login_dir(os.environ, Path.home()), os.environ, claude_version, shipped_switches(), arguments.claude_version)
     print("\n".join(finding.line for finding in findings))
     return 1 if has_failed(findings) else 0
 

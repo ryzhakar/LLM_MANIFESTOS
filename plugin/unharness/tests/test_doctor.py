@@ -10,11 +10,13 @@ from unharness.cli import main
 from unharness.compile import stack_block
 from unharness.config import load
 from unharness.resolve import resolve_stack
+from unharness.switches import parse_switches, shipped_switches
 
 TESTED_CLAUDE = "2.1.309"
 STUB_VERSION = '#!/bin/sh\necho "{version} (Claude Code)"\n'
 STUB_SILENT = "#!/bin/sh\nexit 0\n"
 CACHE = Path("plugins") / "cache" / "marketplace"
+SWITCH_NAMES = [f"switch {switch.kind} {switch.name}" for switch in shipped_switches()]
 
 
 def install_stub(folder: Path, name: str, body: str) -> Path:
@@ -51,11 +53,13 @@ def test_a_missing_config_fails_and_leaves_only_the_three_checks_that_need_no_co
     status, lines = doctor(capsys, "--config", str(host / "project" / ".manifestos.yaml"))
 
     assert status == 1
-    assert [line.split(":")[0] for line in lines] == ["FAIL config", "OK claude", "OK uv", "OK manifesto plugin"]
+    assert [line.split(":")[0] for line in lines] == [
+        "FAIL config", "OK claude", "OK switch registry", *(f"OK {name}" for name in SWITCH_NAMES), "OK uv", "OK manifesto plugin",
+    ]
     assert lines[0].startswith(f"FAIL config: no config: tried {host / 'project' / '.manifestos.yaml'}")
     assert lines[1] == f"OK claude: {host / 'bin' / 'claude'} {TESTED_CLAUDE}"
-    assert lines[2] == f"OK uv: {host / 'bin' / 'uv'} {host / 'bin' / 'uvx'}"
-    assert lines[3] == "OK manifesto plugin: 3.6.0"
+    assert lines[-2] == f"OK uv: {host / 'bin' / 'uv'} {host / 'bin' / 'uvx'}"
+    assert lines[-1] == "OK manifesto plugin: 3.6.0"
 
 
 @pytest.fixture
@@ -67,23 +71,15 @@ def finding(lines: list[str], name: str) -> str:
     return next(line for line in lines if line.startswith(f"{name}: ", line.index(" ") + 1))
 
 
-@pytest.mark.parametrize("version", ["2.1.308", "2.1.312"])
-def test_a_claude_version_outside_the_tested_range_warns_with_the_range(host, missing_config, capsys, version):
+@pytest.mark.parametrize(("version", "chosen"), [("2.1.308", "2.1.309"), ("2.1.312", "2.1.309"), ("2.2.0", "2.1.309")])
+def test_a_claude_version_outside_the_registry_warns_and_names_the_version_launch_uses(host, missing_config, capsys, version, chosen):
     install_stub(host / "bin", "claude", STUB_VERSION.format(version=version))
 
     _, lines = doctor(capsys, *missing_config)
 
-    assert finding(lines, "claude") == f"WARN claude: {host / 'bin' / 'claude'} {version}, outside the tested range {TESTED_CLAUDE}\u2013{TESTED_CLAUDE}"
-
-
-@pytest.mark.parametrize("version", ["2.1.300", "2.1.312", "2.1.320"])
-def test_a_claude_version_inside_the_tested_range_is_ok(host, missing_config, capsys, monkeypatch, version):
-    monkeypatch.setattr("unharness.doctor.TESTED_CLAUDE_RANGE", ("2.1.300", "2.1.320"))
-    install_stub(host / "bin", "claude", STUB_VERSION.format(version=version))
-
-    _, lines = doctor(capsys, *missing_config)
-
-    assert finding(lines, "claude") == f"OK claude: {host / 'bin' / 'claude'} {version}"
+    assert finding(lines, "claude") == (
+        f"WARN claude: {host / 'bin' / 'claude'} {version}, not in the switch registry; launch uses switches verified at {chosen}"
+    )
 
 
 def test_a_claude_that_prints_no_version_warns(host, missing_config, capsys):
@@ -91,7 +87,7 @@ def test_a_claude_that_prints_no_version_warns(host, missing_config, capsys):
 
     _, lines = doctor(capsys, *missing_config)
 
-    assert finding(lines, "claude").startswith(f"WARN claude: {host / 'bin' / 'claude'} printed no version")
+    assert finding(lines, "claude") == f"WARN claude: {host / 'bin' / 'claude'} printed no version"
 
 
 def test_a_claude_missing_from_path_warns_since_a_shell_function_can_launch(host, missing_config, capsys):
@@ -314,7 +310,8 @@ def test_a_healthy_project_gives_one_ok_line_per_check_and_exits_0(host, healthy
         "OK config", "OK element dry", "OK element kiss", "OK element write-well", "OK skill agent-conduct:write-well",
         "OK digest dry", "OK digest kiss", "OK digest dry+kiss", "OK cover",
         *(f"OK {name}" for name in FULL_PAIR + MINIFIED_PAIR),
-        "OK preamble", "OK claude", "OK uv", "OK manifesto plugin", "OK prompt size",
+        "OK preamble", "OK claude", "OK switch registry", *(f"OK {name}" for name in SWITCH_NAMES), "OK uv", "OK manifesto plugin",
+        "OK prompt size",
     ]
 
 
@@ -477,7 +474,7 @@ def test_an_element_that_does_not_resolve_leaves_out_the_checks_that_need_the_st
     _, lines = doctor(capsys, "--config", str(project))
 
     names = [line.split(": ")[0].split(" ", 1)[1] for line in lines]
-    assert names == ["config", "element dry", "element write-well", "element kiss", "skill agent-conduct:write-well", "preamble", "claude", "uv", "manifesto plugin"]
+    assert names == ["config", "element dry", "element write-well", "element kiss", "skill agent-conduct:write-well", "preamble", "claude", "switch registry", *SWITCH_NAMES, "uv", "manifesto plugin"]
 
 
 @needs_digests
@@ -597,3 +594,95 @@ def test_a_stack_of_skills_alone_reports_a_cover_of_none(host, project, capsys):
     _, lines = doctor(capsys, "--config", str(project))
 
     assert finding(lines, "cover") == "OK cover: none; 0 words"
+
+
+def registry_of(monkeypatch, entries: list[dict]) -> None:
+    monkeypatch.setattr("unharness.cli.shipped_switches", lambda: parse_switches(json.dumps(entries)))
+
+
+def switch_entry(**overrides) -> dict:
+    return {
+        "name": "SWITCH_ONE", "kind": "env", "value": "1", "removes": "Some text", "documented": True, "control": True,
+        "verified": [TESTED_CLAUDE], "default": True, "option": None, **overrides,
+    }
+
+
+def test_the_switch_registry_line_names_the_newest_version_and_the_entry_count(host, missing_config, capsys):
+    _, lines = doctor(capsys, *missing_config)
+
+    assert finding(lines, "switch registry") == "OK switch registry: newest 2.1.309; 13 switches"
+
+
+def test_every_switch_verified_at_the_version_in_use_is_ok_in_registry_order(host, missing_config, capsys):
+    _, lines = doctor(capsys, *missing_config)
+
+    switch_lines = [line for line in lines if " switch " in line and "registry" not in line]
+    assert switch_lines == [f"OK {name}: verified at {TESTED_CLAUDE}" for name in SWITCH_NAMES]
+
+
+def test_a_version_off_the_registry_warns_on_every_switch_with_both_versions(host, missing_config, capsys):
+    install_stub(host / "bin", "claude", STUB_VERSION.format(version="2.1.312"))
+
+    status, lines = doctor(capsys, *missing_config)
+
+    switch_lines = [line for line in lines if " switch " in line and "registry" not in line]
+    assert switch_lines == [f"WARN {name}: verified at {TESTED_CLAUDE}, not at 2.1.312" for name in SWITCH_NAMES]
+
+
+@pytest.mark.parametrize("claude_stub", [None, STUB_SILENT])
+def test_a_claude_whose_version_is_unknown_warns_on_every_switch_with_the_newest_version(host, missing_config, capsys, claude_stub):
+    if claude_stub is None:
+        (host / "bin" / "claude").unlink()
+    else:
+        install_stub(host / "bin", "claude", claude_stub)
+
+    _, lines = doctor(capsys, *missing_config)
+
+    switch_lines = [line for line in lines if " switch " in line and "registry" not in line]
+    assert switch_lines == [f"WARN {name}: verified at {TESTED_CLAUDE}, claude version unknown" for name in SWITCH_NAMES]
+
+
+def test_a_switch_not_verified_at_the_chosen_version_is_left_out_and_names_its_last_version(host, missing_config, capsys, monkeypatch):
+    registry_of(monkeypatch, [
+        switch_entry(name="DROPPED", verified=["2.1.300"]),
+        switch_entry(name="KEPT", removes="Other", verified=["2.1.300", TESTED_CLAUDE]),
+    ])
+
+    _, lines = doctor(capsys, *missing_config)
+
+    assert finding(lines, "switch env DROPPED") == "WARN switch env DROPPED: left out; last verified at 2.1.300"
+    assert finding(lines, "switch env KEPT") == f"OK switch env KEPT: verified at {TESTED_CLAUDE}"
+
+
+def test_claude_version_replaces_the_detected_version_in_the_switch_lines_alone(host, missing_config, capsys, monkeypatch):
+    registry_of(monkeypatch, [switch_entry(verified=["2.1.300", TESTED_CLAUDE])])
+    (host / "bin" / "claude").unlink()
+
+    _, lines = doctor(capsys, *missing_config, "--claude-version", "2.1.300")
+
+    assert finding(lines, "claude") == "WARN claude: not on PATH; a shell function can still launch it"
+    assert finding(lines, "switch env SWITCH_ONE") == "OK switch env SWITCH_ONE: verified at 2.1.300"
+
+
+def test_claude_version_off_the_registry_chooses_the_nearest_lower_version(host, missing_config, capsys):
+    _, lines = doctor(capsys, *missing_config, "--claude-version", "2.1.400")
+
+    assert finding(lines, "switch env CLAUDE_CODE_ATTRIBUTION_HEADER") == (
+        f"WARN switch env CLAUDE_CODE_ATTRIBUTION_HEADER: verified at {TESTED_CLAUDE}, not at 2.1.400"
+    )
+
+
+def test_a_malformed_claude_version_fails_in_one_line_with_status_1(host, missing_config, capsys):
+    status = main(["doctor", *missing_config, "--claude-version", "latest"])
+
+    captured = capsys.readouterr()
+    assert (status, captured.out, captured.err) == (1, "", "unharness: --claude-version takes X.Y.Z, got latest\n")
+
+
+def test_no_switch_line_fails_whatever_the_version(host, missing_config, capsys, monkeypatch):
+    registry_of(monkeypatch, [switch_entry(verified=["2.1.300"]), switch_entry(name="TWO", verified=["2.1.300", "2.1.400"], removes="Other")])
+
+    _, lines = doctor(capsys, *missing_config, "--claude-version", "1.0.0")
+
+    assert [line for line in lines if line.startswith("FAIL switch")] == []
+    assert len([line for line in lines if line.startswith("WARN switch env")]) == 2
