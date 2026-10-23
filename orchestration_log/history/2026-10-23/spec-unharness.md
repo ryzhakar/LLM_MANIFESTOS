@@ -266,3 +266,14 @@ Each test builds a plugin folder, a login, and a project under `tmp_path`; no te
 9. A min body holds at most one third of its full body's words, and the min commitments hold one line per element.
 10. Doctor FAILs on what the flags load and WARNs on the rest; a missing `claude` is a WARN; the `cover` line falls back to `--stack-digests --overlap`.
 11. Stamp writes sorted, two-space-indented JSON and prints one line.
+
+# 3.6.1: reminder switches, quiet pipes, one block type, doctor range, digest method
+
+Source of the first item: `identity-line-findings.md`, "What unharness should change". The deferred items come from `reviews/digests-triage.md`: code N12 and the end-to-end `BrokenPipeError` line.
+
+1. **Reminder switches.** `launch` adds `CLAUDE_CODE_TODO_REMINDER_MODE=off`, which removes the task-list and TodoWrite nudges and keeps the skill list, and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`, which removes the token-count line. The printed command shows both. The docs name neither, so a release may drop them; the strip table, `plugin/README.md`, the unharness README, and `plugin/SCHEMA.md` say so. The preamble sentence on the task nudge stays, since the nudge may return.
+2. **Quiet pipes.** Every verb, when its reader closes stdout early as in `unharness stack | head`, exits 0 with no traceback and no message.
+3. **One block type.** `Block` and `Document` become one type when the merge changes no output: the constitution renders the same text for every mode.
+4. **Doctor range.** One constant records the range of `claude` versions the package has been tested with; both ends read 2.1.309 today. `claude` WARNs with `claude: <path> <version>, outside the tested range <lo>–<hi>` when `claude --version` falls outside it; inside it the OK line is unchanged. This replaces the `claude` row's third WARN cause in the table above.
+5. **`/compile-digest` method.** The plugin skill carries the digest method in its own voice: list every distinct demand, collapse restatements, write one plain complete sentence per demand, fold each boundary into the sentence it limits, keep the manifesto's own order, apply Strunk, check that every demand stands present or deliberately dropped, and name a drop in the stamp commit. It refers to no repo-local skill.
+6. **Versions.** Package and plugin read 3.6.1. Doctor's floor for the manifesto plugin stays 3.6.0.
