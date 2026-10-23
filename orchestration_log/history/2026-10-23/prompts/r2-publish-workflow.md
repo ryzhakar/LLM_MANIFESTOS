@@ -1,0 +1,11 @@
+# R2 — publish on semver tags, README install order
+
+1. Role: you add the GitHub Actions workflow that publishes unharness to PyPI on semver tags, and put the PyPI install first in the docs.
+2. Context: repo /Users/ryzhakar/LLM_MANIFESTOS, branch session/long-run, clean tree. unharness 3.6.0 is on PyPI (published by token today). The owner will register a trusted publisher on PyPI for this repo: workflow file `publish.yml`, environment `pypi`. The package lives at plugin/unharness (uv_build; `uv build --no-sources plugin/unharness` makes dist/). Git rules: subject `type(scope): subject` ≤ 10 words, no body, no trailer; commit, do not push.
+3. Inputs: plugin/unharness/pyproject.toml (version field); plugin/unharness/README.md and plugin/README.md (install lines); README.template.md and README.md (repo root; one sentence names unharness).
+4. Task: (a) write .github/workflows/publish.yml: trigger `push` on tags matching `v[0-9]+.[0-9]+.[0-9]+` only (no prerelease or build suffix; GitHub's tag glob); one job `publish` on ubuntu-latest, `environment: pypi`, `permissions: id-token: write, contents: read`; steps: checkout; `astral-sh/setup-uv@v6`; a step that fails unless the tag `${GITHUB_REF_NAME#v}` equals `version` in plugin/unharness/pyproject.toml (read it with `uv version --project plugin/unharness --short` if that works in this uv, else a one-line python); `uv run --project plugin/unharness pytest -q plugin/unharness`; `uv build --no-sources plugin/unharness`; `uv publish plugin/unharness/dist/*` with `trusted-publishing: always` (`uv publish --trusted-publishing always`). No secrets. Validate the YAML (`python3 -c "import yaml"` may be absent; use `ruby -ryaml -e 'YAML.load_file(...)'` or `uv run --with pyyaml python -c ...`). (b) In plugin/unharness/README.md and plugin/README.md, make `uvx unharness …` the first install/run form and the git form the alternative; keep every other sentence. (c) Commits: `ci(unharness): publish to PyPI on semver tags`, `doc(plugin): uvx unharness is the first install form`.
+5. Output: the files; reply with the two shas and the workflow's trigger block verbatim.
+6. Report: 3-sentence summary.
+7. Scope: those files only; no version bump.
+8. Tools: Read, Edit, Write, Bash, Grep.
+9. Exact, minimal YAML; no comments that restate steps.
