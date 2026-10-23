@@ -1,0 +1,5 @@
+# R3 — publish on `pypi-<version>` tags
+
+Role: you retarget the publish workflow. Context: repo /Users/ryzhakar/LLM_MANIFESTOS, branch session/long-run, clean. `v<semver>` tags mark plugin releases, which often change no package source; the owner wants PyPI publishing only on tags `pypi-<semver>`. Git rules: subject `type(scope): subject` ≤ 10 words, no body, no trailer; commit, do not push.
+Task: in .github/workflows/publish.yml change the trigger to tags `pypi-[0-9]+.[0-9]+.[0-9]+` only and the check step to compare `${GITHUB_REF_NAME#pypi-}` with the package version; nothing else changes. In plugin/unharness/README.md add one sentence where releasing is described (or at the end of the install section if nothing describes it): a `pypi-<version>` tag on a commit whose `pyproject.toml` carries that version publishes it; `v<version>` tags release the plugin and do not publish. Validate the YAML parses. Commit `ci(unharness): publish on pypi-<version> tags`. Reply with the sha and the trigger block.
+Scope: those two files. Tools: Read, Edit, Bash.
