@@ -1,0 +1,11 @@
+# R1 — PyPI metadata and license for unharness
+
+1. Role: you prepare the unharness package for its first PyPI release.
+2. Context: repo /Users/ryzhakar/LLM_MANIFESTOS, branch session/long-run (work in place; the tree is clean). Package at plugin/unharness (uv_build backend, version 3.6.0, published to PyPI by the owner afterwards). The owner chose the MIT license for the repo and the package. Git rules: subject `type(scope): subject` ≤ 10 words, no body, no trailer, no attribution; commit, do not push.
+3. Inputs: plugin/unharness/pyproject.toml; plugin/unharness/README.md; .claude-plugin/marketplace.json (for the repo URL and owner name); `git log -1 --format=%an` for the author name.
+4. Task: (a) write LICENSE at the repo root: the MIT text, `Copyright (c) 2026 Arthur Ryzhak`. (b) In pyproject.toml `[project]`: `readme = "README.md"`, `license = "MIT"`, `license-files = ["../../LICENSE"]` only if uv_build accepts a parent path — test with `uv build --no-sources plugin/unharness` and inspect the sdist/wheel for the license file; if it refuses, copy LICENSE into plugin/unharness/ and use `license-files = ["LICENSE"]`; `authors = [{ name = "Arthur Ryzhak" }]`; `keywords = ["claude-code", "system-prompt", "manifesto"]`; `classifiers` for Python 3.11–3.13, License :: OSI Approved :: MIT License, Environment :: Console; `[project.urls]` Homepage and Repository = https://github.com/ryzhakar/llm-manifestos, Documentation = the plugin/unharness/README.md blob URL on the v3.6.0 tag. (c) Check README.md renders as PyPI long description: relative links must become absolute GitHub URLs; the install line should show `uvx unharness` first and the git form second. (d) `uv build --no-sources plugin/unharness`, confirm `unharness-3.6.0-py3-none-any.whl` and the sdist contain README and LICENSE (`unzip -l`, `tar tzf`), run `uv run --project plugin/unharness pytest -q plugin/unharness`, then delete plugin/unharness/dist. (e) Two commits: `chore(repo): MIT license` and `chore(unharness): PyPI metadata`.
+5. Output: the files; reply with the two shas, the build output's last line, and the wheel's file list (names only).
+6. Report: 3-sentence summary.
+7. Scope: no code changes; no version bump; no push.
+8. Tools: Read, Edit, Write, Bash, Grep.
+9. Exact metadata, nothing decorative.
