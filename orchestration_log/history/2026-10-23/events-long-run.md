@@ -137,3 +137,4 @@
 - D2 second fix commit 00029fb (doctor). Skill, docs, hooks commits and its summary pending.
 - D2 third fix commit 46e6b79 (cover search). Skill, docs, hooks commits and summary pending.
 - D2 fourth fix commit 579e1bc (one home for slugs, hashes, paths). Skill, docs, hooks commits and summary pending.
+- D2 commits 5–6: 2e979f6 (tests), c2ca1b1 (skill). Docs and hooks commits and summary pending.
