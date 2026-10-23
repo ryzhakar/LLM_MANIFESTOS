@@ -307,6 +307,14 @@ README.md (derived navigation artifact)
 
 ---
 
+### Releasing
+
+- **Semver tag:** Every plugin release gets the tag `v<major>.<minor>.<patch>` on main, always.
+- **PyPI tag:** Add `pypi-<version>` only when the release changes unharness source under `plugin/unharness/`. That tag alone triggers `.github/workflows/publish.yml`, which checks it against the version in `plugin/unharness/pyproject.toml`.
+- **Versions:** Bump the plugin and package versions together in `plugin/.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and `plugin/unharness/pyproject.toml`.
+
+---
+
 ## Troubleshooting
 
 ### Validation Errors
