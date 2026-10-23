@@ -18,15 +18,16 @@ Bind to those manifestos through the `manifesto-oath` skill; never write unbound
 </read-the-manifestos>
 
 <list-the-demands>
-List each demand, one thing a manifesto tells its reader to do or refuse, once; never list a restatement as a new demand.
+List every distinct demand, one thing a manifesto tells its reader to do or refuse; never leave one unlisted.
+Collapse each restatement into the demand it restates; never carry a restatement as a new demand.
 Drop the stories, numbers, figures of speech, names, examples, and any closing call to choose a path; never carry one into the digest.
 </list-the-demands>
 
 <write-the-sentences>
-Write each demand as one plain, complete command a reader obeys without the manifesto; never write a sentence that needs the original.
+Write each demand as one plain, complete sentence, a command a reader obeys without the manifesto; never write a sentence that needs the original, and never spread one demand over two sentences.
 Write in literal, full words; never use a metaphor, an idiom, or an ellipsis.
 Fold each boundary, the point where a demand stops applying, into the sentence it limits; never give a boundary its own sentence.
-Write in the active voice and positive form, with concrete words, parallel lists, the key word last, and no needless word; never deliver a sentence that breaks one of these.
+Apply Strunk's rules to every sentence: the active voice, the positive form, concrete words, parallel lists, the key word last, and no needless word; never deliver a sentence that breaks one of these.
 When the `agent-conduct:write-well` skill is installed, load it and reread the draft against every rule it holds; never rely on the lines above alone while it is available.
 </write-the-sentences>
 
@@ -50,6 +51,7 @@ End the digest with one line ordering the reader to apply these rules to every r
 
 <check-against-the-source>
 Check the draft against the temporary file, every demand present, merged, resolved, or dropped on purpose, and nothing imported; never check it against memory.
+Name each demand dropped on purpose, whether the cap or a conflict forced the drop, in the subject of the commit that records the digest and its stamp; never drop a demand unnamed.
 </check-against-the-source>
 
 <write-the-file>
