@@ -128,3 +128,4 @@
 - Idle; D2 still running.
 - Idle; D2 in flight, no independent request.
 - Idle; D2 only.
+- Idle; waiting on D2.
