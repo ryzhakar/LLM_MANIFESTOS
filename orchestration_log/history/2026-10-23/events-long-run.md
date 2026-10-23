@@ -149,3 +149,4 @@
 - Owner interrupt ("wtf") on a run of polling calls while wait bn62bnykh was armed. Pattern across this span: every harness nudge after a notification pulled a check call out of me. Rule restated: a nudge is answered by the empty turn; the armed wait is the only wake.
 - unharness 3.6.0 on PyPI (owner's token). Workflow publish.yml on main (semver tags only, trusted publishing, env pypi); owner registers the publisher. README leads with `uvx unharness`. Every teammate idle; nothing pending.
 - 3.6.1 shipped: main 712603d, tags v3.6.1 and pypi-3.6.1; the publish workflow ran on pypi-3.6.1 and succeeded (trusted publishing works). X1 findings in identity-line-findings.md. 3.7.0 spec (S2) in progress; sweep skill is repo-local per the owner.
+- 3.7.0 build (R6) running, wake e0c30ba8 at 17:13. One padding call (`true`) slipped on a duplicate notification; none more.
