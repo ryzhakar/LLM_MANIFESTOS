@@ -83,3 +83,4 @@
 - C1 and C3 are mid-cycle (red tests present in both worktrees). Waiting.
 - C1 committed: 8281fab, 121 tests. C4 (b) resumed. C2 rebasing onto feat/digests (conflicts in cli.py/compile.py handed back to the C2 agent). C3 still in cycle; it rebases itself per its brief.
 - Three background waits set: C3 commit (feat/doctor), C4 index commit (feat/compile-digest), C2 rebase end (feat/minified). Next: fast-forward feat/digests with C2, rebase C3 and C4 onto it, fast-forward, launch C5 docs, then D1 reviews ×3, D3 e2e, fix pass, D4 release, ship.
+- feat/digests now c35a026: C1 (8281fab) + refactor (ab20bc9, exports for doctor) + C2 rebased (126 tests). C3 told to rebase onto c35a026 and squash its wip commit into one. C4 told to rebase before stamping.
