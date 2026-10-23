@@ -145,7 +145,7 @@ The four rows marked "set" are implemented per the Claude Code docs and the bina
 Run it from git until the package is published, then from the package:
 
 ```
-uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.5.0#subdirectory=plugin/unharness" unharness
+uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.6.0#subdirectory=plugin/unharness" unharness
 uvx unharness
 ```
 

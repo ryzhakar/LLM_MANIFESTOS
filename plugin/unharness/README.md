@@ -7,7 +7,7 @@ Compile a project's manifesto stack into a Claude Code session's system prompt, 
 uvx unharness prompt | uvx unharness launch -- claude
 ```
 
-Until the package is published, run `uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.5.0#subdirectory=plugin/unharness" unharness` in place of `uvx unharness`. The launcher's input is reopened on the terminal.
+Until the package is published, run `uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.6.0#subdirectory=plugin/unharness" unharness` in place of `uvx unharness`. The launcher's input is reopened on the terminal.
 
 - `unharness prompt [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints the compiled prompt. `--digests` and `--stack-digests` swap manifesto texts for digests, `--overlap` lets stack digests share a manifesto, and `--minified` loads the min pair, the two `.min.md` session files; the Unharness section of `plugin/README.md` states the cover rule.
 - `unharness stack [--config PATH] [SLUG ...]` prints the `<stack>` block and the constitution; given slugs, it prints those manifestos alone.
