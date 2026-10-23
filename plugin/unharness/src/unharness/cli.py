@@ -8,13 +8,15 @@ from pathlib import Path
 
 from unharness.compile import COMMITMENTS_FILE, INTERPLAY_FILE, compile_prompt, stack_view
 from unharness.config import TEXT_ENCODING, UnharnessError, fail, load
+from unharness.digests import DIGESTS_FLAG, OVERLAP_FLAG, STACK_DIGESTS_FLAG, constitution_blocks, digest_mode, stamp_digest
 from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, terminal_device
-from unharness.resolve import login_dir, resolve_stack
+from unharness.resolve import login_dir, manifesto_elements, manifesto_plugin_dir, resolve_stack
 
 DEFAULT_CONFIG = Path(".manifestos.yaml")
 PREAMBLE_OVERRIDE_FILE = ".manifestos.preamble.md"
 PROMPT_VERB = "prompt"
 STACK_VERB = "stack"
+STAMP_VERB = "stamp"
 LAUNCH_VERB = "launch"
 LAUNCHER_SEPARATOR = "--"
 
@@ -25,8 +27,16 @@ def main(argv: list[str] | None = None) -> int:
     argv, launcher = _split_launcher(argv)
     parser = argparse.ArgumentParser(prog="unharness")
     verbs = parser.add_subparsers(dest="verb", required=True)
-    for verb in (PROMPT_VERB, STACK_VERB):
-        verbs.add_parser(verb).add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    prompt_parser = verbs.add_parser(PROMPT_VERB)
+    stack_parser = verbs.add_parser(STACK_VERB)
+    stack_parser.add_argument("slugs", nargs="*")
+    for parser_of_verb in (prompt_parser, stack_parser):
+        parser_of_verb.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    for flag in (DIGESTS_FLAG, STACK_DIGESTS_FLAG, OVERLAP_FLAG):
+        prompt_parser.add_argument(flag, action="store_true")
+    stamp_parser = verbs.add_parser(STAMP_VERB)
+    stamp_parser.add_argument("digest", type=Path)
+    stamp_parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     launch_parser = verbs.add_parser(LAUNCH_VERB)
     launch_parser.add_argument("prompt", nargs="?")
     for flag in ("--keep-claude-md", "--keep-web-search", "--no-hooks"):
@@ -35,7 +45,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if arguments.verb == LAUNCH_VERB:
             return _launch(arguments, launcher)
-        print(_output(arguments.verb, arguments.config, login_dir(os.environ, Path.home())))
+        login = login_dir(os.environ, Path.home())
+        print(_stamp(arguments, login) if arguments.verb == STAMP_VERB else _output(arguments, login))
     except UnharnessError as error:
         return fail(error)
     return 0
@@ -57,18 +68,28 @@ def _launch(arguments: argparse.Namespace, launcher: list[str]) -> int:
     return launch(prompt, options, os.environ, cache_home(os.environ, Path.home()), terminal_device(), reopen_terminal, execute_launcher)
 
 
-def _output(verb: str, config_path: Path, login: Path) -> str:
-    config = load(config_path)
+def _stamp(arguments: argparse.Namespace, login: Path) -> str:
+    index = stamp_digest(arguments.digest, load(arguments.config).registry, login)
+    return f"stamped {arguments.digest.stem} in {index}"
+
+
+def _output(arguments: argparse.Namespace, login: Path) -> str:
+    verb = arguments.verb
+    config = load(arguments.config)
+    if verb == STACK_VERB and arguments.slugs:
+        return stack_view(resolve_stack(manifesto_elements(arguments.slugs), config.directory, config.registry, login))
     if not config.you:
         raise UnharnessError("the stack is empty")
     documents = resolve_stack(config.you, config.directory, config.registry, login)
     if verb == STACK_VERB:
         return stack_view(documents)
+    mode = digest_mode(arguments.digests, arguments.stack_digests, arguments.overlap)
     return compile_prompt(
         documents,
         _preamble(config.directory),
         _read_if_present(config.directory / INTERPLAY_FILE),
         _read_if_present(config.directory / COMMITMENTS_FILE),
+        constitution_blocks(config.you, documents, config.directory, manifesto_plugin_dir(config.registry, login), mode),
     )
 
 

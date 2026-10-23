@@ -28,6 +28,21 @@ def login_dir(environ: Mapping[str, str], home: Path) -> Path:
     return Path(environ[LOGIN_VARIABLE]) if environ.get(LOGIN_VARIABLE) else home / ".claude"
 
 
+def manifesto_slug(element: Element) -> str | None:
+    """Return the registry stem the element names, None for a skill or a file."""
+    return (element.reference or element.name) if element.source_type in (None, MANIFESTO_SOURCE) else None
+
+
+def manifesto_elements(slugs: list[str]) -> list[Element]:
+    """Return one registry-manifesto element per slug, named by the slug."""
+    return [Element(slug, None, MANIFESTO_SOURCE, slug) for slug in slugs]
+
+
+def manifesto_plugin_dir(registry: Path | None, login: Path) -> Path:
+    """Return the folder holding manifestos/ and digests/: the configured one, else the manifesto plugin's highest cached version."""
+    return registry or _highest_version_dir(login, MANIFESTO_PLUGIN)
+
+
 def resolve_stack(elements: list[Element], directory: Path, registry: Path | None, login: Path) -> list[Document]:
     """Resolve each element, in order, to its Document; stop at the first that does not resolve."""
     return [_resolve_element(element, directory, registry, login) for element in elements]
@@ -51,8 +66,8 @@ def _locate(element: Element, directory: Path, registry: Path | None, login: Pat
     kind = element.source_type or MANIFESTO_SOURCE
     reference = element.reference or element.name
     if kind == MANIFESTO_SOURCE:
-        plugin_root = registry or _highest_version_dir(login, MANIFESTO_PLUGIN)
-        return plugin_root / "manifestos" / f"{reference}.md", plugin_root
+        plugin_root = manifesto_plugin_dir(registry, login)
+        return plugin_root / "manifestos" / f"{manifesto_slug(element)}.md", plugin_root
     if kind == SKILL_SOURCE and PLUGIN_SKILL_SEPARATOR in reference:
         plugin, _, skill = reference.partition(PLUGIN_SKILL_SEPARATOR)
         plugin_root = _highest_version_dir(login, plugin)

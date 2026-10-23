@@ -1,6 +1,8 @@
 """Compile resolved documents and the session's own files into the system prompt."""
 
 import re
+from collections.abc import Sequence
+from dataclasses import dataclass
 
 from unharness.config import UnharnessError
 from unharness.resolve import Document
@@ -13,13 +15,23 @@ SINGLE_QUOTE = "'"
 WRITING_SKILL = "/compile-commitments"
 
 
-def compile_prompt(documents: list[Document], preamble: str, interplay: str | None, commitments: str | None) -> str:
+@dataclass(frozen=True)
+class Block:
+    name: str
+    purpose: str | None
+    text: str
+
+
+def compile_prompt(
+    documents: list[Document], preamble: str, interplay: str | None, commitments: str | None,
+    constitution: Sequence[Block | Document] | None = None,
+) -> str:
     """Return the system prompt: preamble, constitution, interplay, commitments; stop if a session file is stale."""
     session_files = [
         _current_body(INTERPLAY_FILE, interplay, documents),
         _current_body(COMMITMENTS_FILE, commitments, documents),
     ]
-    return "\n\n".join([f"<harness>\n{preamble.strip()}\n</harness>", constitution_block(documents), *session_files])
+    return "\n\n".join([f"<harness>\n{preamble.strip()}\n</harness>", constitution_block(documents if constitution is None else constitution), *session_files])
 
 
 def stack_view(documents: list[Document]) -> str:
@@ -32,18 +44,18 @@ def stack_block(documents: list[Document]) -> str:
     return "<stack>\n" + "\n".join(_stack_lines(documents)) + "\n</stack>"
 
 
-def constitution_block(documents: list[Document]) -> str:
-    """Return the constitution block: one tagged text per document, in order."""
-    return "<constitution>\n" + "\n".join(_tagged(document) for document in documents) + "\n</constitution>"
+def constitution_block(blocks: Sequence[Block | Document]) -> str:
+    """Return the constitution block: one tagged text per block, in order."""
+    return "<constitution>\n" + "\n".join(_tagged(block) for block in blocks) + "\n</constitution>"
 
 
 def _stack_lines(documents: list[Document]) -> list[str]:
     return [f"{document.name} {document.sha256} {document.purpose or ''}".rstrip() for document in documents]
 
 
-def _tagged(document: Document) -> str:
-    governs = f' governs="{document.purpose.replace(DOUBLE_QUOTE, SINGLE_QUOTE)}"' if document.purpose else ""
-    return f"<{document.name}{governs}>\n{document.text}\n</{document.name}>"
+def _tagged(block: Block | Document) -> str:
+    governs = f' governs="{block.purpose.replace(DOUBLE_QUOTE, SINGLE_QUOTE)}"' if block.purpose else ""
+    return f"<{block.name}{governs}>\n{block.text}\n</{block.name}>"
 
 
 def _current_body(file_name: str, text: str | None, documents: list[Document]) -> str:
