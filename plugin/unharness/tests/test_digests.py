@@ -21,7 +21,7 @@ def source_hash(body: str) -> str:
 class World:
     """A plugin folder with four manifestos, and a project whose config names them in order."""
 
-    def __init__(self, root: Path, order=SLUGS, purposes=PURPOSES, tail: str = ""):
+    def __init__(self, root: Path, order=SLUGS, purposes=PURPOSES, tail: str = "", names: dict | None = None):
         self.root = root
         self.plugin = root / "plugin"
         self.project = root / "project"
@@ -29,8 +29,11 @@ class World:
         self.bodies = {slug: f"# {slug}\n\nThe {slug} manifesto." for slug in SLUGS}
         for slug, body in self.bodies.items():
             write(self.plugin / "manifestos" / f"{slug}.md", f"---\ntitle: {slug}\n---\n\n{body}\n")
+        names = names or {}
         entries = "".join(
-            f"  - name: {slug}\n" + (f"    purpose: {purposes[slug]}\n" if purposes[slug] else "")
+            f"  - name: {names.get(slug, slug)}\n"
+            + (f"    source: manifesto {slug}\n" if slug in names else "")
+            + (f"    purpose: {purposes[slug]}\n" if purposes[slug] else "")
             for slug in order
         )
         self.config = write(self.project / ".manifestos.yaml", f"manifesto_dir: ../plugin\n\nyou:\n{entries}{tail}")
@@ -54,9 +57,16 @@ class World:
         write(self.project / ".manifestos.interplay.md", f"{stack}\n\n<interplay>\nAgree.\n</interplay>\n")
         write(self.project / ".manifestos.commitments.md", f"{stack}\n\n<commitments>\nI must, and I will.\n</commitments>\n")
 
+    def write_minified_files(self) -> None:
+        config = load(self.config)
+        stack = stack_block(resolve_stack(config.you, config.directory, config.registry, self.login))
+        write(self.project / ".manifestos.interplay.min.md", f"{stack}\n\n<interplay>\nAgree, briefly.\n</interplay>\n")
+        write(self.project / ".manifestos.commitments.min.md", f"{stack}\n\n<commitments>\nI must, briefly.\n</commitments>\n")
+
     def run(self, monkeypatch, capsys, *arguments: str) -> tuple[int, str, str]:
         monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(self.login))
         self.write_session_files()
+        self.write_minified_files()
         status = main([*arguments[:1], "--config", str(self.config), *arguments[1:]])
         captured = capsys.readouterr()
         return status, captured.out, captured.err
@@ -106,10 +116,23 @@ def test_stack_digests_alone_selects_digests_for_every_manifesto(world, monkeypa
     assert "ALPHA DIGEST" in out and "The alpha manifesto." not in out
 
 
-@pytest.mark.parametrize("flag", ["--digests", "--stack-digests", "--overlap"])
+MODE_FLAGS = ["--digests", "--stack-digests", "--overlap", "--minified"]
+
+
+@pytest.mark.parametrize("flag", MODE_FLAGS)
 def test_stack_rejects_the_mode_flags(world, monkeypatch, capsys, flag):
     with pytest.raises(SystemExit) as stopped:
         world.run(monkeypatch, capsys, "stack", flag)
+
+    assert stopped.value.code == 2
+
+
+@pytest.mark.parametrize("flag", MODE_FLAGS)
+def test_stamp_rejects_the_mode_flags(world, monkeypatch, capsys, flag):
+    digest = world.digest("alpha", "ALPHA DIGEST", index=False)
+
+    with pytest.raises(SystemExit) as stopped:
+        world.run(monkeypatch, capsys, "stamp", str(digest), flag)
 
     assert stopped.value.code == 2
 
@@ -548,3 +571,48 @@ def test_select_cover_returns_the_chosen_stacks_and_the_singles_they_leave(world
 
     assert [digest.stem for digest in cover.stacks] == ["alpha+beta"]
     assert sorted(cover.singles) == ["delta", "gamma"]
+
+
+def test_digests_key_by_slug_while_the_blocks_carry_the_element_names(tmp_path, monkeypatch, capsys):
+    world = World(tmp_path, names={"alpha": "first-rule", "beta": "second-rule"})
+    digest_all_singles(world)
+    world.digest("alpha+beta", "AB")
+
+    _, stacked, _ = world.prompt(monkeypatch, capsys, "--stack-digests")
+    _, singles, _ = world.prompt(monkeypatch, capsys, "--digests")
+
+    assert constitution_of(stacked).startswith('<first-rule+second-rule governs="first rule; second rule">\nAB\n</first-rule+second-rule>')
+    assert single_block("first-rule", "A" * 10, "first rule") in constitution_of(singles)
+
+
+def test_a_local_stack_digest_wins_over_the_plugins_for_its_stem(world, monkeypatch, capsys):
+    digest_all_singles(world)
+    world.digest("alpha+beta", "PP")
+    world.digest("alpha+beta", "LLLL", place="local")
+
+    status, out, _ = world.prompt(monkeypatch, capsys, "--stack-digests")
+
+    assert status == 0
+    assert "LLLL" in out and "PP" not in out
+
+
+def test_a_stale_local_stack_entry_refuses_even_when_the_plugin_copy_is_current(world, monkeypatch, capsys):
+    digest_all_singles(world)
+    world.digest("alpha+beta", "PP")
+    local = world.digest("alpha+beta", "LLLL", place="local", hashes={"alpha": source_hash("an earlier text"), "beta": source_hash(world.bodies["beta"])})
+
+    status, out, err = world.prompt(monkeypatch, capsys, "--stack-digests")
+
+    assert (status, out) == (1, "")
+    assert err == f"unharness: {local} is stale (changed: alpha); run /compile-digest alpha beta\n"
+
+
+def test_the_minified_pair_loads_with_every_digest_flag_though_it_was_compiled_against_the_full_stack(world, monkeypatch, capsys):
+    digest_all_singles(world)
+    world.digest("alpha+beta", "AB")
+
+    status, out, err = world.prompt(monkeypatch, capsys, "--stack-digests", "--overlap", "--minified")
+
+    assert status == 0, err
+    assert stack_block_of(["alpha", "beta"], "AB") in out
+    assert out.endswith("<interplay>\nAgree, briefly.\n</interplay>\n\n<commitments>\nI must, briefly.\n</commitments>\n")
