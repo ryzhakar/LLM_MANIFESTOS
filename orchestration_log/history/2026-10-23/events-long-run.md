@@ -122,3 +122,4 @@
 - Idle; D3 and D2 running.
 - Idle; D3 and D2 in flight, nothing independent to request.
 - Idle; D3 record and D2 fixes outstanding.
+- Idle; D3 and D2 still running.
