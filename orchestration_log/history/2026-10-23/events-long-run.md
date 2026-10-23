@@ -111,3 +111,4 @@
 - Idle; same four outputs outstanding.
 - Idle; outputs outstanding from D1 ×3 and D3.
 - Idle; same needs outstanding.
+- Idle; D1 ×3 and D3 still running.
