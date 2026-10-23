@@ -1,13 +1,16 @@
 import json
+import random
+import re
 from hashlib import sha256
+from itertools import combinations
 from pathlib import Path
 
 import pytest
-from helpers import write
+from helpers import deadline, write
 from unharness.cli import main
 from unharness.compile import stack_block, stack_view
-from unharness.config import Element, load
-from unharness.digests import DigestMode, select_cover
+from unharness.config import Element, UnharnessError, load
+from unharness.digests import Cover, Digest, DigestMode, choose_cover, select_cover
 from unharness.resolve import resolve_stack
 
 SLUGS = ("alpha", "beta", "gamma", "delta")
@@ -21,19 +24,20 @@ def source_hash(body: str) -> str:
 class World:
     """A plugin folder with four manifestos, and a project whose config names them in order."""
 
-    def __init__(self, root: Path, order=SLUGS, purposes=PURPOSES, tail: str = "", names: dict | None = None):
+    def __init__(self, root: Path, order=None, purposes=PURPOSES, tail: str = "", names: dict | None = None, slugs=SLUGS):
         self.root = root
         self.plugin = root / "plugin"
         self.project = root / "project"
         self.login = root / "login"
-        self.bodies = {slug: f"# {slug}\n\nThe {slug} manifesto." for slug in SLUGS}
+        order = order or slugs
+        self.bodies = {slug: f"# {slug}\n\nThe {slug} manifesto." for slug in slugs}
         for slug, body in self.bodies.items():
             write(self.plugin / "manifestos" / f"{slug}.md", f"---\ntitle: {slug}\n---\n\n{body}\n")
         names = names or {}
         entries = "".join(
             f"  - name: {names.get(slug, slug)}\n"
             + (f"    source: manifesto {slug}\n" if slug in names else "")
-            + (f"    purpose: {purposes[slug]}\n" if purposes[slug] else "")
+            + (f"    purpose: {purposes[slug]}\n" if purposes.get(slug) else "")
             for slug in order
         )
         self.config = write(self.project / ".manifestos.yaml", f"manifesto_dir: ../plugin\n\nyou:\n{entries}{tail}")
@@ -616,3 +620,59 @@ def test_the_minified_pair_loads_with_every_digest_flag_though_it_was_compiled_a
     assert status == 0, err
     assert stack_block_of(["alpha", "beta"], "AB") in out
     assert out.endswith("<interplay>\nAgree, briefly.\n</interplay>\n\n<commitments>\nI must, briefly.\n</commitments>\n")
+
+
+LARGE_STACK = tuple(f"m{number:02d}" for number in range(12))
+STACK_DIGEST_TIMEOUT_SECONDS = 20
+
+
+@pytest.mark.parametrize("flags", [("--stack-digests",), ("--stack-digests", "--overlap")])
+def test_a_stack_of_twelve_with_every_pair_digest_picks_its_cover_in_seconds(tmp_path, monkeypatch, capsys, flags):
+    world = World(tmp_path, slugs=LARGE_STACK, purposes={})
+    for slug in LARGE_STACK:
+        world.digest(slug, "S" * 10)
+    for pair in combinations(LARGE_STACK, 2):
+        world.digest("+".join(pair), "P" * 15)
+
+    with deadline(STACK_DIGEST_TIMEOUT_SECONDS):
+        status, out, err = world.prompt(monkeypatch, capsys, *flags)
+
+    assert status == 0, err
+    assert re.findall(r"^<(m\d\d\+m\d\d)>", constitution_of(out), re.MULTILINE) == [
+        f"{first}+{second}" for first, second in zip(LARGE_STACK[::2], LARGE_STACK[1::2])
+    ]
+
+
+def every_subset_cover(slugs, singles, stacks, overlap):
+    """The reference the cover search must equal: rank every subset of the stack digests by the spec's key."""
+    best = None
+    for size in range(len(stacks) + 1):
+        for chosen in combinations(sorted(stacks, key=lambda digest: digest.stem), size):
+            members = [digest.stem.split("+") for digest in chosen]
+            covered = {slug for group in members for slug in group}
+            if not overlap and sum(map(len, members)) != len(covered):
+                continue
+            left = [slug for slug in slugs if slug not in covered]
+            if any(slug not in singles for slug in left):
+                continue
+            digests = [*chosen, *(singles[slug] for slug in left)]
+            key = (sum(len(digest.text) for digest in digests), len(digests), sorted(digest.stem for digest in digests))
+            if best is None or key < best[0]:
+                best = (key, Cover(chosen, {slug: singles[slug] for slug in left}))
+    return None if best is None else best[1]
+
+
+@pytest.mark.parametrize("overlap", [False, True])
+def test_the_cover_search_equals_the_ranking_of_every_subset_on_random_stacks(overlap):
+    chance = random.Random(2026)
+    slugs = [f"s{number}" for number in range(5)]
+    for _ in range(300):
+        singles = {slug: Digest(slug, "x" * chance.randint(1, 6)) for slug in slugs if chance.random() < 0.7}
+        stems = {"+".join(sorted(chance.sample(slugs, chance.randint(2, 4)))) for _ in range(chance.randint(0, 7))}
+        stacks = [Digest(stem, "y" * chance.randint(1, 9)) for stem in stems]
+        expected = every_subset_cover(slugs, singles, stacks, overlap)
+        try:
+            found = choose_cover(slugs, singles, stacks, DigestMode(stacks=True, overlap=overlap))
+        except UnharnessError:
+            found = None
+        assert found == expected

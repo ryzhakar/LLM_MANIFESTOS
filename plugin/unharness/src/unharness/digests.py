@@ -1,9 +1,7 @@
 """Locate, validate, and choose the digests that stand in for manifesto texts, and stamp their index."""
 
 import json
-from collections.abc import Iterator
 from dataclasses import dataclass
-from itertools import chain, combinations
 from pathlib import Path
 
 from unharness.compile import Block
@@ -126,15 +124,14 @@ def choose_cover(
     slugs: list[str], singles: dict[str, Digest], stacks: list[Digest], mode: DigestMode,
 ) -> Cover:
     """Return the cover of the fewest characters; refuse a slug nothing covers, or a stack no disjoint choice covers."""
-    candidates = sorted(stacks, key=lambda digest: digest.stem)
-    best: tuple[tuple, Cover] | None = None
-    for chosen in _subsets(candidates):
-        cover = _cover_of(slugs, singles, chosen, mode)
-        if cover and (best is None or _cost(cover) < best[0]):
-            best = (_cost(cover), cover)
-    if best is None:
+    covers = [
+        cover
+        for chosen in _cheapest_choices(stacks, mode).values()
+        if (cover := _cover_of(slugs, singles, chosen))
+    ]
+    if not covers:
         raise UnharnessError(_no_cover_message(slugs, singles))
-    return best[1]
+    return min(covers, key=_cost)
 
 
 def read_index(path: Path) -> dict[str, dict[str, str]]:
@@ -195,16 +192,24 @@ def _require_every_slug_covered(
             raise UnharnessError(missing_message(slug, directory, plugin_folder))
 
 
-def _subsets(items: list[Digest]) -> Iterator[tuple[Digest, ...]]:
-    return chain.from_iterable(combinations(items, size) for size in range(len(items) + 1))
+def _cheapest_choices(stacks: list[Digest], mode: DigestMode) -> dict[frozenset[str], tuple[Digest, ...]]:
+    """Return the cheapest choice of stack digests for each set of slugs some choice covers; a choice shares no slug unless the mode allows overlap."""
+    cheapest: dict[frozenset[str], tuple[Digest, ...]] = {frozenset(): ()}
+    for digest in sorted(stacks, key=lambda candidate: candidate.stem):
+        members = frozenset(slugs_of(digest.stem))
+        for covered, chosen in list(cheapest.items()):
+            extended = (*chosen, digest)
+            reached = covered | members
+            if (mode.overlap or covered.isdisjoint(members)) and (
+                reached not in cheapest or _cost(Cover(extended, {})) < _cost(Cover(cheapest[reached], {}))
+            ):
+                cheapest[reached] = extended
+    return cheapest
 
 
-def _cover_of(slugs: list[str], singles: dict[str, Digest], chosen: tuple[Digest, ...], mode: DigestMode) -> Cover | None:
+def _cover_of(slugs: list[str], singles: dict[str, Digest], chosen: tuple[Digest, ...]) -> Cover | None:
     """Return the cover the chosen stack digests make with the singles of the slugs they leave, None when they make none."""
-    member_lists = [slugs_of(digest.stem) for digest in chosen]
-    covered = {slug for members in member_lists for slug in members}
-    if not mode.overlap and sum(map(len, member_lists)) != len(covered):
-        return None
+    covered = {slug for digest in chosen for slug in slugs_of(digest.stem)}
     left = [slug for slug in slugs if slug not in covered]
     if any(slug not in singles for slug in left):
         return None
