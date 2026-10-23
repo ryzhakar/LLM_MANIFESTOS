@@ -7,6 +7,7 @@ from helpers import write
 from unharness.cli import main
 from unharness.compile import stack_block, stack_view
 from unharness.config import Element, load
+from unharness.digests import DigestMode, select_cover
 from unharness.resolve import resolve_stack
 
 SLUGS = ("alpha", "beta", "gamma", "delta")
@@ -535,3 +536,15 @@ def test_stack_given_slugs_prints_those_manifestos_alone_without_purposes(world,
     assert status == 0
     assert out == stack_view(expected) + "\n"
     assert "governs" not in out and "beta" not in out
+
+
+def test_select_cover_returns_the_chosen_stacks_and_the_singles_they_leave(world):
+    digest_all_singles(world)
+    world.digest("alpha+beta", "AB")
+    config = load(world.config)
+    documents = resolve_stack(config.you, config.directory, config.registry, world.login)
+
+    cover = select_cover(config.you, documents, config.directory, world.plugin, DigestMode(stacks=True, overlap=False))
+
+    assert [digest.stem for digest in cover.stacks] == ["alpha+beta"]
+    assert sorted(cover.singles) == ["delta", "gamma"]

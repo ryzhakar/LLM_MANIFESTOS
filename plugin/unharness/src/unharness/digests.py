@@ -63,13 +63,20 @@ def constitution_blocks(
     """Return the constitution's blocks in config order: full texts, or the cover's digests under a mode."""
     if mode is None:
         return list(documents)
+    return _layout(elements, documents, select_cover(elements, documents, directory, plugin_folder, mode))
+
+
+def select_cover(
+    elements: list[Element], documents: list[Document], directory: Path, plugin_folder: Path, mode: DigestMode,
+) -> Cover:
+    """Return the cover the mode chooses for the stack, or stop with the refusal that names its fix."""
     hashes = {slug: document.sha256 for element, document in zip(elements, documents) if (slug := manifesto_slug(element))}
     slugs = [slug for slug in map(manifesto_slug, elements) if slug]
     _require_each_once(slugs)
     singles = _usable_singles(slugs, hashes, directory, plugin_folder)
     stacks = _usable_stacks(slugs, hashes, directory, plugin_folder) if mode.stacks else []
     _require_every_slug_covered(slugs, singles, stacks, directory, plugin_folder)
-    return _layout(elements, documents, choose_cover(slugs, singles, stacks, mode))
+    return choose_cover(slugs, singles, stacks, mode)
 
 
 def slugs_of(stem: str) -> list[str]:
@@ -151,7 +158,7 @@ def _is_index(value: object) -> bool:
     )
 
 
-def _missing_message(slug: str, directory: Path, plugin_folder: Path) -> str:
+def missing_message(slug: str, directory: Path, plugin_folder: Path) -> str:
     local = directory / LOCAL_FOLDER / f"{slug}.md"
     plugin = plugin_folder / PLUGIN_FOLDER / f"{slug}.md"
     return f"no digest for {slug}: tried {local} and {plugin}; run /compile-digest {slug}"
@@ -176,7 +183,7 @@ def _usable_stacks(slugs: list[str], hashes: dict[str, str], directory: Path, pl
 
 def _read_usable(located: Located, hashes: dict[str, str]) -> Digest:
     require_usable(located, hashes)
-    return _read(located)
+    return read_digest(located)
 
 
 def _require_every_slug_covered(
@@ -185,7 +192,7 @@ def _require_every_slug_covered(
     covered = set(singles).union(*(slugs_of(digest.stem) for digest in stacks))
     for slug in slugs:
         if slug not in covered:
-            raise UnharnessError(_missing_message(slug, directory, plugin_folder))
+            raise UnharnessError(missing_message(slug, directory, plugin_folder))
 
 
 def _subsets(items: list[Digest]) -> Iterator[tuple[Digest, ...]]:
@@ -215,7 +222,7 @@ def _no_cover_message(slugs: list[str], singles: dict[str, Digest]) -> str:
     return f"no cover without overlap; add {OVERLAP_FLAG} or run /compile-digest <slug> for each of: {', '.join(lacking)}"
 
 
-def _read(located: Located) -> Digest:
+def read_digest(located: Located) -> Digest:
     """Return the digest the file holds, stripped of surrounding whitespace."""
     return Digest(located.stem, located.path.read_text(encoding=TEXT_ENCODING).strip())
 
