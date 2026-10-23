@@ -1,0 +1,22 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Check the tag matches the package version
+        run: test "${GITHUB_REF_NAME#v}" = "$(uv version --project plugin/unharness --short)"
+      - run: uv run --project plugin/unharness pytest -q plugin/unharness
+      - run: uv build --no-sources plugin/unharness
+      - run: uv publish --trusted-publishing always plugin/unharness/dist/*
