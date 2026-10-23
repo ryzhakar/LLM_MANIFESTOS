@@ -165,7 +165,9 @@ A stale digest names `/compile-digest` and not `unharness stamp`, because its ma
 - `--digests`: every manifesto element enters as its single digest.
 - `--stack-digests`, which implies `--digests`: the candidates add every stack digest whose slugs all belong to the stack's manifestos. Without `--overlap`, chosen stack digests share no slug; with it, they may. Single digests cover exactly the slugs that no chosen stack digest covers.
 - `--overlap` without `--stack-digests` stops with `--overlap requires --stack-digests`.
-- Every digest mode needs a usable single digest for every manifesto element and refuses at the first that lacks one. Every stack digest a mode considers must be usable as well. The singles guarantee a cover; stack digests only shorten it.
+- A manifesto counts as covered when a usable single digest or a usable candidate stack digest covers it (queue 28). A digest mode refuses only when some manifesto has neither, with the missing-digest message naming that slug. Under `--digests` alone only singles count, so each manifesto needs its single.
+- Every digest file a mode considers, single or stack, must be usable; an unusable one stops the compile with its message.
+- Without `--overlap`, a stack whose every manifesto is covered but which no disjoint choice covers stops with `no cover without overlap; add --overlap or run /compile-digest <slug> for each of: <slugs with no single digest, comma-separated>`.
 - Every digest mode refuses a stack that names one slug twice: `manifesto <slug> appears twice in the stack; digest modes need each once`.
 - The cover is the one with the fewest total characters across the chosen digest texts. A tie goes to fewer files, then to the lexicographically smaller sorted list of stems. unharness searches every subset of the candidate stack digests and returns exactly this optimum.
 - Skills and `file` elements enter in full in every mode (queue 28).
@@ -243,7 +245,7 @@ Each test builds a plugin folder, a login, and a project under `tmp_path`; no te
 - Flags: `--stack-digests` alone admits stack candidates; `--overlap` alone exits 1 with its message; `stack` and `stamp` reject mode flags.
 - Resolution: a local stem wins over the plugin's; a stale local entry refuses even when the plugin copy is current; each of the four refusals prints its text verbatim; an entry with an extra slug counts as missing; a stack digest at `<plugin folder>/digests/<a+b>.md` is no candidate.
 - Stamp: it creates an index; it replaces one entry and keeps the rest; it writes a plugin stack digest's entry in the parent of `stacks/`; it refuses unsorted and repeated stems and an unresolved slug; its hashes equal the `<stack>` block's for the same manifestos.
-- Cover: `--digests` picks singles alone; a shorter stack digest beats its singles and a longer one loses; chosen stack digests stay disjoint without `--overlap` and share with it; ties go by file count, then by stem order; a stack digest with a slug outside the stack never enters; skills and files stay full; a repeated slug refuses.
+- Cover: `--digests` picks singles alone; a shorter stack digest beats its singles and a longer one loses; chosen stack digests stay disjoint without `--overlap` and share with it; ties go by file count, then by stem order; a stack digest with a slug outside the stack never enters; a stack digest alone covers a manifesto that has no single; a manifesto with neither refuses, naming its slug; under `--digests` a manifesto that only a stack digest covers refuses; coverage that only overlapping stack digests reach refuses without `--overlap` with the no-cover message; skills and files stay full; a repeated slug refuses.
 - Rendering: a single digest block has the full block's shape; a stack block sits at its first member's position, with tag and `governs` joined in config order, `governs` omitted without purposes, and quotes replaced; two overlapping stack blocks both name the shared member.
 - Minified: `--minified` reads the min pair; a missing and a stale min file each refuse, naming `/compile-commitments`; session files compiled against the full stack load under `--stack-digests --overlap --minified`.
 - Stack slugs: `stack dry kiss` prints the block and constitution of those two manifestos alone, without purposes.
@@ -253,8 +255,8 @@ Each test builds a plugin folder, a login, and a project under `tmp_path`; no te
 ## Decisions made in the spec
 
 1. The plugin folder holds both `manifestos/` and `digests/`, and digests key by registry slug, never by element name.
-2. Every digest mode requires a usable single digest for every manifesto, so a cover always exists and each refusal names one element; stack digests only shorten the cover.
-3. An unusable stack digest that a mode considers stops the compile instead of dropping out unseen.
+2. Without `--overlap`, a stack whose manifestos are each covered, but by no disjoint choice, stops with its own message, naming `--overlap` and the slugs that lack singles.
+3. Every digest file a mode considers, single or stack, must be usable; an unusable one stops the compile instead of dropping out unseen.
 4. Local wins per stem even when the local entry is stale.
 5. A stale digest names `/compile-digest`; only a missing entry names `unharness stamp`.
 6. A stack digest renders at its first member's position, its tag joining element names by `+` and its `governs` joining purposes by `; `, both in config order.
