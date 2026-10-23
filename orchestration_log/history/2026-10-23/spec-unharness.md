@@ -229,7 +229,7 @@ Plugin skill `manifesto:compile-digest` at `plugin/skills/compile-digest/SKILL.m
 1. Sort and dedupe the slugs; the stem joins them with `+`.
 2. Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness stack --config <path> <slugs>` into a temporary file and read it whole, never sending it into the conversation.
 3. Bind to the manifestos in that file through `manifesto-oath`.
-4. For one slug, write by the rules of the repo's write-digest skill: each demand as one plain sentence, the manifesto's order kept, boundaries folded in, one standing line, Strunk applied, the draft checked against the source, under 350 words. For several, add the rules of write-stack-digest: converging demands merged, each tension replaced by its resolution, rules in priority order, each sentence scoped to its object, under 850 words. The skill carries these rules in its own text, since the repo's skills do not ship.
+4. For one slug, write by the method the skill itself carries (3.6.1): each demand as one plain sentence, the manifesto's order kept, boundaries folded in, one standing line, Strunk applied, the draft checked against the source, under 350 words. For several, add the rules of write-stack-digest: converging demands merged, each tension replaced by its resolution, rules in priority order, each sentence scoped to its object, under 850 words. The skill carries these rules in its own text, since the repo's skills do not ship.
 5. Write the body alone, with no header, frontmatter, or title, to `.claude/digests/<stem>.md` beside the config, creating the folder.
 6. Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness stamp .claude/digests/<stem>.md --config <path>` and report its exit code; on a failure, fix what the message names and run it again.
 
