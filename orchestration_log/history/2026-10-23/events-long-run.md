@@ -72,3 +72,4 @@
 - Plan: plan-digests.md. Worktree feat/digests at LLM_MANIFESTOS.worktrees/digests (72 tests green).
 - S1 (opus) extending spec-unharness.md; prompts c-shared, c1, c2, c3 written. Peer card restored (manifesto-discovery.md). Wake cron 8445614a every 20 min.
 - Owner correction: a "no visible output" nudge is an outside event; silence means an empty message, every time. Breach logged; no text until the owner's own message.
+- S1 landed (147 lines, 11 spec decisions). Sent one amendment: a stack digest covers a manifesto on its own (queue 28); refusal only when a manifesto has neither. C1–C3 launch on confirmation.
