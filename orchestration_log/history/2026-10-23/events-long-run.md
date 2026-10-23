@@ -92,3 +92,4 @@
 - All code units integrated: feat/digests f38fb14, 166 tests; doctor runs on this repo (WARNs on index absent in the main checkout, FAIL on installed plugin 3.4.0 — both true). Launching C5 docs (digests worktree), D1 code + spec reviews (read-only), D3 e2e (verify worktree); prose review after C5.
 - Launched C5 (docs), D1 code and spec reviews, D3 e2e (verify worktree). D2 fix-pass brief written; prose review launches after C5's commit (wait b4svxao38).
 - Wave running: C5 docs, D1 code/spec reviews, D3 e2e. Nothing landed yet. Waiting on notifications; wake cron stands.
+- C5 has not yet edited docs; D3 has written its config copy. Waiting.
