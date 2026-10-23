@@ -112,3 +112,4 @@
 - Idle; outputs outstanding from D1 ×3 and D3.
 - Idle; same needs outstanding.
 - Idle; D1 ×3 and D3 still running.
+- D1 spec review landed: 0 blocking, 5 should-fix, 7 nits. Outstanding: D1 code, D1 prose, D3.
