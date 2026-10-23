@@ -107,3 +107,4 @@
 - Idle; nothing new to request.
 - Idle; all needs in flight.
 - Idle; nothing unrequested.
+- Idle; D1 ×3 and D3 outstanding, nothing else to request.
