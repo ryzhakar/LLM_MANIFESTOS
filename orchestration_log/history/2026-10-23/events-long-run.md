@@ -120,3 +120,4 @@
 - Idle; D1 prose and D3 outstanding.
 - D1 prose landed: 2 blocking (version pin → release; "a third" claim counts bodies not files). D2 fix pass launched on the reviews; it takes D3's FAIL rows when the record lands. D3 still capturing.
 - Idle; D3 and D2 running.
+- Idle; D3 and D2 in flight, nothing independent to request.
