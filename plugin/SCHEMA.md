@@ -120,15 +120,15 @@ Every error is one line. `unharness` prints `unharness: <line>` on stderr and ex
 | `element N of <list> has source 'S' that is none of manifesto <name>, skill <plugin>:<skill>, skill <skill>, or file <path>; write a path as file <path>` | a legacy or malformed source |
 | `element N of <list> name 'X' must hold no whitespace; add name:` | a name, or a file stem used as one, that holds whitespace |
 | `cannot place the line 'L'; check its indent`, `the line 'L' is indented with a tab; indent with spaces`, `key 'K' appears twice` | the YAML reader refuses a line it cannot place, a tab indent, or a repeated key |
-| `the stack is empty` | `unharness prompt` or `stack` with no element in `you` |
-| `<file> is missing`, `<file> is stale (...)`, `<file> has no <stack> block` | a session file of `unharness prompt`, the `.min.md` pair under `--minified`; each names `/compile-commitments` |
+| `the stack is empty` | `unharness prompt`, or `stack` with no slug, and no element in `you` |
+| `<file> is missing`, `<file> is stale (...)`, `<file> has no <stack> block` | a session file of `unharness prompt`, the min pair under `--minified`; each names `/compile-commitments` |
 | `--overlap requires --stack-digests` | `--overlap` without `--stack-digests` |
 | `manifesto <slug> appears twice in the stack; digest modes need each once` | a digest flag on a stack that lists one manifesto twice |
 | `no digest for <slug>: tried <local path> and <plugin path>; run /compile-digest <slug>` | a digest flag, and no single or stack digest covers the manifesto |
-| `<digest path> has no entry in <index path>; run unharness stamp <digest path>` | a digest the flags load, and its index lacks its stem |
+| `<digest path> has no entry in <index path>; run unharness stamp <digest path>` | a digest the flags load, and its index lacks its stem or holds an entry for other slugs |
 | `<digest path> is stale (changed: <slug>, ...); run /compile-digest <slug> ...` | a manifesto changed since its digest was stamped |
 | `<index path> is not a JSON object of stems to slug hashes; fix or delete it, then run unharness stamp on each digest it covers` | a malformed `index.json` |
-| `no cover without overlap; add --overlap or run /compile-digest <slug> for each of: <slugs>` | the usable stack digests overlap and no disjoint choice covers the stack |
+| `no cover without overlap; add --overlap or run /compile-digest <slug> for each of: <slugs>` | stack digests cover a manifesto that has no single digest, and every choice of them overlaps |
 | `no digest at <path>`, `<name> is not named by sorted, distinct slugs joined by +` | `unharness stamp` on a missing file, or on a stem with unsorted or repeated slugs |
 
 ---
