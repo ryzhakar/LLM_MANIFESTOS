@@ -108,3 +108,4 @@
 - Idle; all needs in flight.
 - Idle; nothing unrequested.
 - Idle; D1 ×3 and D3 outstanding, nothing else to request.
+- Idle; same four outputs outstanding.
