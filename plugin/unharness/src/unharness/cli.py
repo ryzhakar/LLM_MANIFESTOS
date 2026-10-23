@@ -3,22 +3,24 @@
 import argparse
 import os
 import sys
-from importlib.resources import files
 from pathlib import Path
 
 from unharness.compile import FULL_FILES, MINIFIED_FILES, compile_prompt, stack_view
-from unharness.config import TEXT_ENCODING, UnharnessError, fail, load
+from unharness.config import EMPTY_STACK_MESSAGE, UnharnessError, fail, load
 from unharness.digests import DIGESTS_FLAG, OVERLAP_FLAG, STACK_DIGESTS_FLAG, constitution_blocks, digest_mode, stamp_digest
+from unharness.doctor import Modes, claude_version, doctor, has_failed
 from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, terminal_device
 from unharness.resolve import login_dir, manifesto_elements, manifesto_plugin_dir, resolve_stack
+from unharness.session import load_preamble, read_if_present
 
 DEFAULT_CONFIG = Path(".manifestos.yaml")
-PREAMBLE_OVERRIDE_FILE = ".manifestos.preamble.md"
 PROMPT_VERB = "prompt"
 STACK_VERB = "stack"
 STAMP_VERB = "stamp"
 LAUNCH_VERB = "launch"
+DOCTOR_VERB = "doctor"
 MINIFIED_FLAG = "--minified"
+MODE_FLAGS = (DIGESTS_FLAG, STACK_DIGESTS_FLAG, OVERLAP_FLAG, MINIFIED_FLAG)
 LAUNCHER_SEPARATOR = "--"
 
 
@@ -33,7 +35,7 @@ def main(argv: list[str] | None = None) -> int:
     stack_parser.add_argument("slugs", nargs="*")
     for parser_of_verb in (prompt_parser, stack_parser):
         parser_of_verb.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
-    for flag in (DIGESTS_FLAG, STACK_DIGESTS_FLAG, OVERLAP_FLAG, MINIFIED_FLAG):
+    for flag in MODE_FLAGS:
         prompt_parser.add_argument(flag, action="store_true")
     stamp_parser = verbs.add_parser(STAMP_VERB)
     stamp_parser.add_argument("digest", type=Path)
@@ -42,10 +44,16 @@ def main(argv: list[str] | None = None) -> int:
     launch_parser.add_argument("prompt", nargs="?")
     for flag in ("--keep-claude-md", "--keep-web-search", "--no-hooks"):
         launch_parser.add_argument(flag, action="store_true")
+    doctor_parser = verbs.add_parser(DOCTOR_VERB)
+    doctor_parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    for flag in MODE_FLAGS:
+        doctor_parser.add_argument(flag, action="store_true")
     arguments = parser.parse_args(argv)
     try:
         if arguments.verb == LAUNCH_VERB:
             return _launch(arguments, launcher)
+        if arguments.verb == DOCTOR_VERB:
+            return _doctor(arguments)
         login = login_dir(os.environ, Path.home())
         print(_stamp(arguments, login) if arguments.verb == STAMP_VERB else _output(arguments, login))
     except UnharnessError as error:
@@ -74,13 +82,20 @@ def _stamp(arguments: argparse.Namespace, login: Path) -> str:
     return f"stamped {arguments.digest.stem} in {index}"
 
 
+def _doctor(arguments: argparse.Namespace) -> int:
+    modes = Modes(arguments.digests, arguments.stack_digests, arguments.overlap, arguments.minified)
+    findings = doctor(arguments.config, modes, login_dir(os.environ, Path.home()), os.environ, claude_version)
+    print("\n".join(finding.line for finding in findings))
+    return 1 if has_failed(findings) else 0
+
+
 def _output(arguments: argparse.Namespace, login: Path) -> str:
     verb = arguments.verb
     config = load(arguments.config)
     if verb == STACK_VERB and arguments.slugs:
         return stack_view(resolve_stack(manifesto_elements(arguments.slugs), config.directory, config.registry, login))
     if not config.you:
-        raise UnharnessError("the stack is empty")
+        raise UnharnessError(EMPTY_STACK_MESSAGE)
     documents = resolve_stack(config.you, config.directory, config.registry, login)
     if verb == STACK_VERB:
         return stack_view(documents)
@@ -88,21 +103,12 @@ def _output(arguments: argparse.Namespace, login: Path) -> str:
     session_files = MINIFIED_FILES if arguments.minified else FULL_FILES
     return compile_prompt(
         documents,
-        _preamble(config.directory),
-        _read_if_present(config.directory / session_files.interplay),
-        _read_if_present(config.directory / session_files.commitments),
+        load_preamble(config.directory).text,
+        read_if_present(config.directory / session_files.interplay),
+        read_if_present(config.directory / session_files.commitments),
         constitution_blocks(config.you, documents, config.directory, manifesto_plugin_dir(config.registry, login), mode),
         session_files,
     )
-
-
-def _preamble(directory: Path) -> str:
-    override = _read_if_present(directory / PREAMBLE_OVERRIDE_FILE)
-    return override if override is not None else files("unharness").joinpath("preamble.md").read_text(encoding=TEXT_ENCODING)
-
-
-def _read_if_present(path: Path) -> str | None:
-    return path.read_text(encoding=TEXT_ENCODING) if path.is_file() else None
 
 
 if __name__ == "__main__":

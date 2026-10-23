@@ -15,6 +15,7 @@ MANIFESTO_SOURCE = "manifesto"
 SKILL_SOURCE = "skill"
 FILE_SOURCE = "file"
 CLAUDE_MD = "CLAUDE.md"
+EMPTY_STACK_MESSAGE = "the stack is empty"
 ACTIVE_MANIFESTOS_SECTION = re.compile(r"^## Active Manifestos\n(.*?)(?=^## |\Z)", re.M | re.S)
 SOURCE = re.compile(rf"^({MANIFESTO_SOURCE}|{SKILL_SOURCE}|{FILE_SOURCE}) (\S.*)$")
 MISSING_CONFIG_STATUS = 2

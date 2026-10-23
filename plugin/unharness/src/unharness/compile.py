@@ -87,3 +87,12 @@ def _current_body(file_name: str, text: str | None, documents: list[Document]) -
 def _difference(recorded_lines: list[str], current_lines: list[str]) -> str:
     changed = sorted({line.split(" ")[0] for line in set(recorded_lines) ^ set(current_lines)})
     return f"changed: {', '.join(changed)}" if changed else "reordered"
+
+
+def session_file_problem(file_name: str, text: str | None, documents: list[Document]) -> str | None:
+    """Return why the session file would stop the prompt, None when it is current."""
+    try:
+        _current_body(file_name, text, documents)
+    except UnharnessError as error:
+        return str(error)
+    return None
