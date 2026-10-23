@@ -7,3 +7,6 @@ Replaces baseline-manifesto-tone.md of 2026-10-22.
 - `.manifestos.interplay.md` and `.manifestos.commitments.md` sit in the repo root and match the stack in `.manifestos.yaml`.
 - Captures and recon stay local under `orchestration_log/recon/2026-10-23/` (ignored); the frozen evidence is `history/2026-10-23/verification-unharness.md`.
 - No wake, agent, worktree, or wait remains; the member's card is in `departed/`, and the stewardship is open.
+
+## After span 2 (digests), 2026-10-23
+main fb7e3ae + records 16ccf1d; tag v3.6.0; plugin 3.6.0; 190 tests; no worktrees, no feature branches, no wake. Open for the owner: queue 44 (digest word-cap drop rule), plugin update to 3.6.0 in the logins, PyPI publish. Summary: summary-digests.md.
