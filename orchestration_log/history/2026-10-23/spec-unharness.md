@@ -147,8 +147,9 @@ A digest file's stem names its member set: the member slugs, sorted, distinct, a
 - A digest is body-only markdown; its text enters the prompt stripped of surrounding whitespace and otherwise unchanged.
 - Each index maps a stem to its members' source hashes, `{"<stem>": {"<slug>": "<sha256>", ...}, ...}`, and covers the digests of its own place; the plugin index covers `stacks/` too.
 - A digest is usable when its index holds an entry for its stem, the entry's slugs equal the stem's slugs, and every hash equals that manifesto's current source hash. An entry whose slugs differ from the stem's counts as missing.
+- A stack file whose stem is not sorted and distinct, and a stack digest placed in the plugin's `digests/` instead of `digests/stacks/`, are no candidates and raise nothing; decision 3 binds the files a mode considers.
 
-`unharness stamp DIGEST [--config PATH]` (queue 37) reads DIGEST's stem and resolves each slug as a registry manifesto through `resolve_stack`, the one home for hashing. It writes the entry into the index of DIGEST's place: the `index.json` in DIGEST's folder, or in that folder's parent when the folder is `stacks`. It creates a missing index, replaces the stem's entry, keeps every other entry, writes `json.dumps(index, indent=2, sort_keys=True)` and a newline, and prints `stamped <stem> in <index path>`. It refuses a missing DIGEST, a stem with unsorted or repeated slugs, and a slug that does not resolve, the last with the resolver's message.
+`unharness stamp DIGEST [--config PATH]` (queue 37) reads DIGEST's stem and resolves each slug as a registry manifesto through `resolve_stack`, the one home for hashing. It writes the entry into the index of DIGEST's place: the `index.json` in DIGEST's folder, or in that folder's parent when the folder is `stacks`. It creates a missing index, replaces the stem's entry, keeps every other entry, writes `json.dumps(index, indent=2, sort_keys=True)` and a newline, and prints `stamped <stem> in <index path>`. It refuses, each after the `unharness: ` prefix, a missing DIGEST with `no digest at <path>`, a stem with unsorted, repeated, or empty slugs with `<file name> is not named by sorted, distinct slugs joined by +`, and a slug that does not resolve with the resolver's message.
 
 A digest mode refuses with these messages, verbatim after the `unharness: ` prefix, each naming its fix:
 
@@ -169,7 +170,7 @@ A stale digest names `/compile-digest` and not `unharness stamp`, because its ma
 - Every digest file a mode considers, single or stack, must be usable; an unusable one stops the compile with its message.
 - Without `--overlap`, a stack whose every manifesto is covered but which no disjoint choice covers stops with `no cover without overlap; add --overlap or run /compile-digest <slug> for each of: <slugs with no single digest, comma-separated>`.
 - Every digest mode refuses a stack that names one slug twice: `manifesto <slug> appears twice in the stack; digest modes need each once`.
-- The cover is the one with the fewest total characters across the chosen digest texts. A tie goes to fewer files, then to the lexicographically smaller sorted list of stems. unharness searches every subset of the candidate stack digests and returns exactly this optimum.
+- The cover is the one with the fewest total characters across the chosen digest texts. A tie goes to fewer files, then to the lexicographically smaller sorted list of stems. unharness returns exactly this optimum; how it searches is its own, and a stack of twelve manifestos with a digest for every pair of them compiles in seconds.
 - Skills and `file` elements enter in full in every mode (queue 28).
 
 The constitution keeps one block per element, in config order, with two changes:
@@ -202,13 +203,13 @@ Every compiled artifact records the source hash of each source it was made for, 
 | Check | OK detail | Finding |
 |---|---|---|
 | `config` | the config path | FAIL with the load error; doctor then runs only `claude`, `uv`, and `manifesto plugin` |
-| `element <name>` | the resolved path | FAIL with the resolver's message |
+| `element <name>` | the resolved path | FAIL with the resolver's message; the `digest`, `cover`, session-file, and `prompt size` checks, which need the whole stack, are left out while any element fails |
 | `skill <plugin>:<skill>` | the resolved version | WARN when it differs from the version in `<login>/plugins/installed_plugins.json`, or no record exists |
 | `digest <stem>` | `local` or `plugin`, current | the refusal message; one line per manifesto's single digest, then one per candidate stack digest |
 | `cover` | stems in render order and their total words | the refusal message; the flags' digest mode, else `--stack-digests --overlap` |
 | `.manifestos.interplay.md`, `.manifestos.commitments.md`, and the min pair | current | the missing or stale message, one line per file |
 | `preamble` | `shipped` or `.manifestos.preamble.md` | none |
-| `claude` | path and version | WARN when not on PATH, since a shell function can launch, or when the version differs from the tested 2.1.309 |
+| `claude` | path and version | WARN when not on PATH, since a shell function can launch, when it prints no version, or when the version differs from the tested 2.1.309 |
 | `uv` | the paths of `uv` and `uvx` | FAIL when `uvx` is not on PATH |
 | `manifesto plugin` | the installed version | FAIL when absent from `installed_plugins.json` or below 3.5.0, whose hooks do not stand down |
 | `prompt size` | `full <n> words; shortest <n> words` | WARN when the shortest mode cannot compile, with its message |
