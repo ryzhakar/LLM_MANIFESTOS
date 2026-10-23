@@ -279,3 +279,120 @@ Source of the first item: `identity-line-findings.md`, "What unharness should ch
 4. **Doctor range.** One constant records the range of `claude` versions the package has been tested with; both ends read 2.1.309 today. `claude` WARNs with `claude: <path> <version>, outside the tested range <lo>–<hi>` when `claude --version` falls outside it; inside it the OK line is unchanged. This replaces the `claude` row's third WARN cause in the table above.
 5. **`/compile-digest` method.** The plugin skill carries the digest method in its own voice: list every distinct demand, collapse restatements, write one plain complete sentence per demand, fold each boundary into the sentence it limits, keep the manifesto's own order, apply Strunk, check that every demand stands present or deliberately dropped, and name a drop in the stamp commit. It refers to no repo-local skill.
 6. **Versions.** Package and plugin read 3.6.1. Doctor's floor for the manifesto plugin stays 3.6.0.
+
+# 3.7.0: switch registry and discovery
+
+The owner's order and the answers for this part are entries 51-54 of `queue-long-run.md`, cited below as queue N; entry 54 is the owner's ruling that the sweep skill stays in this repo. The capture form comes from `identity-line-findings.md`. One data file records every switch and the Claude Code versions at which a capture confirmed it, and launch, doctor, and the README's strip table all read that file.
+
+## `switches.json` (queue 53)
+
+The registry is `plugin/unharness/src/unharness/switches.json`, loaded through `importlib.resources` as `preamble.md` is. It is the one home of every switch: no switch name stays in a Python constant or in hand-written prose. Three items stay in `launch.py`: `--system-prompt-file`, whose value is the cached prompt; `--settings`, which carries the settings entries; and `UNHARNESS=1`, which addresses the manifesto plugin's hooks and not Claude Code.
+
+The file holds one JSON array of entries in launch order. Each entry has exactly these keys:
+
+| Key | Type | Meaning |
+|---|---|---|
+| `name` | string | the variable for `env`, the flag with its dashes for `flag`, the top-level key for `settings` |
+| `kind` | `"env"`, `"flag"`, or `"settings"` | how launch passes the switch |
+| `value` | a string for `env`; a string, or `null` for a bare flag, for `flag`; any JSON value for `settings` | what launch passes |
+| `removes` | string | the injected text, as the strip table's first column names it |
+| `documented` | boolean | a Claude Code docs page names the switch |
+| `control` | boolean | a capture without the switch showed the text, so its removal was seen and not inferred |
+| `verified` | a non-empty array of distinct `X.Y.Z` strings in ascending order | the versions at which a capture ran with the switch and its request bodies lacked the text |
+| `default` | boolean | launch passes the switch when its option is absent |
+| `option` | `null`, `"--keep-claude-md"`, `"--keep-web-search"`, or `"--no-hooks"` | the launch option that inverts `default` |
+
+One entry of each kind:
+
+    {"name": "CLAUDE_CODE_DISABLE_CLAUDE_MDS", "kind": "env", "value": "1", "removes": "Every CLAUDE.md", "documented": true, "control": true, "verified": ["2.1.309"], "default": true, "option": "--keep-claude-md"}
+    {"name": "--disallowedTools", "kind": "flag", "value": "WebSearch", "removes": "WebSearch paragraph", "documented": true, "control": true, "verified": ["2.1.309"], "default": true, "option": "--keep-web-search"}
+    {"name": "disableAllHooks", "kind": "settings", "value": true, "removes": "Hook output", "documented": true, "control": true, "verified": ["2.1.309"], "default": false, "option": "--no-hooks"}
+
+The shipped file holds the thirteen switches 3.6.1 passes: the seven variables in 3.6.1's order, then `--disallowedTools`, then the five settings keys in 3.6.1's order. Each is verified at 2.1.309. `documented` is false for `CLAUDE_CODE_TODO_REMINDER_MODE` and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER`. `control` is false for `attribution`, `outputStyle`, and both auto-memory switches, the rows the README marks "set"; X1 captured the silent-turn note with and without its switch, so that entry's `control` is true.
+
+The loader refuses a file that breaks the table above with `switches.json entry <index>: <key> <problem>`. It also refuses two entries with one `kind` and `name`, and entries that share `removes` but differ in `default`, `option`, or `control`, since they form one table row.
+
+## The strip table and `unharness switches`
+
+`unharness switches` takes no argument and prints the strip table in markdown, with the header `| Injected text | Switch | Default |` and one row per distinct `removes`, in order of first appearance.
+
+- The Switch cell joins the row's entries with `, `. An env entry renders as ``env `NAME=VALUE` ``, a flag as `` `NAME VALUE` `` or `` `NAME` ``, and a setting as ``setting `NAME: <json.dumps(VALUE)>` ``; an entry whose `documented` is false gains `, undocumented`.
+- The Default cell reads `stripped` when `control` is true and `set` when it is false; it reads `kept` when `default` is false. An option appends ``; `<option>` keeps`` to `stripped` or `set`, and ``; `<option>` strips`` to `kept`.
+
+In `plugin/README.md`, the table sits between the lines `<!-- switches -->` and `<!-- /switches -->`. A sentence above the markers names `--system-prompt-file`. The paragraph below them names no switch: it says what `stripped`, `set`, and `undocumented` mean, and that a release may drop an undocumented switch. The unharness README and `plugin/SCHEMA.md` replace their sentences naming the two undocumented variables with a pointer to the table. A test reads the lines between the markers and asserts that they equal the verb's output, so a changed registry fails the suite until the README carries the new table.
+
+## Version and selection in `launch` (queue 53)
+
+`unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [--claude-version X.Y.Z] [PROMPT] [-- LAUNCHER [ARGS...]]`
+
+Detection. Without `--claude-version`, launch runs `LAUNCHER ARGS... --version` by the path it runs the launcher on: directly when LAUNCHER is on PATH, else through `$SHELL -ic`. With no launcher, it runs `claude --version` by the same rule, since the printed command names `claude`. It captures stdout under a 10-second timeout and takes the first line matching `^\d+\.\d+\.\d+`, because an interactive shell may print lines of its own first. A timeout, a launcher that fails to start, or output with no match makes launch use the registry's newest version, and it prints `unharness: <launcher> --version printed no version; using switches verified at <newest>` on stderr. `--claude-version` replaces the run; a value other than `X.Y.Z` stops launch with `--claude-version takes X.Y.Z, got <value>`.
+
+Selection. The registry's versions are the union of every entry's `verified`. Launch chooses one version C for the detected version D:
+
+1. When D is a registry version, C is D, and launch prints no note.
+2. Otherwise C is the newest registry version below D, else the oldest registry version when D is older than all of them. Launch prints `unharness: claude <D> is not in the switch registry; using switches verified at <C>` on stderr.
+
+Launch passes every entry verified at C whose `default`, inverted when its option is given, is true. An entry verified at an older version but not at C stays out, since the release may have dropped it.
+
+Composition. Env entries become variables in registry order, followed by `UNHARNESS=1`. After `LAUNCHER ARGS...` come `--system-prompt-file <prompt file>`, each flag entry in registry order with its value as the next argument when the value is a string, and `--settings` with the settings entries in registry order as compact JSON. `--settings` is left out when no settings entry passes. At 2.1.309 with no option, the printed command equals the 3.6.1 command byte for byte, the last word naming the terminal device:
+
+    env CLAUDE_CODE_ATTRIBUTION_HEADER=0 CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1 CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 CLAUDE_CODE_SILENT_TURN_REMINDER=0 CLAUDE_CODE_TODO_REMINDER_MODE=off CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off UNHARNESS=1 claude --system-prompt-file /home/u/.cache/unharness/<sha256>.md --disallowedTools WebSearch --settings '{"includeGitInstructions":false,"attribution":{"commit":"","pr":""},"autoMemoryEnabled":false,"outputStyle":"default"}' </dev/ttys003
+
+## Doctor (queue 53)
+
+The registry replaces 3.6.1's tested-range constant. `unharness doctor` gains `--claude-version X.Y.Z`, which replaces the detected version in the switch lines, for a launcher such as `claude@meta` that is no program on PATH. The new lines follow `claude` and precede `uv`. They need no config, so a config FAIL keeps them. Switch lines never FAIL, since launch still runs with the chosen set.
+
+| Check | OK detail | WARN detail |
+|---|---|---|
+| `claude` | path and version, when the version is a registry version | not on PATH; printed no version; `<path> <D>, not in the switch registry; launch uses switches verified at <C>` |
+| `switch registry` | `newest <version>; <m> switches` | none |
+| `switch <kind> <name>`, one per entry in registry order | `verified at <C>`, when C equals D | `verified at <C>, not at <D>` when D differs; `verified at <C>, claude version unknown` when detection failed; `left out; last verified at <the entry's newest>` when the entry is not verified at C |
+
+An excerpt, with claude 2.1.312 on PATH:
+
+    WARN claude: /usr/local/bin/claude 2.1.312, not in the switch registry; launch uses switches verified at 2.1.309
+    OK switch registry: newest 2.1.309; 13 switches
+    WARN switch env CLAUDE_CODE_ATTRIBUTION_HEADER: verified at 2.1.309, not at 2.1.312
+
+## Sweep skill (queue 51, 54)
+
+`.claude/skills/sweep-switches/SKILL.md`, written to the memento:skill-creation rules, with `sweep.py` beside it, stdlib only and unshipped. The skill runs `python3 -I .claude/skills/sweep-switches/sweep.py <X.Y.Z> [--docs DIR] [--tarball PATH]` from the repo root, reads the report, and reads the extracted source around each candidate whose name suggests injected text. The script takes these steps:
+
+1. It refuses a version that is not `X.Y.Z`.
+2. In a new temporary folder, it runs `npm pack @anthropic-ai/claude-code@<v> --pack-destination <folder>`, or takes `--tarball`, and extracts the tarball with `tarfile`'s `data` filter.
+3. It reads `package/cli.js`. When the tarball holds no `cli.js`, it reads every file over 1 MB under `package/` as bytes decoded as latin-1, the strings method A2 used on the native binary. The `source` field records which.
+4. It extracts three sets. Env reads are the names in `process.env.NAME` and `process.env["NAME"]`. Env literals are every match of `\bCLAUDE_CODE_[A-Z0-9_]+\b`, which also catches reads through an alias such as A2's `i.CLAUDE_CODE_DISABLE_ATTACHMENTS`. Settings candidates are the keys of schema literals matching `[{,]([a-z][A-Za-z0-9]+):[\w$]{1,3}\.(boolean|string|number|enum|array|object|record|union|literal)\(`; this heuristic also catches tool-input keys, so the report calls them candidates.
+5. It fetches `https://code.claude.com/docs/en/env-vars.md` and `https://code.claude.com/docs/en/settings-reference.md`, the two pages A1 found naming switches, or reads both files from `--docs DIR`. A name is documented when it appears in backticks on its page. A fetch failure stops the script, naming the URL and `--docs`.
+6. It takes as the previous sweep the file in `.claude/switch-sweeps/` with the highest version below `<v>`, when one exists.
+7. It writes `.claude/switch-sweeps/<v>.json` with the keys `version`, `date`, `source`, `env_reads`, `env_literals`, `settings_candidates`, `documented_env`, and `documented_settings`, each set a sorted array.
+8. It prints a markdown report to stdout with five lists: env names in code and absent from the docs; settings candidates absent from the docs; names new since the previous sweep; names gone since it; and registry entries whose name the code no longer holds, read from `plugin/unharness/src/unharness/switches.json` under the repo root three folders above the script. An empty list prints `none`.
+
+The sweep writes JSON under `.claude/switch-sweeps/` rather than markdown under `orchestration_log/recon/<date>/`, because the next sweep reads the previous one's sets as data, and a folder keyed by version alone yields the previous file without a search across dated folders. The markdown goes to stdout for the reader, and the JSON files are committed.
+
+Promotion is a human step, and a sweep never edits the registry. A switch enters `switches.json`, and a version enters an entry's `verified`, only after a capture in the X1 form: print mode under `env -i`, the unharness strip, `OTEL_LOG_RAW_API_BODIES=file:<dir>`, and one switch changed per capture from a base. `control` becomes true only when a capture without the switch shows the text. For a new Claude Code version, one run captures the full strip and checks each entry's text absent; the owner or a capture agent then adds the version to the `verified` of every entry the run confirms, in one commit. An entry that lacks a registry version therefore failed at that version and was never merely untested. The promoter then pastes the output of `unharness switches` between the README markers and runs the suite.
+
+## Tests
+
+- Registry: the shipped file loads; a missing key, an extra key, a bad kind, an unsorted, repeated, or empty `verified`, a repeated kind and name, and a row whose entries differ in `default`, `option`, or `control` each refuse with the entry's index.
+- Table: `unharness switches` prints a fixture registry's table exactly, covering a bare flag, `undocumented`, `set`, `kept`, and both option forms; the README block between the markers equals the verb's output for the shipped file.
+- Selection: an exact version, a version above the newest, one between two, and one below the oldest each choose the right C; an entry verified only at an older version stays out; each note prints verbatim.
+- Detection: a launcher on PATH runs directly, and one off PATH runs through `$SHELL -ic`, both stubbed; a version on the second line of output parses; a timeout, an `OSError`, and output with no match each fall back to the newest with the note; `--claude-version` runs nothing; a malformed value refuses.
+- Composition: the printed command at 2.1.309 with no option equals the line above; each option inverts its entry; a selection with no settings entry leaves `--settings` out; a fixture flag with a `null` value adds the bare flag.
+- Doctor: each `claude` line; the `switch registry` line; the OK, differing, unknown, and left-out switch lines; `--claude-version` overrides detection; a config FAIL keeps the switch lines; no switch line FAILs.
+- Sweep: `.claude/skills/sweep-switches/test_sweep.py`, run with `python3 -I`, builds a docs folder and a tarball holding a fixture `cli.js`, then runs the script with `--tarball` and `--docs`. It checks each extracted set, each report list, the previous-sweep diff, the native fallback, and each refusal. No test touches npm or the network.
+
+## Decisions made in the spec
+
+1. `--system-prompt-file`, `--settings`, and `UNHARNESS=1` stay in `launch.py`; every other switch lives in the registry alone.
+2. `default` and `option` record the three launch options, so the registry carries opt-out and opt-in switches alike.
+3. `control` keeps the README's line between `stripped` and `set`; the silent-turn row turns `stripped`, since X1 captured it both ways.
+4. Launch chooses one registry version and passes only the entries verified at it, never an entry verified only earlier.
+5. A version older than every registry version chooses the oldest, with the same note.
+6. A version enters the registry only through a run of the full strip, so an entry's missing version means a failure, never a gap in testing.
+7. With no launcher, launch detects through `claude`, the launcher it prints.
+8. Doctor's `claude` line checks registry membership in place of the tested range; doctor gains `--claude-version`; switch lines never FAIL.
+9. Doctor reads queue 53's "newest swept version" as the registry's newest verified version, since no sweep file ships with the package.
+10. Sweeps land as `.claude/switch-sweeps/<v>.json`, with the report on stdout.
+11. A tarball without `cli.js` falls back to a byte scan; `--tarball` and `--docs` let the script run offline.
+12. The README table is the one derived document; the unharness README and `SCHEMA.md` point to it and name no switch.
+13. Entries that share `removes` form one row and share `default`, `option`, and `control`.
