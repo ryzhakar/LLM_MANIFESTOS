@@ -133,3 +133,4 @@
 - Idle; D2 only, nothing independent.
 - D2 running (2 min in by wall clock). The many "idle" journal lines above were padding; none more until something changes.
 - D2 triage written: 44 accept, 11 reject, 7 defer; fixes being applied. Wait bzkfaqg1f watches for its commits.
+- D2 first fix commit 34ec254 (code); skill, docs, hooks commits to follow; its completion message pending.
