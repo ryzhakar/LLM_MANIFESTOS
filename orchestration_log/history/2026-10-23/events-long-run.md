@@ -129,3 +129,4 @@
 - Idle; D2 in flight, no independent request.
 - Idle; D2 only.
 - Idle; waiting on D2.
+- Idle; D2 outstanding.
