@@ -115,3 +115,4 @@
 - D1 spec review landed: 0 blocking, 5 should-fix, 7 nits. Outstanding: D1 code, D1 prose, D3.
 - Idle; D1 code, D1 prose, D3 outstanding.
 - Idle; three outputs outstanding, all in flight.
+- Idle; D1 code, D1 prose, D3 still running.
