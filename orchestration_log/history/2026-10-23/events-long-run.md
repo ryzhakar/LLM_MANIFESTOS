@@ -76,3 +76,4 @@
 - Spec amendment confirmed. C1 launched alone in the feat/digests worktree (cli.py and compile.py are shared with C2/C3; C2, C3, C4 follow in their own worktrees branched from feat/digests after C1 commits, integrated by rebase and fast-forward).
 - C2 (feat/minified), C3 (feat/doctor), C4 (feat/compile-digest) launched in their own worktrees branched from feat/digests; each rebases on feat/digests once C1 commits. Integration: rebase each onto feat/digests and fast-forward, then C5 docs, then D review.
 - C4 part (a) done: compile-digest skill committed on feat/compile-digest (0a7efbd, 71 lines, plugin validate passes); part (b) stamping waits for C1's stamp verb. C1, C2, C3 still running.
+- C2 committed on feat/minified (29bc797, dbf76d0, c4159b4). C1 in progress (digests.py, tests uncommitted), C3 in progress. Waiting on notifications; wake 8445614a stands.
