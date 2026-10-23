@@ -66,3 +66,8 @@
 2026-10-23T02:48 | tool:git | discovery | feat/unharness rebased onto session/long-run (the superseded records commit skipped, preamble conflicts resolved to the replayed version; product tree identical to 2371385), checks rerun by me (72 package tests, hook suite OK, both validations); session/long-run fast-forwarded to 002db33; origin/main 43a1e3e..002db33; tag v3.5.0 pushed; worktrees unharness and oath removed with their branches
 2026-10-23T02:48 | tool:uvx | discovery | the git install line runs against the pushed tag: uvx --from git+https://github.com/ryzhakar/llm-manifestos@v3.5.0#subdirectory=plugin/unharness unharness --help prints the three verbs
 2026-10-23T02:48 | self | span-event | close; F1: wake 690c6948 cancelled; leave notice sent; card moved to departed; stewardship released; summary and baseline written
+
+## 2026-10-23 round 2 and new span
+- Owner present; round 2 held (queue 27–41). Silence restored after. Release trigger given: ship main, tag 3.6.0.
+- Plan: plan-digests.md. Worktree feat/digests at LLM_MANIFESTOS.worktrees/digests (72 tests green).
+- S1 (opus) extending spec-unharness.md; prompts c-shared, c1, c2, c3 written. Peer card restored (manifesto-discovery.md). Wake cron 8445614a every 20 min.

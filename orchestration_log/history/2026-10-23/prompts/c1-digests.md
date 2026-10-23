@@ -1,0 +1,8 @@
+Read /Users/ryzhakar/LLM_MANIFESTOS/orchestration_log/history/2026-10-23/prompts/c-shared-digests.md first and obey it. Your unit: C1.
+
+Build, in /Users/ryzhakar/LLM_MANIFESTOS.worktrees/digests/plugin/unharness:
+1. src/unharness/digests.py: locate single and stack digests for a stack (local `.claude/digests/` beside the config wins over `<registry>/digests/` and `<registry>/digests/stacks/`), read the `index.json` sidecar, refuse a missing digest, a missing index entry, or stale hashes with the spec's exact messages, and choose the cover per spec §Cover selection (`--digests`, `--stack-digests` implies `--digests`, `--overlap` requires `--stack-digests`; minimal total characters; exact cover; skills and file elements always full).
+2. The `stamp` verb: `unharness stamp <digest-path> [--config PATH]` derives the member slugs from the file name, hashes the current manifesto bodies via resolve.py, and writes/updates the entry in the `index.json` beside the digest (create the file if absent, keep other entries, sorted keys, 2-space indent, trailing newline).
+3. Wire the three flags into `prompt` and `stack` in cli.py and into compile.py so the constitution renders digests exactly as the spec's §Rendered form says. `stack` output must show which digest file each element came from, as the spec says.
+4. Tests in tests/test_digests.py (and additions to existing CLI tests): resolution order, index refusal messages, cover choice with and without overlap on a fixture of 4 manifestos with 2 stack digests and singles, stamp writing and updating, flag implication and refusal.
+Report path: /Users/ryzhakar/LLM_MANIFESTOS/orchestration_log/recon/2026-10-23/c1-report.md. Commit subject: `feat(unharness): digest sources, cover selection, stamp verb`.
