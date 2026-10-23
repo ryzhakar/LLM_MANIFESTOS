@@ -25,8 +25,23 @@ LAUNCHER_SEPARATOR = "--"
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Run the verb named in argv; print its output, or fail in one line with exit status 1."""
-    argv = sys.argv[1:] if argv is None else argv
+    """Run the verb named in argv; print its output, fail in one line with exit status 1, or exit 0 quietly when stdout closes early."""
+    try:
+        status = _run(sys.argv[1:] if argv is None else argv)
+        sys.stdout.flush()
+    except BrokenPipeError:
+        _discard_stdout()
+        return 0
+    return status
+
+
+def _discard_stdout() -> None:
+    """Point stdout at the null device, so the interpreter's flush at exit finds nothing to fail on."""
+    os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+
+
+def _run(argv: list[str]) -> int:
+    """Parse argv, run its verb, and return the exit status."""
     argv, launcher = _split_launcher(argv)
     parser = argparse.ArgumentParser(prog="unharness")
     verbs = parser.add_subparsers(dest="verb", required=True)

@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from importlib.resources import files
@@ -178,3 +179,20 @@ def test_the_full_mode_ignores_the_minified_files_even_when_they_are_stale_or_ab
 
     assert run.returncode == 0, run.stderr
     assert "Old." not in run.stdout and "Agree.\n" in run.stdout
+
+
+@pytest.mark.parametrize("arguments", [("stack",), ("prompt",), ("launch", "Be bound."), ("doctor",)])
+def test_every_verb_exits_quietly_with_status_0_when_its_reader_closes_stdout(login, project, tmp_path, arguments):
+    write_session_files(project, login)
+    reader, writer = os.pipe()
+    os.close(reader)
+    try:
+        run = subprocess.run(
+            [sys.executable, "-m", "unharness.cli", *arguments],
+            stdout=writer, stderr=subprocess.PIPE, text=True, cwd=project, timeout=60,
+            env={"CLAUDE_CONFIG_DIR": str(login), "XDG_CACHE_HOME": str(tmp_path / "cache"), "PATH": "/usr/bin:/bin"},
+        )
+    finally:
+        os.close(writer)
+
+    assert (run.returncode, run.stderr) == (0, "")
