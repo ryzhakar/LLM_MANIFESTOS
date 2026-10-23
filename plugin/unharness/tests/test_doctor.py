@@ -108,12 +108,12 @@ def test_a_manifesto_plugin_absent_from_installed_plugins_fails(host, missing_co
     assert finding(lines, "manifesto plugin") == f"FAIL manifesto plugin: absent from {host / 'login' / 'plugins' / 'installed_plugins.json'}"
 
 
-def test_a_manifesto_plugin_below_3_5_0_fails_since_its_hooks_do_not_stand_down(host, missing_config, capsys):
-    record_installed(host / "login", manifesto="3.4.9")
+def test_a_manifesto_plugin_below_3_6_0_fails_since_its_hooks_do_not_all_stand_down(host, missing_config, capsys):
+    record_installed(host / "login", manifesto="3.5.9")
 
     _, lines = doctor(capsys, *missing_config)
 
-    assert finding(lines, "manifesto plugin") == "FAIL manifesto plugin: 3.4.9 is below 3.5.0, whose hooks do not stand down"
+    assert finding(lines, "manifesto plugin") == "FAIL manifesto plugin: 3.5.9 is below 3.6.0, whose hooks do not all stand down"
 
 
 def test_the_newest_recorded_manifesto_version_counts_when_several_scopes_record_one(host, missing_config, capsys):

@@ -46,7 +46,7 @@ from unharness.resolve import (
 from unharness.session import load_preamble, read_if_present
 
 TESTED_CLAUDE_VERSION = "2.1.309"
-MINIMUM_MANIFESTO_VERSION = "3.5.0"
+MINIMUM_MANIFESTO_VERSION = "3.6.0"
 INSTALLED_PLUGINS_FILE = Path("plugins") / "installed_plugins.json"
 VERSION_NUMBER = re.compile(r"\d+\.\d+\.\d+")
 VERSION_FLAG = "--version"
@@ -237,14 +237,14 @@ def _uv_finding(environ: Mapping[str, str]) -> Finding:
 
 
 def _manifesto_plugin_finding(login: Path) -> Finding:
-    """Check the installed manifesto plugin is recent enough to stand down under unharness."""
+    """Check the installed manifesto plugin is recent enough for every hook to stand down under unharness."""
     name = "manifesto plugin"
     versions = _installed_versions(login, MANIFESTO_PLUGIN)
     if not versions:
         return Finding(Status.FAIL, name, f"absent from {login / INSTALLED_PLUGINS_FILE}")
     newest = max(versions, key=version_key)
     if version_key(newest) < version_key(MINIMUM_MANIFESTO_VERSION):
-        return Finding(Status.FAIL, name, f"{newest} is below {MINIMUM_MANIFESTO_VERSION}, whose hooks do not stand down")
+        return Finding(Status.FAIL, name, f"{newest} is below {MINIMUM_MANIFESTO_VERSION}, whose hooks do not all stand down")
     return Finding(Status.OK, name, newest)
 
 
