@@ -83,12 +83,13 @@ All in `orchestration_log/history/2026-10-23/spec-unharness.md`, part 3.6.0:
 
 1. Cover selection: the search method is the code's; the spec keeps the optimum and its ranking.
 2. `unharness doctor`: an element that fails to resolve leaves out the digest, cover, session-file, and prompt-size checks; the `claude` row adds the third WARN cause.
-3. `unharness doctor`, `prompt size`: the count includes the `<harness>` tags of the preamble block, so the line equals `wc -w` of the prompt it names.
-4. Digest sources: a stack file whose stem is not sorted and distinct, or whose place the table does not name, is no candidate and raises nothing; the two stamp refusals and the empty-slug case carry their text.
+3. Hooks: every hook of the manifesto plugin stands down under `UNHARNESS=1`; `doctor`'s floor reads 3.6.0.
+4. `unharness doctor`, `prompt size`: the count includes the `<harness>` tags of the preamble block, so the line equals `wc -w` of the prompt it names.
+5. Digest sources: a stack file whose stem is not sorted and distinct, or whose place the table does not name, is no candidate and raises nothing; the two stamp refusals and the empty-slug case carry their text.
 
 ## End-to-end record (`verification-digests.md`)
 
-The record scores 35 rows, 35 PASS and 0 FAIL, so no FAIL row needed a fix. Its findings and observations are ruled here.
+The record on disk scores 35 rows, 35 PASS and 0 FAIL (the lead's note said 36), so no FAIL row needed a fix. Its findings and observations are ruled here.
 
 - e2e premise REJECT: the stack lacks `raise-the-bar`, so no mode refuses in this repo; a fact about the brief, not a defect.
 - e2e meta login REJECT: the `meta` login holds manifesto plugin 3.4.0, so doctor's FAIL is correct; an environment fact.
@@ -99,7 +100,9 @@ The record scores 35 rows, 35 PASS and 0 FAIL, so no FAIL row needed a fix. Its 
 - e2e idioms in a manifesto REJECT: the skill already bans idioms and its check step covers them; the record says the rewrite worked.
 - e2e doctor word count ACCEPT: I traced the two-word gap to the `<harness>` tags that the compiled prompt wraps round the preamble and the count left out. A test now compares doctor's sizes with `wc -w` of both prompts, and the count includes the tags. The spec line is fixed to say so.
 - e2e `BrokenPipeError` on `stack | head` DEFER (to a later unit): no spec line covers it, and every verb shares it.
-- e2e ten names in the first reply, and the hook line REJECT: model behavior and the login's older plugin, not scored and not a product fault.
+- e2e ten names in the first reply REJECT: model behavior, not scored and not a product fault.
+- e2e `Active bindings` line in every request ACCEPT (the lead's order after the record landed): of the four hooks, session-start and post-compact stood down under `UNHARNESS=1`, and the per-prompt drift reminder and the subagent hook did not. That was queue 16's reading, pinned by a test, so the 3.4.0 login did not explain the line alone. Both hooks now exit silently under the variable, with tests that run all four hooks. The spec section on hooks changes with them, and queue 16 is superseded. One consequence for the lead: a subagent runs on its own system prompt, which the compiled prompt does not reach, so under unharness subagents now receive no binding from this plugin at all. If the owner wants them bound, revert the subagent-start hunk of 9d36026 alone.
+- e2e doctor floor ACCEPT (follows from the line above): doctor's floor said a plugin below 3.5.0 does not stand down, but 3.5.0 stands down two hooks only. The floor is 3.6.0, the first release whose hooks all stand down, with the message "whose hooks do not all stand down". The release unit must therefore ship 3.6.0, or doctor fails on its own plugin.
 
 ## Commits on feat/digests
 
@@ -113,6 +116,10 @@ The record scores 35 rows, 35 PASS and 0 FAIL, so no FAIL row needed a fix. Its 
 | c2ca1b1 | fix(skill): slug rule, word counts, write-well; drop extra compile | prose S3, S4, S8, N9; spec S3, N6, N7 |
 | ecf43a9 | doc(plugin): min pair, slug and cover wording, doctor omissions | prose B2, S1, S2, S5, S6, N1-N8, N10-N12; spec S4, N5 |
 | 8b6fb06 | fix(unharness): prompt size counts the harness tags too | e2e doctor word count |
+| 9d36026 | fix(hooks): every hook stands down under UNHARNESS | e2e `Active bindings` line |
+| 48ef74d | fix(unharness): doctor floor is the release whose hooks all stand down | e2e hook line, floor |
+
+Commit 04778c2 on the branch, a preamble change, is another agent's and not part of this pass; it adds 72 words to every prompt size that doctor prints after it.
 
 The spec edits sit in `spec-unharness.md` in the main checkout, uncommitted. The `.min.md` files and the root README changed inside the doc commit.
 
@@ -123,10 +130,10 @@ The spec edits sit in `spec-unharness.md` in the main checkout, uncommitted. The
 | code review | 16 | 3 | 3 | n/a |
 | spec review | 7 | 6 | 2 | n/a |
 | prose review | 20 | 1 | 1 | n/a |
-| end-to-end record | 2 | 5 | 3 | 0 |
-| Total | 45 | 15 | 9 | 0 |
+| end-to-end record | 4 | 4 | 3 | 0 |
+| Total | 47 | 14 | 9 | 0 |
 
-Of the 69 lines, 9 repeat a finding that another review or the record made; each repeat is ruled as its twin.
+Of the 70 lines, 9 repeat a finding that another review or the record made; each repeat is ruled as its twin.
 
 ## Last lines of the final runs
 
@@ -135,7 +142,10 @@ Suite, from the worktree:
 ```
 $ uv run --project plugin/unharness pytest -q plugin/unharness
 ..............................................                           [100%]
-190 passed in 7.93s
+190 passed in 7.88s
+$ cd plugin && python3 -m unittest discover -s tests
+Ran 25 tests in 5.016s
+OK
 ```
 
 Plugin and marketplace:
@@ -155,7 +165,7 @@ OK .manifestos.commitments.min.md: current
 OK preamble: shipped
 OK claude: /Users/ryzhakar/.local/bin/claude 2.1.309
 OK uv: /Users/ryzhakar/pp/offline-kit/shim/uv /Users/ryzhakar/pp/offline-kit/shim/uvx
-FAIL manifesto plugin: 3.4.0 is below 3.5.0, whose hooks do not stand down
+FAIL manifesto plugin: 3.4.0 is below 3.6.0, whose hooks do not all stand down
 WARN prompt size: shortest mode cannot compile: .../LLM_MANIFESTOS/plugin/digests/first-principles.md has no entry in .../LLM_MANIFESTOS/plugin/digests/index.json; run unharness stamp ...
 ```
 
@@ -163,8 +173,8 @@ The same run from a temporary copy of the config that points `manifesto_dir` at 
 
 ```
 OK uv: /Users/ryzhakar/pp/offline-kit/shim/uv /Users/ryzhakar/pp/offline-kit/shim/uvx
-FAIL manifesto plugin: 3.4.0 is below 3.5.0, whose hooks do not stand down
-OK prompt size: full 14888 words; shortest 5581 words
+FAIL manifesto plugin: 3.4.0 is below 3.6.0, whose hooks do not all stand down
+OK prompt size: full 14960 words; shortest 5653 words
 ```
 
 The temporary copy is deleted.
