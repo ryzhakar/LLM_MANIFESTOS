@@ -116,3 +116,4 @@
 - Idle; D1 code, D1 prose, D3 outstanding.
 - Idle; three outputs outstanding, all in flight.
 - Idle; D1 code, D1 prose, D3 still running.
+- D1 code review landed: 0 blocking. Outstanding: D1 prose, D3. D2 launches when both land.
