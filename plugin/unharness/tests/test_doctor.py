@@ -504,6 +504,22 @@ def test_a_stale_single_fails_under_stack_digests_since_the_flag_implies_digests
 
 
 @needs_digests
+def test_prompt_size_equals_the_word_count_of_the_prompts_it_names(host, project, capsys):
+    write(plugin_folder(host) / "manifestos" / "dry.md", "# dry\n\nOne two.\n")
+    write(project, "you:\n  - name: dry\n")
+    write(plugin_folder(host) / "digests" / "dry.md", "Short.")
+    stamp(host, project, plugin_folder(host) / "digests", "dry")
+    write_session_files(project, host / "login", FULL_PAIR + MINIFIED_PAIR)
+    prompts = {}
+    for key, flags in (("full", []), ("shortest", ["--stack-digests", "--overlap", "--minified"])):
+        main(["prompt", "--config", str(project), *flags])
+        prompts[key] = len(capsys.readouterr().out.split())
+
+    _, lines = doctor(capsys, "--config", str(project))
+
+    assert finding(lines, "prompt size") == f"OK prompt size: full {prompts['full']} words; shortest {prompts['shortest']} words"
+
+
 def test_prompt_size_counts_the_preamble_the_constitution_and_the_session_file_bodies(host, project, capsys):
     write(plugin_folder(host) / "manifestos" / "dry.md", "# dry\n\nOne two.\n")
     write(project, "you:\n  - name: dry\n")
@@ -514,7 +530,7 @@ def test_prompt_size_counts_the_preamble_the_constitution_and_the_session_file_b
 
     _, lines = doctor(capsys, "--config", str(project))
 
-    assert finding(lines, "prompt size") == "OK prompt size: full 12 words; shortest 9 words"
+    assert finding(lines, "prompt size") == "OK prompt size: full 14 words; shortest 11 words"
 
 
 MALFORMED_RECORDS = [

@@ -9,7 +9,15 @@ from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 
-from unharness.compile import FULL_FILES, MINIFIED_FILES, STACK_BLOCK, SessionFiles, constitution_block, session_file_problem
+from unharness.compile import (
+    FULL_FILES,
+    MINIFIED_FILES,
+    STACK_BLOCK,
+    SessionFiles,
+    constitution_block,
+    harness_block,
+    session_file_problem,
+)
 from unharness.config import EMPTY_STACK_MESSAGE, SKILL_SOURCE, TEXT_ENCODING, Config, Element, UnharnessError, load
 from unharness.digests import (
     Digest,
@@ -174,7 +182,7 @@ def _cover_finding(
 def _prompt_size_finding(elements: list[Element], documents: list[Document], directory: Path, plugin: Path) -> Finding:
     """Count the words of the full prompt and of the shortest one; warn when the shortest cannot compile."""
     name = "prompt size"
-    preamble = load_preamble(directory).text
+    preamble = harness_block(load_preamble(directory).text)
     full = _word_count([preamble, constitution_block(documents), *_session_bodies(directory, FULL_FILES)])
     try:
         shortest_blocks = constitution_blocks(elements, documents, directory, plugin, STACKS_WITH_OVERLAP)

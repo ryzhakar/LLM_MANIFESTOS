@@ -43,7 +43,12 @@ def compile_prompt(
         _current_body(files.interplay, interplay, documents),
         _current_body(files.commitments, commitments, documents),
     ]
-    return "\n\n".join([f"<harness>\n{preamble.strip()}\n</harness>", constitution_block(documents if constitution is None else constitution), *session_files])
+    return "\n\n".join([harness_block(preamble), constitution_block(documents if constitution is None else constitution), *session_files])
+
+
+def harness_block(preamble: str) -> str:
+    """Return the preamble in its tags, the first block of the system prompt."""
+    return f"<harness>\n{preamble.strip()}\n</harness>"
 
 
 def stack_view(documents: list[Document]) -> str:
