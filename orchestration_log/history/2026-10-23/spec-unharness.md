@@ -98,7 +98,7 @@ Residue, text no switch removes without dropping what we keep (A1 docs silent; A
 
 ## Manifesto plugin hooks under unharness (round 17, solved 16)
 
-`launch` sets `UNHARNESS=1`. The plugin's session-start and post-compact hooks, which inject the binding ceremony that the compiled prompt already carries, stand down when it is set. The per-prompt drift reminder and the subagent hook keep running. Other plugins' hooks are untouched.
+`launch` sets `UNHARNESS=1`. Every hook of the manifesto plugin, session-start, post-compact, subagent-start, and the per-prompt drift reminder, stands down when it is set, since the compiled prompt already carries the binding (changed in the 3.6.0 fix pass from queue 16, after the end-to-end capture showed the drift line in every request). Other plugins' hooks are untouched.
 
 ## Shipped preamble
 
@@ -211,7 +211,7 @@ Every compiled artifact records the source hash of each source it was made for, 
 | `preamble` | `shipped` or `.manifestos.preamble.md` | none |
 | `claude` | path and version | WARN when not on PATH, since a shell function can launch, when it prints no version, or when the version differs from the tested 2.1.309 |
 | `uv` | the paths of `uv` and `uvx` | FAIL when `uvx` is not on PATH |
-| `manifesto plugin` | the installed version | FAIL when absent from `installed_plugins.json` or below 3.5.0, whose hooks do not stand down |
+| `manifesto plugin` | the installed version | FAIL when absent from `installed_plugins.json` or below 3.6.0, whose hooks do not all stand down |
 | `prompt size` | `full <n> words; shortest <n> words` | WARN when the shortest mode cannot compile, with its message |
 
 The `prompt size` check counts the preamble in its `<harness>` tags, the constitution, and whichever session files exist, ignoring staleness; full means no flag, and shortest means `--stack-digests --overlap --minified`. An excerpt of `unharness doctor --minified`:
