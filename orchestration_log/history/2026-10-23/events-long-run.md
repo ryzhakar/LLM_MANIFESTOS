@@ -140,3 +140,4 @@
 - D2 commits 5–6: 2e979f6 (tests), c2ca1b1 (skill). Docs and hooks commits and summary pending.
 - D2 docs commit ecf43a9. Confirmed from the hooks: drift-reminder.sh (per-turn "Active bindings") and subagent-start.sh do not stand down under UNHARNESS; session-start and post-compact do. D2's hooks commit pending.
 - Correction from D3: raise-the-bar is not an element of this repo's stack (it is a section of manifesto-writing); every digest mode compiled here before any local digest. The verify/digests commit f7e7b20 (local raise-the-bar digest) adds an unused file; it is not integrated. Solved 42: drop it; alternative: keep as a sample of the skill's output.
+- Owner order: the preamble gets the antidote to harness nudges. P1 (opus) launched on feat/compile-digest; integrates after D2. Owner's question about the polling answered in conversation; silence resumes.
