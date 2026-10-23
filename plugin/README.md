@@ -128,16 +128,18 @@ OK prompt size: full 3541 words; shortest 818 words
 | Auto memory section | env `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`, setting `autoMemoryEnabled: false` | set |
 | Output style text | setting `outputStyle: "default"` | set |
 | "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0` | set |
+| Task-list and TodoWrite nudges | env `CLAUDE_CODE_TODO_REMINDER_MODE=off`, undocumented | stripped |
+| Token-count line | env `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`, undocumented | stripped |
 | WebSearch paragraph | `--disallowedTools WebSearch` | stripped; `--keep-web-search` keeps it |
 | Hook output | setting `disableAllHooks: true` under `--no-hooks` | kept |
 
-The four rows marked "set" are implemented per the Claude Code docs and the binary; no capture shows their text present or removed. Launch also sets `UNHARNESS=1`, so every hook of this plugin, session-start, post-compact, subagent-start, and the per-prompt drift reminder, stands down; the compiled prompt already carries the binding. Their tests cover this, and no capture shows it.
+The four rows marked "set" are implemented per the Claude Code docs and the binary; no capture shows their text present or removed. The two undocumented switches, `CLAUDE_CODE_TODO_REMINDER_MODE` and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER`, appear in no Claude Code docs page, so a release may drop them; captures x1-mt-neither and x1-tokens-off show each removing its text. Launch also sets `UNHARNESS=1`, so every hook of this plugin, session-start, post-compact, subagent-start, and the per-prompt drift reminder, stands down; the compiled prompt already carries the binding. Their tests cover this, and no capture shows it.
 
 **What stays.** The harness adds each item below, and either no switch removes it or the only switch drops something kept on purpose. The evidence is in `orchestration_log/history/2026-10-23/verification-unharness.md`, with the captures d1-p-haiku and d1-p-opus (print mode), d1-tmux-haiku (interactive sessions), d1-flag-keepmd, d1-flag-nohooks, d1-flag-websearch, b2-full-haiku, and a3-c5.
 
 - The identity line: `You are Claude Code, Anthropic's official CLI for Claude.` in interactive sessions, `You are a Claude agent, built on Anthropic's Claude Agent SDK.` in print mode.
 - The context wrapper around the email line, in a user message; the date line sits outside it.
-- Task-list nudges and file-changed notes: their one switch, `CLAUDE_CODE_DISABLE_ATTACHMENTS`, also drops the skill list.
+- File-changed notes: their one switch, `CLAUDE_CODE_DISABLE_ATTACHMENTS`, also drops the skill list.
 - The Agent tool's worktree sentence and the other tool descriptions.
 - MCP server instructions when MCP servers are configured.
 - The tool, skill, and agent lists and the environment block, kept on purpose.

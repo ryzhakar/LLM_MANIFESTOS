@@ -84,6 +84,8 @@ Environment variables go straight into the launcher's environment; settings keys
 | Auto memory section | env `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` and settings `autoMemoryEnabled: false` | stripped |
 | Output style text | settings `outputStyle: "default"` | stripped |
 | "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0` (A2; fires only in interactive runs, so D3 verifies) | stripped |
+| Task-list and TodoWrite nudges | env `CLAUDE_CODE_TODO_REMINDER_MODE=off` (X1 capture; undocumented, so a release may drop it) | stripped |
+| Token-count line (`<total_tokens>`) | env `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off` (X1 capture; undocumented, so a release may drop it) | stripped |
 | WebSearch paragraph appended after the custom prompt | `--disallowedTools WebSearch` (B2: the only switch that removes it) | stripped with the tool; `--keep-web-search` keeps both |
 | Hook output | hooks stay on (round 17); `--no-hooks` sets settings `disableAllHooks: true` | kept |
 | Tool, skill, and agent lists; environment block (cwd, platform, date) | none; the brief keeps the lists, and the facts stay (solved 12) | kept |
@@ -92,7 +94,7 @@ Residue, text no switch removes without dropping what we keep (A1 docs silent; A
 
 - The identity line: interactive sessions get `You are Claude Code, Anthropic's official CLI for Claude.`; print mode gets `You are a Claude agent, built on Anthropic's Claude Agent SDK.`. The main loop always adds it; only internal side calls skip it. The owner's belief that a documented switch exists (round 5) is not supported: 55 docs pages are silent and the binary's chooser reads no such switch (solved 18).
 - The context wrapper (`As you answer the user's questions, you can use the following context:` ... `Claude Code attached this context automatically`) around the email line, and the date line outside it (capture b2-full-haiku); the email line's only gate, `ANTHROPIC_UNIX_SOCKET`, changes the transport.
-- Task-list nudges and file-changed notes: their only switch, `CLAUDE_CODE_DISABLE_ATTACHMENTS`, also drops the skill list.
+- File-changed notes: their only switch, `CLAUDE_CODE_DISABLE_ATTACHMENTS`, also drops the skill list. The task-list nudge has the narrower switch in the table above.
 - The Agent tool description's worktree sentence and other tool descriptions.
 - MCP server instructions, when MCP servers are configured.
 

@@ -194,6 +194,10 @@ Output accumulates in conversation history (platform behavior) — this is inten
 
 When `UNHARNESS` is set and not `0`, SessionStart and PostCompact print nothing and exit 0, because the compiled system prompt already carries the binding. UserPromptSubmit and SubagentStart run as usual.
 
+### Launch switches without a documented name
+
+`unharness launch` sets `CLAUDE_CODE_TODO_REMINDER_MODE=off` and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`, which remove the task-list nudge and the token-count line. No Claude Code docs page names either variable, so a release may drop them.
+
 ### Template architecture
 
 Composable parts live in `hooks/templates/parts/`:

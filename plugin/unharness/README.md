@@ -9,6 +9,8 @@ uvx unharness prompt | uvx unharness launch -- claude
 
 To run the source at the v3.6.0 tag instead, use `uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.6.0#subdirectory=plugin/unharness" unharness` in place of `uvx unharness`. The launcher's input is reopened on the terminal.
 
+Launch sets two environment variables that no Claude Code docs page names, `CLAUDE_CODE_TODO_REMINDER_MODE=off` and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`. They remove the task-list nudge and the token-count line, and a Claude Code release may drop them.
+
 A `pypi-<version>` tag on a commit whose `pyproject.toml` carries that version publishes it to PyPI; `v<version>` tags release the plugin and do not publish.
 
 - `unharness prompt [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints the compiled prompt. `--digests` and `--stack-digests` swap manifesto texts for digests, `--overlap` lets stack digests share a manifesto, and `--minified` loads the min pair, the two `.min.md` session files; the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.0/plugin/README.md) states the cover rule.
