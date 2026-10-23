@@ -45,7 +45,8 @@ from unharness.resolve import (
 )
 from unharness.session import load_preamble, read_if_present
 
-TESTED_CLAUDE_VERSION = "2.1.309"
+TESTED_CLAUDE_RANGE = ("2.1.309", "2.1.309")
+RANGE_DASH = "\u2013"
 MINIMUM_MANIFESTO_VERSION = "3.6.0"
 INSTALLED_PLUGINS_FILE = Path("plugins") / "installed_plugins.json"
 VERSION_NUMBER = re.compile(r"\d+\.\d+\.\d+")
@@ -216,15 +217,17 @@ def claude_version(binary: Path) -> str:
 
 
 def _claude_finding(environ: Mapping[str, str], version_of: Callable[[Path], str]) -> Finding:
-    """Find claude on PATH and compare its version with the tested one."""
+    """Find claude on PATH and compare its version with the tested range."""
     binary = _on_path(CLAUDE_BINARY, environ)
     if binary is None:
         return Finding(Status.WARN, CLAUDE_BINARY, "not on PATH; a shell function can still launch it")
+    lowest, highest = TESTED_CLAUDE_RANGE
+    tested = f"{lowest}{RANGE_DASH}{highest}"
     found = VERSION_NUMBER.search(version_of(binary))
     if found is None:
-        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} printed no version, tested with {TESTED_CLAUDE_VERSION}")
-    if found.group() != TESTED_CLAUDE_VERSION:
-        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} {found.group()}, tested with {TESTED_CLAUDE_VERSION}")
+        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} printed no version, tested range {tested}")
+    if not version_key(lowest) <= version_key(found.group()) <= version_key(highest):
+        return Finding(Status.WARN, CLAUDE_BINARY, f"{binary} {found.group()}, outside the tested range {tested}")
     return Finding(Status.OK, CLAUDE_BINARY, f"{binary} {found.group()}")
 
 

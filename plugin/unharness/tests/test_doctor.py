@@ -67,12 +67,23 @@ def finding(lines: list[str], name: str) -> str:
     return next(line for line in lines if line.startswith(f"{name}: ", line.index(" ") + 1))
 
 
-def test_a_claude_version_other_than_the_tested_one_warns_with_both_versions(host, missing_config, capsys):
-    install_stub(host / "bin", "claude", STUB_VERSION.format(version="2.1.312"))
+@pytest.mark.parametrize("version", ["2.1.308", "2.1.312"])
+def test_a_claude_version_outside_the_tested_range_warns_with_the_range(host, missing_config, capsys, version):
+    install_stub(host / "bin", "claude", STUB_VERSION.format(version=version))
 
     _, lines = doctor(capsys, *missing_config)
 
-    assert finding(lines, "claude") == f"WARN claude: {host / 'bin' / 'claude'} 2.1.312, tested with {TESTED_CLAUDE}"
+    assert finding(lines, "claude") == f"WARN claude: {host / 'bin' / 'claude'} {version}, outside the tested range {TESTED_CLAUDE}\u2013{TESTED_CLAUDE}"
+
+
+@pytest.mark.parametrize("version", ["2.1.300", "2.1.312", "2.1.320"])
+def test_a_claude_version_inside_the_tested_range_is_ok(host, missing_config, capsys, monkeypatch, version):
+    monkeypatch.setattr("unharness.doctor.TESTED_CLAUDE_RANGE", ("2.1.300", "2.1.320"))
+    install_stub(host / "bin", "claude", STUB_VERSION.format(version=version))
+
+    _, lines = doctor(capsys, *missing_config)
+
+    assert finding(lines, "claude") == f"OK claude: {host / 'bin' / 'claude'} {version}"
 
 
 def test_a_claude_that_prints_no_version_warns(host, missing_config, capsys):

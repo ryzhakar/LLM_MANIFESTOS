@@ -211,7 +211,7 @@ Every compiled artifact records the source hash of each source it was made for, 
 | `cover` | stems in render order and their total words | the refusal message; the flags' digest mode, else `--stack-digests --overlap` |
 | `.manifestos.interplay.md`, `.manifestos.commitments.md`, and the min pair | current | the missing or stale message, one line per file |
 | `preamble` | `shipped` or `.manifestos.preamble.md` | none |
-| `claude` | path and version | WARN when not on PATH, since a shell function can launch, when it prints no version, or when the version differs from the tested 2.1.309 |
+| `claude` | path and version | WARN when not on PATH, since a shell function can launch, when it prints no version, or when the version falls outside the tested range, 2.1.309–2.1.309 in 3.6.1 |
 | `uv` | the paths of `uv` and `uvx` | FAIL when `uvx` is not on PATH |
 | `manifesto plugin` | the installed version | FAIL when absent from `installed_plugins.json` or below 3.6.0, whose hooks do not all stand down |
 | `prompt size` | `full <n> words; shortest <n> words` | WARN when the shortest mode cannot compile, with its message |
@@ -222,7 +222,7 @@ The `prompt size` check counts the preamble in its `<harness>` tags, the constit
     OK element dry: /cache/llm-manifestos/manifesto/3.6.0/manifestos/dry.md
     WARN digest raise-the-bar: no digest for raise-the-bar: tried ...; run /compile-digest raise-the-bar
     FAIL .manifestos.commitments.min.md: .manifestos.commitments.min.md is missing; run /compile-commitments
-    WARN claude: /usr/local/bin/claude 2.1.312, tested with 2.1.309
+    WARN claude: /usr/local/bin/claude 2.1.312, outside the tested range 2.1.309–2.1.309
 
 ## `/compile-digest` (queue 39)
 
