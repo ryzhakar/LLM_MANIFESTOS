@@ -196,7 +196,7 @@ When `UNHARNESS` is set and not `0`, SessionStart, PostCompact, UserPromptSubmit
 
 ### Launch switches
 
-`unharness launch` passes the switches that `plugin/unharness/src/unharness/switches.json` records. The strip table in the Unharness section of [`README.md`](README.md) lists each one and says whether a Claude Code docs page names it; a release may drop an undocumented switch.
+`unharness launch` passes the switches that `plugin/unharness/src/unharness/switches.json` records. The strip table in the Unharness section of [`README.md`](README.md) lists each one and says whether a Claude Code docs page names it; a release may drop an undocumented switch. `launch` picks the entries verified at one registry version, chosen from the launcher's version or from `--claude-version X.Y.Z`; the Unharness section of [`README.md`](README.md) states the rule and its fallbacks.
 
 ### Template architecture
 

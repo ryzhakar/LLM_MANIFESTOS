@@ -45,3 +45,36 @@ def test_the_package_readme_and_the_schema_point_at_the_table_and_name_no_variab
 
     assert TABLE_POINTER in text
     assert not [switch.name for switch in shipped_switches() if switch.name.startswith("CLAUDE_CODE_") and switch.name in text]
+
+
+@pytest.mark.parametrize("document", [PLUGIN_README, PACKAGE_README])
+@pytest.mark.parametrize("verb", ["launch", "doctor"])
+def test_each_readme_lists_claude_version_in_the_synopsis_of_launch_and_doctor(document, verb):
+    synopsis = next(line for line in document.read_text().splitlines() if line.startswith(f"- `unharness {verb} "))
+
+    assert "[--claude-version X.Y.Z]" in synopsis
+
+
+@pytest.mark.parametrize("document", [PLUGIN_README, PACKAGE_README])
+def test_each_readme_states_how_launch_picks_the_version_and_what_it_falls_back_to(document):
+    text = " ".join(document.read_text().split())
+
+    for statement in (
+        "ARGS... --version", "`$SHELL -ic`", "nearest registry version below", "oldest registry version", "newest registry version",
+        "is not in the switch registry", "printed no version",
+    ):
+        assert statement in text, statement
+
+
+def test_the_plugin_readme_describes_the_switch_lines_of_doctor():
+    text = " ".join(PLUGIN_README.read_text().split())
+
+    for statement in ("`switch registry`", "`switch <kind> <name>`", "never FAIL", "`--claude-version X.Y.Z` replaces the detected version"):
+        assert statement in text, statement
+    assert "tested range" not in text
+
+
+def test_the_schema_points_at_the_readme_for_the_version_rule():
+    text = " ".join(SCHEMA.read_text().split())
+
+    assert "`--claude-version X.Y.Z`" in text and "picks the entries verified at one registry version" in text

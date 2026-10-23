@@ -77,9 +77,9 @@ The launcher's input is reopened on the terminal, so the session reads the keybo
 - `unharness prompt [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints the compiled prompt; it stops when the interplay or commitments file is missing or its `<stack>` block differs from the current stack. Under `--minified` the same holds for the min pair.
 - `unharness stack [--config PATH] [SLUG ...]` prints the `<stack>` block and the constitution, exactly what a session binds to. Given slugs, it prints those manifestos alone. It takes no mode flag, since a session always binds to full texts.
 - `unharness stamp DIGEST [--config PATH]` writes the digest's entry into its `index.json`.
-- `unharness doctor [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints one line per check and exits 1 on any FAIL.
+- `unharness doctor [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified] [--claude-version X.Y.Z]` prints one line per check and exits 1 on any FAIL.
 - `unharness switches` prints the strip table below, generated from the switch registry.
-- `unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [PROMPT] [-- LAUNCHER [ARGS...]]` caches the prompt in `$XDG_CACHE_HOME/unharness/<sha256>.md`, or `~/.cache/unharness/` when unset, and runs the launcher with the switches below. The printed command ends in the terminal's own device, and in `/dev/tty` only when neither output is a terminal.
+- `unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [--claude-version X.Y.Z] [PROMPT] [-- LAUNCHER [ARGS...]]` caches the prompt in `$XDG_CACHE_HOME/unharness/<sha256>.md`, or `~/.cache/unharness/` when unset, and runs the launcher with the switches below. The printed command ends in the terminal's own device, and in `/dev/tty` only when neither output is a terminal.
 
 `/compile-commitments` reads `unharness stack`, reduces each element to its axioms, and writes the interplay and commitments files and their min pair.
 Run it once after each change to the stack; `unharness prompt` stops until the full pair matches, and under `--minified` until the min pair matches.
@@ -107,7 +107,7 @@ Each place keeps one `index.json`, in `.claude/digests/` and in the plugin's `di
 }
 ```
 
-`unharness doctor` reads files and runs `claude --version`, and makes no network call. Each line is `OK`, `WARN`, or `FAIL`, then the check and its detail. A problem with an artifact that `prompt` would load under the given flags is a FAIL; the same problem with an artifact it would not load is a WARN. An element that does not resolve leaves out the checks that need the stack: the digests, the cover, the session files, and the prompt size. An excerpt:
+`unharness doctor` reads files and runs `claude --version`, and makes no network call. Each line is `OK`, `WARN`, or `FAIL`, then the check and its detail. A problem with an artifact that `prompt` would load under the given flags is a FAIL; the same problem with an artifact it would not load is a WARN. An element that does not resolve leaves out the checks that need the stack: the digests, the cover, the session files, and the prompt size. After `claude`, a `switch registry` line gives the newest registry version and the entry count, and one `switch <kind> <name>` line per entry follows in registry order. These lines need no config and never FAIL. A switch line is `OK` when the entry is verified at the version launch chooses and that version is the one in use; it is `WARN` when the version in use differs, when the version is unknown, and when the entry is left out because it is not verified at the chosen version. `--claude-version X.Y.Z` replaces the detected version in the switch lines, for a launcher that is no program on PATH. An excerpt:
 
 ```
 unharness doctor --digests
@@ -116,6 +116,8 @@ OK digest dry: plugin, current
 OK cover: dry, kiss; 513 words
 FAIL .manifestos.interplay.md: .manifestos.interplay.md is missing; run /compile-commitments
 WARN .manifestos.interplay.min.md: .manifestos.interplay.min.md is missing; run /compile-commitments
+WARN claude: /usr/local/bin/claude 2.1.312, not in the switch registry; launch uses switches verified at 2.1.309
+OK switch registry: newest 2.1.309; 13 switches
 OK prompt size: full 3541 words; shortest 818 words
 ```
 
@@ -138,6 +140,8 @@ Launch replaces Claude Code's default system prompt with the cached prompt throu
 <!-- /switches -->
 
 `stripped` means a capture without the switch showed the text and a capture with it did not. `set` means the docs and the binary implement the switch, but no capture without it showed the text, so its removal is inferred. `kept` means launch leaves the text in unless the option beside it strips it. `undocumented` means no Claude Code docs page names the switch, so a release may drop it.
+
+**Version.** Each registry entry records the Claude Code versions at which a capture confirmed it. `launch` asks the launcher for its version by running `LAUNCHER ARGS... --version`, directly when the launcher is a program on PATH and through `$SHELL -ic` otherwise, and runs `claude --version` when no launcher follows `--`. It takes the first output line that opens with `X.Y.Z`. It then chooses one registry version, the detected version when the registry holds it, else the nearest registry version below it, else the oldest registry version, and passes the entries verified at that version. When the choice differs from the detected version, it writes `unharness: claude <D> is not in the switch registry; using switches verified at <C>` on stderr. When the launcher times out after ten seconds, fails to start, or prints no version, `launch` uses the newest registry version and writes `unharness: <launcher> --version printed no version; using switches verified at <newest>` on stderr. `--claude-version X.Y.Z` states the version and runs nothing, for a launcher such as `claude@meta` that cannot answer; any other value stops `launch` with `--claude-version takes X.Y.Z, got <value>`. At 2.1.309 the printed command equals the one 3.6.1 printed.
 
 **What stays.** The harness adds each item below, and either no switch removes it or the only switch drops something kept on purpose. The evidence is in `orchestration_log/history/2026-10-23/verification-unharness.md`, with the captures d1-p-haiku and d1-p-opus (print mode), d1-tmux-haiku (interactive sessions), d1-flag-keepmd, d1-flag-nohooks, d1-flag-websearch, b2-full-haiku, and a3-c5.
 
