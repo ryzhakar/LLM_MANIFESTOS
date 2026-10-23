@@ -130,3 +130,4 @@
 - Idle; D2 only.
 - Idle; waiting on D2.
 - Idle; D2 outstanding.
+- Idle; D2 only, nothing independent.
