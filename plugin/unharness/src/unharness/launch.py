@@ -5,13 +5,14 @@ import os
 import shlex
 import shutil
 import subprocess
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 from typing import IO
 
 from unharness.config import TEXT_ENCODING, UnharnessError
+from unharness.switches import Switch, version_key
 
 CACHE_FOLDER = "unharness"
 CACHE_VARIABLE = "XDG_CACHE_HOME"
@@ -22,23 +23,10 @@ DEFAULT_LAUNCHER = "claude"
 CONTROLLING_TERMINAL = "/dev/tty"
 STDIN_DESCRIPTOR = 0
 OUTPUT_DESCRIPTORS = (1, 2)
-CLAUDE_MD_VARIABLE = "CLAUDE_CODE_DISABLE_CLAUDE_MDS"
-STRIP_ENVIRONMENT = {
-    "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
-    CLAUDE_MD_VARIABLE: "1",
-    "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
-    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
-    "CLAUDE_CODE_SILENT_TURN_REMINDER": "0",
-    "CLAUDE_CODE_TODO_REMINDER_MODE": "off",
-    "CLAUDE_CODE_TOTAL_TOKENS_REMINDER": "off",
-}
 STAND_DOWN_MARKER = {"UNHARNESS": "1"}
-STRIP_SETTINGS = {
-    "includeGitInstructions": False,
-    "attribution": {"commit": "", "pr": ""},
-    "autoMemoryEnabled": False,
-    "outputStyle": "default",
-}
+SYSTEM_PROMPT_FLAG = "--system-prompt-file"
+SETTINGS_FLAG = "--settings"
+OPTION_ATTRIBUTES = {"--keep-claude-md": "keep_claude_md", "--keep-web-search": "keep_web_search", "--no-hooks": "no_hooks"}
 
 
 @dataclass(frozen=True)
@@ -52,6 +40,7 @@ class Options:
 def launch(
     prompt: str,
     options: Options,
+    switches: Sequence[Switch],
     environ: Mapping[str, str],
     cache_home: Path,
     terminal: str,
@@ -62,13 +51,15 @@ def launch(
     if not prompt.strip():
         raise UnharnessError("the prompt is empty")
     prompt_file = _write_prompt(prompt, cache_home)
-    assignments = [f"{name}={value}" for name, value in _strip_environment(options).items()]
-    arguments = _strip_arguments(prompt_file, options)
+    passed = _passed_switches(switches, options)
+    variables = _strip_environment(passed)
+    arguments = _strip_arguments(prompt_file, passed)
+    assignments = [f"{name}={value}" for name, value in variables.items()]
     if not options.launcher:
         print(shlex.join(["env", *assignments, DEFAULT_LAUNCHER, *arguments]), f"<{terminal}")
         return 0
     reopen_stdin(terminal)
-    return execute([*options.launcher, *arguments], {**environ, **_strip_environment(options)})
+    return execute([*options.launcher, *arguments], {**environ, **variables})
 
 
 def cache_home(environ: Mapping[str, str], home: Path) -> Path:
@@ -109,15 +100,29 @@ def reopen_terminal(
         pass
 
 
-def _strip_environment(options: Options) -> dict[str, str]:
-    kept = [CLAUDE_MD_VARIABLE] if options.keep_claude_md else []
-    return {**{name: value for name, value in STRIP_ENVIRONMENT.items() if name not in kept}, **STAND_DOWN_MARKER}
+def _passed_switches(switches: Sequence[Switch], options: Options) -> list[Switch]:
+    """Return the switches verified at the newest registry version whose default, inverted by its given option, is true."""
+    newest = max((version for switch in switches for version in switch.verified), key=version_key, default=None)
+    return [switch for switch in switches if newest in switch.verified and switch.default != _option_given(switch, options)]
 
 
-def _strip_arguments(prompt_file: Path, options: Options) -> list[str]:
-    settings = {**STRIP_SETTINGS, **({"disableAllHooks": True} if options.no_hooks else {})}
-    web_search = [] if options.keep_web_search else ["--disallowedTools", "WebSearch"]
-    return ["--system-prompt-file", str(prompt_file), *web_search, "--settings", json.dumps(settings, separators=(",", ":"))]
+def _option_given(switch: Switch, options: Options) -> bool:
+    return switch.option is not None and getattr(options, OPTION_ATTRIBUTES[switch.option])
+
+
+def _strip_environment(passed: Sequence[Switch]) -> dict[str, str]:
+    return {**{switch.name: switch.value for switch in passed if switch.kind == "env"}, **STAND_DOWN_MARKER}
+
+
+def _strip_arguments(prompt_file: Path, passed: Sequence[Switch]) -> list[str]:
+    flags = [word for switch in passed if switch.kind == "flag" for word in _flag_words(switch)]
+    settings = {switch.name: switch.value for switch in passed if switch.kind == "settings"}
+    settings_words = [SETTINGS_FLAG, json.dumps(settings, separators=(",", ":"))] if settings else []
+    return [SYSTEM_PROMPT_FLAG, str(prompt_file), *flags, *settings_words]
+
+
+def _flag_words(switch: Switch) -> list[str]:
+    return [switch.name] if switch.value is None else [switch.name, switch.value]
 
 
 def _write_prompt(prompt: str, cache_home: Path) -> Path:

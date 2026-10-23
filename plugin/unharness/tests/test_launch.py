@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 from unharness.config import UnharnessError
 from unharness.launch import Options, cache_home, launch, reopen_terminal, terminal_device
+from unharness.switches import parse_switches, shipped_switches
 
 DEFAULT_ENVIRONMENT = [
     "CLAUDE_CODE_ATTRIBUTION_HEADER=0",
@@ -28,6 +29,14 @@ DEFAULT_SETTINGS = {
 }
 PROMPT = "You are bound.\n"
 TERMINAL = "/dev/ttys042"
+COMMAND_OF_3_6_1 = (
+    "env CLAUDE_CODE_ATTRIBUTION_HEADER=0 CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1"
+    " CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 CLAUDE_CODE_SILENT_TURN_REMINDER=0 CLAUDE_CODE_TODO_REMINDER_MODE=off"
+    " CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off UNHARNESS=1 claude --system-prompt-file {prompt_file}"
+    " --disallowedTools WebSearch --settings"
+    " '{{\"includeGitInstructions\":false,\"attribution\":{{\"commit\":\"\",\"pr\":\"\"}},"
+    "\"autoMemoryEnabled\":false,\"outputStyle\":\"default\"{hooks}}}' <{terminal}\n"
+)
 
 
 def never(*_):
@@ -39,7 +48,7 @@ def cached_prompt(cache_home: Path, prompt: str = PROMPT) -> Path:
 
 
 def printed_command(options: Options, cache_home: Path, capsys) -> list[str]:
-    assert launch(PROMPT, options, {}, cache_home, TERMINAL, never, never) == 0
+    assert launch(PROMPT, options, shipped_switches(), {}, cache_home, TERMINAL, never, never) == 0
     line = capsys.readouterr().out
     assert line.endswith(f" <{TERMINAL}\n") and line.count("\n") == 1
     return shlex.split(line.removesuffix(f" <{TERMINAL}\n"))
@@ -59,7 +68,7 @@ def test_without_a_launcher_it_prints_the_command_for_claude_and_runs_nothing(tm
 def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tmp_path):
     previous_umask = os.umask(0)
     try:
-        launch(PROMPT, Options(False, False, False, []), {}, tmp_path, TERMINAL, never, never)
+        launch(PROMPT, Options(False, False, False, []), shipped_switches(), {}, tmp_path, TERMINAL, never, never)
     finally:
         os.umask(previous_umask)
 
@@ -71,7 +80,7 @@ def test_the_prompt_is_cached_under_its_sha256_with_a_private_file_and_folder(tm
 
 def test_an_empty_prompt_stops_before_anything_is_written(tmp_path):
     with pytest.raises(UnharnessError, match="^the prompt is empty$"):
-        launch(" \n", Options(False, False, False, []), {}, tmp_path, TERMINAL, never, never)
+        launch(" \n", Options(False, False, False, []), shipped_switches(), {}, tmp_path, TERMINAL, never, never)
 
     assert list(tmp_path.iterdir()) == []
 
@@ -111,7 +120,7 @@ def test_all_three_flags_combine(tmp_path, capsys):
 def test_with_a_launcher_it_reopens_stdin_then_executes_the_launcher_with_the_stripped_environment(tmp_path, capsys):
     calls = []
     status = launch(
-        PROMPT, Options(False, False, False, ["fake", "extra"]), {"KEPT": "yes"}, tmp_path, TERMINAL,
+        PROMPT, Options(False, False, False, ["fake", "extra"]), shipped_switches(), {"KEPT": "yes"}, tmp_path, TERMINAL,
         lambda device: calls.append(("reopen", device)),
         lambda argv, env: calls.append((argv, env)) or 7,
     )
@@ -186,3 +195,73 @@ def test_the_cache_is_dot_cache_in_home_unless_xdg_cache_home_is_set_and_not_emp
     assert cache_home({}, tmp_path) == tmp_path / ".cache"
     assert cache_home({"XDG_CACHE_HOME": ""}, tmp_path) == tmp_path / ".cache"
     assert cache_home({"XDG_CACHE_HOME": "/elsewhere"}, tmp_path) == Path("/elsewhere")
+
+
+@pytest.mark.parametrize(("options", "hooks"), [
+    (Options(False, False, False, []), ""),
+    (Options(False, False, True, []), ',"disableAllHooks":true'),
+])
+def test_the_printed_command_equals_the_one_3_6_1_printed(options, hooks, tmp_path, capsys):
+    assert launch(PROMPT, options, shipped_switches(), {}, tmp_path, TERMINAL, never, never) == 0
+
+    expected = COMMAND_OF_3_6_1.format(prompt_file=cached_prompt(tmp_path), hooks=hooks, terminal=TERMINAL)
+    assert capsys.readouterr().out == expected
+
+
+def entry(**overrides) -> dict:
+    return {
+        "name": "SWITCH_ONE", "kind": "env", "value": "1", "removes": "Some text",
+        "documented": True, "control": True, "verified": ["2.1.309"], "default": True, "option": None,
+        **overrides,
+    }
+
+
+def printed_command_of(entries: list[dict], options: Options, tmp_path, capsys) -> list[str]:
+    launch(PROMPT, options, parse_switches(json.dumps(entries)), {}, tmp_path, TERMINAL, never, never)
+    return shlex.split(capsys.readouterr().out.removesuffix(f" <{TERMINAL}\n"))
+
+
+def test_launch_composes_env_flags_and_settings_from_the_registry_in_its_order(tmp_path, capsys):
+    command = printed_command_of([
+        entry(name="FIRST", value="a"),
+        entry(name="--bare", kind="flag", value=None, removes="Second"),
+        entry(name="key", kind="settings", value={"nested": [1]}, removes="Third"),
+        entry(name="--valued", kind="flag", value="v", removes="Fourth"),
+        entry(name="SECOND", value="b", removes="Fifth"),
+        entry(name="other", kind="settings", value=False, removes="Sixth"),
+    ], Options(False, False, False, []), tmp_path, capsys)
+
+    assert command == [
+        "env", "FIRST=a", "SECOND=b", "UNHARNESS=1",
+        "claude", "--system-prompt-file", str(cached_prompt(tmp_path)),
+        "--bare", "--valued", "v", "--settings", '{"key":{"nested":[1]},"other":false}',
+    ]
+
+
+def test_launch_leaves_out_settings_when_no_settings_entry_passes(tmp_path, capsys):
+    command = printed_command_of([entry()], Options(False, False, False, []), tmp_path, capsys)
+
+    assert "--settings" not in command
+
+
+def test_an_option_inverts_the_default_of_the_entry_it_names(tmp_path, capsys):
+    entries = [
+        entry(name="STRIPPED", option="--keep-claude-md"),
+        entry(name="KEPT", removes="Other", default=False, option="--keep-web-search"),
+        entry(name="UNNAMED", removes="Third", default=False),
+    ]
+
+    plain = printed_command_of(entries, Options(False, False, False, []), tmp_path, capsys)
+    inverted = printed_command_of(entries, Options(True, True, False, []), tmp_path, capsys)
+
+    assert plain[1:-3] == ["STRIPPED=1", "UNHARNESS=1"]
+    assert inverted[1:-3] == ["KEPT=1", "UNHARNESS=1"]
+
+
+def test_launch_passes_only_the_entries_verified_at_the_newest_registry_version(tmp_path, capsys):
+    command = printed_command_of([
+        entry(name="OLD", verified=["2.1.300"]),
+        entry(name="CURRENT", removes="Other", verified=["2.1.300", "2.1.309"]),
+    ], Options(False, False, False, []), tmp_path, capsys)
+
+    assert command[1:-3] == ["CURRENT=1", "UNHARNESS=1"]
