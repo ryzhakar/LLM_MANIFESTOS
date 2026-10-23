@@ -1,7 +1,7 @@
 ---
 name: compile-commitments
 description: >
-  Write the interplay file and the commitments file that a session's system prompt carries, from the stack the session binds to.
+  Write the interplay file and the commitments file that a session's system prompt carries, and their condensed variants, from the stack the session binds to.
   "/compile-commitments", "compile the commitments", "precompile the oath", or a change to the stack.
 ---
 
@@ -55,14 +55,28 @@ I must count every line I ship as spent, and I will write the least that does th
 </do_exactly_this>
 </write-the-commitments-file>
 
+<write-the-minified-pair>
+Write `.manifestos.interplay.min.md` and `.manifestos.commitments.min.md` beside the config, in the same run and after the full pair; never write one without its full counterpart or from the elements' texts instead of that counterpart.
+
+Open each with the same `<stack>` block copied verbatim; never alter, drop, or reorder a line of it.
+
+Condense the interplay to the rules that resolve tensions and the priority order, inside `<interplay>` ... `</interplay>`, in the first person; never keep an axiom, a convergence, or a quotation.
+
+Condense the commitments to one `I must ..., and I will ...` line per element in the stack's order, inside `<commitments>` ... `</commitments>`, with the prohibition folded into the line; never write a second line for an element.
+
+Hold each condensed body, the text after the `<stack>` block, to at most one third of the words of its full counterpart's body, a word being a whitespace-separated token; never ship a body over that budget.
+
+Count each body with `sed '1,/^<\/stack>$/d' <file> | wc -w` and cut the lowest-ranked rule or the longest line until the count fits; never report a file without its count under the budget.
+</write-the-minified-pair>
+
 <report-the-files>
 After writing each file, report its path; never print its content to the conversation.
 </report-the-files>
 
 <confirm-the-compile>
-Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness prompt --config <path> > /dev/null`; never report the files as done without that run.
+Run `${CLAUDE_PLUGIN_ROOT}/bin/unharness prompt --config <path> > /dev/null` and `${CLAUDE_PLUGIN_ROOT}/bin/unharness prompt --minified --config <path> > /dev/null`; never report the files as done without both runs.
 
-Report the exit code of that run; never report a pass on a code other than 0.
+Report the exit code of each run; never report a pass on a code other than 0.
 
-On a code other than 0, correct the file that the printed message names and run the command again; never stop at a failing run.
+On a code other than 0, correct the file that the printed message names and run both commands again; never stop at a failing run.
 </confirm-the-compile>
