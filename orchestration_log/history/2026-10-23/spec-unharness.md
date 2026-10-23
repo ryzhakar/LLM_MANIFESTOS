@@ -214,7 +214,7 @@ Every compiled artifact records the source hash of each source it was made for, 
 | `manifesto plugin` | the installed version | FAIL when absent from `installed_plugins.json` or below 3.5.0, whose hooks do not stand down |
 | `prompt size` | `full <n> words; shortest <n> words` | WARN when the shortest mode cannot compile, with its message |
 
-The `prompt size` check counts the preamble, the constitution, and whichever session files exist, ignoring staleness; full means no flag, and shortest means `--stack-digests --overlap --minified`. An excerpt of `unharness doctor --minified`:
+The `prompt size` check counts the preamble in its `<harness>` tags, the constitution, and whichever session files exist, ignoring staleness; full means no flag, and shortest means `--stack-digests --overlap --minified`. An excerpt of `unharness doctor --minified`:
 
     OK config: /work/proj/.manifestos.yaml
     OK element dry: /cache/llm-manifestos/manifesto/3.6.0/manifestos/dry.md
