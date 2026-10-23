@@ -110,3 +110,4 @@
 - Idle; D1 ×3 and D3 outstanding, nothing else to request.
 - Idle; same four outputs outstanding.
 - Idle; outputs outstanding from D1 ×3 and D3.
+- Idle; same needs outstanding.
