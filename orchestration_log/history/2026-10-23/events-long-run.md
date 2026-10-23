@@ -101,3 +101,4 @@
 - C5 committed (8378fd2). D1 prose review launched. Running: D1 code, D1 spec, D1 prose, D3 e2e.
 - D3 committed the local raise-the-bar digest on verify/digests (f7e7b20); its captures continue. Wait b07vgifwb watches for the three reports and the verification record.
 - No new output; all four needs in flight.
+- Waiting on D1 ×3 and D3; nothing new to request.
