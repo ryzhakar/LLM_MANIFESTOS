@@ -192,7 +192,7 @@ Output accumulates in conversation history (platform behavior) — this is inten
 
 ### Standing down under unharness
 
-When `UNHARNESS` is set and not `0`, SessionStart and PostCompact print nothing and exit 0, because the compiled system prompt already carries the binding. UserPromptSubmit and SubagentStart run as usual.
+When `UNHARNESS` is set and not `0`, SessionStart, PostCompact, UserPromptSubmit, and SubagentStart each print nothing and exit 0, because the compiled system prompt already carries the binding.
 
 ### Launch switches without a documented name
 
