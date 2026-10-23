@@ -130,7 +130,7 @@ Launch replaces Claude Code's default system prompt with the cached prompt throu
 | Every CLAUDE.md | env `CLAUDE_CODE_DISABLE_CLAUDE_MDS=1` | stripped; `--keep-claude-md` keeps |
 | Git status snapshot; commit and PR text in the Bash tool description | env `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1`, setting `includeGitInstructions: false` | stripped |
 | Auto memory section | env `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`, setting `autoMemoryEnabled: false` | set |
-| "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0` | stripped |
+| "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0`, undocumented | stripped |
 | Task-list and TodoWrite nudges | env `CLAUDE_CODE_TODO_REMINDER_MODE=off`, undocumented | stripped |
 | Token-count line | env `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`, undocumented | stripped |
 | WebSearch paragraph | `--disallowedTools WebSearch` | stripped; `--keep-web-search` keeps |

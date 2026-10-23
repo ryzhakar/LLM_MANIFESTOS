@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pytest
 from unharness.cli import main
@@ -46,7 +47,7 @@ def test_the_shipped_registry_marks_what_the_spec_marks():
 
     undocumented = {name for name, switch in by_name.items() if not switch.documented}
     uncontrolled = {name for name, switch in by_name.items() if not switch.control}
-    assert undocumented == {"CLAUDE_CODE_TODO_REMINDER_MODE", "CLAUDE_CODE_TOTAL_TOKENS_REMINDER"}
+    assert undocumented == {"CLAUDE_CODE_SILENT_TURN_REMINDER", "CLAUDE_CODE_TODO_REMINDER_MODE", "CLAUDE_CODE_TOTAL_TOKENS_REMINDER"}
     assert uncontrolled == {"attribution", "outputStyle", "autoMemoryEnabled", "CLAUDE_CODE_DISABLE_AUTO_MEMORY"}
     assert {name: switch.option for name, switch in by_name.items() if switch.option} == {
         "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "--keep-claude-md",
@@ -147,3 +148,13 @@ def test_the_switches_verb_prints_the_table_of_the_shipped_registry(capsys):
 def test_the_switches_verb_takes_no_argument(capsys):
     with pytest.raises(SystemExit):
         main(["switches", "extra"])
+
+
+def test_every_documented_registry_entry_appears_in_the_baseline_sweep_documented_lists():
+    baseline = Path(__file__).resolve().parents[3] / ".claude" / "switch-sweeps" / "2.1.309.json"
+    if not baseline.exists():
+        pytest.skip("the baseline sweep is absent")
+    sweep = json.loads(baseline.read_text())
+    named = set(sweep["documented_env"]) | set(sweep["documented_settings"])
+
+    assert [switch.name for switch in shipped_switches() if switch.documented and switch.kind != "flag" and switch.name not in named] == []
