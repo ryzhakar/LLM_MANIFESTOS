@@ -2,8 +2,24 @@
 name = "unharness"
 version = "3.6.0"
 description = "Compile a manifesto stack into a session's system prompt and launch Claude Code with it."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Arthur Ryzhak" }]
+keywords = ["claude-code", "system-prompt", "manifesto"]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 requires-python = ">=3.11"
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/ryzhakar/llm-manifestos"
+Repository = "https://github.com/ryzhakar/llm-manifestos"
+Documentation = "https://github.com/ryzhakar/llm-manifestos/blob/v3.6.0/plugin/unharness/README.md"
 
 [project.scripts]
 unharness = "unharness.cli:main"
