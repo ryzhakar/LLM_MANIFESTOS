@@ -18,13 +18,6 @@ WRITING_SKILL = "/compile-commitments"
 
 
 @dataclass(frozen=True)
-class Block:
-    name: str
-    purpose: str | None
-    text: str
-
-
-@dataclass(frozen=True)
 class SessionFiles:
     interplay: str
     commitments: str
@@ -36,7 +29,7 @@ MINIFIED_FILES = SessionFiles(MINIFIED_INTERPLAY_FILE, MINIFIED_COMMITMENTS_FILE
 
 def compile_prompt(
     documents: list[Document], preamble: str, interplay: str | None, commitments: str | None,
-    constitution: Sequence[Block | Document] | None = None, files: SessionFiles = FULL_FILES,
+    constitution: Sequence[Document] | None = None, files: SessionFiles = FULL_FILES,
 ) -> str:
     """Return the system prompt: preamble, constitution, interplay, commitments; stop if a session file is stale."""
     session_files = [
@@ -61,7 +54,7 @@ def stack_block(documents: list[Document]) -> str:
     return "<stack>\n" + "\n".join(_stack_lines(documents)) + "\n</stack>"
 
 
-def constitution_block(blocks: Sequence[Block | Document]) -> str:
+def constitution_block(blocks: Sequence[Document]) -> str:
     """Return the constitution block: one tagged text per block, in order."""
     return "<constitution>\n" + "\n".join(_tagged(block) for block in blocks) + "\n</constitution>"
 
@@ -70,7 +63,7 @@ def _stack_lines(documents: list[Document]) -> list[str]:
     return [f"{document.name} {document.sha256} {document.purpose or ''}".rstrip() for document in documents]
 
 
-def _tagged(block: Block | Document) -> str:
+def _tagged(block: Document) -> str:
     governs = f' governs="{block.purpose.replace(DOUBLE_QUOTE, SINGLE_QUOTE)}"' if block.purpose else ""
     return f"<{block.name}{governs}>\n{block.text}\n</{block.name}>"
 

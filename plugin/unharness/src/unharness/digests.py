@@ -4,7 +4,6 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
-from unharness.compile import Block
 from unharness.config import TEXT_ENCODING, Element, UnharnessError
 from unharness.resolve import Document, manifesto_elements, manifesto_slug, resolve_stack
 
@@ -58,7 +57,7 @@ def digest_mode(digests: bool, stack_digests: bool, overlap: bool) -> DigestMode
 
 def constitution_blocks(
     elements: list[Element], documents: list[Document], directory: Path, plugin_folder: Path, mode: DigestMode | None,
-) -> list[Block | Document]:
+) -> list[Document]:
     """Return the constitution's blocks in config order: full texts, or the cover's digests under a mode."""
     if mode is None:
         return list(documents)
@@ -248,27 +247,27 @@ def read_digest(located: Located) -> Digest:
     return Digest(located.stem, located.path.read_text(encoding=TEXT_ENCODING).strip())
 
 
-def _layout(elements: list[Element], documents: list[Document], cover: Cover) -> list[Block | Document]:
+def _layout(elements: list[Element], documents: list[Document], cover: Cover) -> list[Document]:
     """Return one block per element in config order: a stack digest's block at its first member, a single digest in place of a text."""
     slugs = [manifesto_slug(element) for element in elements]
-    stack_blocks: dict[int, list[Block]] = {}
+    stack_blocks: dict[int, list[Document]] = {}
     for digest in cover.stacks:
         members = [position for position, slug in enumerate(slugs) if slug in slugs_of(digest.stem)]
         stack_blocks.setdefault(members[0], []).append(_stack_block(digest, [documents[position] for position in members]))
     in_stack = {slug for digest in cover.stacks for slug in slugs_of(digest.stem)}
-    blocks: list[Block | Document] = []
+    blocks: list[Document] = []
     for position, (slug, document) in enumerate(zip(slugs, documents)):
         blocks.extend(stack_blocks.get(position, []))
         if slug is None:
             blocks.append(document)
         elif slug not in in_stack:
-            blocks.append(Block(document.name, document.purpose, cover.singles[slug].text))
+            blocks.append(Document(document.name, document.purpose, cover.singles[slug].text))
     return blocks
 
 
-def _stack_block(digest: Digest, members: list[Document]) -> Block:
+def _stack_block(digest: Digest, members: list[Document]) -> Document:
     purposes = [member.purpose for member in members if member.purpose]
-    return Block(STEM_SEPARATOR.join(member.name for member in members), PURPOSE_SEPARATOR.join(purposes) or None, digest.text)
+    return Document(STEM_SEPARATOR.join(member.name for member in members), PURPOSE_SEPARATOR.join(purposes) or None, digest.text)
 
 
 def stamp_digest(digest: Path, registry: Path | None, login: Path) -> Path:

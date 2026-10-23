@@ -20,7 +20,7 @@ class Document:
     name: str
     purpose: str | None
     text: str
-    sha256: str
+    sha256: str | None = None
 
 
 def login_dir(environ: Mapping[str, str], home: Path) -> Path:
