@@ -102,3 +102,4 @@
 - D3 committed the local raise-the-bar digest on verify/digests (f7e7b20); its captures continue. Wait b07vgifwb watches for the three reports and the verification record.
 - No new output; all four needs in flight.
 - Waiting on D1 ×3 and D3; nothing new to request.
+- Needs unchanged (D1 ×3, D3), all in flight.
