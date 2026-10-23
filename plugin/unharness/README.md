@@ -9,7 +9,7 @@ uvx unharness prompt | uvx unharness launch -- claude
 
 To run the source at the v3.6.1 tag instead, use `uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.6.1#subdirectory=plugin/unharness" unharness` in place of `uvx unharness`. The launcher's input is reopened on the terminal.
 
-Launch sets two environment variables that no Claude Code docs page names, `CLAUDE_CODE_TODO_REMINDER_MODE=off` and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`. They remove the task-list nudge and the token-count line, and a Claude Code release may drop them.
+The strip table in the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.1/plugin/README.md) lists every switch launch passes, and `unharness switches` prints it.
 
 A `pypi-<version>` tag on a commit whose `pyproject.toml` carries that version publishes it to PyPI; `v<version>` tags release the plugin and do not publish.
 
@@ -17,6 +17,7 @@ A `pypi-<version>` tag on a commit whose `pyproject.toml` carries that version p
 - `unharness stack [--config PATH] [SLUG ...]` prints the `<stack>` block and the constitution; given slugs, it prints those manifestos alone.
 - `unharness stamp DIGEST [--config PATH]` writes the digest's entry into its `index.json`, as in `unharness stamp .claude/digests/dry.md`.
 - `unharness doctor [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints one `OK`, `WARN`, or `FAIL` line per check and exits 1 on any FAIL.
+- `unharness switches` prints the strip table from the switch registry.
 - `unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [PROMPT] [-- LAUNCHER [ARGS...]]` caches the prompt and runs the launcher, or prints the command when none follows `--`.
 
 The config schema is in [`plugin/SCHEMA.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.1/plugin/SCHEMA.md). The strip table and the text that stays are in the Unharness section of [`plugin/README.md`](https://github.com/ryzhakar/llm-manifestos/blob/v3.6.1/plugin/README.md).

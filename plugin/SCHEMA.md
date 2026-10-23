@@ -194,9 +194,9 @@ Output accumulates in conversation history (platform behavior) — this is inten
 
 When `UNHARNESS` is set and not `0`, SessionStart, PostCompact, UserPromptSubmit, and SubagentStart each print nothing and exit 0, because the compiled system prompt already carries the binding.
 
-### Launch switches without a documented name
+### Launch switches
 
-`unharness launch` sets `CLAUDE_CODE_TODO_REMINDER_MODE=off` and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`, which remove the task-list nudge and the token-count line. No Claude Code docs page names either variable, so a release may drop them.
+`unharness launch` passes the switches that `plugin/unharness/src/unharness/switches.json` records. The strip table in the Unharness section of [`README.md`](README.md) lists each one and says whether a Claude Code docs page names it; a release may drop an undocumented switch.
 
 ### Template architecture
 

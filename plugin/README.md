@@ -78,6 +78,7 @@ The launcher's input is reopened on the terminal, so the session reads the keybo
 - `unharness stack [--config PATH] [SLUG ...]` prints the `<stack>` block and the constitution, exactly what a session binds to. Given slugs, it prints those manifestos alone. It takes no mode flag, since a session always binds to full texts.
 - `unharness stamp DIGEST [--config PATH]` writes the digest's entry into its `index.json`.
 - `unharness doctor [--config PATH] [--digests] [--stack-digests] [--overlap] [--minified]` prints one line per check and exits 1 on any FAIL.
+- `unharness switches` prints the strip table below, generated from the switch registry.
 - `unharness launch [--keep-claude-md] [--keep-web-search] [--no-hooks] [PROMPT] [-- LAUNCHER [ARGS...]]` caches the prompt in `$XDG_CACHE_HOME/unharness/<sha256>.md`, or `~/.cache/unharness/` when unset, and runs the launcher with the switches below. The printed command ends in the terminal's own device, and in `/dev/tty` only when neither output is a terminal.
 
 `/compile-commitments` reads `unharness stack`, reduces each element to its axioms, and writes the interplay and commitments files and their min pair.
@@ -118,22 +119,25 @@ WARN .manifestos.interplay.min.md: .manifestos.interplay.min.md is missing; run 
 OK prompt size: full 3541 words; shortest 818 words
 ```
 
+Launch replaces Claude Code's default system prompt with the cached prompt through `--system-prompt-file`, and passes `UNHARNESS=1`, so every hook of this plugin, session-start, post-compact, subagent-start, and the per-prompt drift reminder, stands down; the compiled prompt already carries the binding. Their tests cover this, and no capture shows it. It passes every other switch from the registry `plugin/unharness/src/unharness/switches.json`, and `unharness switches` prints this table from it.
+
+<!-- switches -->
 | Injected text | Switch | Default |
 |---|---|---|
-| Default system prompt | `--system-prompt-file` the cached prompt | replaced |
 | Billing header block | env `CLAUDE_CODE_ATTRIBUTION_HEADER=0` | stripped |
 | Every CLAUDE.md | env `CLAUDE_CODE_DISABLE_CLAUDE_MDS=1` | stripped; `--keep-claude-md` keeps |
 | Git status snapshot; commit and PR text in the Bash tool description | env `CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS=1`, setting `includeGitInstructions: false` | stripped |
-| Co-Authored-By trailer and PR footer | setting `attribution: {commit: "", pr: ""}` | set |
 | Auto memory section | env `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`, setting `autoMemoryEnabled: false` | set |
-| Output style text | setting `outputStyle: "default"` | set |
-| "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0` | set |
+| "The user hasn't heard from you in a while" note | env `CLAUDE_CODE_SILENT_TURN_REMINDER=0` | stripped |
 | Task-list and TodoWrite nudges | env `CLAUDE_CODE_TODO_REMINDER_MODE=off`, undocumented | stripped |
 | Token-count line | env `CLAUDE_CODE_TOTAL_TOKENS_REMINDER=off`, undocumented | stripped |
-| WebSearch paragraph | `--disallowedTools WebSearch` | stripped; `--keep-web-search` keeps it |
-| Hook output | setting `disableAllHooks: true` under `--no-hooks` | kept |
+| WebSearch paragraph | `--disallowedTools WebSearch` | stripped; `--keep-web-search` keeps |
+| Co-Authored-By trailer and PR footer | setting `attribution: {"commit": "", "pr": ""}` | set |
+| Output style text | setting `outputStyle: "default"` | set |
+| Hook output | setting `disableAllHooks: true` | kept; `--no-hooks` strips |
+<!-- /switches -->
 
-The four rows marked "set" are implemented per the Claude Code docs and the binary; no capture shows their text present or removed. The two undocumented switches, `CLAUDE_CODE_TODO_REMINDER_MODE` and `CLAUDE_CODE_TOTAL_TOKENS_REMINDER`, appear in no Claude Code docs page, so a release may drop them; captures x1-mt-neither and x1-tokens-off show each removing its text. Launch also sets `UNHARNESS=1`, so every hook of this plugin, session-start, post-compact, subagent-start, and the per-prompt drift reminder, stands down; the compiled prompt already carries the binding. Their tests cover this, and no capture shows it.
+`stripped` means a capture without the switch showed the text and a capture with it did not. `set` means the docs and the binary implement the switch, but no capture without it showed the text, so its removal is inferred. `kept` means launch leaves the text in unless the option beside it strips it. `undocumented` means no Claude Code docs page names the switch, so a release may drop it.
 
 **What stays.** The harness adds each item below, and either no switch removes it or the only switch drops something kept on purpose. The evidence is in `orchestration_log/history/2026-10-23/verification-unharness.md`, with the captures d1-p-haiku and d1-p-opus (print mode), d1-tmux-haiku (interactive sessions), d1-flag-keepmd, d1-flag-nohooks, d1-flag-websearch, b2-full-haiku, and a3-c5.
 
