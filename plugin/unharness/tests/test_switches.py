@@ -1,0 +1,112 @@
+import json
+
+import pytest
+from unharness.config import UnharnessError
+from unharness.switches import parse_switches, shipped_switches
+
+SHIPPED_NAMES = [
+    "CLAUDE_CODE_ATTRIBUTION_HEADER",
+    "CLAUDE_CODE_DISABLE_CLAUDE_MDS",
+    "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY",
+    "CLAUDE_CODE_SILENT_TURN_REMINDER",
+    "CLAUDE_CODE_TODO_REMINDER_MODE",
+    "CLAUDE_CODE_TOTAL_TOKENS_REMINDER",
+    "--disallowedTools",
+    "includeGitInstructions",
+    "attribution",
+    "autoMemoryEnabled",
+    "outputStyle",
+    "disableAllHooks",
+]
+
+
+def entry(**overrides) -> dict:
+    return {
+        "name": "SWITCH_ONE", "kind": "env", "value": "1", "removes": "Some text",
+        "documented": True, "control": True, "verified": ["2.1.309"], "default": True, "option": None,
+        **overrides,
+    }
+
+
+def text_of(*entries: dict) -> str:
+    return json.dumps(list(entries))
+
+
+def test_the_shipped_registry_holds_the_thirteen_switches_3_6_1_passes_in_its_order():
+    switches = shipped_switches()
+
+    assert [switch.name for switch in switches] == SHIPPED_NAMES
+    assert all(switch.verified == ("2.1.309",) for switch in switches)
+
+
+def test_the_shipped_registry_marks_what_the_spec_marks():
+    by_name = {switch.name: switch for switch in shipped_switches()}
+
+    undocumented = {name for name, switch in by_name.items() if not switch.documented}
+    uncontrolled = {name for name, switch in by_name.items() if not switch.control}
+    assert undocumented == {"CLAUDE_CODE_TODO_REMINDER_MODE", "CLAUDE_CODE_TOTAL_TOKENS_REMINDER"}
+    assert uncontrolled == {"attribution", "outputStyle", "autoMemoryEnabled", "CLAUDE_CODE_DISABLE_AUTO_MEMORY"}
+    assert {name: switch.option for name, switch in by_name.items() if switch.option} == {
+        "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "--keep-claude-md",
+        "--disallowedTools": "--keep-web-search",
+        "disableAllHooks": "--no-hooks",
+    }
+    assert [name for name, switch in by_name.items() if not switch.default] == ["disableAllHooks"]
+
+
+def test_a_valid_text_loads_each_kind_with_its_value():
+    switches = parse_switches(text_of(
+        entry(),
+        entry(name="--bare", kind="flag", value=None, removes="Other", default=False, option="--no-hooks"),
+        entry(name="key", kind="settings", value={"a": [1]}, removes="Third"),
+    ))
+
+    assert [(switch.kind, switch.value) for switch in switches] == [("env", "1"), ("flag", None), ("settings", {"a": [1]})]
+
+
+@pytest.mark.parametrize(("entries", "message"), [
+    ([{key: value for key, value in entry().items() if key != "kind"}], "switches.json entry 0: kind is missing"),
+    ([entry(), {**entry(name="B", removes="B"), "extra": 1}], "switches.json entry 1: extra is not a key of an entry"),
+    ([entry(kind="header")], 'switches.json entry 0: kind must be "env", "flag", or "settings"'),
+    ([entry(name="")], "switches.json entry 0: name must be a non-empty string"),
+    ([entry(removes="")], "switches.json entry 0: removes must be a non-empty string"),
+    ([entry(value=1)], "switches.json entry 0: value must be a string"),
+    ([entry(kind="flag", value=1)], "switches.json entry 0: value must be a string or null"),
+    ([entry(kind="env", value=None)], "switches.json entry 0: value must be a string"),
+    ([entry(documented="yes")], "switches.json entry 0: documented must be true or false"),
+    ([entry(control=1)], "switches.json entry 0: control must be true or false"),
+    ([entry(default=None)], "switches.json entry 0: default must be true or false"),
+    ([entry(option="--other")], 'switches.json entry 0: option must be null, "--keep-claude-md", "--keep-web-search", or "--no-hooks"'),
+    ([entry(verified=[])], "switches.json entry 0: verified must be a non-empty array of distinct X.Y.Z strings in ascending order"),
+    ([entry(verified="2.1.309")], "switches.json entry 0: verified must be a non-empty array of distinct X.Y.Z strings in ascending order"),
+    ([entry(verified=["2.1"])], "switches.json entry 0: verified must be a non-empty array of distinct X.Y.Z strings in ascending order"),
+    ([entry(verified=["2.1.309", "2.1.309"])], "switches.json entry 0: verified must be a non-empty array of distinct X.Y.Z strings in ascending order"),
+    ([entry(verified=["2.1.310", "2.1.309"])], "switches.json entry 0: verified must be a non-empty array of distinct X.Y.Z strings in ascending order"),
+    ([entry(verified=["2.1.10", "2.1.9"])], "switches.json entry 0: verified must be a non-empty array of distinct X.Y.Z strings in ascending order"),
+    (["text"], "switches.json entry 0: is not an object"),
+    ([entry(), entry(removes="Other")], "switches.json entry 1: name repeats entry 0, which has the same kind"),
+    ([entry(), entry(name="B", control=False)], "switches.json entry 1: control differs from entry 0, which has the same removes"),
+    ([entry(), entry(name="B", default=False)], "switches.json entry 1: default differs from entry 0, which has the same removes"),
+    ([entry(), entry(name="B", option="--no-hooks")], "switches.json entry 1: option differs from entry 0, which has the same removes"),
+])
+def test_a_file_that_breaks_the_schema_is_refused_with_the_entry_index_and_the_problem(entries, message):
+    with pytest.raises(UnharnessError) as refusal:
+        parse_switches(json.dumps(entries))
+
+    assert str(refusal.value) == message
+
+
+def test_two_entries_of_different_kinds_may_share_a_name():
+    parse_switches(text_of(entry(), entry(kind="settings", value=True, removes="Other")))
+
+
+@pytest.mark.parametrize(("text", "message"), [
+    ("{}", "switches.json is not one JSON array"),
+    ("[", "switches.json is not JSON: Expecting value: line 1 column 2 (char 1)"),
+])
+def test_a_file_that_is_not_one_json_array_is_refused(text, message):
+    with pytest.raises(UnharnessError) as refusal:
+        parse_switches(text)
+
+    assert str(refusal.value) == message
