@@ -127,3 +127,4 @@
 - Idle; D2 fix pass running, everything after depends on it.
 - Idle; D2 still running.
 - Idle; D2 in flight, no independent request.
+- Idle; D2 only.
