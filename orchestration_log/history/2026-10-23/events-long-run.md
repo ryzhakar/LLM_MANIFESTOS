@@ -106,3 +106,4 @@
 - Idle; four outputs pending from running agents.
 - Idle; nothing new to request.
 - Idle; all needs in flight.
+- Idle; nothing unrequested.
