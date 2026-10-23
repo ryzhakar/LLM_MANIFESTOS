@@ -91,6 +91,7 @@ def _doctor(arguments: argparse.Namespace) -> int:
 
 def _output(arguments: argparse.Namespace, login: Path) -> str:
     verb = arguments.verb
+    mode = digest_mode(arguments.digests, arguments.stack_digests, arguments.overlap) if verb == PROMPT_VERB else None
     config = load(arguments.config)
     if verb == STACK_VERB and arguments.slugs:
         return stack_view(resolve_stack(manifesto_elements(arguments.slugs), config.directory, config.registry, login))
@@ -99,7 +100,6 @@ def _output(arguments: argparse.Namespace, login: Path) -> str:
     documents = resolve_stack(config.you, config.directory, config.registry, login)
     if verb == STACK_VERB:
         return stack_view(documents)
-    mode = digest_mode(arguments.digests, arguments.stack_digests, arguments.overlap)
     session_files = MINIFIED_FILES if arguments.minified else FULL_FILES
     return compile_prompt(
         documents,

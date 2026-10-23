@@ -676,3 +676,14 @@ def test_the_cover_search_equals_the_ranking_of_every_subset_on_random_stacks(ov
         except UnharnessError:
             found = None
         assert found == expected
+
+
+def test_a_flag_refusal_comes_before_an_unresolved_element_is_reported(tmp_path, monkeypatch, capsys):
+    world = World(tmp_path, tail="  - name: ghost\n")
+    monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(world.login))
+
+    status = main(["prompt", "--config", str(world.config), "--overlap"])
+
+    captured = capsys.readouterr()
+    assert (status, captured.out) == (1, "")
+    assert captured.err == "unharness: --overlap requires --stack-digests\n"

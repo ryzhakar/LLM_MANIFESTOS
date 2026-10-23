@@ -12,6 +12,7 @@ LOCAL_FOLDER = Path(".claude") / "digests"
 PLUGIN_FOLDER = "digests"
 STACKS_FOLDER = "stacks"
 INDEX_FILE = "index.json"
+COMPILE_DIGEST_COMMAND = "/compile-digest"
 STEM_SEPARATOR = "+"
 PURPOSE_SEPARATOR = "; "
 DIGESTS_FLAG = "--digests"
@@ -68,13 +69,23 @@ def select_cover(
     elements: list[Element], documents: list[Document], directory: Path, plugin_folder: Path, mode: DigestMode,
 ) -> Cover:
     """Return the cover the mode chooses for the stack, or stop with the refusal that names its fix."""
-    hashes = {slug: document.sha256 for element, document in zip(elements, documents) if (slug := manifesto_slug(element))}
-    slugs = [slug for slug in map(manifesto_slug, elements) if slug]
+    hashes = stack_hashes(elements, documents)
+    slugs = stack_slugs(elements)
     _require_each_once(slugs)
     singles = _usable_singles(slugs, hashes, directory, plugin_folder)
     stacks = _usable_stacks(slugs, hashes, directory, plugin_folder) if mode.stacks else []
     _require_every_slug_covered(slugs, singles, stacks, directory, plugin_folder)
     return choose_cover(slugs, singles, stacks, mode)
+
+
+def stack_slugs(elements: list[Element]) -> list[str]:
+    """Return the slug of each manifesto element, in config order."""
+    return [slug for slug in map(manifesto_slug, elements) if slug]
+
+
+def stack_hashes(elements: list[Element], documents: list[Document]) -> dict[str, str]:
+    """Return the current source hash of each manifesto element, by slug."""
+    return {slug: document.sha256 for element, document in zip(elements, documents) if (slug := manifesto_slug(element))}
 
 
 def slugs_of(stem: str) -> list[str]:
@@ -90,10 +101,16 @@ def index_path_of(digest_path: Path) -> Path:
 
 def locate_single(slug: str, directory: Path, plugin_folder: Path) -> Located | None:
     """Return the single digest of the slug, the local one before the plugin's, None when neither exists."""
-    for place, folder in ((LOCAL, directory / LOCAL_FOLDER), (PLUGIN, plugin_folder / PLUGIN_FOLDER)):
-        if (folder / f"{slug}.md").is_file():
-            return Located(slug, folder / f"{slug}.md", place)
+    for place, path in _single_paths(slug, directory, plugin_folder):
+        if path.is_file():
+            return Located(slug, path, place)
     return None
+
+
+def _single_paths(slug: str, directory: Path, plugin_folder: Path) -> tuple[tuple[str, Path], tuple[str, Path]]:
+    """Return the two places a single digest may live, as (place, path), the local one first."""
+    file_name = f"{slug}.md"
+    return (LOCAL, directory / LOCAL_FOLDER / file_name), (PLUGIN, plugin_folder / PLUGIN_FOLDER / file_name)
 
 
 def locate_stacks(slugs: list[str], directory: Path, plugin_folder: Path) -> list[Located]:
@@ -117,7 +134,7 @@ def require_usable(located: Located, current_hashes: dict[str, str]) -> None:
         raise UnharnessError(f"{located.path} has no entry in {index_path}; run unharness stamp {located.path}")
     changed = [slug for slug in slugs if entry[slug] != current_hashes[slug]]
     if changed:
-        raise UnharnessError(f"{located.path} is stale (changed: {', '.join(changed)}); run /compile-digest {' '.join(slugs)}")
+        raise UnharnessError(f"{located.path} is stale (changed: {', '.join(changed)}); run {COMPILE_DIGEST_COMMAND} {' '.join(slugs)}")
 
 
 def choose_cover(
@@ -156,9 +173,8 @@ def _is_index(value: object) -> bool:
 
 
 def missing_message(slug: str, directory: Path, plugin_folder: Path) -> str:
-    local = directory / LOCAL_FOLDER / f"{slug}.md"
-    plugin = plugin_folder / PLUGIN_FOLDER / f"{slug}.md"
-    return f"no digest for {slug}: tried {local} and {plugin}; run /compile-digest {slug}"
+    (_, local), (_, plugin) = _single_paths(slug, directory, plugin_folder)
+    return f"no digest for {slug}: tried {local} and {plugin}; run {COMPILE_DIGEST_COMMAND} {slug}"
 
 
 def _require_each_once(slugs: list[str]) -> None:
@@ -224,7 +240,7 @@ def _cost(cover: Cover) -> tuple[int, int, list[str]]:
 
 def _no_cover_message(slugs: list[str], singles: dict[str, Digest]) -> str:
     lacking = [slug for slug in slugs if slug not in singles]
-    return f"no cover without overlap; add {OVERLAP_FLAG} or run /compile-digest <slug> for each of: {', '.join(lacking)}"
+    return f"no cover without overlap; add {OVERLAP_FLAG} or run {COMPILE_DIGEST_COMMAND} <slug> for each of: {', '.join(lacking)}"
 
 
 def read_digest(located: Located) -> Digest:

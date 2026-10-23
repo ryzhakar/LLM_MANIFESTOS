@@ -19,11 +19,12 @@ from unharness.digests import (
     digest_mode,
     locate_single,
     locate_stacks,
-    manifesto_slug,
     missing_message,
     require_usable,
     select_cover,
     slugs_of,
+    stack_hashes,
+    stack_slugs,
 )
 from unharness.resolve import (
     MANIFESTO_PLUGIN,
@@ -95,9 +96,10 @@ def doctor(
         for element, document in zip(config.you, documents)
         if document and _is_plugin_skill(element)
     ]
+    mode, flag_error = _flagged_mode(modes)
     on_stack = [] if stack is None else [
-        *_digest_findings(config.you, stack, config.directory, plugin, modes),
-        _cover_finding(config.you, stack, config.directory, plugin, modes),
+        *_digest_findings(config.you, stack, config.directory, plugin, mode),
+        _cover_finding(config.you, stack, config.directory, plugin, mode, flag_error),
         *_session_findings(stack, config.directory, modes),
     ]
     size = [] if stack is None else [_prompt_size_finding(config.you, stack, config.directory, plugin)]
@@ -140,12 +142,11 @@ def _skill_finding(element: Element, config: Config, login: Path) -> Finding:
 
 
 def _digest_findings(
-    elements: list[Element], documents: list[Document], directory: Path, plugin: Path, modes: Modes,
+    elements: list[Element], documents: list[Document], directory: Path, plugin: Path, mode: DigestMode | None,
 ) -> list[Finding]:
     """Check each manifesto's single digest, then each candidate stack digest; a problem fails where the flags load the digest."""
-    mode = _flagged_mode(modes)
     slugs = _manifesto_slugs(elements)
-    hashes = {slug: document.sha256 for element, document in zip(elements, documents) if (slug := manifesto_slug(element))}
+    hashes = stack_hashes(elements, documents)
     singles = [_single_finding(slug, directory, plugin, hashes, mode) for slug in slugs]
     stacks = [
         _usable_finding(located, hashes, loaded=mode is not None and mode.stacks)
@@ -155,13 +156,12 @@ def _digest_findings(
 
 
 def _cover_finding(
-    elements: list[Element], documents: list[Document], directory: Path, plugin: Path, modes: Modes,
+    elements: list[Element], documents: list[Document], directory: Path, plugin: Path,
+    mode: DigestMode | None, flag_error: UnharnessError | None,
 ) -> Finding:
     """Report the cover the flags choose, else the one with stack digests and overlap; a refusal fails only when the flags choose."""
-    try:
-        mode = digest_mode(modes.digests, modes.stack_digests, modes.overlap)
-    except UnharnessError as error:
-        return Finding(Status.FAIL, "cover", str(error))
+    if flag_error:
+        return Finding(Status.FAIL, "cover", str(flag_error))
     try:
         cover = select_cover(elements, documents, directory, plugin, mode or STACKS_WITH_OVERLAP)
     except UnharnessError as error:
@@ -258,15 +258,16 @@ def _installed_versions(login: Path, plugin: str) -> list[str]:
     ]
 
 
-def _flagged_mode(modes: Modes) -> DigestMode | None:
+def _flagged_mode(modes: Modes) -> tuple[DigestMode | None, UnharnessError | None]:
+    """Return the digest mode the flags name, or the refusal that the flags earn."""
     try:
-        return digest_mode(modes.digests, modes.stack_digests, modes.overlap)
-    except UnharnessError:
-        return None
+        return digest_mode(modes.digests, modes.stack_digests, modes.overlap), None
+    except UnharnessError as error:
+        return None, error
 
 
 def _manifesto_slugs(elements: list[Element]) -> list[str]:
-    return list(dict.fromkeys(slug for slug in map(manifesto_slug, elements) if slug))
+    return list(dict.fromkeys(stack_slugs(elements)))
 
 
 def _single_finding(slug: str, directory: Path, plugin: Path, hashes: dict[str, str], mode: DigestMode | None) -> Finding:
