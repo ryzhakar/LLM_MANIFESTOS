@@ -6,7 +6,7 @@ import sys
 from importlib.resources import files
 from pathlib import Path
 
-from unharness.compile import COMMITMENTS_FILE, INTERPLAY_FILE, compile_prompt, stack_view
+from unharness.compile import FULL_FILES, MINIFIED_FILES, compile_prompt, stack_view
 from unharness.config import TEXT_ENCODING, UnharnessError, fail, load
 from unharness.digests import DIGESTS_FLAG, OVERLAP_FLAG, STACK_DIGESTS_FLAG, constitution_blocks, digest_mode, stamp_digest
 from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, terminal_device
@@ -18,6 +18,7 @@ PROMPT_VERB = "prompt"
 STACK_VERB = "stack"
 STAMP_VERB = "stamp"
 LAUNCH_VERB = "launch"
+MINIFIED_FLAG = "--minified"
 LAUNCHER_SEPARATOR = "--"
 
 
@@ -32,7 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     stack_parser.add_argument("slugs", nargs="*")
     for parser_of_verb in (prompt_parser, stack_parser):
         parser_of_verb.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
-    for flag in (DIGESTS_FLAG, STACK_DIGESTS_FLAG, OVERLAP_FLAG):
+    for flag in (DIGESTS_FLAG, STACK_DIGESTS_FLAG, OVERLAP_FLAG, MINIFIED_FLAG):
         prompt_parser.add_argument(flag, action="store_true")
     stamp_parser = verbs.add_parser(STAMP_VERB)
     stamp_parser.add_argument("digest", type=Path)
@@ -84,12 +85,14 @@ def _output(arguments: argparse.Namespace, login: Path) -> str:
     if verb == STACK_VERB:
         return stack_view(documents)
     mode = digest_mode(arguments.digests, arguments.stack_digests, arguments.overlap)
+    session_files = MINIFIED_FILES if arguments.minified else FULL_FILES
     return compile_prompt(
         documents,
         _preamble(config.directory),
-        _read_if_present(config.directory / INTERPLAY_FILE),
-        _read_if_present(config.directory / COMMITMENTS_FILE),
+        _read_if_present(config.directory / session_files.interplay),
+        _read_if_present(config.directory / session_files.commitments),
         constitution_blocks(config.you, documents, config.directory, manifesto_plugin_dir(config.registry, login), mode),
+        session_files,
     )
 
 

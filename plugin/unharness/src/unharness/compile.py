@@ -10,6 +10,8 @@ from unharness.resolve import Document
 STACK_BLOCK = re.compile(r"\A<stack>\n(.*?)\n</stack>\n*", re.S)
 INTERPLAY_FILE = ".manifestos.interplay.md"
 COMMITMENTS_FILE = ".manifestos.commitments.md"
+MINIFIED_INTERPLAY_FILE = ".manifestos.interplay.min.md"
+MINIFIED_COMMITMENTS_FILE = ".manifestos.commitments.min.md"
 DOUBLE_QUOTE = '"'
 SINGLE_QUOTE = "'"
 WRITING_SKILL = "/compile-commitments"
@@ -22,14 +24,24 @@ class Block:
     text: str
 
 
+@dataclass(frozen=True)
+class SessionFiles:
+    interplay: str
+    commitments: str
+
+
+FULL_FILES = SessionFiles(INTERPLAY_FILE, COMMITMENTS_FILE)
+MINIFIED_FILES = SessionFiles(MINIFIED_INTERPLAY_FILE, MINIFIED_COMMITMENTS_FILE)
+
+
 def compile_prompt(
     documents: list[Document], preamble: str, interplay: str | None, commitments: str | None,
-    constitution: Sequence[Block | Document] | None = None,
+    constitution: Sequence[Block | Document] | None = None, files: SessionFiles = FULL_FILES,
 ) -> str:
     """Return the system prompt: preamble, constitution, interplay, commitments; stop if a session file is stale."""
     session_files = [
-        _current_body(INTERPLAY_FILE, interplay, documents),
-        _current_body(COMMITMENTS_FILE, commitments, documents),
+        _current_body(files.interplay, interplay, documents),
+        _current_body(files.commitments, commitments, documents),
     ]
     return "\n\n".join([f"<harness>\n{preamble.strip()}\n</harness>", constitution_block(documents if constitution is None else constitution), *session_files])
 

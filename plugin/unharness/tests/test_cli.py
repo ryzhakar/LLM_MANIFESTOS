@@ -129,3 +129,52 @@ def test_the_shipped_preamble_stays_within_25_lines_and_names_no_tool():
 
     assert len(preamble.splitlines()) <= 25
     assert "unharness" not in preamble.lower() and "compil" not in preamble.lower()
+
+
+def write_minified_files(project: Path, login: Path) -> None:
+    stack = stack_block(documents_of(project, login))
+    write(project / ".manifestos.interplay.min.md", f"{stack}\n\n<interplay>\nAgree, briefly.\n</interplay>\n")
+    write(project / ".manifestos.commitments.min.md", f"{stack}\n\n<commitments>\nI must, briefly.\n</commitments>\n")
+
+
+def test_the_minified_flag_reads_the_condensed_pair_in_place_of_the_full_pair(login, project):
+    write_session_files(project, login)
+    write_minified_files(project, login)
+
+    run = unharness(login, "prompt", "--minified", cwd=project)
+
+    assert run.returncode == 0, run.stderr
+    assert run.stdout.endswith("<interplay>\nAgree, briefly.\n</interplay>\n\n<commitments>\nI must, briefly.\n</commitments>\n")
+    assert "Agree.\n" not in run.stdout
+
+
+def test_a_missing_minified_file_stops_the_prompt_and_names_the_minified_file(login, project):
+    write_session_files(project, login)
+    write_minified_files(project, login)
+    (project / ".manifestos.commitments.min.md").unlink()
+
+    run = unharness(login, "prompt", "--minified", cwd=project)
+
+    assert (run.returncode, run.stdout) == (1, "")
+    assert run.stderr == "unharness: .manifestos.commitments.min.md is missing; run /compile-commitments\n"
+
+
+def test_a_minified_file_made_for_another_stack_is_stale_though_the_full_pair_is_current(login, project):
+    write_session_files(project, login)
+    write_minified_files(project, login)
+    write(project / ".manifestos.interplay.min.md", f"<stack>\ndry {'0' * 64} one home\n</stack>\n\n<interplay>\nOld.\n</interplay>\n")
+
+    run = unharness(login, "prompt", "--minified", cwd=project)
+
+    assert (run.returncode, run.stdout) == (1, "")
+    assert run.stderr == "unharness: .manifestos.interplay.min.md is stale (changed: dry, write-well); run /compile-commitments\n"
+
+
+def test_the_full_mode_ignores_the_minified_files_even_when_they_are_stale_or_absent(login, project):
+    write_session_files(project, login)
+    write(project / ".manifestos.interplay.min.md", "<stack>\nstale\n</stack>\n\n<interplay>\nOld.\n</interplay>\n")
+
+    run = unharness(login, "prompt", cwd=project)
+
+    assert run.returncode == 0, run.stderr
+    assert "Old." not in run.stdout and "Agree.\n" in run.stdout
