@@ -131,16 +131,6 @@ def test_stack_rejects_the_mode_flags(world, monkeypatch, capsys, flag):
     assert stopped.value.code == 2
 
 
-@pytest.mark.parametrize("flag", MODE_FLAGS)
-def test_stamp_rejects_the_mode_flags(world, monkeypatch, capsys, flag):
-    digest = world.digest("alpha", "ALPHA DIGEST", index=False)
-
-    with pytest.raises(SystemExit) as stopped:
-        world.run(monkeypatch, capsys, "stamp", str(digest), flag)
-
-    assert stopped.value.code == 2
-
-
 def stale_hashes(world, slug: str) -> dict:
     return {slug: source_hash("an earlier text")}
 
@@ -544,11 +534,12 @@ def test_stamp_refuses_a_malformed_index_instead_of_overwriting_it(world, monkey
     assert index.read_text() == "not json"
 
 
-def test_stamp_rejects_the_mode_flags(world, monkeypatch, capsys):
+@pytest.mark.parametrize("flag", MODE_FLAGS)
+def test_stamp_rejects_the_mode_flags(world, monkeypatch, capsys, flag):
     digest = write(world.project / ".claude" / "digests" / "beta.md", "text")
 
     with pytest.raises(SystemExit) as stopped:
-        world.run(monkeypatch, capsys, "stamp", str(digest), "--digests")
+        world.run(monkeypatch, capsys, "stamp", str(digest), flag)
 
     assert stopped.value.code == 2
 
