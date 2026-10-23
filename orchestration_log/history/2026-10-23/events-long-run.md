@@ -103,3 +103,4 @@
 - No new output; all four needs in flight.
 - Waiting on D1 ×3 and D3; nothing new to request.
 - Needs unchanged (D1 ×3, D3), all in flight.
+- Idle; four outputs pending from running agents.
