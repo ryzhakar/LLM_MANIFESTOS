@@ -71,3 +71,4 @@
 - Owner present; round 2 held (queue 27–41). Silence restored after. Release trigger given: ship main, tag 3.6.0.
 - Plan: plan-digests.md. Worktree feat/digests at LLM_MANIFESTOS.worktrees/digests (72 tests green).
 - S1 (opus) extending spec-unharness.md; prompts c-shared, c1, c2, c3 written. Peer card restored (manifesto-discovery.md). Wake cron 8445614a every 20 min.
+- Owner correction: a "no visible output" nudge is an outside event; silence means an empty message, every time. Breach logged; no text until the owner's own message.
