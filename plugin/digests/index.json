@@ -1,0 +1,57 @@
+{
+  "cargo-cult-science": {
+    "cargo-cult-science": "bfde6690242f614ef914c63b57efe7d6ab8f951fe6a8738cf73a22445a574fa6"
+  },
+  "cargo-cult-science+correct-by-construction+dry+first-principles+kiss+lines-spent+self-documenting-code+simple-made-easy+stop-yapping+yagni+zen-of-python": {
+    "cargo-cult-science": "bfde6690242f614ef914c63b57efe7d6ab8f951fe6a8738cf73a22445a574fa6",
+    "correct-by-construction": "28b06330d96686a979a849448960b6aa70535895e2b11e06fc73565bda7d7a86",
+    "dry": "5dd350b8de9f7dcd91f6c9cf41296d0b9fc2f1055bc72ab8580a7b6ddcb0de84",
+    "first-principles": "3a6dd008c2a2392a1db5c5200f26e434de5737ed1f2cdf2edca7f9fcf19dd8f8",
+    "kiss": "669f41203040af0372a6f8ed08d0330ed74316140a853dde76bb634d3cdc4382",
+    "lines-spent": "7c91ac5cba70ba8dfcdf50f9918e0c5ec70612bf24978b4699c666be6f077be2",
+    "self-documenting-code": "29acb4bc0c21a25b67b9487e27b0811836374ffaa33e1aa055c4de1dd4c3ea7f",
+    "simple-made-easy": "8e551cb85c111b167a949a82dcf159453fcad67252f6d4d13daf74649a5fe508",
+    "stop-yapping": "e5cbef9b772ba8417cdef27fdcaa2267c17fcb7dce5433afb70266b13f70e2c6",
+    "yagni": "c8cff465ddc10c2c077f2a5e54e739b15b4768b2622aca1751259bc92f67eb50",
+    "zen-of-python": "89277f88321ebefc2de6f9608d9488c83232e996b65f209cd19de90ae51aef08"
+  },
+  "correct-by-construction": {
+    "correct-by-construction": "28b06330d96686a979a849448960b6aa70535895e2b11e06fc73565bda7d7a86"
+  },
+  "dry": {
+    "dry": "5dd350b8de9f7dcd91f6c9cf41296d0b9fc2f1055bc72ab8580a7b6ddcb0de84"
+  },
+  "first-principles": {
+    "first-principles": "3a6dd008c2a2392a1db5c5200f26e434de5737ed1f2cdf2edca7f9fcf19dd8f8"
+  },
+  "intervention": {
+    "intervention": "c0e99895710400cd0de82ee8e04c12b659b97b9185efec45594c4dd6ad455e0f"
+  },
+  "kiss": {
+    "kiss": "669f41203040af0372a6f8ed08d0330ed74316140a853dde76bb634d3cdc4382"
+  },
+  "lines-spent": {
+    "lines-spent": "7c91ac5cba70ba8dfcdf50f9918e0c5ec70612bf24978b4699c666be6f077be2"
+  },
+  "only-what-it-needs": {
+    "only-what-it-needs": "872b079a892188afca2f33f51a4c5d5d4b77110058e6df0e2ea72a514814d5ac"
+  },
+  "postgres": {
+    "postgres": "cfad814033aded4642cfe1c773be9a9ae4b46e3e3ac63253f610003f340c2d41"
+  },
+  "self-documenting-code": {
+    "self-documenting-code": "29acb4bc0c21a25b67b9487e27b0811836374ffaa33e1aa055c4de1dd4c3ea7f"
+  },
+  "simple-made-easy": {
+    "simple-made-easy": "8e551cb85c111b167a949a82dcf159453fcad67252f6d4d13daf74649a5fe508"
+  },
+  "stop-yapping": {
+    "stop-yapping": "e5cbef9b772ba8417cdef27fdcaa2267c17fcb7dce5433afb70266b13f70e2c6"
+  },
+  "yagni": {
+    "yagni": "c8cff465ddc10c2c077f2a5e54e739b15b4768b2622aca1751259bc92f67eb50"
+  },
+  "zen-of-python": {
+    "zen-of-python": "89277f88321ebefc2de6f9608d9488c83232e996b65f209cd19de90ae51aef08"
+  }
+}
