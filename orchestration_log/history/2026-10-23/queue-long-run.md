@@ -52,3 +52,25 @@ Entries 1-11 went to the owner in the round of 2026-10-23; numbering continues.
 19. **Missing or stale commitments** (solved 9): kept. Owner: "anything else decided already you can drop into the tool a bunch at the time." Standing word for this round: solved entries go in rapid-fire sets.
 20. **Second verb** (solved 10): kept; `unharness launch -- <launcher>`.
 21. **Who writes the interplay file** (solved 11): kept; `/compile-commitments` writes both.
+
+## Round 2 (2026-10-23, owner present) — digests, minified files, signatures, doctor
+
+Owner's brief: prompt compilation gains parameters that pick digests instead of manifestos, stack digests for combinations (several, overlapping, shortest prompt); compilation emits "minified" commitments and interplay; every compiled artifact carries a signature of the element set it was made for and loads only on a match; a `doctor` verb checks reachability and relevance and whatever else belongs there.
+
+27. Cover rule — answered: exact cover, overlap allowed. A stack digest counts only if all its members are in the stack; chosen stack digests may share members; the compiler picks the shortest total text covering every manifesto, gaps filled by single digests.
+28. Missing digest in digest mode — answered: refuse, name the element, recommend local compilation of a digest. Implies a new plugin skill for userland digests and a local resolution source for digests. Skills are never digested; they ship in full in every mode.
+29. Digest gate status — answered: ignore digest quality for now.
+30. Minified session files — answered: the session writes the condensed variant (compile-commitments writes both full and condensed); the compiler picks the condensed one under its flag.
+31. Signature scope — answered: commitments produced against the full stack must load with the minified stack too. Signature = canonical source hashes (full manifesto body sha, skill/file sha), never the rendered digest text. The shipped `<stack>` block already is that; it stays.
+32. Digest signature home — answered: sidecar index (`index.json` beside the digests), digests stay body-only.
+33. Mode selection — answered: four flags: `--digests`, `--stack-digests`, `--overlap`, `--minified`.
+34. Release — answered: ship to main and tag 3.6.0 on verified completion.
+
+Solved (owner heard, no objection):
+35. `--stack-digests` implies `--digests`; `--overlap` requires `--stack-digests` (error otherwise). Alternative: independent flags.
+36. Local digests at `.claude/digests/<slug>.md` and `.claude/digests/<a+b+c>.md` (sorted slugs joined by `+`), index at `.claude/digests/index.json`; plugin digests at `<registry>/digests/<slug>.md`, `<registry>/digests/stacks/<a+b>.md`, index `<registry>/digests/index.json`. Local wins over plugin. Alternative: one flat folder.
+37. Index shape: `{"<file stem>": {"<slug>": "<sha256 of manifesto body>", ...}}`; a verb `unharness stamp <digest-path>` writes the entry from the file name and current manifesto hashes (one home for hashing). Alternative: the skill writes the entry by hand.
+38. A digest whose index entry is missing or whose hashes differ from the current manifestos is refused in digest mode with a message naming the fix (`/compile-digest <names>` or `unharness stamp`). Alternative: warn and use.
+39. New plugin skill `/compile-digest <name> [<name>...]`: one name writes a single local digest, several write a local stack digest, then `unharness stamp`. Guidance comes from the repo's write-digest and write-stack-digest skills (word limits 350 / 850, body only). Alternative: two skills.
+40. Minified file names: `.manifestos.interplay.min.md`, `.manifestos.commitments.min.md`, same `<stack>` signature. Alternative: one combined file.
+41. Doctor checks (exit 1 on any FAIL): config parses; every element reachable; plugin skills at latest cached version; digest coverage per manifesto (local/plugin), index entries present and hashes current, the cover chosen and its word count; interplay/commitments and their .min present and signatures current; preamble override present or not; `claude` on PATH and version vs the tested 2.1.309 (WARN); `uv`/`uvx` on PATH; installed manifesto plugin version ≥ 3.5.0 (hooks stand down under UNHARNESS=1); prompt size in words for full and shortest mode. Alternative: reachability and signatures only.
