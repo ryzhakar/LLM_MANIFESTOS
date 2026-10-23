@@ -1,6 +1,6 @@
 # Plan: unharness 3.6.0 — digests, minified session files, signatures, doctor
 
-Status: OPEN. Owner away after round 2 (queue 27–41). Silence in force.
+Status: DONE 2026-10-23. Shipped as 3.6.0 (fb7e3ae, tag v3.6.0).
 Branch: session/long-run (product work on feat/digests worktree, rebased onto session/long-run, then main on completion; tag v3.6.0).
 
 Units (sonnet unless noted; records in history/2026-10-23/, reports in recon/2026-10-23/):
