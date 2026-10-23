@@ -1,4 +1,4 @@
-"""The unharness command: print the compiled prompt, print the stack a session binds to, or launch a session."""
+"""The unharness command: print the compiled prompt, the stack a session binds to, or the strip table, or launch a session."""
 
 import argparse
 import os
@@ -12,7 +12,7 @@ from unharness.doctor import Modes, claude_version, doctor, has_failed
 from unharness.launch import Options, cache_home, execute_launcher, launch, reopen_terminal, terminal_device
 from unharness.resolve import login_dir, manifesto_elements, manifesto_plugin_dir, resolve_stack
 from unharness.session import load_preamble, read_if_present
-from unharness.switches import shipped_switches
+from unharness.switches import shipped_switches, strip_table
 
 DEFAULT_CONFIG = Path(".manifestos.yaml")
 PROMPT_VERB = "prompt"
@@ -20,6 +20,7 @@ STACK_VERB = "stack"
 STAMP_VERB = "stamp"
 LAUNCH_VERB = "launch"
 DOCTOR_VERB = "doctor"
+SWITCHES_VERB = "switches"
 MINIFIED_FLAG = "--minified"
 MODE_FLAGS = (DIGESTS_FLAG, STACK_DIGESTS_FLAG, OVERLAP_FLAG, MINIFIED_FLAG)
 LAUNCHER_SEPARATOR = "--"
@@ -60,6 +61,7 @@ def _run(argv: list[str]) -> int:
     launch_parser.add_argument("prompt", nargs="?")
     for flag in ("--keep-claude-md", "--keep-web-search", "--no-hooks"):
         launch_parser.add_argument(flag, action="store_true")
+    verbs.add_parser(SWITCHES_VERB)
     doctor_parser = verbs.add_parser(DOCTOR_VERB)
     doctor_parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     for flag in MODE_FLAGS:
@@ -70,6 +72,9 @@ def _run(argv: list[str]) -> int:
             return _launch(arguments, launcher)
         if arguments.verb == DOCTOR_VERB:
             return _doctor(arguments)
+        if arguments.verb == SWITCHES_VERB:
+            print(strip_table(shipped_switches()))
+            return 0
         login = login_dir(os.environ, Path.home())
         print(_stamp(arguments, login) if arguments.verb == STAMP_VERB else _output(arguments, login))
     except UnharnessError as error:

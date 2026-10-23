@@ -1,8 +1,9 @@
 import json
 
 import pytest
+from unharness.cli import main
 from unharness.config import UnharnessError
-from unharness.switches import parse_switches, shipped_switches
+from unharness.switches import parse_switches, shipped_switches, strip_table
 
 SHIPPED_NAMES = [
     "CLAUDE_CODE_ATTRIBUTION_HEADER",
@@ -110,3 +111,39 @@ def test_a_file_that_is_not_one_json_array_is_refused(text, message):
         parse_switches(text)
 
     assert str(refusal.value) == message
+
+
+FIXTURE_TABLE = """\
+| Injected text | Switch | Default |
+|---|---|---|
+| First text | env `A=1` | stripped |
+| Second text | env `B=off`, undocumented | set; `--keep-claude-md` keeps |
+| Third text | `--bare`, setting `key: {"a": ""}` | stripped; `--keep-web-search` keeps |
+| Fourth text | `--valued v` | kept; `--no-hooks` strips |
+| Fifth text | setting `flag: false` | kept |"""
+
+
+def fixture_registry() -> str:
+    return text_of(
+        entry(name="A", value="1", removes="First text"),
+        entry(name="B", value="off", removes="Second text", documented=False, control=False, option="--keep-claude-md"),
+        entry(name="--bare", kind="flag", value=None, removes="Third text", option="--keep-web-search"),
+        entry(name="key", kind="settings", value={"a": ""}, removes="Third text", option="--keep-web-search"),
+        entry(name="--valued", kind="flag", value="v", removes="Fourth text", default=False, option="--no-hooks"),
+        entry(name="flag", kind="settings", value=False, removes="Fifth text", default=False),
+    )
+
+
+def test_the_strip_table_has_one_row_per_removed_text_with_its_switches_and_default():
+    assert strip_table(parse_switches(fixture_registry())) == FIXTURE_TABLE
+
+
+def test_the_switches_verb_prints_the_table_of_the_shipped_registry(capsys):
+    assert main(["switches"]) == 0
+
+    assert capsys.readouterr().out == strip_table(shipped_switches()) + "\n"
+
+
+def test_the_switches_verb_takes_no_argument(capsys):
+    with pytest.raises(SystemExit):
+        main(["switches", "extra"])

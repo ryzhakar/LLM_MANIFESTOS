@@ -3,6 +3,7 @@
 import json
 import re
 from dataclasses import dataclass
+from collections.abc import Sequence
 from importlib.resources import files
 from typing import Any
 
@@ -15,6 +16,8 @@ KEYS = ("name", "kind", "value", "removes", "documented", "control", "verified",
 BOOLEAN_KEYS = ("documented", "control", "default")
 SHARED_ROW_KEYS = ("control", "default", "option")
 VERSION_PATTERN = re.compile(r"\d+\.\d+\.\d+")
+TABLE_HEADER = "| Injected text | Switch | Default |"
+TABLE_RULE = "|---|---|---|"
 VERSIONS_PROBLEM = "must be a non-empty array of distinct X.Y.Z strings in ascending order"
 
 
@@ -49,6 +52,16 @@ def parse_switches(text: str) -> list[Switch]:
     return switches
 
 
+def strip_table(switches: Sequence[Switch]) -> str:
+    """Return the markdown strip table, one row per distinct removed text in order of first appearance."""
+    rows = {}
+    for switch in switches:
+        rows.setdefault(switch.removes, []).append(switch)
+    lines = [TABLE_HEADER, TABLE_RULE]
+    lines += [f"| {removes} | {_switch_cell(row)} | {_default_cell(row[0])} |" for removes, row in rows.items()]
+    return "\n".join(lines)
+
+
 def version_key(version: str) -> tuple[int, ...]:
     """Return the version's numbers, so versions compare as numbers and not as text."""
     return tuple(int(part) for part in version.split("."))
@@ -76,6 +89,25 @@ def _switch(index: int, entry: Any) -> Switch:
         default=_boolean(index, entry, "default"),
         option=_option(index, entry["option"]),
     )
+
+
+def _switch_cell(row: Sequence[Switch]) -> str:
+    return ", ".join(_switch_text(switch) + ("" if switch.documented else ", undocumented") for switch in row)
+
+
+def _switch_text(switch: Switch) -> str:
+    if switch.kind == "env":
+        return f"env `{switch.name}={switch.value}`"
+    if switch.kind == "settings":
+        return f"setting `{switch.name}: {json.dumps(switch.value)}`"
+    return f"`{switch.name}`" if switch.value is None else f"`{switch.name} {switch.value}`"
+
+
+def _default_cell(switch: Switch) -> str:
+    state = "kept" if not switch.default else "stripped" if switch.control else "set"
+    if switch.option is None:
+        return state
+    return f"{state}; `{switch.option}` {'strips' if state == 'kept' else 'keeps'}"
 
 
 def _refusal(index: int, problem: str) -> UnharnessError:
