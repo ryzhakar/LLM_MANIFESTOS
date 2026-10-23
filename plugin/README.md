@@ -142,11 +142,11 @@ The four rows marked "set" are implemented per the Claude Code docs and the bina
 - MCP server instructions when MCP servers are configured.
 - The tool, skill, and agent lists and the environment block, kept on purpose.
 
-Run it from git until the package is published, then from the package:
+Run it from the package, or from git at a tag:
 
 ```
-uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.6.0#subdirectory=plugin/unharness" unharness
 uvx unharness
+uvx --from "git+https://github.com/ryzhakar/llm-manifestos@v3.6.0#subdirectory=plugin/unharness" unharness
 ```
 
 Inside a session, `bin/unharness` runs the copy bundled with the plugin; `UNHARNESS_FROM`, a path or a git URL, runs another source.
