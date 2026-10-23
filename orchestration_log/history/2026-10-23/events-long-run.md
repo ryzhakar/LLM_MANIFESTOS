@@ -105,3 +105,4 @@
 - Needs unchanged (D1 ×3, D3), all in flight.
 - Idle; four outputs pending from running agents.
 - Idle; nothing new to request.
+- Idle; all needs in flight.
