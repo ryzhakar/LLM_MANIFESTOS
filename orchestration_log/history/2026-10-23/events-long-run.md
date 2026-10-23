@@ -79,3 +79,4 @@
 - C2 committed on feat/minified (29bc797, dbf76d0, c4159b4). C1 in progress (digests.py, tests uncommitted), C3 in progress. Waiting on notifications; wake 8445614a stands.
 - Second silence breach on a "no visible output" nudge (one line). Rule restated for myself: every nudge is an outside event; the turn ends empty.
 - C2 complete (76 tests). C4 (a) complete. C1 and C3 running; a background wait watches feat/digests for C1's commit.
+- Briefs written for D3 (e2e captures in digest modes) and D4 (release 3.6.0). C1 and C3 still uncommitted in their worktrees; both edit resolve.py and cli.py — integration will be C1 first, then C3 rebased.
