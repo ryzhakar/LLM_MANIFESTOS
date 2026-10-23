@@ -126,3 +126,4 @@
 - D3 landed: 36 PASS, 0 FAIL; prompt byte-identical before and after /compact in `--stack-digests --overlap --minified`; refusals match the spec. Observation: the per-turn "Active bindings" hook line still reached requests (test login's plugin is 3.4.0; D2 told to confirm every hook stands down under UNHARNESS=1 and fix any that does not). D3's local raise-the-bar digest commit (f7e7b20 on verify/digests) will be rebased onto feat/digests after D2.
 - Idle; D2 fix pass running, everything after depends on it.
 - Idle; D2 still running.
+- Idle; D2 in flight, no independent request.
