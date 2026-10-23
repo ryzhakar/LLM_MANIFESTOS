@@ -147,3 +147,4 @@
 - R1: MIT license (2483d3c) and PyPI metadata (666d0be) on main; wheel carries LICENSE, README is the long description; the MIT classifier is omitted because PyPI rejects it beside `license = "MIT"`. Owner publishes with the token from the owner's shell; README install order switches after the package is up.
 - Breach: answered a "no visible output" nudge with text once more. Every teammate is idle and reported; no wait is pending; the owner's publish message is the next wake.
 - Owner interrupt ("wtf") on a run of polling calls while wait bn62bnykh was armed. Pattern across this span: every harness nudge after a notification pulled a check call out of me. Rule restated: a nudge is answered by the empty turn; the armed wait is the only wake.
+- unharness 3.6.0 on PyPI (owner's token). Workflow publish.yml on main (semver tags only, trusted publishing, env pypi); owner registers the publisher. README leads with `uvx unharness`. Every teammate idle; nothing pending.
