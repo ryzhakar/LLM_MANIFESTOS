@@ -1,7 +1,7 @@
 ---
 name: compile-commitments
 description: >
-  Write the interplay file and the commitments file that a session's system prompt carries, and their condensed variants, from the stack the session binds to.
+  Write the interplay file and the commitments file that a session's system prompt carries, and their min pair, from the stack the session binds to.
   "/compile-commitments", "compile the commitments", "precompile the oath", or a change to the stack.
 ---
 
@@ -64,9 +64,9 @@ Condense the interplay to the rules that resolve tensions and the priority order
 
 Condense the commitments to one `I must ..., and I will ...` line per element in the stack's order, inside `<commitments>` ... `</commitments>`, with the prohibition folded into the line; never write a second line for an element.
 
-Hold each condensed body, the text after the `<stack>` block, to at most one third of the words of its full counterpart's body, a word being a whitespace-separated token; never ship a body over that budget.
+Hold each min body, the text after the `<stack>` block, to at most one third of the words of its full counterpart's body, a word being a whitespace-separated token; never ship a body over that budget.
 
-Count each body with `sed '1,/^<\/stack>$/d' <file> | wc -w` and cut the lowest-ranked rule or the longest line until the count fits; never report a file without its count under the budget.
+Count each min body and its full counterpart's body with `sed '1,/^<\/stack>$/d' <file> | wc -w`, divide the full count by three, and cut the lowest-ranked rule or the longest line until the min count fits; never report a file without both counts.
 </write-the-minified-pair>
 
 <report-the-files>
