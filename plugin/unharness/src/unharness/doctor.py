@@ -47,6 +47,7 @@ UV_BINARY = "uv"
 UVX_BINARY = "uvx"
 MARKETPLACE_SEPARATOR = "@"
 STACKS_WITH_OVERLAP = DigestMode(stacks=True, overlap=True)
+NO_DIGESTS = "none"
 
 
 class Status(StrEnum):
@@ -101,7 +102,7 @@ def doctor(
     ]
     size = [] if stack is None else [_prompt_size_finding(config.you, stack, config.directory, plugin)]
     return [
-        Finding(Status.OK, "config", str(config_path)),
+        Finding(Status.OK, "config", str(config_path.resolve())),
         *[finding for finding, _ in outcomes],
         *skills,
         *on_stack,
@@ -166,7 +167,8 @@ def _cover_finding(
     except UnharnessError as error:
         return Finding(Status.FAIL if mode else Status.WARN, "cover", str(error))
     chosen = _in_render_order(_manifesto_slugs(elements), [*cover.stacks, *cover.singles.values()])
-    return Finding(Status.OK, "cover", f"{', '.join(digest.stem for digest in chosen)}; {_word_count(digest.text for digest in chosen)} words")
+    stems = ", ".join(digest.stem for digest in chosen) or NO_DIGESTS
+    return Finding(Status.OK, "cover", f"{stems}; {_word_count(digest.text for digest in chosen)} words")
 
 
 def _prompt_size_finding(elements: list[Element], documents: list[Document], directory: Path, plugin: Path) -> Finding:
@@ -185,7 +187,7 @@ def _prompt_size_finding(elements: list[Element], documents: list[Document], dir
 def _session_findings(documents: list[Document], directory: Path, modes: Modes) -> list[Finding]:
     """Check the four session files against the stack; a problem fails for the pair the flags load, else warns."""
     return [
-        _session_finding(name, directory, documents, loaded=pair is (MINIFIED_FILES if modes.minified else FULL_FILES))
+        _session_finding(name, directory, documents, loaded=pair == (MINIFIED_FILES if modes.minified else FULL_FILES))
         for pair in (FULL_FILES, MINIFIED_FILES)
         for name in (pair.interplay, pair.commitments)
     ]
@@ -223,7 +225,7 @@ def _uv_finding(environ: Mapping[str, str]) -> Finding:
     uv, uvx = _on_path(UV_BINARY, environ), _on_path(UVX_BINARY, environ)
     if uvx is None:
         return Finding(Status.FAIL, UV_BINARY, f"{UVX_BINARY} is not on PATH; install uv, which ships it")
-    return Finding(Status.OK, UV_BINARY, f"{uv} {uvx}")
+    return Finding(Status.OK, UV_BINARY, " ".join(str(path) for path in (uv, uvx) if path))
 
 
 def _manifesto_plugin_finding(login: Path) -> Finding:
@@ -243,13 +245,16 @@ def _installed_versions(login: Path, plugin: str) -> list[str]:
     path = login / INSTALLED_PLUGINS_FILE
     try:
         records = json.loads(path.read_text(encoding=TEXT_ENCODING))["plugins"]
-    except (OSError, ValueError, KeyError):
+    except (OSError, ValueError, KeyError, TypeError):
+        return []
+    if not isinstance(records, dict):
         return []
     return [
         entry["version"]
         for key, entries in records.items()
-        if key.partition(MARKETPLACE_SEPARATOR)[0] == plugin
+        if key.partition(MARKETPLACE_SEPARATOR)[0] == plugin and isinstance(entries, list)
         for entry in entries
+        if isinstance(entry, dict) and isinstance(entry.get("version"), str)
     ]
 
 

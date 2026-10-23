@@ -515,3 +515,58 @@ def test_prompt_size_counts_the_preamble_the_constitution_and_the_session_file_b
     _, lines = doctor(capsys, "--config", str(project))
 
     assert finding(lines, "prompt size") == "OK prompt size: full 12 words; shortest 9 words"
+
+
+MALFORMED_RECORDS = [
+    "[]",
+    '{"plugins": null}',
+    '{"plugins": []}',
+    '{"plugins": {"manifesto@marketplace": null}}',
+    '{"plugins": {"manifesto@marketplace": [3]}}',
+    '{"plugins": {"manifesto@marketplace": [{"scope": "user"}]}}',
+]
+
+
+@pytest.mark.parametrize("content", MALFORMED_RECORDS)
+def test_a_malformed_installed_plugins_file_counts_as_no_record_instead_of_crashing(host, missing_config, capsys, content):
+    write(host / "login" / "plugins" / "installed_plugins.json", content)
+
+    status, lines = doctor(capsys, *missing_config)
+
+    assert status == 1
+    assert finding(lines, "manifesto plugin") == f"FAIL manifesto plugin: absent from {host / 'login' / 'plugins' / 'installed_plugins.json'}"
+
+
+def test_an_unusable_record_of_one_plugin_leaves_the_records_of_the_others_standing(host, missing_config, capsys):
+    write(host / "login" / "plugins" / "installed_plugins.json", json.dumps({"plugins": {
+        "manifesto@marketplace": [{"version": "3.6.0"}],
+        "other@marketplace": [{"scope": "user"}, 3],
+    }}))
+
+    _, lines = doctor(capsys, *missing_config)
+
+    assert finding(lines, "manifesto plugin") == "OK manifesto plugin: 3.6.0"
+
+
+def test_a_uvx_without_uv_prints_the_one_path_found(host, missing_config, capsys):
+    (host / "bin" / "uv").unlink()
+
+    _, lines = doctor(capsys, *missing_config)
+
+    assert finding(lines, "uv") == f"OK uv: {host / 'bin' / 'uvx'}"
+
+
+def test_the_config_line_prints_the_absolute_path_of_a_relative_config(host, project, capsys, monkeypatch):
+    monkeypatch.chdir(project.parent)
+
+    _, lines = doctor(capsys, "--config", project.name)
+
+    assert lines[0] == f"OK config: {project.resolve()}"
+
+
+def test_a_stack_of_skills_alone_reports_a_cover_of_none(host, project, capsys):
+    write(project, "you:\n  - name: write-well\n    source: skill agent-conduct:write-well\n")
+
+    _, lines = doctor(capsys, "--config", str(project))
+
+    assert finding(lines, "cover") == "OK cover: none; 0 words"
