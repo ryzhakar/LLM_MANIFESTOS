@@ -88,3 +88,4 @@
 - C3 still in cycle on feat/doctor (wip commit, uncommitted edits); background wait bkmnvrm6m watches for the squashed commit. Nothing else is launchable before it: C5 docs, D1 reviews, and D3 e2e all read the doctor verb.
 - C3 at 160 passed, 2 failing; close to done.
 - C3 suite green (162) in its worktree; awaiting its rebase and squash into one commit.
+- C3 squashed (2728399, 162 tests in its worktree); its rebase onto a954a64 conflicts in cli.py; handed to the C3 agent. Wait by1g1l9b8 watches for the rebase end. Then: ff feat/digests, launch C5 docs + D1 reviews ×3 + D3 e2e in parallel (reviews and e2e read code only; C5 edits docs only).
